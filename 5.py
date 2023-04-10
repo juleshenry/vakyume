@@ -1,46 +1,59 @@
-# 5-1
+# 5-1 Phase Equilibria
 """
- = 
+K_i := volatility
+y_i := component concentration, vapor
+x_i := component concentration, liquid
+K_i = y_i / x_i
 """
-# 5-2
+
+# 5-2 Ease of Separation
 """
- = 
+alpha_1_2 = K_1 / K_2 = (y_1 * x_2 / (y_2 * x_1))
 """
-# 5-3
+
+# 5-3 Raoult's Law
 """
- = 
+p_i := component partial pressure
+x_i := liquid component mole fraction
+P_0_i := pure component vapor pressure at equilibrium temperature
+p_i = x_i * P_0_i
 """
-# 5-4
+
+# 5-4 Dalton's Law + Raoult's Law
 """
- = 
+y_i * P =  x_i * P_0_i
 """
-# 5-5
+
+# 5-5, relative volatlity in ideal liquid solution
+""" 
+alpha_12 =  P_0_1 / P_0_2
 """
- = 
+
+# 5-6, Liquid Phase Nonideality I
 """
-# 5-6
+p_i = x_i * gamma_i * P_0_i
 """
- = 
+# 5-7, Liquid Phase Nonideality II
 """
-# 5-7
+y_i * P = x_i * gamma_i * P_0_i
 """
- = 
+
+# 5-8, Liquid Phase Nonideality III
 """
-# 5-8
+alpha_12 = gamma_1 * P_0_1 / (gamma_2 * P_0_2)
 """
- = 
+
+# 5-9, Distillation
 """
-# 5-9
-"""
- = 
+L_0 / V_1 =  L_0 / (L_0 + D)
 """
 # 5-10
 """
- = 
+L_0 / V_1 =  (L_0/D) / (L_0/D + 1) = R / (R + 1)
 """
 # 5-11
 """
- = 
+L_N / V_0 = (V_0 + B) / V_0
 """
 # 5-12
 """
@@ -68,5 +81,5 @@ p_i =  x_i * H_i
 # 5-17
 """
 Henry's Law
-ln(H_2_mi) =  x_1 * ln (H_2_1) + x_3 * ln (H_2_3)
+math.log(H_2_mi) =  x_1 * ln (H_2_1) + x_3 * ln (H_2_3)
 """

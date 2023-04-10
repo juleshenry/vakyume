@@ -44,7 +44,7 @@ P = A_C / V * (H_2)**2
 """
 # 3-12
 """
-KAPPA := A_C / V, THE `GUAGE CONSTANT`
+KAPPA := A_C / V, THE `GAUGE CONSTANT`
 P = KAPPA_1 * H_2**2
 """
 # 3-13
