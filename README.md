@@ -20,10 +20,10 @@ einstein(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
 ```
 
 
--[ ] Transcription of Formulae
--[ ] Filling in physics constants
--[ ] Inflation adjusting money calculations in chapter 8
--[ ] Implement solver-decorator
--[ ] Confirm worked examples in book
--[ ] Recreate some graphs in book
--[ ] Create arbitrary solver demo that scrolls through various calculations, for fun!
+- [ ] Transcription of Formulae
+- [ ] Filling in physics constants
+- [ ] Inflation adjusting money calculations in chapter 8
+- [ ] Implement solver-decorator
+- [ ] Confirm worked examples in book
+- [ ] Recreate some graphs in book
+- [ ] Create arbitrary solver demo that scrolls through various calculations, for fun!
