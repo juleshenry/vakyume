@@ -19,10 +19,15 @@ def einstein(...):
 einstein(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
 ```
 
-
-- [ ] Transcription of Formulae
+Transcription Phase
+- [x] Transcription of Formulae
+- [ ] Develop universal format for these notes
+- [ ] Confirm adherence to strict format
 - [ ] Filling in physics constants
 - [ ] Inflation adjusting money calculations in chapter 8
+
+Implementation Phase
+- [ ] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
 - [ ] Implement solver-decorator
 - [ ] Confirm worked examples in book
 - [ ] Recreate some graphs in book
