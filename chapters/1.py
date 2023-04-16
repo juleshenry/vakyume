@@ -47,4 +47,7 @@ y_a = p_a / P
 where y is the mole fraction of component A
 """
 
-# Caution, real gas deviates from ideal at 1. high pressure 2. low temp 3. molecular dissociation/association matters
+# Caution, real gas deviates from ideal at 
+#1. high pressure
+#2. low temp
+#3. molecular dissociation/association matters
