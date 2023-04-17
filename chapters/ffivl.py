@@ -1,3 +1,4 @@
+# Chapter 2 : Fluid Flow in Vacuum Lines
 # 2-1 Reynold's number
 """
 Re = rho * D * v / mu
@@ -59,7 +60,9 @@ M = mol. weight
 T_c = critical temp, K
 P_c = critical pressure, atm
 """
-
+def critical_pt_viscocity(M, P_c, T_c):
+    mu_c = (7.7 * (M **.5 ) * P_c**(2/3)) / T_c**(1/6)
+    return mu_C
 
 # 2-10 Suction pressure
 """
