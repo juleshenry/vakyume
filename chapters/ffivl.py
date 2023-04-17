@@ -60,9 +60,9 @@ M = mol. weight
 T_c = critical temp, K
 P_c = critical pressure, atm
 """
-def critical_pt_viscocity(M, P_c, T_c):
+def critical_pt_viscocity(M: float, P_c:float, T_c: float):
     mu_c = (7.7 * (M **.5 ) * P_c**(2/3)) / T_c**(1/6)
-    return mu_C
+    return mu_c
 
 # 2-10 Suction pressure
 """
