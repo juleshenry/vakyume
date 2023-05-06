@@ -1,5 +1,6 @@
 import os
 import re
+
 # def see_which_notes_are_valid_Python():
 # 	for o in os.listdir(os.getcwd()+'/chapters'):
 # 		if o[0]=='_':continue
@@ -21,31 +22,39 @@ import re
 # 		print(l)
 # 	except NameError as ne:
 # 		pass
-from sympy import Symbol, solve
+from sympy import Symbol, solve, log
 
-if __name__=='__main__':
-	class Solver:
-		def permute(s, eqn):
-			tokes = [t for t in eqn.split(' ') if t.isidentifier()]
-			normal_form = eqn.split('=')[1].strip() + ' - ' + eqn.split('=')[0].strip()
-			# print("ATTEMPT SOLVE", '`0 = ',normal_form,'`')
-			for t in tokes:
-				x = solve(normal_form, Symbol(t))
-				print(t,x)
-	with open(os.getcwd()+'/chapters/10.py') as s:
-		for l in s.readlines():
-			if ' = ' in l:
-				# try:
-				print(l)
-				if 'bhp_0' in l:
-					print('skipping',l)
-					continue
-				Solver().permute(l)	
-				# except:
-					# print(l)
-	# Solver().permute("SS = S_Th * (P - p_s) / P ")
-	# tokes = []
-	# for t in tokes:
-	# 	solve(,)	
+if __name__ == "__main__":
 
-	# see_which_notes_are_valid_Python()
+    class Solver:
+        def permute(s, eqn):
+            tokes = [
+                t for t in eqn.split(" ") if t.isidentifier() and t not in {"ln", "log"}
+            ]
+            normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
+            print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
+            for t in tokes:
+                x = solve(normal_form, Symbol(t))
+                print(t, end=" = ")
+                if not len(x):
+                    print("failed to solve")
+                    continue
+                if len(x) > 1:
+                    print("!!")
+                print(f"{x[0]}\nreturn {t}")
+
+    with open(os.getcwd() + "/chapters/10.py") as s:
+        for l in s.readlines():
+            if " = " in l:
+                if "bhp_0" in l:
+                    print("skipping", l)
+                    continue
+                Solver().permute(l)
+                # except:
+                # print(l)
+    # Solver().permute("SS = S_Th * (P - p_s) / P ")
+    # tokes = []
+    # for t in tokes:
+    # 	solve(,)
+
+    # see_which_notes_are_valid_Python()

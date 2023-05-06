@@ -1,4 +1,4 @@
-#Chapter 1 : Vacuum System Engineering and Kinetic Theory
+# Chapter 1 : Vacuum System Engineering and Kinetic Theory
 # 1-3
 """
 .5*m*v**2 = 1.5*k*T
@@ -48,7 +48,7 @@ y_a = p_a / P
 where y is the mole fraction of component A
 """
 
-# Caution, real gas deviates from ideal at 
-#1. high pressure
-#2. low temp
-#3. molecular dissociation/association matters
+# Caution, real gas deviates from ideal at
+# 1. high pressure
+# 2. low temp
+# 3. molecular dissociation/association matters

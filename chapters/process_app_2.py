@@ -1,5 +1,5 @@
 # Chapter 6: Process Applications II
-# 6-1 
+# 6-1
 """
 Refrigeration Capacity Q_r
 w_1 * c_p * (T_1 - T_R) + w_2 * c_p (T_2 - T_R) = w_v * del_h_v

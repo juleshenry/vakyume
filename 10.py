@@ -37,7 +37,7 @@ eqn_10_8
 eqn_10_9
 eqn_10_17
 """
-# Example 10-4 
+# Example 10-4
 """
 The steam jet evacuating a turbine condensor must be replaced. The jet is not
 oversized. It requires a suction pressure of 50 torr under a load of 
@@ -48,4 +48,3 @@ for the pump are 40bhp and 30 gal/min.
 
 eqn_10_16
 """
-
