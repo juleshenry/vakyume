@@ -26,11 +26,11 @@ einstein(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
 
 Transcription Phase
 - [x] Transcription of Formulae
-- [ ] Develop universal format for these notes
+- [x] Develop universal format for these notes
 - [ ] Confirm adherence to strict format
 - [ ] Filling in physics constants
 - [ ] Inflation adjusting money calculations in chapter 8
-- [ ] Test Exmamples
+- [ ] Test Examples
 
 Implementation Phase
 - [ ] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊

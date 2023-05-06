@@ -26,20 +26,24 @@ from sympy import Symbol, solve
 if __name__=='__main__':
 	class Solver:
 		def permute(s, eqn):
-			print("ATTEMPT SOLVE",eqn)
-			try:
-				tokes = [t for t in eqn.split(' ') if t.isidentifier()]
-				normal_form = eqn.split('=')[1]+ ' - ' + eqn.split('=')[0]
-				print(normal_form)
-				for t in tokes:
-					x = solve(normal_form, Symbol(t))
-					print(t,x)
-			except:
-				print("failed")
+			tokes = [t for t in eqn.split(' ') if t.isidentifier()]
+			normal_form = eqn.split('=')[1].strip() + ' - ' + eqn.split('=')[0].strip()
+			# print("ATTEMPT SOLVE", '`0 = ',normal_form,'`')
+			for t in tokes:
+				x = solve(normal_form, Symbol(t))
+				print(t,x)
 	with open(os.getcwd()+'/chapters/10.py') as s:
 		for l in s.readlines():
 			if ' = ' in l:
+				# try:
+				print(l)
+				if 'bhp_0' in l:
+					print('skipping',l)
+					continue
 				Solver().permute(l)	
+				# except:
+					# print(l)
+	# Solver().permute("SS = S_Th * (P - p_s) / P ")
 	# tokes = []
 	# for t in tokes:
 	# 	solve(,)	
