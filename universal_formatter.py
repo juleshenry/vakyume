@@ -1,5 +1,7 @@
 import os
 import re
+import time
+
 
 # def see_which_notes_are_valid_Python():
 # 	for o in os.listdir(os.getcwd()+'/chapters'):
@@ -72,7 +74,6 @@ def reveal_blank_eqn_names():
             for l in s.readlines():
                 if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
                     eqn_number = x[0]
-
                     if len(l) < 10:
                         ix += 1
                         print(ix, l.strip(), "needs name!")
@@ -80,8 +81,13 @@ def reveal_blank_eqn_names():
 
 if __name__ == "__main__":
     X = Solver()
-    for i in range(11):
-        X.analyze(("0" if not len(i)-1 else "") + str(i))
+    for i in range(1,12):
+        chap = ("0" if not len(str(i)) - 1 else "") + str(i)
+        print(chap)
+        try:
+            X.analyze(chap)
+        except:
+            print('NotImplementedError')
     # reveal_blank_eqn_names()
     # except:
     # print(l)

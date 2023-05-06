@@ -16,6 +16,6 @@ dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
 # 6-10 Filtrate Volum Neglecting Filter-Medium Resistance
 dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
 # 6-11a Vacuum Drying Total Residence Time A
-t_R = delta_h_i * m_b * delta_m / (A_d * h_d delta_T) 
+t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T) 
 # 6-11b Vacuum Drying Total Residence Time B
 t_R= (delta_h_v * m_b * (m_i - m_l)) / (A_d * h_d * (T_w - T_s))

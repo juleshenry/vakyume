@@ -15,7 +15,7 @@ lambd := average mean free path , in
 delta := mol. diam , in
 psi:= mol. density molecules/in^3
 """
-lambd = pi * delta ** 2 * psi * 2 ** 0.5
+lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
 
 # 2-3 Knudsen's number
 """
@@ -27,7 +27,7 @@ kn = lambd / D
 """
 mu:=coefficient of viscosity
 """
-beta = mu * vel_grad
+_beta = mu * vel_grad
 # 2-5 Hagen-Poiseuille
 """
 q:=volumetric flow cm^3/s
@@ -53,9 +53,9 @@ m:= mass of a molecule
 v_a = ((8 * k * T) / (pi * m)) ** 0.5
 # 2-8 Critical point viscosity
 """
-M = mol. weight
-T_c = critical temp, K
-P_c = critical pressure, atm
+M:= mol. weight
+T_c:= critical temp, K
+P_c:= critical pressure, atm
 """
 mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
 
@@ -135,18 +135,18 @@ L:= laminar flow
 L = sum_pipe + sum_equivalent_length
 # 2-22 Throughput Molecular Flow
 """
-Q:= through_put, sucking pressure P, S_p = dV / Dt
+Q:= through_put, sucking pressure P
+S_p:= dV / Dt
 """
-Q_t = S_p * P_s
+Q_throughput = S_p * P_s
 # 2-25 Conductance, Reciprocal of resistance, expressed in ft^3/min
 """
 pressure loss
 """
-C = Q / (P_1 - P_2)
+C = Q_throughput / (P_1 - P_2)
 # 2-26 Poiseuille's eqn for isothermal flow
-q * P_p = (
-    3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
-)
+q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+
 
 # 2-28 Laminar conductance
 C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p

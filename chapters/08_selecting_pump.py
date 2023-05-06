@@ -6,19 +6,19 @@ NS:= number ejector stages
 NC:= number of condensors
 SCON:=steam consumption based on 100-psig motive steam, lb/hr
 """
-installation_Cost = 16000 * (NS + 2 * NC) (SCON / 1000) ** 0.35
+installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
 
 # 8-2 Liquid Ring Pumps
 """
 hp:= horse power of pump
 """
-installed_Costs = 33000 * (hp / 10) **0.5
+installed_costs = 33000 * (hp / 10) **0.5
 # 8-3 Rotary Piston or Two-Stage Rotary Vane Pumps
-installed_Costs = 38000 * (hp / 10) **0.45
+installed_costs = 38000 * (hp / 10) **0.45
 
 # 8-4 Rotary Lobe Blowers
 
-installed costs = 26000 * (hp / 10)** 0.4
+installed_costs = 26000 * (hp / 10)** 0.4
 # 8-5 Thermal Efficiency
 """
 E:= thermal efficiency
