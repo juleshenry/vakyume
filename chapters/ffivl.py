@@ -44,7 +44,7 @@ rho:= density, g/cm^3
 lambd:= mean free path, cm
 """
 mu = 0.35 * rho * lambd * v_a
-# 2-7
+# 2-7 Maxwell-Boltzmann Velocity Distribution
 """
 k:=boltz
 T:= abs temp
@@ -94,7 +94,7 @@ d:= pipe inside diameter, in
 q:= vol. flow rate, ft^3/min
 """
 delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
-# 2-14
+# 2-14 Room Temperature Pressure Drop
 """
 Incompressibility not always valid assumption:
 100 micron to 1 torr calculation.  
@@ -117,83 +117,78 @@ delta_P = 0.0345* mu * L * v / d**2
 delta_P = 0.105 * mu * L * q / d**4
 """
 
-# 2-18,2-19 Noncircular ducts
-"""
+# 2-18a Noncircular ducts equivalent diameter
 D_eq = 4 * R_ll
+"""
 R_ll := cross-sectional area of duct / wetted perimeter
-R_ll = w * h / (2 *(w+h))
-Re = 4 * R_ll * rho * v / mu = (2 * w * h * rho * v)/ ((w+h) * mu)
 """
-
-# 2-20
+# 2-18b Noncircular ducts Hydraulic radius
+R_ll = w * h / (2 * (w + h))
+# 2-19a Noncircular Reynold's Number Hydraulic Radius
+Re = 4 * R_ll * rho * v / mu
+# 2-19b Noncircular Reynold's Number Rectangle
+Re = (2 * w * h * rho * v) / ((w + h) * mu)
+# 2-20 total Loss
 """
-L ~= sum(pipe) + sum(equiv. length)
 L:= laminar flow
 """
-
-# 2-22
+L = sum_pipe + sum_equivalent_length
+# 2-22 Throughput Molecular Flow
 """
 Q:= through_put, sucking pressure P, S_p = dV / Dt
 """
-Q = S_p * P_s
-
+Q_t = S_p * P_s
 # 2-25 Conductance, Reciprocal of resistance, expressed in ft^3/min
 """
-C = Q / (P_1 - P_2)
 pressure loss
 """
-
+C = Q / (P_1 - P_2)
 # 2-26 Poiseuille's eqn for isothermal flow
-"""
-q* P` =  pi * D**4 / (128 * mu * L) * P` * (P_upstream - P_downstream)
-
-"""
+q * P_p = (
+    3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+)
 
 # 2-28 Laminar conductance
-"""
-C = pi * D**4 / (128 * mu * L) * P`
-"""
+C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+
 
 # 2-29 S, pumping speed
-"""
-S_1**-1 = S_2**-1 + 1/C
-"""
+S_1 ** -1 = S_2 ** -1 + 1 / C
+
 
 # 2-31 , General pump formula for overall speed
-"""
-S = (S_p * C) / (S_p + C)
-"""
+S_pump_speed = (S_p * C) / (S_p + C)
 
-# 2-32
-"""
-1 / C_series = geometric_sum (C...)
-"""
 
-# 2-33
-"""
-1 / C_paralell = arithmetic_sum (C...)
-"""
+# 2-32 overall conductance series
+1 / C_series = geometric_sum_C
+
+
+# 2-33 overall conductance parallel
+
+1 / C_paralell = arithmetic_sum_C
+
 
 # 2-34, Transitional Flow, 1 > Kn > 0.01
-"""
-C = C_1 * (D**4 / (mu * L)) * P` + C_2 * (D**3 / L) 
-"""
+
+C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+
 
 # 2-35, relating laminar and transitional flow conductance
 """
-C_T =  C_L * F_p
 F_P:= correction factor for Poiseuille's eqn from Figure 2-11
 """
 
+C_T = C_L * F_p
 # 2-36, Conductance of any vacuum system component
 """
-C =  C_0 * F_t
 C_0:=conductance thin walled aperture
 F_t:=transmission prob. for component
 """
+C = C_0 * F_t
 
-# 2-37
+# 2-37 Conductance of Cylindrical Line of Cross Sectional Area A
 """
-C = 38.3 * (T * A * F_t / M )**.5
 F_t:= 1, for an aperture
 """
+C = 38.3 * (T * A * F_t / M) ** 0.5
