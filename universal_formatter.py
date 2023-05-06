@@ -79,7 +79,9 @@ def reveal_blank_eqn_names():
 
 
 if __name__ == "__main__":
-    Solver().analyze("10")
+    X = Solver()
+    for i in range(11):
+        X.analyze(("0" if not len(i)-1 else "") + str(i))
     # reveal_blank_eqn_names()
     # except:
     # print(l)
