@@ -4,42 +4,24 @@ Rotational speed of liquid ring pumps
 sig_R := rotor tip speed ft/s
 D_r := rotor Diameter
 w := rotational speed
+"""
 sig_R = 0.00436 * D_r * w
-"""
 # 10-2
-"""
 PS = - V * dP / dt + Q
-"""
 # 10-3
-"""
 Q = 9.25 * N * T
-"""
 # 10-4
-"""
-t = V/S ln ((SP_1 - Q) / (SP_2 - Q))
-"""
+t = V/S * ln ((SP_1 - Q) / (SP_2 - Q))
 # 10-5
-"""
-t = V/S ln (P_1 / P_2)
-"""
-
+t = V/S * ln (P_1 / P_2)
 # 10-6
-"""
 S_a = V/t * ln (P_1 / P_2)
-"""
 # 10-7
-"""
 t = V(ln(P_1 / P_2) / S_1_2 + ln(P_2 / P_3) / S_2_3 + ...)
-"""
-# 10-8
-"""
-Effective Sealant Temperature
+# 10-8 Effective Sealant Temperature
 delta_T = (2545 * bhp + w_i * delta_h_i) / ( 8.02 * f_a * rho * c_p )
-"""
 # 10-9
-"""
 T_c = T_s + delta_T
-"""
 # 10-10
 """
 bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)

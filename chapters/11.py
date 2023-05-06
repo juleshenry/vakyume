@@ -2,9 +2,8 @@ import math
 # 11-1 Low Pressure Evacuation Time for Rotary-Piston/Rotary-Vane Pumps
 """
 Q_0 := throughput of gas flow due to system outgassing
-PS = -V * dP/dT + Q + Q_0
 """
-
+PS = -V * dP / dT + Q + Q_0
 # 11-2 
 """
 Q_0 := throughput of gas flow due to system outgassing, must be constant for 11-2

@@ -5,6 +5,11 @@ Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by 
 
 We revisit the history of low pressure devices, recreating the example calculations programatically. Furthermore, a supplementary decorator is developed to calculate arbitrary missing values for a given formula. 
 
+In a nutshell, we demonstrate how to take a textbook's equations and turn it into a complete equation solver for all permutations. 
+
+Later, we convert the Python code to C++ for optimization.
+
+
 # Solver Decorator
 
 As long as one keyword argument is not given, its value is calculated
