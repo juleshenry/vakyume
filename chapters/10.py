@@ -7,23 +7,23 @@ D_r := rotor Diameter
 w := rotational speed
 """
 sig_R = 0.00436 * D_r * w
-# 10-2
+# 10-2 Sizing for Evacuation
 PS = - V * dP / dt + Q_gas
-# 10-3
+# 10-3 Throughput
 Q_gas = 9.25 * N_mfw * T
-# 10-4
+# 10-4 Time Required to Evacuate
 t = V/S_p * log ((SP_1 - Q_gas) / (SP_2 - Q_gas))
-# 10-5
+# 10-5 Reasonably Tight System Evacuation
 t = V/S_p * log (P_1 / P_2)
-# 10-6
+# 10-6 Average Pump Capacity 
 S_a = V/t * log (P_1 / P_2)
 # 10-7 Total evacuation time 
 t ~= V(log(P_1 / P_2) / S_1_2 + log(P_2 / P_3) / S_2_3 + ...)
 # 10-8 Effective Sealant Temperature
 delta_T = (2545 * bhp + w_i * delta_h_i) / ( 8.02 * f_a * rho * c_p )
-# 10-9
+# 10-9 Bulk Liquid Ring Temperature
 T_c = T_s + delta_T
-# 10-10
+# 10-10 Correction for Non-Water Sealants
 bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
 # 10-11 single-stage water sealed pumps compressing dry noncondensable loads
 T_c = T_s + 10

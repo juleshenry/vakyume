@@ -26,45 +26,61 @@ from sympy import Symbol, solve, log
 
 TAB = "    "
 TYPE = ": float"
+
+
+class Solver:
+    def permute(s, eqn, eqn_n):
+        tokes = []
+        for t in eqn.split(" "):
+            t = t.strip()
+            if t.isidentifier() and t not in {"ln", "log"}:
+                tokes.append(t)
+        normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
+        print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
+
+        for t in tokes:
+            args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
+            print(f'def eqn_{eqn_n.replace("-","_")}__{t}(' + args + f"{TYPE}):")
+            solns = solve(normal_form, Symbol(t))
+            if not len(solns):
+                print("failed to solve")
+                continue
+            for soln in solns:
+                print(f"{TAB}{t} = {soln}\n{TAB}return {t}")
+
+    def analyze(s, i):
+        with open(os.getcwd() + f"/chapters/{i}.py") as file:
+            eqn_number = ""
+            for l in file.readlines():
+                if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                    eqn_number = x[0]
+                if " = " in l:
+                    if "bhp_0" in l:
+                        print("skipping", l)
+                        continue
+                    s.permute(l, eqn_number)
+
+
+def reveal_blank_eqn_names():
+    ix = 1
+    for o in os.listdir(os.getcwd() + "/chapters"):
+        if o[0] == "_":
+            continue
+        with open(os.getcwd() + "/chapters/" + o) as s:
+            for l in s.readlines():
+                if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                    eqn_number = x[0]
+
+                    if len(l) < 10:
+                        ix += 1
+                        print(ix, l.strip(), "needs name!")
+
+
 if __name__ == "__main__":
-
-    class Solver:
-        def permute(s, eqn, eqn_n):
-            tokes = []
-            for t in eqn.split(" "):
-                t = t.strip()
-                if t.isidentifier() and t not in {"ln", "log"}:
-                    tokes.append(t)
-            normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-            print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
-
-            for t in tokes:
-                args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
-                print(
-                    f'def eqn_{eqn_number.replace("-","_")}__{t}(' + args + f"{TYPE}):"
-                )
-                x = solve(normal_form, Symbol(t))
-                print(TAB + t, end=" = ")
-                if not len(x):
-                    print("failed to solve")
-                    continue
-                if len(x) > 1:
-                    print("!!")
-                print(f"{x[0]}\n{TAB}return {t}")
-
-    with open(os.getcwd() + "/chapters/9.py") as s:
-        eqn_number = ""
-        for l in s.readlines():
-            if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
-                eqn_number = x[0]
-            if " = " in l:
-                if "bhp_0" in l:
-                    print("skipping", l)
-                    continue
-
-                Solver().permute(l, eqn_number)
-                # except:
-                # print(l)
+    # Solver().analyze(9)
+    reveal_blank_eqn_names()
+    # except:
+    # print(l)
     # Solver().permute("SS = S_Th * (P - p_s) / P ")
     # tokes = []
     # for t in tokes:
