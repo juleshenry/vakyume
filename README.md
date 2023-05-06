@@ -25,6 +25,7 @@ Transcription Phase
 - [ ] Confirm adherence to strict format
 - [ ] Filling in physics constants
 - [ ] Inflation adjusting money calculations in chapter 8
+- [ ] Test Exmamples
 
 Implementation Phase
 - [ ] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
