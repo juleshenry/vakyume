@@ -1,65 +1,63 @@
 # Chapter 2 : Fluid Flow in Vacuum Lines
+import math
 # 2-1 Reynold's number
 """
-Re = rho * D * v / mu
 rho := density, lb/ft^3
 D := pipe inside diam, ft
 v := vel. ft/s
 mu := viscosity, lb/ft*s
 """
-
+Re = rho * D * v / mu
 # 2-2 Maxwell-Boltzmann
 """
-lambda = (pi * delta**2 * psi * 2**.5)
-lambda := average mean free path , in
+lambd := average mean free path , in
 delta := mol. diam , in
 psi:= mol. density molecules/in^3
 """
+lambd = (pi * delta**2 * psi * 2**.5)
 
 # 2-3 Knudsen's number
 """
-kn = lambda / D
 D:= inside diameter, in
-lambda:=avg. mean free path, in
+lambd:=avg. mean free path, in
 """
+kn = lambd / D
 # 2-4 Internal viscosity
 """
-beta = mu * vel_grad
 mu:=coefficient of viscosity
 """
+beta = mu * vel_grad
 # 2-5 Hagen-Poiseuille
 """
-q = pi*D^4*delta_P / (128 * L)
 q:=volumetric flow cm^3/s
 D:= pipe diam.,cm
 delta_P := upstream-downstream pressure, dyne/cm^3
 L:=length, cm
-mu = coef. of visco., poise
+mu:= coef. of visco., poise
 """
+q = 3.141592653589793*(D**4)*delta_P / (128 * L * mu)
 # 2-6 Average Molecular velocity, cm/s
 """
-mu = 0.35 * rho * lambda * v_a
 mu :=viscosity, poise
 rho:= density, g/cm^3
-lambda:= mean free path, cm
+lambd:= mean free path, cm
 """
+mu = 0.35 * rho * lambd * v_a
 # 2-7
 """
-v_a = ((8 * k * T)/(pi * m))**.5
 k:=boltz
 T:= abs temp
 m:= mass of a molecule
- = 
 """
-
+v_a = ((8 * k * T)/(pi * m))**.5
 # 2-8 Critical point viscosity
 """
-mu_c = (7.7 * (M **.5 ) * P_c**(2/3)) / T_c**(1/6)
-
 M = mol. weight
 T_c = critical temp, K
 P_c = critical pressure, atm
 """
+mu_c = (7.7 * (M **.5 ) * P_c**(2/3)) / T_c**(1/6)
+
 
 
 def eqn_2_8(M: float, P_c: float, T_c: float):
@@ -69,58 +67,54 @@ def eqn_2_8(M: float, P_c: float, T_c: float):
 
 # 2-10 Suction pressure
 """
-Suc_Pres = oper_press - delta_P
 delta_P := pressure loss
 """
-
+Suc_Pres = oper_press - delta_P
 # 2-11 , Darcy-Fanning isothermal flow
 """
-h_r = f * L * v**2 / (D*2*g_c)
-
 f:= Moody friction
 L:=length_pipe, ft
 v:= velocity, ft/s
 D:= inside diameter, ft
 g_c:= dimensional constant, 32.2 lb * ft / lb * s
 """
+h_r = f * L * v**2 / (D*2*g_c)
 
 # 2-12 Pressure drop
 """
-delta_P = 4.31 * rho * f * L * v**2 / (2 * d * g)
-
-delta_P = 2.15 * rho * f * L * q**2 / (d ** 5)
-
 rho:= density, lb/ft^3
 d:= pipe inside diameter, in
 q:= vol. flow rate, ft^3/min
 """
-
+delta_P = 4.31 * rho * f * L * v**2 / (2 * d * g)
+# 2-13 Pressure drop
+"""
+rho:= density, lb/ft^3
+d:= pipe inside diameter, in
+q:= vol. flow rate, ft^3/min
+"""
+delta_P = 2.15 * rho * f * L * q**2 / (d ** 5)
 # 2-14
 """
 Incompressibility not always valid assumption:
 100 micron to 1 torr calculation.  
 Rule of thumb: it holds for velocities less than 1/3 sonic velocity
 
-v_s =  (k*g_c * R / M * T)**.5
 v_s := sonic_velocity
 k:=ratio of specific heat at constant temp to the specific heat at constant volume
 """
+v_s =  (k*g_c * R / M * T)**.5
 
 # 2-15 Turbulent flow smooth pipe, Blausius equation
-
+"""
+given Re < 2e5
 """
 f =  0.316 / Re**(.25)
-given Re < 2e5
-
-"""
-
 # 2-16, 2-17 Laminar Flow
-
 """
 f = 64 / Re
 delta_P = 0.0345* mu * L * v / d**2
 delta_P = 0.105 * mu * L * q / d**4
-
 """
 
 # 2-18,2-19 Noncircular ducts
@@ -139,9 +133,9 @@ L:= laminar flow
 
 # 2-22
 """
-Q = S_p * P_s
 Q:= through_put, sucking pressure P, S_p = dV / Dt
 """
+Q = S_p * P_s
 
 # 2-25 Conductance, Reciprocal of resistance, expressed in ft^3/min
 """

@@ -24,32 +24,45 @@ import re
 # 		pass
 from sympy import Symbol, solve, log
 
+TAB = "    "
+TYPE = ": float"
 if __name__ == "__main__":
 
     class Solver:
-        def permute(s, eqn):
-            tokes = [
-                t for t in eqn.split(" ") if t.isidentifier() and t not in {"ln", "log"}
-            ]
+        def permute(s, eqn, eqn_n):
+            tokes = []
+            for t in eqn.split(" "):
+                t = t.strip()
+                if t.isidentifier() and t not in {"ln", "log"}:
+                    tokes.append(t)
             normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
             print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
+
             for t in tokes:
+                args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
+                print(
+                    f'def eqn_{eqn_number.replace("-","_")}__{t}(' + args + f"{TYPE}):"
+                )
                 x = solve(normal_form, Symbol(t))
-                print(t, end=" = ")
+                print(TAB + t, end=" = ")
                 if not len(x):
                     print("failed to solve")
                     continue
                 if len(x) > 1:
                     print("!!")
-                print(f"{x[0]}\nreturn {t}")
+                print(f"{x[0]}\n{TAB}return {t}")
 
-    with open(os.getcwd() + "/chapters/10.py") as s:
+    with open(os.getcwd() + "/chapters/9.py") as s:
+        eqn_number = ""
         for l in s.readlines():
+            if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                eqn_number = x[0]
             if " = " in l:
                 if "bhp_0" in l:
                     print("skipping", l)
                     continue
-                Solver().permute(l)
+
+                Solver().permute(l, eqn_number)
                 # except:
                 # print(l)
     # Solver().permute("SS = S_Th * (P - p_s) / P ")

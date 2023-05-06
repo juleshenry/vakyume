@@ -1,3 +1,4 @@
+# Chapter 7 : Precondensors
 # 7-1
 """
 y_i = p_i / P
