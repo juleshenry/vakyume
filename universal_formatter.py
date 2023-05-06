@@ -49,7 +49,9 @@ class Solver:
                 print(f"{TAB}{t} = {soln}\n{TAB}return {t}")
 
     def analyze(s, i):
-        with open(os.getcwd() + f"/chapters/{i}.py") as file:
+        root_dir = os.getcwd() + "/chapters/"
+        get = list(filter(lambda x: i in x, os.listdir(root_dir)))[0]
+        with open(root_dir + get) as file:
             eqn_number = ""
             for l in file.readlines():
                 if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
@@ -77,7 +79,7 @@ def reveal_blank_eqn_names():
 
 
 if __name__ == "__main__":
-    Solver().analyze(10)
+    Solver().analyze("10")
     # reveal_blank_eqn_names()
     # except:
     # print(l)
