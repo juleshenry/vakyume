@@ -47,23 +47,21 @@ alpha_12 = gamma_1 * P_0_1 / (gamma_2 * P_0_2)
 
 L_0 / V_1 = L_0 / (L_0 + D)
 
-# 5-10a
+# 5-10a Equilibrium Distilliation Top
 L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
-# 5-10b
+# 5-10b Equilibrium Distilliation Reflux
 L_0 / V_1 = R / (R + 1)
 
-# 5-11
+# 5-11 Equilibrium Distilliation Bottoms Takeoff
 L_N / V_0 = (V_0 + B) / V_0
 
-# 5-12 DistillationColumn
+# 5-12 Distillation Column
 N_t = N_ES / E ** T
 
-# 5-13
+# 5-13 Required Packing Height
+H_p = N_ES * HETP
 
-H_p = N_ES(HETP)
-
-# 5-14
-
+# 5-14 Langmuir-Knudsen
 W_E = 0.0583 * P_0 * (M / T) ** 0.5
 
 # 5-15 separation efficiency

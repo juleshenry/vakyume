@@ -178,7 +178,6 @@ C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
 """
 F_P:= correction factor for Poiseuille's eqn from Figure 2-11
 """
-
 C_T = C_L * F_p
 # 2-36, Conductance of any vacuum system component
 """

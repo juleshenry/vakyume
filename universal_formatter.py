@@ -77,8 +77,8 @@ def reveal_blank_eqn_names():
 
 
 if __name__ == "__main__":
-    # Solver().analyze(9)
-    reveal_blank_eqn_names()
+    Solver().analyze(10)
+    # reveal_blank_eqn_names()
     # except:
     # print(l)
     # Solver().permute("SS = S_Th * (P - p_s) / P ")
