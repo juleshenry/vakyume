@@ -39,7 +39,7 @@ class Solver:
                 tokes.append(t)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
         print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
-
+        print('og ',eqn.strip())
         for t in tokes:
             args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
             print(f'def eqn_{eqn_n.replace("-","_")}__{t}(' + args + f"{TYPE}):")
