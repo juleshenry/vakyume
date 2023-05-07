@@ -10,30 +10,31 @@ In a nutshell, we demonstrate how to take a textbook's equations and turn it int
 Later, we convert the Python code to C++ for optimization.
 
 
-# Solver Decorator
+# Kwarg Solver Decorator
 
 As long as one keyword argument is not given, its value is calculated
 
 E.g. 
 ```
-@solver
+@kwarg_solver
 def einstein(...):
 	"""e = m * c ** 2"""
 	return ...
 
 einstein(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
+einstein(m = 1000) # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
 ```
 
 Transcription Phase
 - [x] Transcription of Formulae
 - [x] Develop universal format for these notes
-- [ ] Confirm adherence to strict format
-- [ ] Filling in physics constants
+- [x] Confirm adherence to strict format
+- [x] Filling in physics constants
 - [ ] Inflation adjusting money calculations in chapter 8
-- [ ] Test Examples
+- [ ] Test Examples from Book
 
 Implementation Phase
-- [ ] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
+- [x] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
 - [ ] Implement solver-decorator
 - [ ] Confirm worked examples in book
 - [ ] Recreate some graphs in book
