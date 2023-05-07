@@ -38,17 +38,16 @@ class Solver:
             if t.isidentifier() and t not in {"ln", "log"}:
                 tokes.append(t)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-        print("ATTEMPT SOLVE", "`0 = ", normal_form, "`")
-        print('og ',eqn.strip())
+        print(f"# {eqn.strip().replace('#','')}")
         for t in tokes:
             args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
-            print(f'def eqn_{eqn_n.replace("-","_")}__{t}(' + args + f"{TYPE}):")
+            print(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}(' + args + f"{TYPE}):")
             solns = solve(normal_form, Symbol(t))
             if not len(solns):
                 print("failed to solve")
                 continue
             for soln in solns:
-                print(f"{TAB}{t} = {soln}\n{TAB}return {t}")
+                print(f"{TAB*2}{t} = {soln}\n{TAB*2}return {t}")
 
     def analyze(s, i):
         root_dir = os.getcwd() + "/chapters/"
@@ -56,12 +55,10 @@ class Solver:
         with open(root_dir + get) as file:
             eqn_number = ""
             for l in file.readlines():
-                if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                if x := re.compile("\d{1,2}-\d{1,2}\w{,2}").findall(l):
                     eqn_number = x[0]
                 if " = " in l:
-                    if "bhp_0" in l:
-                        print("skipping", l)
-                        continue
+                    print(eqn_number)
                     s.permute(l, eqn_number)
 
 
@@ -72,7 +69,7 @@ def reveal_blank_eqn_names():
             continue
         with open(os.getcwd() + "/chapters/" + o) as s:
             for l in s.readlines():
-                if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                if x := re.compile("\d{1,2}-\d{1,2}\w").findall(l):
                     eqn_number = x[0]
                     if len(l) < 10:
                         ix += 1
@@ -81,13 +78,15 @@ def reveal_blank_eqn_names():
 
 if __name__ == "__main__":
     X = Solver()
-    for i in range(1,12):
-        chap = ("0" if not len(str(i)) - 1 else "") + str(i)
-        print(chap)
+    for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
+        chap, mods = modules.split('_')[0], modules.split('_')[1:]
+        cls_name = ''.join(x[0].upper() + x[1:] for x in mods)[:-3]
+        print(f"class {cls_name}:")
         try:
             X.analyze(chap)
         except:
             print('NotImplementedError')
+        break
     # reveal_blank_eqn_names()
     # except:
     # print(l)

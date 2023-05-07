@@ -5,7 +5,7 @@ k:= boltzmann constant
 kboltz:= 1.38e-16
 avogad:= 6.02e23
 """
-.5*m*v**2 = 1.5*k*T
+.5 * m * v**2 = 1.5 * k * T
 # 1-7 ideal gas law
 """
 
@@ -14,13 +14,12 @@ avogad:= 6.02e23
 # 2. low temp
 # 3. molecular dissociation/association matters
 """
-p*V = n*R*T
+p * V = n * R * T
 
 # 1-8 aug. ideal gas law
-P*V = m/M * R * T
+P * V = m / M * R * T
 # 1-9 ideal density
-
-rho = m/V = P* M / (R * T)
+rho = m/V = P * M / (R * T)
 
 # 1-10 Change in pressure, volume, temperature
 P_1 * V_1 / T_1 = P_2 * V_2 / T_2
