@@ -24,8 +24,9 @@ L_c_P = Q_condensor_heat_duty / (500 * del_T)
 V_c = Q_condensor_heat_duty / (U_v * del_T_LM)
 # 7-12 Surface Condensor Heat Transfer
 Q_condensor_heat_duty = U * A * del_T
-# 7-14 Temperature Difference
+# 7-14a Temperature Difference Simple
 A = Q_condensor_heat_duty / (U * del_T_LM) 
+# 7-14b Temperature Difference Full
 A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
 # 7-15 Heat Transfer Difference
 1 / U = sum_R

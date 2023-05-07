@@ -10,12 +10,12 @@ PS = -V * dP / dT + Q_external_gas_throughput + Q_0
 """
 Q_0 := throughput of gas flow due to system outgassing, must be constant for 11-2
 """
-t = V/S * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
+t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
 
 # 11-3 System Factor
 """
 t:= actual evacuation time
-t_c:= calculated evacuation time using Eq 10-4
+t_c:= calculated evacuation time using Eq 10.4
 F_s:= system factor, based on operating experience
 """
 t = t_c * F_s

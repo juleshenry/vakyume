@@ -28,26 +28,48 @@ from sympy import Symbol, solve, log
 
 TAB = "    "
 TYPE = ": float"
+STD = "WRITE"
+OUTFILE = "vakyume_lib.py"
+
+
+def stdout(s):
+    if STD == "WRITE":
+        with open(OUTFILE, "a+") as o:
+            o.write(s + "\n")
+    else:
+        print(s)
 
 
 class Solver:
-    def permute(s, eqn, eqn_n):
-        tokes = []
+    def get_tokes(s, eqn):
+        tokes = set()
         for t in eqn.split(" "):
-            t = t.strip()
-            if t.isidentifier() and t not in {"ln", "log"}:
-                tokes.append(t)
+            clean_t = t.strip().replace("(", "").replace(")", "")
+            # print(clean_t,clean_t.isidentifier())
+            if clean_t.isidentifier() and t not in {"ln", "log"}:
+                tokes.add(clean_t)
+        tokes = list(tokes)
+        return tokes
+
+    def permute(s, eqn, eqn_n):
+        tokes = s.get_tokes(eqn)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-        print(f"# {eqn.strip().replace('#','')}")
+        stdout(f"# {eqn.strip().replace('#','')}")
         for t in tokes:
-            args = str(f"{TYPE}, ").join(sorted(filter(lambda x: x != t, tokes)))
-            print(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}(' + args + f"{TYPE}):")
-            solns = solve(normal_form, Symbol(t))
-            if not len(solns):
-                print("failed to solve")
-                continue
-            for soln in solns:
-                print(f"{TAB*2}{t} = {soln}\n{TAB*2}return {t}")
+            args = sorted(filter(lambda x: x != t, tokes))
+            typed_args = str(f"{TYPE}, ").join(args)
+            if not typed_args:
+                typed_args = ''
+            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}(' + typed_args + f"{TYPE}):")
+            try:
+                solns = solve(normal_form, Symbol(t))
+                if not len(solns):
+                    stdout(f"{TAB*2}pass #failed to solve")
+                    continue
+                for soln in solns:
+                    stdout(f"{TAB*2}{t} = {soln}\n{TAB*2}return {t}")
+            except:
+                stdout(f"{TAB*2}pass #NotImplementedError")
 
     def analyze(s, i):
         root_dir = os.getcwd() + "/chapters/"
@@ -78,21 +100,21 @@ def reveal_blank_eqn_names():
 
 if __name__ == "__main__":
     X = Solver()
+    # o = X.get_tokes("S_pump_speed = (S_p * C) / (S_p + C)")
+    # print(o)
+
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
+        if modules[2].isalpha():continue #__.* files
         chap, mods = modules.split('_')[0], modules.split('_')[1:]
         cls_name = ''.join(x[0].upper() + x[1:] for x in mods)[:-3]
-        print(f"class {cls_name}:")
-        try:
-            X.analyze(chap)
-        except:
-            print('NotImplementedError')
-        break
-    # reveal_blank_eqn_names()
-    # except:
-    # print(l)
-    # Solver().permute("SS = S_Th * (P - p_s) / P ")
-    # tokes = []
-    # for t in tokes:
-    # 	solve(,)
+        stdout(f"\n\nclass {cls_name}:")
+        X.analyze(chap)
 
-    # see_which_notes_are_valid_Python()
+
+
+
+
+
+
+
+
