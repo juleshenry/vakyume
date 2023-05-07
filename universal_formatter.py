@@ -58,9 +58,9 @@ class Solver:
         for t in tokes:
             args = sorted(filter(lambda x: x != t, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
-            if not typed_args:
-                typed_args = ''
-            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}(' + typed_args + f"{TYPE}):")
+            if typed_args:
+                typed_args += TYPE
+            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}({typed_args}):')
             try:
                 solns = solve(normal_form, Symbol(t))
                 if not len(solns):
