@@ -19,7 +19,7 @@ p * V = n * R * T
 # 1-8 aug. ideal gas law
 P * V = m / M * R * T
 # 1-9 ideal density
-rho = m/V = P * M / (R * T)
+rho = P * M / (R * T)
 
 # 1-10 Change in pressure, volume, temperature
 P_1 * V_1 / T_1 = P_2 * V_2 / T_2

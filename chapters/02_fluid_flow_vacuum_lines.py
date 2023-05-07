@@ -50,7 +50,7 @@ k:=boltz
 T:= abs temp
 m:= mass of a molecule
 """
-v_a = ((8 * k * T) / (pi * m)) ** 0.5
+v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
 # 2-8 Critical point viscosity
 """
 M:= mol. weight
