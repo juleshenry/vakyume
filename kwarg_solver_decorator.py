@@ -1,5 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May  8 10:56:16 CDT 2023
 
+@author: Julian Henry
 
+Allows for arbitrary missing variable resolution
+"""
 def kwarg_solver(func):
     """
     Intention: 
@@ -20,10 +26,9 @@ def kwarg_solver(func):
 
 
 class Einstein:
-
     @kwarg_solver
     def einstein_1(s, **kwargs):
-        return 0
+        return # decorator skips return
 
     def einstein_1__m(s, e:float):
         return e / 8.98755179e16
@@ -37,3 +42,18 @@ ans = e.einstein_1(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -1
 print(ans)
 ans = e.einstein_1(m = 1000) # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
 print(ans)
+
+
+class Pythagoras:
+    @kwarg_solver
+    def pythagorean(s, **kwargs):
+        return
+
+    def pythagorean__a(s, b: float, c:float):
+        return (c**2 - b**2) **.5
+    def pythagorean__b(s, a: float, c:float):
+        return (c**2 - a**2) **.5
+    def pythagorean__c(s, a: float, b:float):
+        return (a**2 + b**2) **.5
+
+
