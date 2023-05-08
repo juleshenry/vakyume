@@ -1,24 +1,20 @@
-import inspect
-
 def kwarg_solver(func):
-    def wrapper(*args, **kwargs):
-        print("Something is happening before the function is called.")
-        func(*args, **kwargs)
-        print("Something is happening after the function is called.")
+    def wrapper(self, *args, **kwargs):
+        print(kwargs)
+        method_name = func.__name__
+        missing_arg = list(filter(lambda x:x, kwargs))
+        if not len(missing_arg) == 1:
+            raise IllegalArgumentException
+        correct_method = method_name + '__' + missing_arg[0] 
+        print(correct_method)
+        correct_args = [x[1] for x in sorted(kwargs.items(), key=lambda kv:kv[0])]
+        return getattr(self ,correct_method)(*correct_args)
     return wrapper
 
 class Einstein:
 
-    def einstein_1(s,**kwargs):
-        methname = inspect.stack()[0][3]
-        missing_arg = list(filter(lambda x:x,kwargs))
-        if not len(missing_arg) == 1:
-            raise IllegalArgumentException
-        correct_method = methname + '__'+missing_arg[0] 
-        for self_attr in dir(s):
-            if self_attr == correct_method:
-                args = [x[1] for x in sorted(kwargs.items(),key=lambda kv:kv[0])]
-                return getattr(s,correct_method)(*args)
+    @kwarg_solver
+    def einstein_1(s, **kwargs):
         return 0
 
     def einstein_1__m(s, e:float):
