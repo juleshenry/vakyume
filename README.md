@@ -43,4 +43,27 @@ Implementation Phase
 Integration Phase
 - [ ] Separate the python library that converts equations to dynamic classes
 - [ ] Use c++-imports to speed up python library
+- [ ] Make class decorator to ensure invariants on `kwarg_solver`
+- [ ] Metacode Motherlode, the class that does it all
 
+Namely, kwarg_solver is a decorator that requires for x kwargs default to zero, there are x auxiliary functions of the form `vanilla__a, vanilla__b, etc.., vanilla__z`. Implement this as a class decorator. 
+
+Finally, metacode motherlode : 
+
+UniversalSolver({"eqn_name" : "name of method", "eqn": "normal form of equation"})
+-> 
+UniversalSolver({"eqn_name" : "Einstein", "eqn": "0 = m  * 8.98755179e16 - e"})
+->
+`
+class Einstein:
+    @kwarg_solver
+    def einstein(s, e: float = None, m: float = None, **kwargs):
+        return  # decorator skips return
+    def einstein__m(s, e: float):
+        return e / 8.98755179e16
+    def einstein__e(s, m: float) -> float:
+        return m * 8.98755179e16
+`
+
+You get returned a generated class code that solves the equation for parameters
+Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
