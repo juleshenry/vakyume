@@ -31,11 +31,16 @@ Transcription Phase
 - [x] Confirm adherence to strict format
 - [x] Filling in physics constants
 - [ ] Inflation adjusting money calculations in chapter 8
-- [ ] Test Examples from Book
+- [ ] Codify Test Examples from Book
 
 Implementation Phase
 - [x] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
-- [ ] Implement solver-decorator
-- [ ] Confirm worked examples in book
+- [x] Implement solver-decorator
+- [ ] Confirm worked examples in book via test cases
 - [ ] Recreate some graphs in book
 - [ ] Create arbitrary solver demo that scrolls through various calculations, for fun!
+
+Integration Phase
+- [ ] Separate the python library that converts equations to dynamic classes
+- [ ] Use c++-imports to speed up python library
+
