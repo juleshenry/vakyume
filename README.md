@@ -67,3 +67,13 @@ class Einstein:
 
 You get returned a generated class code that solves the equation for parameters
 Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
+
+Structure:
+
+- 1. Original notes, Python equations
+- 2. Python class creation
+- 3. Testing of all existing methods, filling in unresolved equation-stubs or deferring
+- 4. Conversion to C++
+- 5. Testing in C++ all calls
+- 6. Speed tests over compute space
+

@@ -12,13 +12,13 @@ installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
 """
 hp:= horse power of pump
 """
-installed_costs = 33000 * (hp / 10) **0.5
+installed_costs = 33000 * (hp / 10) ** 0.5
 # 8-3 Rotary Piston or Two-Stage Rotary Vane Pumps
-installed_costs = 38000 * (hp / 10) **0.45
+installed_costs = 38000 * (hp / 10) ** 0.45
 
 # 8-4 Rotary Lobe Blowers
 
-installed_costs = 26000 * (hp / 10)** 0.4
+installed_costs = 26000 * (hp / 10) ** 0.4
 # 8-5 Thermal Efficiency
 """
 E:= thermal efficiency
@@ -33,13 +33,15 @@ R:=gas constant, 1544 ft*lb_f / (lb*mol) * deg_R
 T:= absolute temperature, deg_R
 P:= absolute pressure, torr
 """
-adiabatic_hp = k / (k - 1) * (w * R *T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k-1)/k) - 1)
- 
+adiabatic_hp = (
+    k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1)
+)
+
 # 8-7 Adiabatic HP RT Dry Air Imperial
-adiabatic_hp = (w / 20) * ((P_2/ P_1) ** 0.286 - 1)
+adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
 
 # 8-8 Adiabatic HP RT Dry Air Metric
-adiabatic_power_watts = f / 12 * ( (P_2 / P_1) **0.286 - 1)
+adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
 
 # 8-9 Energy Costs
 """
@@ -48,4 +50,4 @@ e:=electrical cost, cents per kWh
 s:=steam cost, dollar per 1000 lb
 E_m:=mechanical pump thermal efficiency
 """
-r = 2.93 ( E_j * e) / (E_m * s)
+r = 2.93(E_j * e) / (E_m * s)

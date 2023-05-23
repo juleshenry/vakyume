@@ -6,7 +6,7 @@ from sympy import Symbol, solve, log
 TAB = "    "
 TYPE = ": float"
 STD = "WRITE"
-OUTFILE = "vakyume_lib.py"
+OUTFILE = "vakyume.py"
 
 
 def stdout(s):
@@ -31,7 +31,7 @@ class Solver:
     def permute(s, eqn, eqn_n):
         tokes = s.get_tokes(eqn)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-        
+
         for t in tokes:
             args = sorted(filter(lambda x: x != t, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
@@ -44,11 +44,11 @@ class Solver:
                 if not len(solns):
                     stdout(f"{TAB*2}pass #   to solve")
                     continue
-                stdout(TAB*2 + "result = []")
+                stdout(TAB * 2 + "result = []")
                 for soln in solns:
                     stdout(f"{TAB*2}{t} = {soln}")
                     stdout(f"{TAB*2}result.append({t})")
-                stdout(TAB*2 + f"return {t}")
+                stdout(TAB * 2 + f"return {t}")
             except:
                 stdout(f"{TAB*2}pass #NotImplementedError")
 
@@ -63,7 +63,6 @@ class Solver:
                 if " = " in l:
                     print(eqn_number)
                     s.permute(l, eqn_number)
-
 
 
 class SetupMethods:
@@ -81,45 +80,38 @@ class SetupMethods:
                         if len(l) < 10:
                             ix += 1
                             print(ix, l.strip(), "needs name!")
-                       
+
     def see_which_notes_are_valid_Python(s):
-        for o in os.listdir(os.getcwd()+'/chapters'):
-            if o[0]=='_':continue
-            with open(os.getcwd()+'/chapters/'+o) as s:
+        for o in os.listdir(os.getcwd() + "/chapters"):
+            if o[0] == "_":
+                continue
+            with open(os.getcwd() + "/chapters/" + o) as s:
                 eqn_number = ""
                 for l in s.readlines():
-                    if (x:=re.compile('\d{1,2}-\d{1,2}').findall(l)):
+                    if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
                         eqn_number = x[0]
-                    if '=' in l and ':' not in l.split('=')[0]:
-                        s.parse_eqn(l.strip().split('#')[0])
-                   
+                    if "=" in l and ":" not in l.split("=")[0]:
+                        s.parse_eqn(l.strip().split("#")[0])
+
     def parse_eqn(s, l):
         try:
             eval(l)
         except SyntaxError as se:
-            to_tokens = se.text.split('=')[0]
-            y = re.compile('\w[A-Za-z0-9\-\_]+').findall(to_tokens)
+            to_tokens = se.text.split("=")[0]
+            y = re.compile("\w[A-Za-z0-9\-\_]+").findall(to_tokens)
             for o in y:
-                print(o,'=',1.1)
+                print(o, "=", 1.1)
             print(l)
         except NameError as ne:
             pass
+
 
 if __name__ == "__main__":
     X = Solver()
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
-            continue #__.* files
-        chap, mods = modules.split('_')[0], modules.split('_')[1:]
-        cls_name = ''.join(x[0].upper() + x[1:] for x in mods)[:-3]
+            continue  # __.* files
+        chap, mods = modules.split("_")[0], modules.split("_")[1:]
+        cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
-
-
-
-
-
-
-
-
-
