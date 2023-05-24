@@ -5,7 +5,7 @@ from sympy import Symbol, solve, log
 
 TAB = "    "
 TYPE = ": float"
-STD = "WRITE"
+STD = "WRITEX"
 OUTFILE = "vakyume.py"
 
 
@@ -18,31 +18,57 @@ def stdout(s):
 
 
 class Solver:
+
+    def valid_toke(s, t):
+        print(t)
+        valid = t.isidentifier() | t.split('**')[0].strip().isidentifier()
+        # print(t.split('**')[0].strip().isidentifier(),'~',valid)
+        return valid
+
+    def clean_t(s,t):
+        d = t.strip().replace("(", "").replace(")", "")
+        o = d.split('**')
+        if len(o)>1 and o[1]:
+            d = f"{t.split('**')[0]} ** {''.join(o[1:])}" 
+            # print(d)
+        return d
+
     def get_tokes(s, eqn):
+        """
+        Assumes equations are symbol-separated by spaces
+        Anything like math.sin(a**2) must be treated via conversion to Sympy syntax
+        B**2 is treated a token by space separation.
+        `clean toke` cleans v**2 to v ** 2 for processing by Symbol
+        """
         tokes = set()
         for t in eqn.split(" "):
-            clean_t = t.strip().replace("(", "").replace(")", "")
-            # print(clean_t,clean_t.isidentifier())
-            if clean_t.isidentifier() and t not in {"ln", "log"}:
-                tokes.add(clean_t)
+            clean = s.clean_t(t)
+            # print(clean,clean.isidentifier())
+            if s.valid_toke(clean) and t not in {"ln", "log"}:
+                tokes.add(clean)
+            else:
+                print("invalid toke",clean)
         tokes = list(tokes)
+        print('tokes',tokes)
         return tokes
 
     def permute(s, eqn, eqn_n):
         tokes = s.get_tokes(eqn)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-
         for t in tokes:
+            print("investigating",t)
             args = sorted(filter(lambda x: x != t, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
             if typed_args:
                 typed_args += TYPE
+            stdout(f"{TAB}@staticmethod")
             stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}({typed_args}):')
             stdout(f"{TAB}# {eqn.strip().replace('#','')}")
             try:
                 solns = solve(normal_form, Symbol(t))
+                print('NORM',normal_form)
                 if not len(solns):
-                    stdout(f"{TAB*2}pass #   to solve")
+                    stdout(f"{TAB*2}pass # unable  to solve")
                     continue
                 stdout(TAB * 2 + "result = []")
                 for soln in solns:
@@ -51,6 +77,7 @@ class Solver:
                 stdout(TAB * 2 + f"return {t}")
             except:
                 stdout(f"{TAB*2}pass #NotImplementedError")
+        1/0
 
     def analyze(s, i):
         root_dir = os.getcwd() + "/chapters/"
@@ -61,12 +88,13 @@ class Solver:
                 if x := re.compile("\d{1,2}-\d{1,2}\w{,2}").findall(l):
                     eqn_number = x[0]
                 if " = " in l:
-                    print(eqn_number)
+                    print("[DEBUG]",eqn_number)
                     s.permute(l, eqn_number)
 
 
 class SetupMethods:
     # These were used to convert my notes to code and check formatting
+    # Universally, they are the 1st step in the process
     @staticmethod
     def reveal_blank_eqn_names():
         ix = 1

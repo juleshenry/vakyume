@@ -30,6 +30,8 @@ def kwarg_solver(func):
             )
         correct_method = method_name + "__" + missing_arg[0]
         correct_args = [x[1] for x in sorted(kwargs.items(), key=lambda kv: kv[0])]
+        # print(*list(vars().items()),sep='\n')
+        print(correct_args)
         return getattr(self, correct_method)(*correct_args)
 
     return wrapper
@@ -51,6 +53,8 @@ e = Einstein()
 ans = e.einstein(e=1000)  # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
 print(ans)
 ans = e.einstein(m=1000)  # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
+print(ans)
+ans = e.einstein(e=ans)  # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
 print(ans)
 
 
@@ -77,3 +81,46 @@ ans = p.pythagorean(a=12, b=5)  # 12
 print(ans)
 ans = p.pythagorean(b=12, c=13)  # 13
 print(ans)
+
+
+
+class VacuumTheory:
+
+    @kwarg_solver
+    def eqn_1_3(s, k=None,m=None,T=None, **kwargs):
+        return 
+
+    def eqn_1_3__T(s, k: float, m: float):
+        # .5 * m * v**2 = 1.5 * k * T
+        result = []
+        T = 0.333333333333333 * m * v ** 2 / k
+        result.append(T)
+        return T
+
+    def eqn_1_3__k(s, T: float, m: float):
+        # .5 * m * v**2 = 1.5 * k * T
+        result = []
+        k = 0.333333333333333 * m * v ** 2 / T
+        result.append(k)
+        return k
+
+    def eqn_1_3__m(s, T: float, k: float):
+        # .5 * m * v**2 = 1.5 * k * T
+        result = []
+        m = 3.0 * T * k / v ** 2
+        result.append(m)
+        return m
+
+VT = VacuumTheory()
+
+ans = VT.eqn_1_3(k=1, T=3)  # 5
+print(ans)
+ans = p.eqn_1_3(m=2, T=3)  # 12
+print(ans)
+ans = p.eqn_1_3(m=2, k=1)  # 13
+print(ans)
+
+
+
+
+

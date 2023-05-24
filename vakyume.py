@@ -1,6 +1,10 @@
 
 
 class VacuumTheory:
+
+    # Wed May 24 16:35:12 CDT 2023 
+    # QUARANTINE
+    # /***********************************/
     def eqn_1_3__k(T: float, m: float):
     # .5 * m * v**2 = 1.5 * k * T
         result = []
@@ -19,6 +23,8 @@ class VacuumTheory:
         m = 3.0*T*k/v**2
         result.append(m)
         return m
+    # /***********************************/
+
     def eqn_1_7__n(R: float, T: float, V: float, p: float):
     # p * V = n * R * T
         result = []
