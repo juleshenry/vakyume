@@ -31,7 +31,7 @@ def kwarg_solver(func):
         correct_method = method_name + "__" + missing_arg[0]
         correct_args = [x[1] for x in sorted(kwargs.items(), key=lambda kv: kv[0])]
         # print(*list(vars().items()),sep='\n')
-        print(correct_args)
+        # print(correct_args)
         return getattr(self, correct_method)(*correct_args)
 
     return wrapper
@@ -87,27 +87,27 @@ print(ans)
 class VacuumTheory:
 
     @kwarg_solver
-    def eqn_1_3(s, k=None,m=None,T=None, **kwargs):
+    def eqn_1_3(s, k=None, m=None, T=None, **kwargs):
         return 
 
     def eqn_1_3__T(s, k: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        T = 0.333333333333333 * m * v ** 2 / k
+        T = 0.333333333333333 * m  ** 2 / k
         result.append(T)
         return T
 
     def eqn_1_3__k(s, T: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        k = 0.333333333333333 * m * v ** 2 / T
+        k = 0.333333333333333 * m  ** 2 / T
         result.append(k)
         return k
 
     def eqn_1_3__m(s, T: float, k: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        m = 3.0 * T * k / v ** 2
+        m = 3.0 * T * k ** 2
         result.append(m)
         return m
 
@@ -115,10 +115,30 @@ VT = VacuumTheory()
 
 ans = VT.eqn_1_3(k=1, T=3)  # 5
 print(ans)
-ans = p.eqn_1_3(m=2, T=3)  # 12
+ans = VT.eqn_1_3(m=2, T=3)  # 12
 print(ans)
-ans = p.eqn_1_3(m=2, k=1)  # 13
+ans = VT.eqn_1_3(m=2, k=1)  # 13
 print(ans)
+
+# Wed May 24 22:19:54 CDT 2023
+# IT works
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
