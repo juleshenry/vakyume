@@ -30,8 +30,6 @@ def kwarg_solver(func):
             )
         correct_method = method_name + "__" + missing_arg[0]
         correct_args = [x[1] for x in sorted(kwargs.items(), key=lambda kv: kv[0])]
-        # print(*list(vars().items()),sep='\n')
-        # print(correct_args)
         return getattr(self, correct_method)(*correct_args)
 
     return wrapper

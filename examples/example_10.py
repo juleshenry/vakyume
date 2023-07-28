@@ -1,3 +1,12 @@
+import sys,os
+sys.path.insert(1, os.path.join(sys.path[0], '..')) 
+from vakyume_lib import LiquidRing
+print(dir(LiquidRing))
+
+'''
+THE FOLLOWING ARE TRUE EXCERPTS FROM THE BOOK.
+'''
+
 # Example 10-1
 """
 A liquid ring vacuum pump is needed to maintain a pressure of 75 torr on a degasser that is 
@@ -48,3 +57,6 @@ for the pump are 40bhp and 30 gal/min.
 
 eqn_10_16
 """
+
+
+
