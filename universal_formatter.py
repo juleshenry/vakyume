@@ -20,7 +20,7 @@ def stdout(s):
 class Solver:
 
     def valid_toke(s, t):
-        print(t)
+        # print(t)
         valid = t.isidentifier() | t.split('**')[0].strip().isidentifier()
         # print(t.split('**')[0].strip().isidentifier(),'~',valid)
         return valid
@@ -47,16 +47,17 @@ class Solver:
             if s.valid_toke(clean) and t not in {"ln", "log"}:
                 tokes.add(clean)
             else:
-                print("invalid toke",clean)
+                pass
+                # print("invalid toke",clean)
         tokes = list(tokes)
-        print('tokes',tokes)
+        # print('tokes',tokes)
         return tokes
 
     def permute(s, eqn, eqn_n):
         tokes = s.get_tokes(eqn)
         normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
         for t in tokes:
-            print("investigating",t)
+            # print("investigating",t)
             args = sorted(filter(lambda x: x != t, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
             if typed_args:
@@ -66,7 +67,7 @@ class Solver:
             stdout(f"{TAB}# {eqn.strip().replace('#','')}")
             try:
                 solns = solve(normal_form, Symbol(t))
-                print('NORM',normal_form)
+                # print('NORM',normal_form)
                 if not len(solns):
                     stdout(f"{TAB*2}pass # unable  to solve")
                     continue
@@ -77,7 +78,6 @@ class Solver:
                 stdout(TAB * 2 + f"return {t}")
             except:
                 stdout(f"{TAB*2}pass #NotImplementedError")
-        1/0
 
     def analyze(s, i):
         root_dir = os.getcwd() + "/chapters/"
@@ -88,7 +88,7 @@ class Solver:
                 if x := re.compile("\d{1,2}-\d{1,2}\w{,2}").findall(l):
                     eqn_number = x[0]
                 if " = " in l:
-                    print("[DEBUG]",eqn_number)
+                    # print("[DEBUG]",eqn_number)
                     s.permute(l, eqn_number)
 
 
@@ -107,7 +107,7 @@ class SetupMethods:
                         eqn_number = x[0]
                         if len(l) < 10:
                             ix += 1
-                            print(ix, l.strip(), "needs name!")
+                            # print(ix, l.strip(), "needs name!")
 
     def see_which_notes_are_valid_Python(s):
         for o in os.listdir(os.getcwd() + "/chapters"):
@@ -127,9 +127,9 @@ class SetupMethods:
         except SyntaxError as se:
             to_tokens = se.text.split("=")[0]
             y = re.compile("\w[A-Za-z0-9\-\_]+").findall(to_tokens)
-            for o in y:
-                print(o, "=", 1.1)
-            print(l)
+            # for o in y:
+            #     print(o, "=", 1.1)
+            # print(l)
         except NameError as ne:
             pass
 
@@ -143,3 +143,4 @@ if __name__ == "__main__":
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
+        break
