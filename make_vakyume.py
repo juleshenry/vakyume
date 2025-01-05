@@ -5,8 +5,8 @@ from sympy import Symbol, solve, log
 
 TAB = "    "
 TYPE = ": float"
-STD = "WRITEX"
-OUTFILE = "vakyume.py"
+STD = "WRITE"
+OUTFILE = "vakyume_2025.py"
 
 
 def stdout(s):
@@ -21,15 +21,15 @@ class Solver:
 
     def valid_toke(s, t):
         # print(t)
-        valid = t.isidentifier() | t.split('**')[0].strip().isidentifier()
+        valid = t.isidentifier() | t.split("**")[0].strip().isidentifier()
         # print(t.split('**')[0].strip().isidentifier(),'~',valid)
         return valid
 
-    def clean_t(s,t):
+    def clean_t(s, t):
         d = t.strip().replace("(", "").replace(")", "")
-        o = d.split('**')
-        if len(o)>1 and o[1]:
-            d = f"{t.split('**')[0]} ** {''.join(o[1:])}" 
+        o = d.split("**")
+        if len(o) > 1 and o[1]:
+            d = f"{t.split('**')[0]} ** {''.join(o[1:])}"
             # print(d)
         return d
 
@@ -69,7 +69,7 @@ class Solver:
                 solns = solve(normal_form, Symbol(t))
                 # print('NORM',normal_form)
                 if not len(solns):
-                    stdout(f"{TAB*2}pass # unable  to solve")
+                    stdout(f"{TAB*2}pass # unable to solve")
                     continue
                 stdout(TAB * 2 + "result = []")
                 for soln in solns:
@@ -136,6 +136,7 @@ class SetupMethods:
 
 if __name__ == "__main__":
     X = Solver()
+    stdout("from math import log, sqrt, exp")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files

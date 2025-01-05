@@ -1,22 +1,25 @@
+from math import sqrt
+
+
 class VacuumTheory:
     def eqn_1_3__T(k: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        T = 0.333333333333333 * m * v ** 2 / k
+        T = 0.333333333333333 * m * v**2 / k
         result.append(T)
         return T
 
     def eqn_1_3__k(T: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        k = 0.333333333333333 * m * v ** 2 / T
+        k = 0.333333333333333 * m * v**2 / T
         result.append(k)
         return k
 
     def eqn_1_3__m(T: float, k: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        m = 3.0 * T * k / v ** 2
+        m = 3.0 * T * k / v**2
         result.append(m)
         return m
 
@@ -305,14 +308,14 @@ class FluidFlowVacuumLines:
     def eqn_2_2__lambd(delta: float, psi: float):
         # lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
         result = []
-        lambd = 4.44288293815837 * delta ** 2 * psi
+        lambd = 4.44288293815837 * delta**2 * psi
         result.append(lambd)
         return lambd
 
     def eqn_2_2__psi(delta: float, lambd: float):
         # lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
         result = []
-        psi = 0.225079079039277 * lambd / delta ** 2
+        psi = 0.225079079039277 * lambd / delta**2
         result.append(psi)
         return psi
 
@@ -361,28 +364,28 @@ class FluidFlowVacuumLines:
     def eqn_2_5__q(D: float, L: float, delta_P: float, mu: float):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
-        q = 0.0245436926061703 * D ** 4 * delta_P / (L * mu)
+        q = 0.0245436926061703 * D**4 * delta_P / (L * mu)
         result.append(q)
         return q
 
     def eqn_2_5__L(D: float, delta_P: float, mu: float, q: float):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
-        L = 0.0245436926061703 * D ** 4 * delta_P / (mu * q)
+        L = 0.0245436926061703 * D**4 * delta_P / (mu * q)
         result.append(L)
         return L
 
     def eqn_2_5__mu(D: float, L: float, delta_P: float, q: float):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
-        mu = 0.0245436926061703 * D ** 4 * delta_P / (L * q)
+        mu = 0.0245436926061703 * D**4 * delta_P / (L * q)
         result.append(mu)
         return mu
 
     def eqn_2_5__delta_P(D: float, L: float, mu: float, q: float):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
-        delta_P = 40.7436654315252 * L * mu * q / D ** 4
+        delta_P = 40.7436654315252 * L * mu * q / D**4
         result.append(delta_P)
         return delta_P
 
@@ -430,14 +433,14 @@ class FluidFlowVacuumLines:
     def eqn_2_7__T(k: float, m: float, v_a: float):
         # v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
         result = []
-        T = 0.392699081698724 * m * v_a ** 2 / k
+        T = 0.392699081698724 * m * v_a**2 / k
         result.append(T)
         return T
 
     def eqn_2_7__k(T: float, m: float, v_a: float):
         # v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
         result = []
-        k = 0.392699081698724 * m * v_a ** 2 / T
+        k = 0.392699081698724 * m * v_a**2 / T
         result.append(k)
         return k
 
@@ -451,7 +454,7 @@ class FluidFlowVacuumLines:
     def eqn_2_7__m(T: float, k: float, v_a: float):
         # v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
         result = []
-        m = 2.54647908947033 * T * k / v_a ** 2
+        m = 2.54647908947033 * T * k / v_a**2
         result.append(m)
         return m
 
@@ -465,27 +468,23 @@ class FluidFlowVacuumLines:
     def eqn_2_8__P_c(M: float, T_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        P_c = -0.046801946114055 * (T_c ** 0.166666666666667 * mu_c / M ** 0.5) ** (
-            3 / 2
-        )
+        P_c = -0.046801946114055 * (T_c**0.166666666666667 * mu_c / M**0.5) ** (3 / 2)
         result.append(P_c)
-        P_c = 0.046801946114055 * (T_c ** 0.166666666666667 * mu_c / M ** 0.5) ** (
-            3 / 2
-        )
+        P_c = 0.046801946114055 * (T_c**0.166666666666667 * mu_c / M**0.5) ** (3 / 2)
         result.append(P_c)
         return P_c
 
     def eqn_2_8__M(P_c: float, T_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        M = 0.0168662506324844 * T_c ** (1 / 3) * mu_c ** 2 / P_c ** (4 / 3)
+        M = 0.0168662506324844 * T_c ** (1 / 3) * mu_c**2 / P_c ** (4 / 3)
         result.append(M)
         return M
 
     def eqn_2_8__T_c(M: float, P_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        T_c = 208422.380089 * M ** 3 * P_c ** 4 / mu_c ** 6
+        T_c = 208422.380089 * M**3 * P_c**4 / mu_c**6
         result.append(T_c)
         return T_c
 
@@ -499,27 +498,23 @@ class FluidFlowVacuumLines:
     def eqn_2_8__P_c(M: float, T_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        P_c = -0.046801946114055 * (T_c ** 0.166666666666667 * mu_c / M ** 0.5) ** (
-            3 / 2
-        )
+        P_c = -0.046801946114055 * (T_c**0.166666666666667 * mu_c / M**0.5) ** (3 / 2)
         result.append(P_c)
-        P_c = 0.046801946114055 * (T_c ** 0.166666666666667 * mu_c / M ** 0.5) ** (
-            3 / 2
-        )
+        P_c = 0.046801946114055 * (T_c**0.166666666666667 * mu_c / M**0.5) ** (3 / 2)
         result.append(P_c)
         return P_c
 
     def eqn_2_8__M(P_c: float, T_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        M = 0.0168662506324844 * T_c ** (1 / 3) * mu_c ** 2 / P_c ** (4 / 3)
+        M = 0.0168662506324844 * T_c ** (1 / 3) * mu_c**2 / P_c ** (4 / 3)
         result.append(M)
         return M
 
     def eqn_2_8__T_c(M: float, P_c: float, mu_c: float):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
         result = []
-        T_c = 208422.380089 * M ** 3 * P_c ** 4 / mu_c ** 6
+        T_c = 208422.380089 * M**3 * P_c**4 / mu_c**6
         result.append(T_c)
         return T_c
 
@@ -547,28 +542,28 @@ class FluidFlowVacuumLines:
     def eqn_2_11__h_r(D: float, L: float, f: float, g_c: float, v: float):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
         result = []
-        h_r = L * f * v ** 2 / (2 * D * g_c)
+        h_r = L * f * v**2 / (2 * D * g_c)
         result.append(h_r)
         return h_r
 
     def eqn_2_11__f(D: float, L: float, g_c: float, h_r: float, v: float):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
         result = []
-        f = 2 * D * g_c * h_r / (L * v ** 2)
+        f = 2 * D * g_c * h_r / (L * v**2)
         result.append(f)
         return f
 
     def eqn_2_11__g_c(D: float, L: float, f: float, h_r: float, v: float):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
         result = []
-        g_c = L * f * v ** 2 / (2 * D * h_r)
+        g_c = L * f * v**2 / (2 * D * h_r)
         result.append(g_c)
         return g_c
 
     def eqn_2_11__L(D: float, f: float, g_c: float, h_r: float, v: float):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
         result = []
-        L = 2 * D * g_c * h_r / (f * v ** 2)
+        L = 2 * D * g_c * h_r / (f * v**2)
         result.append(L)
         return L
 
@@ -584,28 +579,28 @@ class FluidFlowVacuumLines:
     def eqn_2_11__D(L: float, f: float, g_c: float, h_r: float, v: float):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
         result = []
-        D = L * f * v ** 2 / (2 * g_c * h_r)
+        D = L * f * v**2 / (2 * g_c * h_r)
         result.append(D)
         return D
 
     def eqn_2_12__d(L: float, delta_P: float, f: float, g: float, rho: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        d = 2.155 * L * f * rho * v ** 2 / (delta_P * g)
+        d = 2.155 * L * f * rho * v**2 / (delta_P * g)
         result.append(d)
         return d
 
     def eqn_2_12__f(L: float, d: float, delta_P: float, g: float, rho: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        f = 0.464037122969838 * d * delta_P * g / (L * rho * v ** 2)
+        f = 0.464037122969838 * d * delta_P * g / (L * rho * v**2)
         result.append(f)
         return f
 
     def eqn_2_12__L(d: float, delta_P: float, f: float, g: float, rho: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        L = 0.464037122969838 * d * delta_P * g / (f * rho * v ** 2)
+        L = 0.464037122969838 * d * delta_P * g / (f * rho * v**2)
         result.append(L)
         return L
 
@@ -621,116 +616,116 @@ class FluidFlowVacuumLines:
     def eqn_2_12__g(L: float, d: float, delta_P: float, f: float, rho: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        g = 2.155 * L * f * rho * v ** 2 / (d * delta_P)
+        g = 2.155 * L * f * rho * v**2 / (d * delta_P)
         result.append(g)
         return g
 
     def eqn_2_12__delta_P(L: float, d: float, f: float, g: float, rho: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        delta_P = 2.155 * L * f * rho * v ** 2 / (d * g)
+        delta_P = 2.155 * L * f * rho * v**2 / (d * g)
         result.append(delta_P)
         return delta_P
 
     def eqn_2_12__rho(L: float, d: float, delta_P: float, f: float, g: float, v: float):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
         result = []
-        rho = 0.464037122969838 * d * delta_P * g / (L * f * v ** 2)
+        rho = 0.464037122969838 * d * delta_P * g / (L * f * v**2)
         result.append(rho)
         return rho
 
     def eqn_2_13__q(L: float, d: float, delta_P: float, f: float, rho: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        q = -0.681994339470473 * sqrt(d ** 5 * delta_P / (L * f * rho))
+        q = -0.681994339470473 * sqrt(d**5 * delta_P / (L * f * rho))
         result.append(q)
-        q = 0.681994339470473 * sqrt(d ** 5 * delta_P / (L * f * rho))
+        q = 0.681994339470473 * sqrt(d**5 * delta_P / (L * f * rho))
         result.append(q)
         return q
 
     def eqn_2_13__f(L: float, d: float, delta_P: float, q: float, rho: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        f = 0.465116279069767 * d ** 5 * delta_P / (L * q ** 2 * rho)
+        f = 0.465116279069767 * d**5 * delta_P / (L * q**2 * rho)
         result.append(f)
         return f
 
     def eqn_2_13__d(L: float, delta_P: float, f: float, q: float, rho: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        d = 1.16543402167043 * (L * f * q ** 2 * rho / delta_P) ** (1 / 5)
+        d = 1.16543402167043 * (L * f * q**2 * rho / delta_P) ** (1 / 5)
         result.append(d)
-        d = -0.942855929354115 * (L * f * q ** 2 * rho / delta_P) ** (
+        d = -0.942855929354115 * (L * f * q**2 * rho / delta_P) ** (
             1 / 5
-        ) - 0.685024930457783 * I * (L * f * q ** 2 * rho / delta_P) ** (1 / 5)
+        ) - 0.685024930457783 * I * (L * f * q**2 * rho / delta_P) ** (1 / 5)
         result.append(d)
-        d = -0.942855929354115 * (L * f * q ** 2 * rho / delta_P) ** (
+        d = -0.942855929354115 * (L * f * q**2 * rho / delta_P) ** (
             1 / 5
-        ) + 0.685024930457783 * I * (L * f * q ** 2 * rho / delta_P) ** (1 / 5)
+        ) + 0.685024930457783 * I * (L * f * q**2 * rho / delta_P) ** (1 / 5)
         result.append(d)
-        d = 0.360138918518902 * (L * f * q ** 2 * rho / delta_P) ** (
+        d = 0.360138918518902 * (L * f * q**2 * rho / delta_P) ** (
             1 / 5
-        ) - 1.10839362062173 * I * (L * f * q ** 2 * rho / delta_P) ** (1 / 5)
+        ) - 1.10839362062173 * I * (L * f * q**2 * rho / delta_P) ** (1 / 5)
         result.append(d)
-        d = 0.360138918518902 * (L * f * q ** 2 * rho / delta_P) ** (
+        d = 0.360138918518902 * (L * f * q**2 * rho / delta_P) ** (
             1 / 5
-        ) + 1.10839362062173 * I * (L * f * q ** 2 * rho / delta_P) ** (1 / 5)
+        ) + 1.10839362062173 * I * (L * f * q**2 * rho / delta_P) ** (1 / 5)
         result.append(d)
         return d
 
     def eqn_2_13__L(d: float, delta_P: float, f: float, q: float, rho: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        L = 0.465116279069767 * d ** 5 * delta_P / (f * q ** 2 * rho)
+        L = 0.465116279069767 * d**5 * delta_P / (f * q**2 * rho)
         result.append(L)
         return L
 
     def eqn_2_13__delta_P(L: float, d: float, f: float, q: float, rho: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        delta_P = 2.15 * L * f * q ** 2 * rho / d ** 5
+        delta_P = 2.15 * L * f * q**2 * rho / d**5
         result.append(delta_P)
         return delta_P
 
     def eqn_2_13__rho(L: float, d: float, delta_P: float, f: float, q: float):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
         result = []
-        rho = 0.465116279069767 * d ** 5 * delta_P / (L * f * q ** 2)
+        rho = 0.465116279069767 * d**5 * delta_P / (L * f * q**2)
         result.append(rho)
         return rho
 
     def eqn_2_14__g_c(M: float, R: float, T: float, k: float, v_s: float):
         # v_s = (k * g_c * R / M * T) ** 0.5
         result = []
-        g_c = M * v_s ** 2 / (R * T * k)
+        g_c = M * v_s**2 / (R * T * k)
         result.append(g_c)
         return g_c
 
     def eqn_2_14__R(M: float, T: float, g_c: float, k: float, v_s: float):
         # v_s = (k * g_c * R / M * T) ** 0.5
         result = []
-        R = M * v_s ** 2 / (T * g_c * k)
+        R = M * v_s**2 / (T * g_c * k)
         result.append(R)
         return R
 
     def eqn_2_14__T(M: float, R: float, g_c: float, k: float, v_s: float):
         # v_s = (k * g_c * R / M * T) ** 0.5
         result = []
-        T = M * v_s ** 2 / (R * g_c * k)
+        T = M * v_s**2 / (R * g_c * k)
         result.append(T)
         return T
 
     def eqn_2_14__M(R: float, T: float, g_c: float, k: float, v_s: float):
         # v_s = (k * g_c * R / M * T) ** 0.5
         result = []
-        M = R * T * g_c * k / v_s ** 2
+        M = R * T * g_c * k / v_s**2
         result.append(M)
         return M
 
     def eqn_2_14__k(M: float, R: float, T: float, g_c: float, v_s: float):
         # v_s = (k * g_c * R / M * T) ** 0.5
         result = []
-        k = M * v_s ** 2 / (R * T * g_c)
+        k = M * v_s**2 / (R * T * g_c)
         result.append(k)
         return k
 
@@ -744,7 +739,7 @@ class FluidFlowVacuumLines:
     def eqn_2_15__Re(f: float):
         # f = 0.316 / Re ** (0.25)
         result = []
-        Re = 0.009971220736 / f ** 4
+        Re = 0.009971220736 / f**4
         result.append(Re)
         return Re
 
@@ -772,56 +767,56 @@ class FluidFlowVacuumLines:
     def eqn_2_16__delta_P(L: float, mu: float, v: float):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
-        delta_P = 0.0345 * L * mu * v / d ** 2
+        delta_P = 0.0345 * L * mu * v / d**2
         result.append(delta_P)
         return delta_P
 
     def eqn_2_16__v(L: float, delta_P: float, mu: float):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
-        v = 28.9855072463768 * d ** 2 * delta_P / (L * mu)
+        v = 28.9855072463768 * d**2 * delta_P / (L * mu)
         result.append(v)
         return v
 
     def eqn_2_16__mu(L: float, delta_P: float, v: float):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
-        mu = 28.9855072463768 * d ** 2 * delta_P / (L * v)
+        mu = 28.9855072463768 * d**2 * delta_P / (L * v)
         result.append(mu)
         return mu
 
     def eqn_2_16__L(delta_P: float, mu: float, v: float):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
-        L = 28.9855072463768 * d ** 2 * delta_P / (mu * v)
+        L = 28.9855072463768 * d**2 * delta_P / (mu * v)
         result.append(L)
         return L
 
     def eqn_2_16__delta_P(L: float, mu: float, q: float):
         # delta_P = 0.105 * mu * L * q / d**4
         result = []
-        delta_P = 0.105 * L * mu * q / d ** 4
+        delta_P = 0.105 * L * mu * q / d**4
         result.append(delta_P)
         return delta_P
 
     def eqn_2_16__q(L: float, delta_P: float, mu: float):
         # delta_P = 0.105 * mu * L * q / d**4
         result = []
-        q = 9.52380952380952 * d ** 4 * delta_P / (L * mu)
+        q = 9.52380952380952 * d**4 * delta_P / (L * mu)
         result.append(q)
         return q
 
     def eqn_2_16__mu(L: float, delta_P: float, q: float):
         # delta_P = 0.105 * mu * L * q / d**4
         result = []
-        mu = 9.52380952380952 * d ** 4 * delta_P / (L * q)
+        mu = 9.52380952380952 * d**4 * delta_P / (L * q)
         result.append(mu)
         return mu
 
     def eqn_2_16__L(delta_P: float, mu: float, q: float):
         # delta_P = 0.105 * mu * L * q / d**4
         result = []
-        L = 9.52380952380952 * d ** 4 * delta_P / (mu * q)
+        L = 9.52380952380952 * d**4 * delta_P / (mu * q)
         result.append(L)
         return L
 
@@ -1012,7 +1007,7 @@ class FluidFlowVacuumLines:
     ):
         # q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
         result = []
-        P_upstream = P_downstream + 40.7436654315252 * L * mu * q / D ** 4
+        P_upstream = P_downstream + 40.7436654315252 * L * mu * q / D**4
         result.append(P_upstream)
         return P_upstream
 
@@ -1026,7 +1021,7 @@ class FluidFlowVacuumLines:
     ):
         # q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
         result = []
-        q = 0.0245436926061703 * D ** 4 * (-P_downstream + P_upstream) / (L * mu)
+        q = 0.0245436926061703 * D**4 * (-P_downstream + P_upstream) / (L * mu)
         result.append(q)
         return q
 
@@ -1040,7 +1035,7 @@ class FluidFlowVacuumLines:
     ):
         # q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
         result = []
-        L = 0.0245436926061703 * D ** 4 * (-P_downstream + P_upstream) / (mu * q)
+        L = 0.0245436926061703 * D**4 * (-P_downstream + P_upstream) / (mu * q)
         result.append(L)
         return L
 
@@ -1049,7 +1044,7 @@ class FluidFlowVacuumLines:
     ):
         # q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
         result = []
-        P_downstream = P_upstream - 40.7436654315252 * L * mu * q / D ** 4
+        P_downstream = P_upstream - 40.7436654315252 * L * mu * q / D**4
         result.append(P_downstream)
         return P_downstream
 
@@ -1058,7 +1053,7 @@ class FluidFlowVacuumLines:
     ):
         # q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
         result = []
-        mu = 0.0245436926061703 * D ** 4 * (-P_downstream + P_upstream) / (L * q)
+        mu = 0.0245436926061703 * D**4 * (-P_downstream + P_upstream) / (L * q)
         result.append(mu)
         return mu
 
@@ -1130,28 +1125,28 @@ class FluidFlowVacuumLines:
     def eqn_2_28__C(D: float, L: float, P_p: float, mu: float):
         # C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
         result = []
-        C = 0.0245436926061703 * D ** 4 * P_p / (L * mu)
+        C = 0.0245436926061703 * D**4 * P_p / (L * mu)
         result.append(C)
         return C
 
     def eqn_2_28__L(C: float, D: float, P_p: float, mu: float):
         # C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
         result = []
-        L = 0.0245436926061703 * D ** 4 * P_p / (C * mu)
+        L = 0.0245436926061703 * D**4 * P_p / (C * mu)
         result.append(L)
         return L
 
     def eqn_2_28__mu(C: float, D: float, L: float, P_p: float):
         # C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
         result = []
-        mu = 0.0245436926061703 * D ** 4 * P_p / (C * L)
+        mu = 0.0245436926061703 * D**4 * P_p / (C * L)
         result.append(mu)
         return mu
 
     def eqn_2_28__P_p(C: float, D: float, L: float, mu: float):
         # C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
         result = []
-        P_p = 40.7436654315252 * C * L * mu / D ** 4
+        P_p = 40.7436654315252 * C * L * mu / D**4
         result.append(P_p)
         return P_p
 
@@ -1241,42 +1236,42 @@ class FluidFlowVacuumLines:
     def eqn_2_34__C(C_1: float, C_2: float, D: float, L: float, P_p: float, mu: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        C = D ** 3 * (C_1 * D * P_p + C_2 * mu) / (L * mu)
+        C = D**3 * (C_1 * D * P_p + C_2 * mu) / (L * mu)
         result.append(C)
         return C
 
     def eqn_2_34__L(C: float, C_1: float, C_2: float, D: float, P_p: float, mu: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        L = D ** 3 * (C_1 * D * P_p + C_2 * mu) / (C * mu)
+        L = D**3 * (C_1 * D * P_p + C_2 * mu) / (C * mu)
         result.append(L)
         return L
 
     def eqn_2_34__C_2(C: float, C_1: float, D: float, L: float, P_p: float, mu: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        C_2 = C * L / D ** 3 - C_1 * D * P_p / mu
+        C_2 = C * L / D**3 - C_1 * D * P_p / mu
         result.append(C_2)
         return C_2
 
     def eqn_2_34__mu(C: float, C_1: float, C_2: float, D: float, L: float, P_p: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        mu = C_1 * D ** 4 * P_p / (C * L - C_2 * D ** 3)
+        mu = C_1 * D**4 * P_p / (C * L - C_2 * D**3)
         result.append(mu)
         return mu
 
     def eqn_2_34__C_1(C: float, C_2: float, D: float, L: float, P_p: float, mu: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        C_1 = mu * (C * L - C_2 * D ** 3) / (D ** 4 * P_p)
+        C_1 = mu * (C * L - C_2 * D**3) / (D**4 * P_p)
         result.append(C_1)
         return C_1
 
     def eqn_2_34__P_p(C: float, C_1: float, C_2: float, D: float, L: float, mu: float):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
-        P_p = mu * (C * L - C_2 * D ** 3) / (C_1 * D ** 4)
+        P_p = mu * (C * L - C_2 * D**3) / (C_1 * D**4)
         result.append(P_p)
         return P_p
 
@@ -1288,56 +1283,53 @@ class FluidFlowVacuumLines:
                 -sqrt(
                     -2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 - sqrt(
                     2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    + C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    + C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -1357,68 +1349,59 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     + 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 - sqrt(
@@ -1432,74 +1415,65 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     - 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    + C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    + C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * C
@@ -1511,86 +1485,68 @@ class FluidFlowVacuumLines:
                                 * P_p
                                 * (
                                     sqrt(
-                                        C ** 3
-                                        * L ** 3
-                                        * mu ** 3
-                                        / (27 * C_1 ** 3 * P_p ** 3)
+                                        C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                         + (
-                                            -(C_2 ** 2)
-                                            * mu ** 2
+                                            -(C_2**2)
+                                            * mu**2
                                             * (
                                                 -C * L * mu / (C_1 * P_p)
                                                 - 3
-                                                * C_2 ** 4
-                                                * mu ** 4
-                                                / (256 * C_1 ** 4 * P_p ** 4)
+                                                * C_2**4
+                                                * mu**4
+                                                / (256 * C_1**4 * P_p**4)
                                             )
-                                            / (8 * C_1 ** 2 * P_p ** 2)
+                                            / (8 * C_1**2 * P_p**2)
                                             - 3
-                                            * C_2 ** 6
-                                            * mu ** 6
-                                            / (2048 * C_1 ** 6 * P_p ** 6)
+                                            * C_2**6
+                                            * mu**6
+                                            / (2048 * C_1**6 * P_p**6)
                                         )
                                         ** 2
                                         / 4
                                     )
-                                    + C_2 ** 2
-                                    * mu ** 2
+                                    + C_2**2
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (16 * C_1 ** 2 * P_p ** 2)
-                                    + 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (4096 * C_1 ** 6 * P_p ** 6)
+                                    / (16 * C_1**2 * P_p**2)
+                                    + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                                 )
                                 ** (1 / 3)
                             )
                             + 2
                             * (
                                 sqrt(
-                                    C ** 3
-                                    * L ** 3
-                                    * mu ** 3
-                                    / (27 * C_1 ** 3 * P_p ** 3)
+                                    C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                     + (
-                                        -(C_2 ** 2)
-                                        * mu ** 2
+                                        -(C_2**2)
+                                        * mu**2
                                         * (
                                             -C * L * mu / (C_1 * P_p)
                                             - 3
-                                            * C_2 ** 4
-                                            * mu ** 4
-                                            / (256 * C_1 ** 4 * P_p ** 4)
+                                            * C_2**4
+                                            * mu**4
+                                            / (256 * C_1**4 * P_p**4)
                                         )
-                                        / (8 * C_1 ** 2 * P_p ** 2)
-                                        - 3
-                                        * C_2 ** 6
-                                        * mu ** 6
-                                        / (2048 * C_1 ** 6 * P_p ** 6)
+                                        / (8 * C_1**2 * P_p**2)
+                                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                     )
                                     ** 2
                                     / 4
                                 )
-                                + C_2 ** 2
-                                * mu ** 2
+                                + C_2**2
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (16 * C_1 ** 2 * P_p ** 2)
-                                + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                                / (16 * C_1**2 * P_p**2)
+                                + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -1605,56 +1561,53 @@ class FluidFlowVacuumLines:
                 -sqrt(
                     -2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 + sqrt(
                     2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    + C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    + C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -1674,68 +1627,59 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     + 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 + sqrt(
@@ -1749,74 +1693,65 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     - 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    + C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    + C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * C
@@ -1828,86 +1763,68 @@ class FluidFlowVacuumLines:
                                 * P_p
                                 * (
                                     sqrt(
-                                        C ** 3
-                                        * L ** 3
-                                        * mu ** 3
-                                        / (27 * C_1 ** 3 * P_p ** 3)
+                                        C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                         + (
-                                            -(C_2 ** 2)
-                                            * mu ** 2
+                                            -(C_2**2)
+                                            * mu**2
                                             * (
                                                 -C * L * mu / (C_1 * P_p)
                                                 - 3
-                                                * C_2 ** 4
-                                                * mu ** 4
-                                                / (256 * C_1 ** 4 * P_p ** 4)
+                                                * C_2**4
+                                                * mu**4
+                                                / (256 * C_1**4 * P_p**4)
                                             )
-                                            / (8 * C_1 ** 2 * P_p ** 2)
+                                            / (8 * C_1**2 * P_p**2)
                                             - 3
-                                            * C_2 ** 6
-                                            * mu ** 6
-                                            / (2048 * C_1 ** 6 * P_p ** 6)
+                                            * C_2**6
+                                            * mu**6
+                                            / (2048 * C_1**6 * P_p**6)
                                         )
                                         ** 2
                                         / 4
                                     )
-                                    + C_2 ** 2
-                                    * mu ** 2
+                                    + C_2**2
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (16 * C_1 ** 2 * P_p ** 2)
-                                    + 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (4096 * C_1 ** 6 * P_p ** 6)
+                                    / (16 * C_1**2 * P_p**2)
+                                    + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                                 )
                                 ** (1 / 3)
                             )
                             + 2
                             * (
                                 sqrt(
-                                    C ** 3
-                                    * L ** 3
-                                    * mu ** 3
-                                    / (27 * C_1 ** 3 * P_p ** 3)
+                                    C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                     + (
-                                        -(C_2 ** 2)
-                                        * mu ** 2
+                                        -(C_2**2)
+                                        * mu**2
                                         * (
                                             -C * L * mu / (C_1 * P_p)
                                             - 3
-                                            * C_2 ** 4
-                                            * mu ** 4
-                                            / (256 * C_1 ** 4 * P_p ** 4)
+                                            * C_2**4
+                                            * mu**4
+                                            / (256 * C_1**4 * P_p**4)
                                         )
-                                        / (8 * C_1 ** 2 * P_p ** 2)
-                                        - 3
-                                        * C_2 ** 6
-                                        * mu ** 6
-                                        / (2048 * C_1 ** 6 * P_p ** 6)
+                                        / (8 * C_1**2 * P_p**2)
+                                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                     )
                                     ** 2
                                     / 4
                                 )
-                                + C_2 ** 2
-                                * mu ** 2
+                                + C_2**2
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (16 * C_1 ** 2 * P_p ** 2)
-                                + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                                / (16 * C_1**2 * P_p**2)
+                                + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -1922,56 +1839,53 @@ class FluidFlowVacuumLines:
                 sqrt(
                     -2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 - sqrt(
                     2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    - C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    - C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -1991,68 +1905,59 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     + 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 - sqrt(
@@ -2066,74 +1971,65 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     - 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    - C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    - C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * C
@@ -2145,86 +2041,68 @@ class FluidFlowVacuumLines:
                                 * P_p
                                 * (
                                     sqrt(
-                                        C ** 3
-                                        * L ** 3
-                                        * mu ** 3
-                                        / (27 * C_1 ** 3 * P_p ** 3)
+                                        C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                         + (
-                                            -(C_2 ** 2)
-                                            * mu ** 2
+                                            -(C_2**2)
+                                            * mu**2
                                             * (
                                                 -C * L * mu / (C_1 * P_p)
                                                 - 3
-                                                * C_2 ** 4
-                                                * mu ** 4
-                                                / (256 * C_1 ** 4 * P_p ** 4)
+                                                * C_2**4
+                                                * mu**4
+                                                / (256 * C_1**4 * P_p**4)
                                             )
-                                            / (8 * C_1 ** 2 * P_p ** 2)
+                                            / (8 * C_1**2 * P_p**2)
                                             - 3
-                                            * C_2 ** 6
-                                            * mu ** 6
-                                            / (2048 * C_1 ** 6 * P_p ** 6)
+                                            * C_2**6
+                                            * mu**6
+                                            / (2048 * C_1**6 * P_p**6)
                                         )
                                         ** 2
                                         / 4
                                     )
-                                    + C_2 ** 2
-                                    * mu ** 2
+                                    + C_2**2
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (16 * C_1 ** 2 * P_p ** 2)
-                                    + 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (4096 * C_1 ** 6 * P_p ** 6)
+                                    / (16 * C_1**2 * P_p**2)
+                                    + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                                 )
                                 ** (1 / 3)
                             )
                             + 2
                             * (
                                 sqrt(
-                                    C ** 3
-                                    * L ** 3
-                                    * mu ** 3
-                                    / (27 * C_1 ** 3 * P_p ** 3)
+                                    C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                     + (
-                                        -(C_2 ** 2)
-                                        * mu ** 2
+                                        -(C_2**2)
+                                        * mu**2
                                         * (
                                             -C * L * mu / (C_1 * P_p)
                                             - 3
-                                            * C_2 ** 4
-                                            * mu ** 4
-                                            / (256 * C_1 ** 4 * P_p ** 4)
+                                            * C_2**4
+                                            * mu**4
+                                            / (256 * C_1**4 * P_p**4)
                                         )
-                                        / (8 * C_1 ** 2 * P_p ** 2)
-                                        - 3
-                                        * C_2 ** 6
-                                        * mu ** 6
-                                        / (2048 * C_1 ** 6 * P_p ** 6)
+                                        / (8 * C_1**2 * P_p**2)
+                                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                     )
                                     ** 2
                                     / 4
                                 )
-                                + C_2 ** 2
-                                * mu ** 2
+                                + C_2**2
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (16 * C_1 ** 2 * P_p ** 2)
-                                + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                                / (16 * C_1**2 * P_p**2)
+                                + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -2239,56 +2117,53 @@ class FluidFlowVacuumLines:
                 sqrt(
                     -2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 + sqrt(
                     2
                     * (
-                        -(C_2 ** 2)
-                        * mu ** 2
+                        -(C_2**2)
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (8 * C_1 ** 2 * P_p ** 2)
-                        - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                        / (8 * C_1**2 * P_p**2)
+                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    - C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    - C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -2308,68 +2183,59 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     + 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                    + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                 )
                 / 2
                 + sqrt(
@@ -2383,74 +2249,65 @@ class FluidFlowVacuumLines:
                         * P_p
                         * (
                             sqrt(
-                                C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                                C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                 + (
-                                    -(C_2 ** 2)
-                                    * mu ** 2
+                                    -(C_2**2)
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (8 * C_1 ** 2 * P_p ** 2)
-                                    - 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (2048 * C_1 ** 6 * P_p ** 6)
+                                    / (8 * C_1**2 * P_p**2)
+                                    - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                 )
                                 ** 2
                                 / 4
                             )
-                            + C_2 ** 2
-                            * mu ** 2
+                            + C_2**2
+                            * mu**2
                             * (
                                 -C * L * mu / (C_1 * P_p)
-                                - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                                - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                             )
-                            / (16 * C_1 ** 2 * P_p ** 2)
-                            + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                            / (16 * C_1**2 * P_p**2)
+                            + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                         )
                         ** (1 / 3)
                     )
                     - 2
                     * (
                         sqrt(
-                            C ** 3 * L ** 3 * mu ** 3 / (27 * C_1 ** 3 * P_p ** 3)
+                            C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                             + (
-                                -(C_2 ** 2)
-                                * mu ** 2
+                                -(C_2**2)
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (8 * C_1 ** 2 * P_p ** 2)
-                                - 3 * C_2 ** 6 * mu ** 6 / (2048 * C_1 ** 6 * P_p ** 6)
+                                / (8 * C_1**2 * P_p**2)
+                                - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                             )
                             ** 2
                             / 4
                         )
-                        + C_2 ** 2
-                        * mu ** 2
+                        + C_2**2
+                        * mu**2
                         * (
                             -C * L * mu / (C_1 * P_p)
-                            - 3 * C_2 ** 4 * mu ** 4 / (256 * C_1 ** 4 * P_p ** 4)
+                            - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                         )
-                        / (16 * C_1 ** 2 * P_p ** 2)
-                        + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                        / (16 * C_1**2 * P_p**2)
+                        + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                     )
                     ** (1 / 3)
-                    + C_2 ** 2 * mu ** 2 / (2 * C_1 ** 2 * P_p ** 2)
-                    - C_2 ** 3
-                    * mu ** 3
+                    + C_2**2 * mu**2 / (2 * C_1**2 * P_p**2)
+                    - C_2**3
+                    * mu**3
                     / (
                         4
-                        * C_1 ** 3
-                        * P_p ** 3
+                        * C_1**3
+                        * P_p**3
                         * sqrt(
                             -2
                             * C
@@ -2462,86 +2319,68 @@ class FluidFlowVacuumLines:
                                 * P_p
                                 * (
                                     sqrt(
-                                        C ** 3
-                                        * L ** 3
-                                        * mu ** 3
-                                        / (27 * C_1 ** 3 * P_p ** 3)
+                                        C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                         + (
-                                            -(C_2 ** 2)
-                                            * mu ** 2
+                                            -(C_2**2)
+                                            * mu**2
                                             * (
                                                 -C * L * mu / (C_1 * P_p)
                                                 - 3
-                                                * C_2 ** 4
-                                                * mu ** 4
-                                                / (256 * C_1 ** 4 * P_p ** 4)
+                                                * C_2**4
+                                                * mu**4
+                                                / (256 * C_1**4 * P_p**4)
                                             )
-                                            / (8 * C_1 ** 2 * P_p ** 2)
+                                            / (8 * C_1**2 * P_p**2)
                                             - 3
-                                            * C_2 ** 6
-                                            * mu ** 6
-                                            / (2048 * C_1 ** 6 * P_p ** 6)
+                                            * C_2**6
+                                            * mu**6
+                                            / (2048 * C_1**6 * P_p**6)
                                         )
                                         ** 2
                                         / 4
                                     )
-                                    + C_2 ** 2
-                                    * mu ** 2
+                                    + C_2**2
+                                    * mu**2
                                     * (
                                         -C * L * mu / (C_1 * P_p)
-                                        - 3
-                                        * C_2 ** 4
-                                        * mu ** 4
-                                        / (256 * C_1 ** 4 * P_p ** 4)
+                                        - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                     )
-                                    / (16 * C_1 ** 2 * P_p ** 2)
-                                    + 3
-                                    * C_2 ** 6
-                                    * mu ** 6
-                                    / (4096 * C_1 ** 6 * P_p ** 6)
+                                    / (16 * C_1**2 * P_p**2)
+                                    + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                                 )
                                 ** (1 / 3)
                             )
                             + 2
                             * (
                                 sqrt(
-                                    C ** 3
-                                    * L ** 3
-                                    * mu ** 3
-                                    / (27 * C_1 ** 3 * P_p ** 3)
+                                    C**3 * L**3 * mu**3 / (27 * C_1**3 * P_p**3)
                                     + (
-                                        -(C_2 ** 2)
-                                        * mu ** 2
+                                        -(C_2**2)
+                                        * mu**2
                                         * (
                                             -C * L * mu / (C_1 * P_p)
                                             - 3
-                                            * C_2 ** 4
-                                            * mu ** 4
-                                            / (256 * C_1 ** 4 * P_p ** 4)
+                                            * C_2**4
+                                            * mu**4
+                                            / (256 * C_1**4 * P_p**4)
                                         )
-                                        / (8 * C_1 ** 2 * P_p ** 2)
-                                        - 3
-                                        * C_2 ** 6
-                                        * mu ** 6
-                                        / (2048 * C_1 ** 6 * P_p ** 6)
+                                        / (8 * C_1**2 * P_p**2)
+                                        - 3 * C_2**6 * mu**6 / (2048 * C_1**6 * P_p**6)
                                     )
                                     ** 2
                                     / 4
                                 )
-                                + C_2 ** 2
-                                * mu ** 2
+                                + C_2**2
+                                * mu**2
                                 * (
                                     -C * L * mu / (C_1 * P_p)
-                                    - 3
-                                    * C_2 ** 4
-                                    * mu ** 4
-                                    / (256 * C_1 ** 4 * P_p ** 4)
+                                    - 3 * C_2**4 * mu**4 / (256 * C_1**4 * P_p**4)
                                 )
-                                / (16 * C_1 ** 2 * P_p ** 2)
-                                + 3 * C_2 ** 6 * mu ** 6 / (4096 * C_1 ** 6 * P_p ** 6)
+                                / (16 * C_1**2 * P_p**2)
+                                + 3 * C_2**6 * mu**6 / (4096 * C_1**6 * P_p**6)
                             )
                             ** (1 / 3)
-                            + C_2 ** 2 * mu ** 2 / (4 * C_1 ** 2 * P_p ** 2)
+                            + C_2**2 * mu**2 / (4 * C_1**2 * P_p**2)
                         )
                     )
                 )
@@ -2605,28 +2444,28 @@ class FluidFlowVacuumLines:
     def eqn_2_37__F_t(A: float, C: float, M: float, T: float):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
-        F_t = 0.000681714375311032 * C ** 2 * M / (A * T)
+        F_t = 0.000681714375311032 * C**2 * M / (A * T)
         result.append(F_t)
         return F_t
 
     def eqn_2_37__T(A: float, C: float, F_t: float, M: float):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
-        T = 0.000681714375311032 * C ** 2 * M / (A * F_t)
+        T = 0.000681714375311032 * C**2 * M / (A * F_t)
         result.append(T)
         return T
 
     def eqn_2_37__M(A: float, C: float, F_t: float, T: float):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
-        M = 1466.89 * A * F_t * T / C ** 2
+        M = 1466.89 * A * F_t * T / C**2
         result.append(M)
         return M
 
     def eqn_2_37__A(C: float, F_t: float, M: float, T: float):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
-        A = 0.000681714375311032 * C ** 2 * M / (F_t * T)
+        A = 0.000681714375311032 * C**2 * M / (F_t * T)
         result.append(A)
         return A
 
@@ -2847,16 +2686,12 @@ class PressMgmt:
         result = []
         H_2 = (
             A_C * (H_1 - P)
-            - sqrt(
-                A_C * (A_C * H_1 ** 2 - 2 * A_C * H_1 * P + A_C * P ** 2 + 4 * P * V)
-            )
+            - sqrt(A_C * (A_C * H_1**2 - 2 * A_C * H_1 * P + A_C * P**2 + 4 * P * V))
         ) / (2 * A_C)
         result.append(H_2)
         H_2 = (
             A_C * (H_1 - P)
-            + sqrt(
-                A_C * (A_C * H_1 ** 2 - 2 * A_C * H_1 * P + A_C * P ** 2 + 4 * P * V)
-            )
+            + sqrt(A_C * (A_C * H_1**2 - 2 * A_C * H_1 * P + A_C * P**2 + 4 * P * V))
         ) / (2 * A_C)
         result.append(H_2)
         return H_2
@@ -2880,21 +2715,21 @@ class PressMgmt:
     def eqn_3_11__V(A_C: float, H_2: float, P: float):
         # P = A_C / V * (H_2) ** 2
         result = []
-        V = A_C * H_2 ** 2 / P
+        V = A_C * H_2**2 / P
         result.append(V)
         return V
 
     def eqn_3_11__A_C(H_2: float, P: float, V: float):
         # P = A_C / V * (H_2) ** 2
         result = []
-        A_C = P * V / H_2 ** 2
+        A_C = P * V / H_2**2
         result.append(A_C)
         return A_C
 
     def eqn_3_11__P(A_C: float, H_2: float, V: float):
         # P = A_C / V * (H_2) ** 2
         result = []
-        P = A_C * H_2 ** 2 / V
+        P = A_C * H_2**2 / V
         result.append(P)
         return P
 
@@ -2910,14 +2745,14 @@ class PressMgmt:
     def eqn_3_12__KAPPA_1(H_2: float, P: float):
         # P = KAPPA_1 * H_2 ** 2
         result = []
-        KAPPA_1 = P / H_2 ** 2
+        KAPPA_1 = P / H_2**2
         result.append(KAPPA_1)
         return KAPPA_1
 
     def eqn_3_12__P(H_2: float, KAPPA_1: float):
         # P = KAPPA_1 * H_2 ** 2
         result = []
-        P = H_2 ** 2 * KAPPA_1
+        P = H_2**2 * KAPPA_1
         result.append(P)
         return P
 
@@ -3398,7 +3233,7 @@ class ProcessAppI:
     def eqn_5_14__T(M: float, P_0: float, W_E: float):
         # W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
-        T = 0.00339889 * M * P_0 ** 2 / W_E ** 2
+        T = 0.00339889 * M * P_0**2 / W_E**2
         result.append(T)
         return T
 
@@ -3412,7 +3247,7 @@ class ProcessAppI:
     def eqn_5_14__M(P_0: float, T: float, W_E: float):
         # W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
-        M = 294.213699178261 * T * W_E ** 2 / P_0 ** 2
+        M = 294.213699178261 * T * W_E**2 / P_0**2
         result.append(M)
         return M
 
@@ -4042,7 +3877,7 @@ class ProcessAppIi:
     ):
         # dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
-        dV_dt = A ** 2 * delta_P / (A * r_M + delta_P * m * mu * r)
+        dV_dt = A**2 * delta_P / (A * r_M + delta_P * m * mu * r)
         result.append(dV_dt)
         return dV_dt
 
@@ -4078,7 +3913,7 @@ class ProcessAppIi:
     ):
         # dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
-        delta_P = A * dV_dt * r_M / (A ** 2 - dV_dt * m * mu * r)
+        delta_P = A * dV_dt * r_M / (A**2 - dV_dt * m * mu * r)
         result.append(delta_P)
         return delta_P
 
@@ -4088,13 +3923,11 @@ class ProcessAppIi:
         # dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         A = (
-            dV_dt * r_M
-            - sqrt(dV_dt * (dV_dt * r_M ** 2 + 4 * delta_P ** 2 * m * mu * r))
+            dV_dt * r_M - sqrt(dV_dt * (dV_dt * r_M**2 + 4 * delta_P**2 * m * mu * r))
         ) / (2 * delta_P)
         result.append(A)
         A = (
-            dV_dt * r_M
-            + sqrt(dV_dt * (dV_dt * r_M ** 2 + 4 * delta_P ** 2 * m * mu * r))
+            dV_dt * r_M + sqrt(dV_dt * (dV_dt * r_M**2 + 4 * delta_P**2 * m * mu * r))
         ) / (2 * delta_P)
         result.append(A)
         return A
@@ -5502,7 +5335,7 @@ class SelectingPump:
     def eqn_8_2__hp(installed_costs: float):
         # installed_costs = 33000 * (hp / 10) **0.5
         result = []
-        hp = 9.18273645546364e-9 * installed_costs ** 2
+        hp = 9.18273645546364e-9 * installed_costs**2
         result.append(hp)
         return hp
 
@@ -5748,21 +5581,21 @@ class SteamJetInjectors:
     def eqn_9_2__rho_s(P_m: float, d_n: float, w_s: float):
         # w_s = 865.8 * d_n ** 2 * (P_m * rho_s) ** 0.5
         result = []
-        rho_s = 1.334027668054e-6 * w_s ** 2 / (P_m * d_n ** 4)
+        rho_s = 1.334027668054e-6 * w_s**2 / (P_m * d_n**4)
         result.append(rho_s)
         return rho_s
 
     def eqn_9_2__P_m(d_n: float, rho_s: float, w_s: float):
         # w_s = 865.8 * d_n ** 2 * (P_m * rho_s) ** 0.5
         result = []
-        P_m = 1.334027668054e-6 * w_s ** 2 / (d_n ** 4 * rho_s)
+        P_m = 1.334027668054e-6 * w_s**2 / (d_n**4 * rho_s)
         result.append(P_m)
         return P_m
 
     def eqn_9_2__w_s(P_m: float, d_n: float, rho_s: float):
         # w_s = 865.8 * d_n ** 2 * (P_m * rho_s) ** 0.5
         result = []
-        w_s = 865.8 * d_n ** 2 * sqrt(P_m * rho_s)
+        w_s = 865.8 * d_n**2 * sqrt(P_m * rho_s)
         result.append(w_s)
         return w_s
 
@@ -6106,7 +5939,7 @@ class LiquidRing:
     def eqn_10_10__bhp_0(bhp: float, mu: float, rho: float):
         # bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
         result = []
-        bhp_0 = 2000.0 * bhp / (31.0 * mu ** 0.16 * rho ** 0.84 + 1000.0)
+        bhp_0 = 2000.0 * bhp / (31.0 * mu**0.16 * rho**0.84 + 1000.0)
         result.append(bhp_0)
         return bhp_0
 
@@ -6120,20 +5953,20 @@ class LiquidRing:
         mu = (
             -204374584201.104
             * I
-            * (bhp / (bhp_0 * rho ** 0.84) - 0.5 / rho ** 0.84) ** (25 / 4)
+            * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (25 / 4)
         )
         result.append(mu)
         mu = (
             204374584201.104
             * I
-            * (bhp / (bhp_0 * rho ** 0.84) - 0.5 / rho ** 0.84) ** (25 / 4)
+            * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (25 / 4)
         )
         result.append(mu)
-        mu = -204374584201.104 * (bhp / (bhp_0 * rho ** 0.84) - 0.5 / rho ** 0.84) ** (
+        mu = -204374584201.104 * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (
             25 / 4
         )
         result.append(mu)
-        mu = 204374584201.104 * (bhp / (bhp_0 * rho ** 0.84) - 0.5 / rho ** 0.84) ** (
+        mu = 204374584201.104 * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (
             25 / 4
         )
         result.append(mu)
@@ -6675,19 +6508,19 @@ class LiquidRing:
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
         T_i = (
-            P ** 2 * T_e * (S_0 / S_p) ** (5 / 3)
-            + 460.0 * P ** 2 * (S_0 / S_p) ** (5 / 3)
-            - 460.0 * P ** 2
+            P**2 * T_e * (S_0 / S_p) ** (5 / 3)
+            + 460.0 * P**2 * (S_0 / S_p) ** (5 / 3)
+            - 460.0 * P**2
             - P * T_e * p_s * (S_0 / S_p) ** (5 / 3)
             + 460.0 * P * p_0
             + 460.0 * P * p_c
             - 460.0 * P * p_s * (S_0 / S_p) ** (5 / 3)
             - 460.0 * p_0 * p_c
-        ) / (P ** 2 - P * p_0 - P * p_c + p_0 * p_c)
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
         result.append(T_i)
         T_i = (
             0.487139289628747
-            * P ** 2
+            * P**2
             * T_e
             * (
                 -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
@@ -6695,13 +6528,13 @@ class LiquidRing:
             )
             ** 5
             + 224.084073229223
-            * P ** 2
+            * P**2
             * (
                 -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
                 - I * (S_0 / S_p) ** 0.333333333333333
             )
             ** 5
-            - 460.0 * P ** 2
+            - 460.0 * P**2
             - 0.487139289628747
             * P
             * T_e
@@ -6722,11 +6555,11 @@ class LiquidRing:
             )
             ** 5
             - 460.0 * p_0 * p_c
-        ) / (P ** 2 - P * p_0 - P * p_c + p_0 * p_c)
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
         result.append(T_i)
         T_i = (
             0.487139289628747
-            * P ** 2
+            * P**2
             * T_e
             * (
                 -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
@@ -6734,13 +6567,13 @@ class LiquidRing:
             )
             ** 5
             + 224.084073229223
-            * P ** 2
+            * P**2
             * (
                 -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
                 + I * (S_0 / S_p) ** 0.333333333333333
             )
             ** 5
-            - 460.0 * P ** 2
+            - 460.0 * P**2
             - 0.487139289628747
             * P
             * T_e
@@ -6761,7 +6594,7 @@ class LiquidRing:
             )
             ** 5
             - 460.0 * p_0 * p_c
-        ) / (P ** 2 - P * p_0 - P * p_c + p_0 * p_c)
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
         result.append(T_i)
         return T_i
 
@@ -6770,8 +6603,8 @@ class LiquidRing:
         result = []
         S_0 = S_p * (
             (
-                P ** 2 * T_i
-                + 460.0 * P ** 2
+                P**2 * T_i
+                + 460.0 * P**2
                 - P * T_i * p_0
                 - P * T_i * p_c
                 - 460.0 * P * p_0
@@ -6898,9 +6731,9 @@ class LiquidRing:
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
         T_e = (
-            P ** 2 * T_i
-            - 460.0 * P ** 2 * (S_0 / S_p) ** (5 / 3)
-            + 460.0 * P ** 2
+            P**2 * T_i
+            - 460.0 * P**2 * (S_0 / S_p) ** (5 / 3)
+            + 460.0 * P**2
             - P * T_i * p_0
             - P * T_i * p_c
             - 460.0 * P * p_0
@@ -6913,15 +6746,15 @@ class LiquidRing:
         T_e = (
             2.05280095711867
             * (
-                P ** 2 * T_i
+                P**2 * T_i
                 - 224.084073229223
-                * P ** 2
+                * P**2
                 * (
                     -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
                     - I * (S_0 / S_p) ** 0.333333333333333
                 )
                 ** 5
-                + 460.0 * P ** 2
+                + 460.0 * P**2
                 - P * T_i * p_0
                 - P * T_i * p_c
                 - 460.0 * P * p_0
@@ -6951,15 +6784,15 @@ class LiquidRing:
         T_e = (
             2.05280095711867
             * (
-                P ** 2 * T_i
+                P**2 * T_i
                 - 224.084073229223
-                * P ** 2
+                * P**2
                 * (
                     -0.577350269189626 * (S_0 / S_p) ** 0.333333333333333
                     + I * (S_0 / S_p) ** 0.333333333333333
                 )
                 ** 5
-                + 460.0 * P ** 2
+                + 460.0 * P**2
                 - P * T_i * p_0
                 - P * T_i * p_c
                 - 460.0 * P * p_0

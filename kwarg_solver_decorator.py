@@ -62,13 +62,13 @@ class Pythagoras:
         return
 
     def pythagorean__a(s, b: float, c: float):
-        return (c ** 2 - b ** 2) ** 0.5
+        return (c**2 - b**2) ** 0.5
 
     def pythagorean__b(s, a: float, c: float):
-        return (c ** 2 - a ** 2) ** 0.5
+        return (c**2 - a**2) ** 0.5
 
     def pythagorean__c(s, a: float, b: float):
-        return (a ** 2 + b ** 2) ** 0.5
+        return (a**2 + b**2) ** 0.5
 
 
 p = Pythagoras()
@@ -81,33 +81,33 @@ ans = p.pythagorean(b=12, c=13)  # 13
 print(ans)
 
 
-
 class VacuumTheory:
 
     @kwarg_solver
     def eqn_1_3(s, k=None, m=None, T=None, **kwargs):
-        return 
+        return
 
     def eqn_1_3__T(s, k: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        T = 0.333333333333333 * m  ** 2 / k
+        T = 0.333333333333333 * m**2 / k
         result.append(T)
         return T
 
     def eqn_1_3__k(s, T: float, m: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        k = 0.333333333333333 * m  ** 2 / T
+        k = 0.333333333333333 * m**2 / T
         result.append(k)
         return k
 
     def eqn_1_3__m(s, T: float, k: float):
         # .5 * m * v**2 = 1.5 * k * T
         result = []
-        m = 3.0 * T * k ** 2
+        m = 3.0 * T * k**2
         result.append(m)
         return m
+
 
 VT = VacuumTheory()
 
@@ -120,25 +120,3 @@ print(ans)
 
 # Wed May 24 22:19:54 CDT 2023
 # IT works
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
