@@ -14,7 +14,7 @@ d_n := nozzle throat diameter
 P_m := motive steam pressure at point 1, psia
 rhos_s := motive steam density at point 1, lb/ft^3
 """
-w_s = 865.8 * d_n ** 2 * (P_m * rho_s) ** 0.5
+w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
 # 9-3 Evacuation Hogger Estimation
 """
 Order of magnitue accuracy estimate of time required for point specific ejector to evacuate a system

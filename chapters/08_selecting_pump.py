@@ -33,9 +33,9 @@ R:=gas constant, 1544 ft*lb_f / (lb*mol) * deg_R
 T:= absolute temperature, deg_R
 P:= absolute pressure, torr
 """
-adiabatic_hp = (
-    k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1)
-)
+# fmt:off
+adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+# fmt:on
 
 # 8-7 Adiabatic HP RT Dry Air Imperial
 adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)

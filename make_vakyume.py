@@ -5,12 +5,12 @@ from sympy import Symbol, solve, log
 
 TAB = "    "
 TYPE = ": float"
-STD = "WRITE"
+STD = 1
 OUTFILE = "vakyume_2025.py"
 
 
 def stdout(s):
-    if STD == "WRITE":
+    if STD:
         with open(OUTFILE, "a+") as o:
             o.write(s + "\n")
     else:
@@ -21,7 +21,7 @@ class Solver:
 
     def valid_toke(s, t):
         # print(t)
-        valid = t.isidentifier() | t.split("**")[0].strip().isidentifier()
+        valid = t.isidentifier() or t.split("**")[0].strip().isidentifier()
         # print(t.split('**')[0].strip().isidentifier(),'~',valid)
         return valid
 
@@ -46,49 +46,70 @@ class Solver:
             # print(clean,clean.isidentifier())
             if s.valid_toke(clean) and t not in {"ln", "log"}:
                 tokes.add(clean)
-            else:
-                pass
-                # print("invalid toke",clean)
+            # else:
+            #     print("invalid toke",clean)
         tokes = list(tokes)
         # print('tokes',tokes)
         return tokes
 
+    def unexponentiate(s, t):
+        return t.split("**")[0].strip()
+
     def permute(s, eqn, eqn_n):
+        """1. gets tokes
+        2. yields normal form
+        """
         tokes = s.get_tokes(eqn)
-        normal_form = eqn.split("=")[1].strip() + " - " + eqn.split("=")[0].strip()
-        for t in tokes:
-            # print("investigating",t)
-            args = sorted(filter(lambda x: x != t, tokes))
+        normal_form = (
+            eqn.split("=")[1].strip().split("#")[0]
+            + f" - ({eqn.split("=")[0].strip()})"
+        )
+        print("!!!!", normal_form)
+        tokes = list(map(s.unexponentiate, tokes))
+        for token in tokes:
+            # print("investigating",f"{token}")
+            # print(normal_form)
+            args = sorted(filter(lambda x: x != token, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
             if typed_args:
                 typed_args += TYPE
-            stdout(f"{TAB}@staticmethod")
-            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{t}({typed_args}):')
-            stdout(f"{TAB}# {eqn.strip().replace('#','')}")
+            stdout(f"\n{TAB}@staticmethod")
+            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{token}({typed_args}):')
+            stdout(
+                f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
+            )  # original text contains #-comment for units
             try:
-                solns = solve(normal_form, Symbol(t))
-                # print('NORM',normal_form)
-                if not len(solns):
-                    stdout(f"{TAB*2}pass # unable to solve")
-                    continue
-                stdout(TAB * 2 + "result = []")
-                for soln in solns:
-                    stdout(f"{TAB*2}{t} = {soln}")
-                    stdout(f"{TAB*2}result.append({t})")
-                stdout(TAB * 2 + f"return {t}")
-            except:
-                stdout(f"{TAB*2}pass #NotImplementedError")
+                solns = solve(normal_form, Symbol(token))
+            except NotImplementedError:
+                solns = []  # Unable to solve at present moment
+
+            # print('solns',solns)
+            if not len(solns):
+                stdout(f"{TAB*2}pass # unable to solve")
+                continue
+            stdout(TAB * 2 + "result = []")
+            for soln in solns:
+                stdout(f"{TAB*2}{token} = {soln}")
+                stdout(f"{TAB*2}result.append({token})")
+            stdout(TAB * 2 + f"return {token}")
+            # except:
+            #     stdout(f"{TAB*2}pass #NotImplementedError")
 
     def analyze(s, i):
+        """1. opens a file in the chapters folder
+        2. reads lines until equation is found.
+        3. permutes the equation
+        """
         root_dir = os.getcwd() + "/chapters/"
         get = list(filter(lambda x: i in x, os.listdir(root_dir)))[0]
         with open(root_dir + get) as file:
             eqn_number = ""
             for l in file.readlines():
-                if x := re.compile("\d{1,2}-\d{1,2}\w{,2}").findall(l):
+                if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
                     eqn_number = x[0]
                 if " = " in l:
-                    # print("[DEBUG]",eqn_number)
+                    print("[DEBUG]", eqn_number)
+                    print(l)
                     s.permute(l, eqn_number)
 
 
@@ -103,7 +124,7 @@ class SetupMethods:
                 continue
             with open(os.getcwd() + "/chapters/" + o) as s:
                 for l in s.readlines():
-                    if x := re.compile("\d{1,2}-\d{1,2}\w").findall(l):
+                    if x := re.compile(r"\d{1,2}-\d{1,2}\w").findall(l):
                         eqn_number = x[0]
                         if len(l) < 10:
                             ix += 1
@@ -116,7 +137,7 @@ class SetupMethods:
             with open(os.getcwd() + "/chapters/" + o) as s:
                 eqn_number = ""
                 for l in s.readlines():
-                    if x := re.compile("\d{1,2}-\d{1,2}").findall(l):
+                    if x := re.compile(r"\d{1,2}-\d{1,2}").findall(l):
                         eqn_number = x[0]
                     if "=" in l and ":" not in l.split("=")[0]:
                         s.parse_eqn(l.strip().split("#")[0])
@@ -126,7 +147,7 @@ class SetupMethods:
             eval(l)
         except SyntaxError as se:
             to_tokens = se.text.split("=")[0]
-            y = re.compile("\w[A-Za-z0-9\-\_]+").findall(to_tokens)
+            y = re.compile(r"\w[A-Za-z0-9\-\_]+").findall(to_tokens)
             # for o in y:
             #     print(o, "=", 1.1)
             # print(l)
@@ -142,6 +163,10 @@ if __name__ == "__main__":
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
+        print(
+            chap,
+            mods,
+            cls_name,
+        )
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
-        break

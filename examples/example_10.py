@@ -1,11 +1,13 @@
-import sys,os
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import sys, os
+
+sys.path.insert(1, os.path.join(sys.path[0], ".."))
 from vakyume_lib import LiquidRing
+
 print(dir(LiquidRing))
 
-'''
+"""
 THE FOLLOWING ARE TRUE EXCERPTS FROM THE BOOK.
-'''
+"""
 
 # Example 10-1
 """
@@ -57,6 +59,3 @@ for the pump are 40bhp and 30 gal/min.
 
 eqn_10_16
 """
-
-
-
