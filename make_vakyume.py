@@ -7,7 +7,8 @@ TAB = "    "
 TYPE = ": float"
 STD = 1
 OUTFILE = "vakyume_2025.py"
-MAX_COMP_TIME_SECONDS = 5 * 60 
+MAX_COMP_TIME_SECONDS = 5 * 60
+
 
 def stdout(s):
     if STD:
@@ -25,7 +26,6 @@ class Solver:
             return solve(nf, symb)
         except NotImplementedError:
             return []  # Unable to solve at present moment
-            
 
     def valid_toke(s, t):
         # print(t)
@@ -88,8 +88,9 @@ class Solver:
             )  # original text contains #-comment for units
             try:
                 solns = s.get_solutions(normal_form, Symbol(token))
-            except StopIteration as unable_to_compute:
+            except RuntimeError as unable_to_compute:
                 print(unable_to_compute)
+                solns = []
             # print('solns',solns)
             if not len(solns):
                 stdout(f"{TAB*2}pass # unable to solve")
