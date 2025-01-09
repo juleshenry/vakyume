@@ -7,7 +7,7 @@ TAB = "    "
 TYPE = ": float"
 STD = 1
 OUTFILE = "vakyume_2025.py"
-MAX_COMP_TIME_SECONDS = 5 * 60
+MAX_COMP_TIME_SECONDS = 1 * 60 / 10
 
 
 def stdout(s):
@@ -41,6 +41,13 @@ class Solver:
             # print(d)
         return d
 
+    def tokenize(s, eqn, malos):
+        # if any log\d+(), replace as log().... remove spaces trailing operator
+        for m in malos:
+            eqn = f"{m}".join([o.strip() for o in eqn.split(m)])
+        print(eqn)
+        return eqn.split(" ")
+
     def get_tokes(s, eqn):
         """
         Assumes equations are symbol-separated by spaces
@@ -49,15 +56,26 @@ class Solver:
         `clean toke` cleans v**2 to v ** 2 for processing by Symbol
         """
         tokes = set()
-        for t in eqn.split(" "):
+        malos = {"ln", "log"}
+        for t in s.tokenize(eqn, malos):
             clean = s.clean_t(t)
             # print(clean,clean.isidentifier())
-            if s.valid_toke(clean) and t not in {"ln", "log"}:
+            if s.valid_toke(clean) and not any(op in clean for op in malos):
                 tokes.add(clean)
-            # else:
-            #     print("invalid toke",clean)
-        tokes = list(tokes)
-        # print('tokes',tokes)
+            elif any(op in clean for op in malos):  # TODO: approximate
+                for m in malos:
+                    clean = clean.replace(m, "")
+                tokes.add(clean)
+
+        def purge(t):
+            for c in "*()/-+":
+                t = t.replace(c, "")
+            return t
+
+        tokes = list(
+            filter(lambda a: a, map(purge, map(s.unexponentiate, list(tokes))))
+        )
+        print("tokens: ", tokes)
         return tokes
 
     def unexponentiate(s, t):
@@ -72,8 +90,7 @@ class Solver:
             eqn.split("=")[1].strip().split("#")[0]
             + f" - ({eqn.split("=")[0].strip()})"
         )
-        print("!!!!", normal_form)
-        tokes = list(map(s.unexponentiate, tokes))
+        print("normal_form", normal_form)
         for token in tokes:
             # print("investigating",f"{token}")
             # print(normal_form)
@@ -88,18 +105,19 @@ class Solver:
             )  # original text contains #-comment for units
             try:
                 solns = s.get_solutions(normal_form, Symbol(token))
-            except RuntimeError as unable_to_compute:
-                print(unable_to_compute)
+            except:
                 solns = []
             # print('solns',solns)
             if not len(solns):
-                stdout(f"{TAB*2}pass # unable to solve")
+                stdout(
+                    f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
+                )
                 continue
             stdout(TAB * 2 + "result = []")
             for soln in solns:
                 stdout(f"{TAB*2}{token} = {soln}")
                 stdout(f"{TAB*2}result.append({token})")
-            stdout(TAB * 2 + f"return {token}")
+            stdout(TAB * 2 + f"return result")
             # except:
             #     stdout(f"{TAB*2}pass #NotImplementedError")
 

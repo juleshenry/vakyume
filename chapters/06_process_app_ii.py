@@ -1,8 +1,8 @@
 # Chapter 6: Process Applications II
 # 6-1 Refrigeration Capacity Mass Flow Heat Coefficient
-w_1 * c_p * (T_1 - T_R) + w_2 * c_p (T_2 - T_R) = w_v * del_h_v
+w_1 * c_p * (T_1 - T_R) + w_2 * c_p * (T_2 - T_R) = w_v * del_h_v
 # 6-2 Refrigeration Capacity Q_r
-w_1 * c_p * (T_1 - T_R) + w_2 * c_p (T_2 - T_R) = 12000 * Q_v
+w_1 * c_p * (T_1 - T_R) + w_2 * c_p * (T_2 - T_R) = 12000 * Q_v
 # 6-4 Vapor Load Steam Jet
 w_v = 12000 * Q_v / delta_h_v
 # 6-6 Makeup Water Flow Required to Replace Evaporative Losses

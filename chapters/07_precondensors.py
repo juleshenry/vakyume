@@ -5,9 +5,14 @@ y_i = p_i / P
 p_i = x_i * P_i_0
 # 7-3 Partial Pressure Condensable Vapor
 p_i = x_i * epsilon_i * P_i_0
-# 7-4 Partial Pressure Noncondensibles
+# 7-4a Partial Pressure Noncondensibles
 p_nc = P - p_c
-n_i / n_nc = p_i / p_nc = p_i / (p - P_c)
+# 7-4aa Partial Pressure Noncondensibles
+n_i / n_nc = p_i / p_nc
+# 7-4ab Partial Pressure Noncondensibles
+ p_i / p_nc = p_i / (p - P_c)
+# 7-4ac Partial Pressure Noncondensibles
+n_i / n_nc = p_i / (p - P_c)
 # 7-5 Molar Flow Rate
 N_i = N_nc * (p_i) / (P - P_c)
 # 7-6 Noncondensable Mass Flow Rate

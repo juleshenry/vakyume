@@ -18,7 +18,8 @@ def make_test_case(o):
                         i + 1 for i in range(len(signature(method).parameters))
                     ]
                     try:
-                        print(method, method(*test_args))
+                        # print(method, )
+                        method(*test_args)
                     except Exception as e:
                         raise ValueError(f"{e}\nmethod failed {method}")
 

@@ -21,9 +21,9 @@ installed_costs = 38000 * (hp / 10) ** 0.45
 installed_costs = 26000 * (hp / 10) ** 0.4
 # 8-5 Thermal Efficiency
 """
-E:= thermal efficiency
+Eff:= thermal efficiency
 """
-E = theoretical_adiabatic_horsepower / actual_brake_horsepower
+Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
 
 # 8-6 Adiabatic HP Master
 """
@@ -50,4 +50,4 @@ e:=electrical cost, cents per kWh
 s:=steam cost, dollar per 1000 lb
 E_m:=mechanical pump thermal efficiency
 """
-r = 2.93(E_j * e) / (E_m * s)
+r = 2.93 * (E_j * e) / (E_m * s)

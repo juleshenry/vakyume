@@ -11,13 +11,13 @@ PS = - V * dP / dt + Q_gas
 # 10-3 Liquid Ring Throughput
 Q_gas = 9.25 * N_mfw * T
 # 10-4 Time Required to Evacuate
-t = V/S_p * log ((SP_1 - Q_gas) / (SP_2 - Q_gas))
+t = V / S_p * log((SP_1 - Q_gas) / (SP_2 - Q_gas))
 # 10-5 Reasonably Tight System Evacuation
-t = V/S_p * log (P_1 / P_2)
+t = V / S_p * log(P_1 / P_2)
 # 10-6 Average Pump Capacity 
-S_a = V/t * log (P_1 / P_2)
+S_a = V / t * log(P_1 / P_2)
 # 10-7 Total evacuation time 
-t ~= V(log(P_1 / P_2) / S_1_2 + log(P_2 / P_3) / S_2_3 + ...)
+t ~= V* (log(P_1 / P_2) / S_1_2 + log(P_2 / P_3) / S_2_3 + ...)
 # 10-8 Effective Sealant Temperature
 delta_T = (2545 * bhp + w_i * delta_h_i) / ( 8.02 * f_a * rho * c_p )
 # 10-9 Bulk Liquid Ring Temperature
