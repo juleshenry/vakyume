@@ -110,9 +110,11 @@ v_s = (k * g_c * R / M * T) ** 0.5
 given Re < 2e5
 """
 f = 0.316 / Re ** (0.25)
-# 2-16, 2-17 Laminar Flow
+# 2-16
 """
 f = 64 / Re
+"""
+# 2-17 Laminar Flow
 delta_P = 0.0345* mu * L * v / d**2
 delta_P = 0.105 * mu * L * q / d**4
 """

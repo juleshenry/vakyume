@@ -7,7 +7,8 @@ TAB = "    "
 TYPE = ": float"
 STD = 1
 OUTFILE = "vakyume_2025.py"
-MAX_COMP_TIME_SECONDS = 1 * 60 / 10
+MAX_COMP_TIME_SECONDS = 1 * 10
+FUN = "*()/-+"
 
 
 def stdout(s):
@@ -45,7 +46,21 @@ class Solver:
         # if any log\d+(), replace as log().... remove spaces trailing operator
         for m in malos:
             eqn = f"{m}".join([o.strip() for o in eqn.split(m)])
-        print(eqn)
+        # dilate functors
+        eqn = "".join(
+            [
+                (
+                    f" {f} "
+                    if 0 < i < len(eqn) - 1
+                    and eqn[i + 1] != "*"
+                    and eqn[i - 1] != "*"
+                    and f in FUN
+                    else f
+                )
+                for i, f in enumerate(eqn)
+            ]
+        )
+        print("[dilated tokens]", eqn)
         return eqn.split(" ")
 
     def get_tokes(s, eqn):
@@ -68,22 +83,23 @@ class Solver:
                 tokes.add(clean)
 
         def purge(t):
-            for c in "*()/-+":
+            for c in FUN:
                 t = t.replace(c, "")
             return t
 
-        tokes = list(
-            filter(lambda a: a, map(purge, map(s.unexponentiate, list(tokes))))
-        )
+        tokes = set(filter(lambda a: a, map(purge, map(s.unexponentiate, set(tokes)))))
         print("tokens: ", tokes)
         return tokes
 
     def unexponentiate(s, t):
         return t.split("**")[0].strip()
 
-    def permute(s, eqn, eqn_n):
+    def permute_and_print(s, eqn, eqn_n, comment=None):
         """1. gets tokes
         2. yields normal form
+        3. injects comment
+        4. forms method out of them
+
         """
         tokes = s.get_tokes(eqn)
         normal_form = (
@@ -103,6 +119,11 @@ class Solver:
             stdout(
                 f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
             )  # original text contains #-comment for units
+            if comment:
+                stdout(f'{TAB*2}"""')
+                for l in comment.split('\n')[1:-1]:
+                    stdout(f"{TAB*2}{l}")
+                stdout(f'{TAB*2}"""')
             try:
                 solns = s.get_solutions(normal_form, Symbol(token))
             except:
@@ -118,8 +139,6 @@ class Solver:
                 stdout(f"{TAB*2}{token} = {soln}")
                 stdout(f"{TAB*2}result.append({token})")
             stdout(TAB * 2 + f"return result")
-            # except:
-            #     stdout(f"{TAB*2}pass #NotImplementedError")
 
     def analyze(s, i):
         """1. opens a file in the chapters folder
@@ -129,14 +148,26 @@ class Solver:
         root_dir = os.getcwd() + "/chapters/"
         get = list(filter(lambda x: i in x, os.listdir(root_dir)))[0]
         with open(root_dir + get) as file:
-            eqn_number = ""
+            eqn_number = comment = ""
+            is_in_comment = 0
+            # fmt: off
             for l in file.readlines():
-                if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
-                    eqn_number = x[0]
-                if " = " in l:
-                    print("[DEBUG]", eqn_number)
-                    print(l)
-                    s.permute(l, eqn_number)
+                if '"""' in l:
+                    is_in_comment =~ is_in_comment
+                if is_in_comment:
+                    comment += l
+                else:
+                    if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
+                        eqn_number = x[0]
+                        comment = ""
+                    if " = " in l:
+                        print("[DEBUG]", eqn_number,'\n',l)
+                        # kludge:
+                        # k = ''.join(comment.split('"""')[-2:]).split('\n')[1:-1]
+                        comment = None # TODO:
+                        s.permute_and_print(l, eqn_number, comment=comment)
+                        # comment = ""
+            # fmt: on
 
 
 class SetupMethods:
@@ -183,7 +214,9 @@ class SetupMethods:
 
 if __name__ == "__main__":
     X = Solver()
-    stdout("from math import log, sqrt, exp")
+    stdout(
+        "from math import log, sqrt, exp\nfrom sympy import I, Piecewise, LambertW, Eq"
+    )
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files

@@ -1,4 +1,3 @@
-#include <iostream>
 
 int funct(int num) 
 {
@@ -6,7 +5,7 @@ int funct(int num)
     return 0;
 }
 
-extern "C" {
+extern "C++" {
     int my_function(int a)
     {
         return funct(a);

@@ -1,0 +1,3 @@
+1. ollama solver in situ
+4. c++ lib conversion
+5. test drive
