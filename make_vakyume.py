@@ -100,7 +100,7 @@ class Solver:
         3. injects comment
         4. forms method out of them
 
-        """
+        """ 
         tokes = s.get_tokes(eqn)
         normal_form = (
             eqn.split("=")[1].strip().split("#")[0]
@@ -155,11 +155,11 @@ class Solver:
                 if '"""' in l:
                     is_in_comment =~ is_in_comment
                 if is_in_comment:
-                    comment += l
+                    comment = None #+= l
                 else:
                     if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
                         eqn_number = x[0]
-                        comment = ""
+                        comment = None #""
                     if " = " in l:
                         print("[DEBUG]", eqn_number,'\n',l)
                         # kludge:
