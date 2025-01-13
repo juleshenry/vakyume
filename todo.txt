@@ -1,3 +1,7 @@
 1. ollama solver in situ
-4. c++ lib conversion
-5. test drive
+    = for all unable to solve cases, extract answer as python. metaprogramming in situ
+2. c++ lib conversion
+    =  
+3. test drive
+    = 
+4. "Just 2 be done for the aesthetic of it."
