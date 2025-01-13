@@ -1,7 +1,9 @@
 1. ollama solver in situ
     = for all unable to solve cases, extract answer as python. metaprogramming in situ
 2. c++ lib conversion
-    =  
+    = done, chunked by class by llm 
 3. test drive
-    = 
-4. "Just 2 be done for the aesthetic of it."
+    = run all methods in python. Get valid inputs. Feed to C++. We are done boys.
+4. "Why have we done this? Just 2 be done for the aesthetic of it
+    Should I have solved for the singular case even more generally and done it? Absolutely.
+    "
