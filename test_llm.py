@@ -26,5 +26,20 @@ for W in Ws:
 This code will iterate over all possible combinations of values for W, M, P, and q, and print the corresponding value of T.
 Note that you'll need to adjust the ranges and values of the variables to match your specific proble
 """
-u = extract_code(test_ans1)
-print(u)
+def do1():
+    u = extract_code(test_ans1)
+    print(u)
+
+print(
+    ans1 := escribir_codigo(
+        eqn="q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)",
+        lang="Python",
+        p1_i=1,
+        p2_i=1,
+    )
+)
+# EVAL WRAP DOES NOT WORK. 
+print("###"*19)
+print(extract_code(ans1))
+# print(ans2 := escribir_codigo(eqn=ans1, lang=None, p1_i=2, p2_i=2))  # or 2
+# print(eval_wrap(ans2))

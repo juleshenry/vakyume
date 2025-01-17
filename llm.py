@@ -47,22 +47,21 @@ def escribir_codigo(eqn, lang, single_variable=None, p1_i=None, p2_i=None):
             )
             + (
                 p3 := (
-                    "give back only the methods",
+                    "give back only the methods ",
                     "no additional commentary",
-                )[0]
-                + p3[1]
-            ),
+                )
+               
+            )[0] + p3[1],
         },
     ]
-    print(mnms)
-    1 / 0
+    # print(mnms[0]['content'])
     response = ollama.chat(
         model="llama3:latest",
         messages=mnms,
     )
 
-    dummy(p1)
-    dummy(p2)
+    dummy([p1])
+    dummy([p2])
     return n.join(filter(lambda a: a, response["message"]["content"].split(n)))
 
 
@@ -97,15 +96,15 @@ def extract_code(text):
             max_str += n
         elif "```" in ii:
             if len(max_str.split(n)) > maxxx:
-                maxxx, maxxx_str, max_str = len(max_str.split(n)), max_str, ""
-                #  = 
-                # max_str = ""
+                maxxx, maxxx_str, max_str = (len(max_str.split(n)), max_str, "",)
         if (a := len(max_str.split(n))) > 1:
             max_str += (ii if a - 2 else '') + n
+    print("$#" * 88)
     return maxxx_str
 
 
 def eval_wrap(ans):
+    # EVAL WRAP DOES NOT WORK.  b/c you would have to know variables before
     max_bounds = [0, 0]
     print("evaluatin", len(ans), max_bounds)
     for i, j in (s := enumerate(o := ans.split(n))):
@@ -120,21 +119,9 @@ def eval_wrap(ans):
                 # dummy(extract_code(f))
                 if ii - i > max_bounds[1] - max_bounds[0]:
                     max_bounds = [i, ii]
-                    print(f)
+                    # print(f)
             except:
                 pass
             # O(n^2)
-    print("$#" * 88)
     return n.join(o[max_bounds[0] : max_bounds[1]])
 
-# print(
-#     ans1 := escribir_codigo(
-#         eqn="q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)",
-#         lang="Python",
-#         p1_i=1,
-#         p2_i=1,
-#     )
-# )
-# print(eval_wrap(test_ans1))
-# print(ans2 := escribir_codigo(eqn=ans1, lang=None, p1_i=2, p2_i=2))  # or 2
-# eval_wrap(ans2)
