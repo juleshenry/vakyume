@@ -39,7 +39,8 @@ def escribir_codigo(eqn, lang, single_variable=None, p1_i=None, p2_i=None):
                     null_str,
                     """print the python code syntax for an equation solving the formula for every value ablated ( taken one at a time out)
                     example: a**2 = b**2 + c**2
-
+                    
+                    (mark and start your code with '```python')
 
                     winning correct output:  a = [math.sqrt(b**2+c**2),math.sqrt(b**2+c**2),]; b = [math.sqrt(a**2-c**2),math.sqrt(a**2-c**2),];c = [math.sqrt(a**2-b**2),math.sqrt(a**2-b**2),];""",
                     """Give your answer as one line.""",

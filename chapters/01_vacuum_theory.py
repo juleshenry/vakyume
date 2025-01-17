@@ -30,8 +30,10 @@ W := lb/hr flow
 M := molecular weight
 P := Torr
 T := R degrees temp
+q is given in ft^3/min
+
 """
-q = W * (359 / M) * (760 / P) * (T / 492) * (1/60) #ft^3/min
+q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
 
 # 1-12 Dalton's law
 Total_P = sum_partial_pressures
