@@ -6,7 +6,7 @@ null_str = ""
 dummy = lambda aa: print((n + "*" * 88 + n).join(["", *aa, ""]))
 
 
-def escribir_codigo(eqn, lang, single_variable=None, p1_i=None, p2_i=None):
+def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p2_i=None):
     int(
         sum(
             [
@@ -37,47 +37,50 @@ def escribir_codigo(eqn, lang, single_variable=None, p1_i=None, p2_i=None):
             + (
                 p2 := (
                     null_str,
-                    """print the python code syntax for an equation solving the formula for every value ablated ( taken one at a time out)
+                    """print the python code syntax for an equation solving the formula the given variable
                     example: a**2 = b**2 + c**2
                     
+                    closed-form for "a"
                     (mark and start your code with '```python')
 
-                    winning correct output:  a = [math.sqrt(b**2+c**2),math.sqrt(b**2+c**2),]; b = [math.sqrt(a**2-c**2),math.sqrt(a**2-c**2),];c = [math.sqrt(a**2-b**2),math.sqrt(a**2-b**2),];""",
+                    winning correct output:
+                    ```python
+                    def eqn_9_9__a(b, c):
+                        return = [math.sqrt(b**2+c**2),math.sqrt(-(b**2+c**2)),]
+                    ```
+                    \n""",
                     """Give your answer as one line.""",
                 )[p2_i]
             )
             + (
                 p3 := (
-                    "give back only the methods ",
-                    "no additional commentary",
+                    null_str,
+                    "give back only the methods without additional commentary",
+                    f"the equation header will be {header}",
                 )
                
-            )[0] + p3[1],
+            )[0] + p3[2],
         },
     ]
-    # print(mnms[0]['content'])
+    dummy([mnms[0]['content']])
     response = ollama.chat(
         model="llama3:latest",
         messages=mnms,
     )
-
-    dummy([p1])
-    dummy([p2])
     return n.join(filter(lambda a: a, response["message"]["content"].split(n)))
 
 
 
 
-def llm_is_true(o):
-    # print(o)
+def extract_method_solving_for_(code_block, var):
     response = ollama.chat(
         model="llama3:latest",
         messages=[
             {
                 "role": "user",
                 "content": [
-                    f"Return only back the Python format code, signified by ```python. no comments or formatting {o}",
-                    "Give the python code to extract text from string only from '```python' to nearest '```' ",
+                    f"(Return only the section of the code that solves for {var}):\n",
+                    f"{code_block}",
                 ][1],
             }
         ],

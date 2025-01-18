@@ -2,7 +2,7 @@ import os
 import re
 import timeout_decorator
 from sympy import Symbol, solve, log
-
+from llm import *
 TAB = "    "
 TYPE = ": float"
 STD = 1
@@ -47,6 +47,7 @@ class Solver:
         for m in malos:
             eqn = f"{m}".join([o.strip() for o in eqn.split(m)])
         # dilate functors
+        eqn = eqn.split("#")[0]
         eqn = "".join(
             [
                 (
@@ -115,7 +116,7 @@ class Solver:
             if typed_args:
                 typed_args += TYPE
             stdout(f"\n{TAB}@staticmethod")
-            stdout(f'{TAB}def eqn_{eqn_n.replace("-","_")}__{token}({typed_args}):')
+            stdout((eqn_header:=f'{TAB}def eqn_{eqn_n.replace("-","_")}__{token}({typed_args}):'))
             stdout(
                 f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
             )  # original text contains #-comment for units
@@ -130,9 +131,32 @@ class Solver:
                 solns = []
             # print('solns',solns)
             if not len(solns):
-                stdout(
-                    f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
+                print(eqn_header)
+                print(
+                    ans1 := escribir_codigo(
+                        eqn="0 = " + normal_form,
+                        lang="Python",
+                        single_variable=token,
+                        header = eqn_header,
+                        p1_i=1,
+                        p2_i=1,
+                    )
                 )
+                extract_0 = extract_code(ans1)
+                print('*'*8**2)
+                print(extract_0)
+                print('*'*8**2)
+                # extract_1 = extract_method_solving_for_(extract_0, token)
+                # print(extract_1)
+                # print('*'*8**2)
+                for line in extract_0:
+                    if not line.strip() or 'import' in line:
+                        continue
+                    else:
+                        stdout(f"{TAB*2}{line}")
+                # stdout(
+                #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
+                # )
                 continue
             stdout(TAB * 2 + "result = []")
             for soln in solns:
@@ -221,6 +245,7 @@ if __name__ == "__main__":
         if modules[2].isalpha():
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
+        if int(chap) < 8:continue
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         print(
             chap,
