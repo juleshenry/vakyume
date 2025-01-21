@@ -26,20 +26,42 @@ for W in Ws:
 This code will iterate over all possible combinations of values for W, M, P, and q, and print the corresponding value of T.
 Note that you'll need to adjust the ranges and values of the variables to match your specific proble
 """
-def do1():
+def do_extract_code_1():
+    # EVAL WRAP DOES NOT WORK. 
+    print(
+        ans1 := escribir_codigo(
+            eqn="q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)",
+            lang="Python",
+            p1_i=1+1,
+            p2_i=1,
+        )
+    )
+    print("###"*19)
+    print(extract_code(ans1))
     u = extract_code(test_ans1)
+    # print(ans2 := escribir_codigo(eqn=ans1, lang=None, p1_i=2, p2_i=2))  # or 2
+    # print(eval_wrap(ans2))
     print(u)
 
 print(
     ans1 := escribir_codigo(
         eqn="q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)",
-        lang="Python",
-        p1_i=1,
-        p2_i=1,
+        single_variable="T",
+        p1_i=4,
+        p2_i=0,
     )
 )
-# EVAL WRAP DOES NOT WORK. 
-print("###"*19)
-print(extract_code(ans1))
-# print(ans2 := escribir_codigo(eqn=ans1, lang=None, p1_i=2, p2_i=2))  # or 2
-# print(eval_wrap(ans2))
+
+print(
+    ans1 := escribir_codigo(
+        eqn="",
+        single_variable="T",
+        header = "eqn_1_11__T(M: float, P: float, W: float, q: float):",
+        pipin=ans1,
+        p1_i=-1,
+        p2_i=3,
+    )
+)
+print(and1:=extract_code(ans1))
+print(ans1:=(make_sure_python_annotated(ans1)))
+print(and1:=extract_code(ans1))

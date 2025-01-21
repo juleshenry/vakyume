@@ -6,7 +6,7 @@ null_str = ""
 dummy = lambda aa: print((n + "*" * 88 + n).join(["", *aa, ""]))
 
 
-def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p2_i=None):
+def escribir_codigo(eqn, lang="Python", single_variable=None, header = None, pipin="", p1_i=None, p2_i=None, p3_i=0):
     int(
         sum(
             [
@@ -16,12 +16,14 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
         )
     )
     print(f"solving { eqn }, queerly enough.")
+    print(f"ROUTING: {(p1_i,p2_i,p3_i,)}")
     fluff = secrets.choice(["C++", "Erlang", "Haskell", "Rust", "Lisp"])
     mnms = [
         {
             "role": "user",
             "content": (
                 p1 := (
+                    null_str,
                     f"""
                         You are a {lang} / {fluff} wizard giga chad developer who wakes up peer-reviewing arxiv.org
                           for News.YCombinator.com threads and sleeps coding {lang} at 3am.
@@ -32,8 +34,10 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
                         
                         """,
                     f"""identify the line that is a one liner for a closed-form expression for {single_variable or 'T'}:\n{eqn}""",
+                    f"""{eqn};solve for {single_variable}""",
+                    pipin
                 )[p1_i]
-            )
+            ) 
             + (
                 p2 := (
                     null_str,
@@ -50,6 +54,7 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
                     ```
                     \n""",
                     """Give your answer as one line.""",
+                    f"""you will write a specific Python function to return {single_variable}; header will be:\n{header}"""
                 )[p2_i]
             )
             + (
@@ -59,7 +64,7 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
                     f"the equation header will be {header}",
                 )
                
-            )[0] + p3[2],
+            )[p3_i],
         },
     ]
     dummy([mnms[0]['content']])
@@ -72,14 +77,16 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
 
 
 
-def extract_method_solving_for_(code_block, var):
+def make_sure_python_annotated(code_block):
+    print("makin' sure iz annotated" + '...'*8)
     response = ollama.chat(
         model="llama3:latest",
         messages=[
             {
                 "role": "user",
                 "content": [
-                    f"(Return only the section of the code that solves for {var}):\n",
+                    f"(Return the following code in Python, converting where necessary. \n \
+                       (Make sure to annotate your answer with ```python and ```\n",
                     f"{code_block}",
                 ][1],
             }
@@ -103,7 +110,7 @@ def extract_code(text):
                 maxxx, maxxx_str, max_str = (len(max_str.split(n)), max_str, "",)
         if (a := len(max_str.split(n))) > 1:
             max_str += (ii if a - 2 else '') + n
-    print("$#" * 88)
+    print("$#" * 32 + "extract_code" + "#$" * 32)
     return maxxx_str
 
 

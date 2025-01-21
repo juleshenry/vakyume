@@ -118,7 +118,7 @@ class Solver:
                 lang="Python",
                 single_variable=token,
                 header = eqn_header,
-                p1_i=1,
+                p1_i=1+1,
                 p2_i=1,
             )
         )
