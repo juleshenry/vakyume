@@ -55,7 +55,7 @@ def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = 
                     ```
                     {n}""",
                     """Give your answer as one line.""",
-                    f"""Hello, You will write a specific Python function to return {single_variable}; Make sure variables are in terms of {"" if header else header.split('(')[1].replace(')','')}\n The method header will be:{n}{header}. """
+                    f"""Hello, You will write a specific Python function to return {single_variable}; Make sure variables are in terms of {"" if not header else header.split('(')[1].replace(')','')}\n The method header will be:{n}{header}. """
                 )[p2_i]
             )
             + (
