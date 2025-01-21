@@ -6,7 +6,8 @@ null_str = ""
 dummy = lambda aa: print((n + "*" * 88 + n).join(["", *aa, ""]))
 
 
-def escribir_codigo(eqn, lang="Python", single_variable=None, header = None, pipin="", p1_i=None, p2_i=None, p3_i=0):
+def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = None, pipin="", p1_i=None, p2_i=None, p3_i=0):
+    """Walrus-routed method for writing code with prompts via ollama"""
     int(
         sum(
             [
@@ -33,9 +34,9 @@ def escribir_codigo(eqn, lang="Python", single_variable=None, header = None, pip
                         Hi Doctor Math, I need help solving this {eqn}  Give back the closed form expression for {single_variable or 'T'}
                         
                         """,
-                    f"""identify the line that is a one liner for a closed-form expression for {single_variable or 'T'}:\n{eqn}""",
+                    f"""identify the line that is a one liner for a closed-form expression for {single_variable or 'T'}:{n+eqn}""",
                     f"""{eqn};solve for {single_variable}""",
-                    pipin
+                    pipin + n
                 )[p1_i]
             ) 
             + (
@@ -52,9 +53,9 @@ def escribir_codigo(eqn, lang="Python", single_variable=None, header = None, pip
                     def eqn_9_9__a(b, c):
                         return = [math.sqrt(b**2+c**2),math.sqrt(-(b**2+c**2)),]
                     ```
-                    \n""",
+                    {n}""",
                     """Give your answer as one line.""",
-                    f"""you will write a specific Python function to return {single_variable}; header will be:\n{header}"""
+                    f"""Hello, You will write a specific Python function to return {single_variable}; Make sure variables are in terms of {"" if header else header.split('(')[1].replace(')','')}\n The method header will be:{n}{header}. """
                 )[p2_i]
             )
             + (
@@ -97,6 +98,7 @@ def make_sure_python_annotated(code_block):
 
 
 def extract_code(text):
+    """ gets actual code snippet (attempts)"""
     # dummy([text])
     maxxx = 0
     maxxx_str = ""

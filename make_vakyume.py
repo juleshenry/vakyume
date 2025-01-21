@@ -29,7 +29,7 @@ class Solver:
             return []  # Unable to solve at present moment
         
     @timeout_decorator.timeout(MAX_COMP_TIME_SECONDS, timeout_exception=StopIteration)
-    def get_solutions_in_situ_nf(s, nf: str, symb: Symbol):
+    def get_solns_in_situ_nf(s, nf: str, symb: Symbol):
         try:
             #TODO: define in-situ the symbols and 
             #TODO: must be normal form as defined by python . perhaps requires another metaprogram to solve? 
@@ -107,6 +107,44 @@ class Solver:
     def unexponentiate(s, t):
         return t.split("**")[0].strip()
 
+    def sympy_backup_2(s, eqn_header, normal_form, token):
+        stdout("# [Sympy Failover]")
+        print(
+            ans1 := escribir_codigo(
+                eqn="0 = " + normal_form,
+                single_variable=token,
+                p1_i=4,
+                p2_i=0,
+            )
+        )
+        print(
+            ans1 := escribir_codigo(
+                eqn="",
+                single_variable=token,
+                header = eqn_header,
+                pipin=ans1,
+                p1_i=-1,
+                p2_i=3,
+            )
+        )
+        
+        print(and1:=extract_code(ans1))
+        s.fine_tune_extracted(and1)
+        
+
+    @staticmethod
+    def fine_tune_extracted(and1):
+        """fte(extract_code) -> printable"""
+        tableau = lambda a:a.startswith(' '*4)or a.startswith('\t')
+        for line in and1.split('\n'):
+            # llm hacky
+            line = line.replace("math.", "").replace('^','**') #LLm hacky
+            if tableau(line):
+                if 'return' in line and not ('[' in line and ']' in line):
+                    # attempt catch the naked, list-less return
+                    line = f'return [{line.split('return')[1]}]'
+                stdout(line)        
+    
     def sympy_backup(s, eqn_header, normal_form, token):
         stdout(
             f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]"
@@ -133,14 +171,13 @@ class Solver:
 
         for line in extract_0.split('\n'):
             # llm hacky
-            line = line.replace("math.", "")
-            line = line.replace('^','**') #LLm hacky
+            line = line.replace("math.", "").replace('^','**') #LLm hacky
             if 0 and not line.strip() or any(m in line for m in ('import' , 'def' , '#', )):
                 continue
             else:
                 if 'return' in line and not ('[' in line and ']' in line):
                     #attempt to wrap formula
-                    line = f'return [{line.split('return')[1]}]'
+                    line = f'return [{line.split('return')[1]} ]'
                 stdout(f"{TAB*2}{line.strip()}")
         # stdout(
         #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
@@ -179,11 +216,11 @@ class Solver:
                 stdout(f'{TAB*2}"""')
             '''
             try:
-                solns = s.get_solutions(normal_form, Symbol(token))
+                solns = s.get_solns_vanilla_nf(normal_form, Symbol(token))
             except:
                 solns = []
             if not len(solns):
-                # s.sympy_backup(eqn_header, normal_form, token)
+                s.sympy_backup_2(eqn_header, normal_form, token)
                 continue
             stdout(TAB * 2 + "result = []")
             for soln in solns:
@@ -266,7 +303,7 @@ class SetupMethods:
 if __name__ == "__main__":
     X = Solver()
     stdout(
-        "from math import log, sqrt, exp\nfrom sympy import I, Piecewise, LambertW, Eq"
+        "from math import log, sqrt, exp, pow\nfrom sympy import I, Piecewise, LambertW, Eq"
     )
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
