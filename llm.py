@@ -64,7 +64,7 @@ def escribir_codigo(eqn, lang, single_variable=None, header = None, p1_i=None, p
     ]
     dummy([mnms[0]['content']])
     response = ollama.chat(
-        model="llama3:latest",
+        model="phi3:latest" or "llama3:latest",
         messages=mnms,
     )
     return n.join(filter(lambda a: a, response["message"]["content"].split(n)))

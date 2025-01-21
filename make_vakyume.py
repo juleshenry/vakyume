@@ -1,7 +1,7 @@
 import os
 import re
 import timeout_decorator
-from sympy import Symbol, solve, log
+from sympy import Symbol, solve, Eq
 from llm import *
 TAB = "    "
 TYPE = ": float"
@@ -22,11 +22,23 @@ def stdout(s):
 class Solver:
 
     @timeout_decorator.timeout(MAX_COMP_TIME_SECONDS, timeout_exception=StopIteration)
-    def get_solutions(s, nf, symb):
+    def get_solns_vanilla_nf(s, nf: str, symb: Symbol):
         try:
             return solve(nf, symb)
         except NotImplementedError:
             return []  # Unable to solve at present moment
+        
+    @timeout_decorator.timeout(MAX_COMP_TIME_SECONDS, timeout_exception=StopIteration)
+    def get_solutions_in_situ_nf(s, nf: str, symb: Symbol):
+        try:
+            #TODO: define in-situ the symbols and 
+            #TODO: must be normal form as defined by python . perhaps requires another metaprogram to solve? 
+            equation = Eq(0, nf)
+            closed_form_solution = solve(equation, rho)
+            return closed_form_solution[0] if closed_form_solution else None
+        except NotImplementedError:
+            return []  # Unable to solve at present moment
+    
 
     def valid_toke(s, t):
         # print(t)
@@ -95,6 +107,45 @@ class Solver:
     def unexponentiate(s, t):
         return t.split("**")[0].strip()
 
+    def sympy_backup(s, eqn_header, normal_form, token):
+        stdout(
+            f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]"
+        )
+        print(eqn_header)
+        print(
+            ans1 := escribir_codigo(
+                eqn="0 = " + normal_form,
+                lang="Python",
+                single_variable=token,
+                header = eqn_header,
+                p1_i=1,
+                p2_i=1,
+            )
+        )
+
+        extract_0 = extract_code(ans1)
+        print('!'*8**2)
+        print(extract_0)
+        print('!'*8**2)
+        # extract_1 = extract_method_solving_for_(extract_0, token)
+        # print(extract_1)
+        # print('*'*8**2)
+
+        for line in extract_0.split('\n'):
+            # llm hacky
+            line = line.replace("math.", "")
+            line = line.replace('^','**') #LLm hacky
+            if 0 and not line.strip() or any(m in line for m in ('import' , 'def' , '#', )):
+                continue
+            else:
+                if 'return' in line and not ('[' in line and ']' in line):
+                    #attempt to wrap formula
+                    line = f'return [{line.split('return')[1]}]'
+                stdout(f"{TAB*2}{line.strip()}")
+        # stdout(
+        #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
+        # )
+
     def permute_and_print(s, eqn, eqn_n, comment=None):
         """1. gets tokes
         2. yields normal form
@@ -120,43 +171,19 @@ class Solver:
             stdout(
                 f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
             )  # original text contains #-comment for units
+            '''TODO:
             if comment:
                 stdout(f'{TAB*2}"""')
                 for l in comment.split('\n')[1:-1]:
                     stdout(f"{TAB*2}{l}")
                 stdout(f'{TAB*2}"""')
+            '''
             try:
                 solns = s.get_solutions(normal_form, Symbol(token))
             except:
                 solns = []
-            # print('solns',solns)
             if not len(solns):
-                print(eqn_header)
-                print(
-                    ans1 := escribir_codigo(
-                        eqn="0 = " + normal_form,
-                        lang="Python",
-                        single_variable=token,
-                        header = eqn_header,
-                        p1_i=1,
-                        p2_i=1,
-                    )
-                )
-                extract_0 = extract_code(ans1)
-                print('*'*8**2)
-                print(extract_0)
-                print('*'*8**2)
-                # extract_1 = extract_method_solving_for_(extract_0, token)
-                # print(extract_1)
-                # print('*'*8**2)
-                for line in extract_0:
-                    if not line.strip() or 'import' in line:
-                        continue
-                    else:
-                        stdout(f"{TAB*2}{line}")
-                # stdout(
-                #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
-                # )
+                # s.sympy_backup(eqn_header, normal_form, token)
                 continue
             stdout(TAB * 2 + "result = []")
             for soln in solns:
