@@ -129,7 +129,7 @@ class Solver:
         )
         
         if any(a in ans1.lower() for a in ('transcendental','culo','not be possible',)):
-            stdout(TAB+ 'pass # no closed form solution')
+            stdout(TAB * 2 + 'pass # no closed form solution')
             return 
         # print("BEFORE:::")
         # ans1 = make_sure_python_annotated(ans1)
@@ -163,7 +163,6 @@ class Solver:
                 if o.lstrip().startswith('return'):
                     return len(w) - i - 1
         lix = find_last_return(and1)
-        print(lix,'??')
         for iii, line in enumerate(spl:=and1.split('\n')):
             # llm hacky
             print(iii,line)
@@ -343,7 +342,7 @@ if __name__ == "__main__":
         if modules[2].isalpha():
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
-        if int(chap) != 11:continue
+        if int(chap) != 8:continue
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         print(
             chap,
@@ -360,6 +359,6 @@ if __name__ == "__main__":
     # 6. [x]
     # 7. [x]
     # 8. [~]
-    # 9. [ ]
-    # 10. [ ]
-    # 11. [ ] 
+    # 9. [x]
+    # 10. [x]
+    # 11. [x] 
