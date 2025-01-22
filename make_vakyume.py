@@ -131,8 +131,16 @@ class Solver:
         if any(a in ans1.lower() for a in ('transcendental','culo','not be possible',)):
             stdout(TAB+ 'pass # no closed form solution')
             return 
-        print(and1:=extract_code(ans1))
-        and2 = s.fine_tune_extracted(and1, eqn_header)
+        # print("BEFORE:::")
+        # ans1 = make_sure_python_annotated(ans1)
+        # print("AFTER:::")
+        xtracted_code = extract_code(ans1)
+        if not xtracted_code.strip(): # hacky, can come back un-annotated and llm is quantum noisy these days
+            xtracted_code = ans1
+        print("xtractd()()()")
+        print(xtracted_code)
+        print("xtractd()()()")
+        and2 = s.fine_tune_extracted(xtracted_code, eqn_header)
         print("??$$"*6)
         print(eqn_header)
         print(and2)
@@ -140,17 +148,29 @@ class Solver:
         for l in and2.split('\n'):
             stdout(l)
 
+    
     @staticmethod
     def fine_tune_extracted(and1, header):
         """fte(extract_code) -> printable"""
         ans = ""
         tableau = lambda a:a.startswith(TAB) or a.startswith('\t')
+        print("&"*88)
+        print(and1)
+        print("&"*88)
+        
+        def find_last_return(code_block) -> int:
+            for i,o in enumerate(reversed(w:=code_block.split('\n'))):
+                if o.lstrip().startswith('return'):
+                    return len(w) - i - 1
+        lix = find_last_return(and1)
+        print(lix,'??')
         for iii, line in enumerate(spl:=and1.split('\n')):
             # llm hacky
+            print(iii,line)
             line = line.replace("math.", "").replace('^','**') #LLm hacky
             if tableau(line):
                 # attempt catch the naked, list-less return at the end of the solving code; technically should be index of last return
-                if iii + 3 >= len(spl) and 'return' in line and not ('[' in line and ']' in line):
+                if iii == lix and not ('[' in line and ']' in line):
                     line = f'{TAB}return [{line.split('return')[1]} ]'
                 ans += (TAB + line) + '\n'
         
@@ -315,13 +335,15 @@ class SetupMethods:
 if __name__ == "__main__":
     X = Solver()
     stdout(
-        "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve\nfrom scipy.optimize import newton"
+        "from math import log, sqrt, exp, pow, e"
     )
+    stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
+    stdout("from scipy.optimize import newton")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
-        if int(chap) != 8:continue
+        if int(chap) != 11:continue
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         print(
             chap,
@@ -337,7 +359,7 @@ if __name__ == "__main__":
     # 5. [x]
     # 6. [x]
     # 7. [x]
-    # 8. [ ]
+    # 8. [~]
     # 9. [ ]
     # 10. [ ]
     # 11. [ ] 

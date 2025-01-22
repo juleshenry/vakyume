@@ -86,8 +86,7 @@ def make_sure_python_annotated(code_block):
             {
                 "role": "user",
                 "content": [
-                    f"(Return the following code in Python, converting where necessary. \n \
-                       (Make sure to annotate your answer with ```python and ```\n",
+                    f"(Make sure the following executable Python code starts with ```python and ends with```)\n",
                     f"{code_block}",
                 ][1],
             }
