@@ -3,7 +3,7 @@ import re
 import timeout_decorator
 from sympy import Symbol, solve, Eq
 from llm import *
-TAB = "    "
+TAB = " " * 4
 TYPE = ": float"
 STD = 1
 OUTFILE = "vakyume_2025.py"
@@ -128,28 +128,35 @@ class Solver:
             )
         )
         
+        if any(a in ans1.lower() for a in ('transcendental','culo','not be possible',)):
+            stdout(TAB+ 'pass # no closed form solution')
+            return 
         print(and1:=extract_code(ans1))
-        and2 = s.fine_tune_extracted(and1)
+        and2 = s.fine_tune_extracted(and1, eqn_header)
         print("??$$"*6)
+        print(eqn_header)
         print(and2)
         print("??$$"*6)
         for l in and2.split('\n'):
             stdout(l)
 
     @staticmethod
-    def fine_tune_extracted(and1):
+    def fine_tune_extracted(and1, header):
         """fte(extract_code) -> printable"""
         ans = ""
-        tableau = lambda a:a.startswith(' '*4)or a.startswith('\t')
+        tableau = lambda a:a.startswith(TAB) or a.startswith('\t')
         for iii, line in enumerate(spl:=and1.split('\n')):
             # llm hacky
             line = line.replace("math.", "").replace('^','**') #LLm hacky
             if tableau(line):
-                # attempt catch the naked, list-less return at the end of the solving code
-                if iii + 1 == len(spl) and 'return' in line and not ('[' in line and ']' in line):
+                # attempt catch the naked, list-less return at the end of the solving code; technically should be index of last return
+                if iii + 3 >= len(spl) and 'return' in line and not ('[' in line and ']' in line):
                     line = f'{TAB}return [{line.split('return')[1]} ]'
                 ans += (TAB + line) + '\n'
+        
         return ans
+    
+    
     def sympy_backup(s, eqn_header, normal_form, token):
         stdout(
             f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]"
@@ -308,13 +315,13 @@ class SetupMethods:
 if __name__ == "__main__":
     X = Solver()
     stdout(
-        "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve"
+        "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve\nfrom scipy.optimize import newton"
     )
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
-        if int(chap) < 8:continue
+        if int(chap) != 8:continue
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         print(
             chap,
@@ -323,3 +330,14 @@ if __name__ == "__main__":
         )
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
+    # 1. [x]
+    # 2. [x]
+    # 3. [x]
+    # 4. [x]
+    # 5. [x]
+    # 6. [x]
+    # 7. [x]
+    # 8. [ ]
+    # 9. [ ]
+    # 10. [ ]
+    # 11. [ ] 
