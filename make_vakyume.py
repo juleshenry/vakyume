@@ -128,7 +128,8 @@ class Solver:
             )
         )
         
-        if any(a in ans1.lower() for a in ('transcendental','culo','not be possible',)):
+        if any(a in ans1.lower() for a in ('transcendental','numerical','not be possible',)):
+            # llm hacky
             stdout(TAB * 2 + 'pass # no closed form solution')
             return 
         # print("BEFORE:::")
@@ -164,8 +165,6 @@ class Solver:
                     return len(w) - i - 1
         lix = find_last_return(and1)
         for iii, line in enumerate(spl:=and1.split('\n')):
-            # llm hacky
-            print(iii,line)
             line = line.replace("math.", "").replace('^','**') #LLm hacky
             if tableau(line):
                 # attempt catch the naked, list-less return at the end of the solving code; technically should be index of last return
@@ -338,11 +337,12 @@ if __name__ == "__main__":
     )
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
     stdout("from scipy.optimize import newton")
+    stdout("import numpy as np")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
         chap, mods = modules.split("_")[0], modules.split("_")[1:]
-        if int(chap) != 8:continue
+        # if int(chap) != 8:continue
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
         print(
             chap,
