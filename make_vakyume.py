@@ -108,7 +108,7 @@ class Solver:
         return t.split("**")[0].strip()
 
     def sympy_backup_2(s, eqn_header, normal_form, token):
-        stdout("# [Sympy Failover]")
+        stdout(TAB*2 + "# [Sympy Failover]")
         print(
             ans1 := escribir_codigo(
                 eqn="0 = " + normal_form,
@@ -129,22 +129,27 @@ class Solver:
         )
         
         print(and1:=extract_code(ans1))
-        s.fine_tune_extracted(and1)
-        
+        and2 = s.fine_tune_extracted(and1)
+        print("??$$"*6)
+        print(and2)
+        print("??$$"*6)
+        for l in and2.split('\n'):
+            stdout(l)
 
     @staticmethod
     def fine_tune_extracted(and1):
         """fte(extract_code) -> printable"""
+        ans = ""
         tableau = lambda a:a.startswith(' '*4)or a.startswith('\t')
-        for line in and1.split('\n'):
+        for iii, line in enumerate(spl:=and1.split('\n')):
             # llm hacky
             line = line.replace("math.", "").replace('^','**') #LLm hacky
             if tableau(line):
-                if 'return' in line and not ('[' in line and ']' in line):
-                    # attempt catch the naked, list-less return
-                    line = f'return [{line.split('return')[1]}]'
-                stdout(line)        
-    
+                # attempt catch the naked, list-less return at the end of the solving code
+                if iii + 1 == len(spl) and 'return' in line and not ('[' in line and ']' in line):
+                    line = f'{TAB}return [{line.split('return')[1]} ]'
+                ans += (TAB + line) + '\n'
+        return ans
     def sympy_backup(s, eqn_header, normal_form, token):
         stdout(
             f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]"
@@ -303,7 +308,7 @@ class SetupMethods:
 if __name__ == "__main__":
     X = Solver()
     stdout(
-        "from math import log, sqrt, exp, pow\nfrom sympy import I, Piecewise, LambertW, Eq"
+        "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve"
     )
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
