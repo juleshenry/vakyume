@@ -3,12 +3,7 @@ import re
 import timeout_decorator
 from sympy import Symbol, solve, Eq
 from llm import *
-TAB = " " * 4
-TYPE = ": float"
-STD = 1
-OUTFILE = "vakyume_2025.py"
-MAX_COMP_TIME_SECONDS = 1 * 10
-FUN = "*()/-+"
+from suck_consts import *
 
 
 def stdout(s):
@@ -27,23 +22,10 @@ class Solver:
             return solve(nf, symb)
         except NotImplementedError:
             return []  # Unable to solve at present moment
-        
-    @timeout_decorator.timeout(MAX_COMP_TIME_SECONDS, timeout_exception=StopIteration)
-    def get_solns_in_situ_nf(s, nf: str, symb: Symbol):
-        try:
-            #TODO: define in-situ the symbols and 
-            #TODO: must be normal form as defined by python . perhaps requires another metaprogram to solve? 
-            equation = Eq(0, nf)
-            closed_form_solution = solve(equation, rho)
-            return closed_form_solution[0] if closed_form_solution else None
-        except NotImplementedError:
-            return []  # Unable to solve at present moment
     
 
     def valid_toke(s, t):
-        # print(t)
         valid = t.isidentifier() or t.split("**")[0].strip().isidentifier()
-        # print(t.split('**')[0].strip().isidentifier(),'~',valid)
         return valid
 
     def clean_t(s, t):
@@ -51,7 +33,6 @@ class Solver:
         o = d.split("**")
         if len(o) > 1 and o[1]:
             d = f"{t.split('**')[0]} ** {''.join(o[1:])}"
-            # print(d)
         return d
 
     def tokenize(s, eqn, malos):
@@ -67,7 +48,7 @@ class Solver:
                     if 0 < i < len(eqn) - 1
                     and eqn[i + 1] != "*"
                     and eqn[i - 1] != "*"
-                    and f in FUN
+                    and f in FUNKTORZ
                     else f
                 )
                 for i, f in enumerate(eqn)
@@ -82,12 +63,14 @@ class Solver:
         Anything like math.sin(a**2) must be treated via conversion to Sympy syntax
         B**2 is treated a token by space separation.
         `clean toke` cleans v**2 to v ** 2 for processing by Symbol
+
+
+        # print(clean,clean.isidentifier())
         """
         tokes = set()
         malos = {"ln", "log"}
         for t in s.tokenize(eqn, malos):
             clean = s.clean_t(t)
-            # print(clean,clean.isidentifier())
             if s.valid_toke(clean) and not any(op in clean for op in malos):
                 tokes.add(clean)
             elif any(op in clean for op in malos):  # TODO: approximate
@@ -96,7 +79,7 @@ class Solver:
                 tokes.add(clean)
 
         def purge(t):
-            for c in FUN:
+            for c in FUNKTORZ:
                 t = t.replace(c, "")
             return t
 
@@ -149,6 +132,20 @@ class Solver:
         for l in and2.split('\n'):
             stdout(l)
 
+    def doit():
+        class VacuumTheory:pass
+        print(sak_funx:=filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory)))
+        print(funx:=filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory)))
+
+        # iterate all methods and fill with dummy values.
+        import inspect
+        a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),list(funx)[:2])
+        woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
+        tokes = set([u for u in woa(a)+woa(b)if u])
+
+        for o in sak_funx:
+            print(o)
+            print(inspect.signature(getattr(VacuumTheory,o)))
     
     @staticmethod
     def fine_tune_extracted(and1, header):
@@ -226,9 +223,11 @@ class Solver:
             + f" - ({eqn.split("=")[0].strip()})"
         )
         print("normal_form", normal_form)
+        # herin, g
+        stdout(f"{n+TAB}@kwasak_static")
+        stdout(f"{TAB}def eqn_{eqn_n.replace("-","_")}({','.join(f'{a}{TYPE} = None'for a in tokes)}, **kwargs):")
+        stdout(f"{TAB*2}return{n}")
         for token in tokes:
-            # print("investigating",f"{token}")
-            # print(normal_form)
             args = sorted(filter(lambda x: x != token, tokes))
             typed_args = str(f"{TYPE}, ").join(args)
             if typed_args:
@@ -337,7 +336,7 @@ if __name__ == "__main__":
     )
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
     stdout("from scipy.optimize import newton")
-    stdout("import numpy as np")
+    stdout("from kwasak import kwasak_static")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
@@ -351,14 +350,3 @@ if __name__ == "__main__":
         )
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
-    # 1. [x]
-    # 2. [x]
-    # 3. [x]
-    # 4. [x]
-    # 5. [x]
-    # 6. [x]
-    # 7. [x]
-    # 8. [~]
-    # 9. [x]
-    # 10. [x]
-    # 11. [x] 
