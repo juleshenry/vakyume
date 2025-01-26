@@ -230,6 +230,8 @@ class VacuumTheory:
     def eqn_1_10__P_1(P_2: float, T_1: float, T_2: float, V_1: float, V_2: float):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
+        co = 'P_2, T_1, T_2, V_1, V_2'.split(',')
+        print(*[(a,b,) for a,b in zip(co,[P_2, T_1, T_2, V_1, V_2])],sep='\n')
         P_1 = P_2*T_1*V_2/(T_2*V_1)
         result.append(P_1)
         return result
@@ -366,15 +368,38 @@ class VacuumTheory:
         result.append(P)
         return result
 
-print(sak_funx:=filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory)))
-print(funx:=filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory)))
+print(sak_funx:=list(filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory))))
+print(funx:=list(filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory))))
 
 # iterate all methods and fill with dummy values.
 import inspect
-a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),list(funx)[:2])
-woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
-tokes = set([u for u in woa(a)+woa(b)if u])
 
-for o in sak_funx:
-    print(o)
-    print(inspect.signature(getattr(VacuumTheory,o)))
+
+def construir(s):
+    candz= list(filter(lambda a:a.startswith(s),funx))[:2] # first two'll do
+    a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),candz)
+    woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
+    tokes = set([u for u in woa(a)+woa(b)if u])
+    return sorted(list(tokes))
+        
+sak_funx_di = {s: construir(s) for s in sak_funx}
+import random 
+#KWARGS {'P_1': 1.66261, 'P_2': 0.57988, 'T_1': 0.0068, 'T_2': 9.97603, 'V_1': 1.15482, 'V_2': 2.25261}
+fr = { 'P_2': 0.57988, 'T_1': 0.0068, 'T_2': 9.97603, 'V_1': 1.15482, 'V_2': 2.25261}
+s=VacuumTheory.eqn_1_10__P_1(**{'P_2': 0.57988, 'T_1': 0.0068, 'T_2': 9.97603, 'V_1': 1.15482, 'V_2': 2.25261}) #[0.0007710117693077729]
+print(s)
+1/0
+for o,d in sak_funx_di.items():
+    print('EQN',o)
+    preset_dummy_args = {d:round(random.random() * 10,5) for d in d}
+    print('KWARGS',preset_dummy_args)
+    for dd in d:
+        print(dd)
+        nao = list(filter(lambda a:a!=dd, list(d)))
+        kew = {n:preset_dummy_args[n] for n in nao}
+        print('calling .. ',o+'_'+dd,)
+        print('w/',kew)
+
+        print(getattr(VacuumTheory(),o)(**kew))
+    1/0
+        
