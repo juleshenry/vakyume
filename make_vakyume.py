@@ -1,6 +1,7 @@
 import os
 import re
 import timeout_decorator
+import httpx
 from sympy import Symbol, solve, Eq
 from llm import *
 from suck_consts import *
@@ -92,25 +93,28 @@ class Solver:
 
     def sympy_backup_2(s, eqn_header, normal_form, token):
         stdout(TAB*2 + "# [Sympy Failover]")
-        print(
-            ans1 := escribir_codigo(
-                eqn="0 = " + normal_form,
-                single_variable=token,
-                p1_i=4,
-                p2_i=0,
+        try:
+            print(
+                ans1 := escribir_codigo(
+                    eqn="0 = " + normal_form,
+                    single_variable=token,
+                    p1_i=4,
+                    p2_i=0,
+                )
             )
-        )
-        print(
-            ans1 := escribir_codigo(
-                eqn="",
-                single_variable=token,
-                header = eqn_header,
-                pipin=ans1,
-                p1_i=-1,
-                p2_i=3,
+            print(
+                ans1 := escribir_codigo(
+                    eqn="",
+                    single_variable=token,
+                    header = eqn_header,
+                    pipin=ans1,
+                    p1_i=-1,
+                    p2_i=3,
+                )
             )
-        )
-        
+        except httpx.ConnectError as s:
+            print(s)or stdout(TAB * 2 + 'pass # Ollama offline') 
+            return
         if any(a in ans1.lower() for a in ('transcendental','numerical','not be possible',)):
             # llm hacky
             stdout(TAB * 2 + 'pass # no closed form solution')
@@ -132,20 +136,20 @@ class Solver:
         for l in and2.split('\n'):
             stdout(l)
 
-    def doit():
-        class VacuumTheory:pass
-        print(sak_funx:=filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory)))
-        print(funx:=filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory)))
+    # def doit():
+    #     class VacuumTheory:pass
+    #     print(sak_funx:=filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory)))
+    #     print(funx:=filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory)))
 
-        # iterate all methods and fill with dummy values.
-        import inspect
-        a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),list(funx)[:2])
-        woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
-        tokes = set([u for u in woa(a)+woa(b)if u])
+    #     # iterate all methods and fill with dummy values.
+    #     import inspect
+    #     a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),list(funx)[:2])
+    #     woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
+    #     tokes = set([u for u in woa(a)+woa(b)if u])
 
-        for o in sak_funx:
-            print(o)
-            print(inspect.signature(getattr(VacuumTheory,o)))
+    #     for o in sak_funx:
+    #         print(o)
+    #         print(inspect.signature(getattr(VacuumTheory,o)))
     
     @staticmethod
     def fine_tune_extracted(and1, header):
@@ -225,7 +229,7 @@ class Solver:
         print("normal_form", normal_form)
         # herin, g
         stdout(f"{n+TAB}@kwasak_static")
-        stdout(f"{TAB}def eqn_{eqn_n.replace("-","_")}({','.join(f'{a}{TYPE} = None'for a in tokes)}, **kwargs):")
+        stdout(f"{TAB}def eqn_{eqn_n.replace("-","_")}({', '.join(f'{a}{TYPE} = None'for a in tokes)},**kwargs):")
         stdout(f"{TAB*2}return{n}")
         for token in tokes:
             args = sorted(filter(lambda x: x != token, tokes))
