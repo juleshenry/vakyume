@@ -524,12 +524,22 @@ class Verify:
         nao = list(filter(lambda a: a != dd, list(d)))
         kew = {n: ne.pda[n] for n in nao}
         print('calling .. ',o+'_'+dd,'\nw/',kew)
-        rez = getattr(ne.lib_class(), o)(**kew)
+        try:
+            rez = getattr(ne.lib_class(), o)(**kew)
+        except ZeroDivisionError as z:
+            print(z)
+            raise ValueError("SSS")
         print(dd,'=',rez)
         if not ii:  # assumes first is correct. not always true! TODO
             ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
             print(ne.pda)
         def ev(a,b):
+            print(*(a,b,type(a),type(b),),sep=':::::')
+            print(result:=a-b)
+            
+            if isinstance(result, Eq):
+                print('12341243')
+                evaluated = result.subs(pda[dd])
             return abs(a - b) < 1e-10
         return any(ev(result, pda[dd]) for result in rez) if rez else rez  
 
