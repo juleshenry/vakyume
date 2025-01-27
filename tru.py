@@ -462,12 +462,16 @@ def test_b():
 
     assert Verify(C).verify()
     print('exitosoB')
+
+
 # print = lambda *a:a
 class Verify:
     # iterate all methods and fill with dummy values.
 
     def __init__(ne, lib_class):
+        print('Verifyin`...'+str(lib_class))
         ne.lib_class = lib_class
+
         ne.sak_funx = list(
             filter(lambda a: a.startswith("eqn") and "__" not in a, dir(lib_class))
         )
@@ -497,6 +501,7 @@ class Verify:
         fal = {}
         for o, d in ne.sak_funx_di.items():
             ne.pda = {d: ne.fala() for d in d}
+            print(ne.pda)
             for ii, dd in enumerate(d):
                 print(o,d,ii,dd)
                 """
@@ -508,12 +513,12 @@ class Verify:
                 if not ne.todo_suave(
                     d, dd, ii, ne.pda, o
                 ):
-                    fal[dd] = False
+                    fal[dd] = "unsolved or incorrectly solved by AI"
             ne.pda = {}
 
+        if fal:
+            return (filter(lambda a:a,fal.items()))
         return not fal
-        # else:
-        #     print(*filter(lambda a:a,fal))
 
     def todo_suave(ne, d, dd, ii, pda, o) ->bool:
         nao = list(filter(lambda a: a != dd, list(d)))
@@ -522,8 +527,9 @@ class Verify:
         rez = getattr(ne.lib_class(), o)(**kew)
         print(dd,'=',rez)
         if not ii:  # assumes first is correct. not always true! TODO
-            ne.pda[dd] = rez[0] or ne.fala()
-        return any(abs(result - pda[dd]) < 1e-10 for result in rez)
+            ne.pda[dd] = rez[0] or ne.fala() #should fix if first eqn is None ? 
+            print(ne.pda)
+        return any(abs(result - pda[dd]) < 1e-10 for result in rez) if rez else rez  
 
 if __name__=='__main__':
     test_b()

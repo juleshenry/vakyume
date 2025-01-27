@@ -280,6 +280,10 @@ class Solver:
                 else:
                     if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
                         eqn_number = x[0]
+                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed
+                        subnum = x[0].split('-')[1]
+                        w=int(''.join([s for s in subnum if not s.isalpha()]))
+                        eqn_number = x[0].split('-')[0] + '-' + ('0' + str(w) if w<=9 else str(w)) +  ''.join([s for s in subnum if s.isalpha()])
                         comment = None #""
                     if " = " in l:
                         print("[DEBUG]", eqn_number,'\n',l)
@@ -309,6 +313,7 @@ class SetupMethods:
                             # print(ix, l.strip(), "needs name!")
 
     def see_which_notes_are_valid_Python(s):
+        # detect pyeqn files 
         for o in os.listdir(os.getcwd() + "/chapters"):
             if o[0] == "_":
                 continue

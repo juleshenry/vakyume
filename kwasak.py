@@ -56,7 +56,13 @@ import inspect
 def kwasak_static(func):
     #fmt:off
     def wrapper(self, **kw):
-        if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:raise ValueError("Must have exactly one missing variable for which to solve.")
+        if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:
+            # Apparently, there is a bug in inspect.siganature mro() causing `X_1` to be preferred to match `X_10` when calling func
+            print(1231223)
+            # print(kw)
+            # print(str(func))
+            # print(str(inspect.signature(func).parameters))
+            raise ValueError("Must have exactly one missing variable for which to solve.")
         return getattr(self, func.__name__ + "__" + m[0])(*[x[1] for x in sorted(kw.items(), key=lambda kv: kv[0])])
     return wrapper
     #fmt:on
