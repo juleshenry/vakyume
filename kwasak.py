@@ -58,7 +58,6 @@ def kwasak_static(func):
     def wrapper(self, **kw):
         if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:
             # Apparently, there is a bug in inspect.siganature mro() causing `X_1` to be preferred to match `X_10` when calling func
-            print(1231223)
             # print(kw)
             # print(str(func))
             # print(str(inspect.signature(func).parameters))

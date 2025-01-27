@@ -523,6 +523,7 @@ class Verify:
     def todo_suave(ne, d, dd, ii, pda, o) ->bool:
         nao = list(filter(lambda a: a != dd, list(d)))
         kew = {n: ne.pda[n] for n in nao}
+
         print('calling .. ',o+'_'+dd,'\nw/',kew)
         try:
             rez = getattr(ne.lib_class(), o)(**kew)
@@ -530,14 +531,15 @@ class Verify:
             print(z)
             raise ValueError("SSS")
         print(dd,'=',rez)
+        # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed 
         if not ii:  # assumes first is correct. not always true! TODO
             ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
             print(ne.pda)
         def ev(a,b):
             print(*(a,b,type(a),type(b),),sep=':::::')
-            print(result:=a-b)
+            print('DIF >',result:=a-b)
             
-            if isinstance(result, Eq):
+            if not isinstance(a-b, float):
                 print('12341243')
                 evaluated = result.subs(pda[dd])
             return abs(a - b) < 1e-10
