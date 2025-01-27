@@ -4201,6 +4201,9 @@ class LiquidRing:
         result = []
         Q_gas = -(SP_1 - SP_2*exp(S_p*t/V))/(exp(S_p*t/V) - 1)
         result.append(Q_gas)
+        print('exp(S_p*t/V)',exp(S_p*t/V))
+        print('exp(S_p*t/V) - 1',exp(S_p*t/V) - 1)
+        print(SP_1,SP_2, Q_gas,'/????')
         return result
 
     @staticmethod

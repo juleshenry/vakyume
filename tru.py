@@ -527,9 +527,11 @@ class Verify:
         rez = getattr(ne.lib_class(), o)(**kew)
         print(dd,'=',rez)
         if not ii:  # assumes first is correct. not always true! TODO
-            ne.pda[dd] = rez[0] or ne.fala() #should fix if first eqn is None ? 
+            ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
             print(ne.pda)
-        return any(abs(result - pda[dd]) < 1e-10 for result in rez) if rez else rez  
+        def ev(a,b):
+            return abs(a - b) < 1e-10
+        return any(ev(result, pda[dd]) for result in rez) if rez else rez  
 
 if __name__=='__main__':
     test_b()
