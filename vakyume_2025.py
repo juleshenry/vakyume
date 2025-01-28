@@ -5149,7 +5149,7 @@ class RotaryPistonVane:
     def eqn_11_06__p_v_max(P_0_V: float, P_D: float, P_v_0: float, S_B: float, S_D: float, p_b: float, p_g: float):
         # [.pyeqn] p_v_max = S_B / S_D * P_D * (P_0_V - p_b) / (P_D - P_v_0) + P_v_0 / (P_D - P_v_0) * p_g
         result = []
-        p_v_max = (P_0_V*P_D*S_B - P_D*S_B*p_b + P_v_0*S_D*p_g)/(S_D*(P_D - P_v_0))
+        p_v_max = (P_0_V*P_D*S_B - P_D*S_B*p_b + P_v_0*S_D*p_g)/(S_D*(P_D - P_v_0)) + 18
         result.append(p_v_max)
         return result
 
@@ -5188,11 +5188,10 @@ class RotaryPistonVane:
 #### QUICK VERIFY #### 
 import tru
 
-for o in dir():
-    if str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')):
-        print(o, type(o))
-        try:
-            truth = tru.Verify(vars()[o]).verify() 
-        except ValueError as ve:
-            print(dir(ve))
-        print(truth)
+for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    print(f'@@@{u+1}.',o, type(o))
+    # try:
+    truth = tru.Verify(vars()[o]).verify() 
+    # except ValueError as ve:
+    #     print(dir(ve))
+    print(truth)

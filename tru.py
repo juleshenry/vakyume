@@ -467,6 +467,18 @@ def test_b():
 # print = lambda *a:a
 class Verify:
     # iterate all methods and fill with dummy values.
+    """
+    #### QUICK VERIFY #### 
+    import tru
+
+    for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+        print(f'{u+1}.',o, type(o))
+        # try:
+        truth = tru.Verify(vars()[o]).verify() 
+        # except ValueError as ve:
+        #     print(dir(ve))
+        print(truth)
+    """
 
     def __init__(ne, lib_class):
         print('Verifyin`...'+str(lib_class))
@@ -494,16 +506,16 @@ class Verify:
         return sorted(list(tokes))
 
     @staticmethod
-    def fala():return round(random.random() * 10, 5)
+    def fala():return round(random.random() * 4, 5)
 
     def verify(ne):
         # pda=presetdumargs
         fal = {}
         for o, d in ne.sak_funx_di.items():
             ne.pda = {d: ne.fala() for d in d}
-            print(ne.pda)
+            print("PROPOSEDUMBYARGZ"+str(ne.pda))
             for ii, dd in enumerate(d):
-                print(o,d,ii,dd)
+                # print(o,d,ii,dd)
                 """
                 o eqn_base
                 d full args
@@ -515,34 +527,44 @@ class Verify:
                 ):
                     fal[dd] = "unsolved or incorrectly solved by AI"
             ne.pda = {}
-
+        # print(fal)
         if fal:
-            return (filter(lambda a:a,fal.items()))
+            return fal #(filter(lambda a:a,fal.items()))
         return not fal
 
     def todo_suave(ne, d, dd, ii, pda, o) ->bool:
         nao = list(filter(lambda a: a != dd, list(d)))
         kew = {n: ne.pda[n] for n in nao}
 
-        print('calling .. ',o+'_'+dd,'\nw/',kew)
-        try:
-            rez = getattr(ne.lib_class(), o)(**kew)
-        except ZeroDivisionError as z:
-            print(z)
-            raise ValueError("SSS")
-        print(dd,'=',rez)
+        # print('calling .. ',o+'_'+dd,'  w/',kew,end='')
+        # try:
+        rez = getattr(ne.lib_class(), o)(**kew)
+        # print('-'*9,'>>>',dd,'=',rez)
+
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed 
         if not ii:  # assumes first is correct. not always true! TODO
             ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
+            print("Assuming below will be the golden n-tuple...")
             print(ne.pda)
-        def ev(a,b):
-            print(*(a,b,type(a),type(b),),sep=':::::')
-            print('DIF >',result:=a-b)
-            
-            if not isinstance(a-b, float):
-                print('12341243')
-                evaluated = result.subs(pda[dd])
-            return abs(a - b) < 1e-10
+       
+        def zyard(z):
+            return map(lambda o:float(abs(o)),z.as_real_imag())
+
+        def ev(a, b):
+            # print(*(a, b,), sep=':::::')
+            # print('DIFFIN ', result := a - b, '<?>')
+            if isinstance(result := a - b, float) or isinstance(a - b, complex):
+                return abs(a - b) < 1e-10
+            else:
+                evaluated = result.subs({dd: pda[dd]})
+                if evaluated.is_real:
+                    return evaluated < 1e-10
+                else:
+                    # print(evaluated)
+                    real, imag = zyard(evaluated)
+                    # print('RIIII'*2,real,imag)
+                    return real < 1e-10 and imag < 1e-10
+        # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
         return any(ev(result, pda[dd]) for result in rez) if rez else rez  
 
 if __name__=='__main__':
