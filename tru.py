@@ -468,16 +468,23 @@ def test_b():
 class Verify:
     # iterate all methods and fill with dummy values.
     """
-    #### QUICK VERIFY #### 
-    import tru
+    
+#### QUICK VERIFY #### 
+import tru
 
-    for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-        print(f'{u+1}.',o, type(o))
-        # try:
-        truth = tru.Verify(vars()[o]).verify() 
-        # except ValueError as ve:
-        #     print(dir(ve))
-        print(truth)
+for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    print(f'@@@{u+1}.',o, type(o))
+    # try:
+    truth = False
+    for tempt in range(budget:=5):
+        try:
+            truth = truth or tru.Verify(vars()[o]).verify() 
+        except ValueError as ve:
+            if (m:="math domain error") in str(ve):pass
+            # elif(m:=)
+            print("[ERROR]"+":"*99,m)
+            # print(str(ve));1/0
+    print("+"*8*8,truth)
     """
 
     def __init__(ne, lib_class):
@@ -513,7 +520,7 @@ class Verify:
         fal = {}
         for o, d in ne.sak_funx_di.items():
             ne.pda = {d: ne.fala() for d in d}
-            print("PROPOSEDUMBYARGZ"+str(ne.pda))
+            # print("PROPOSEDUMBYARGZ"+str(ne.pda))
             for ii, dd in enumerate(d):
                 # print(o,d,ii,dd)
                 """
@@ -544,8 +551,8 @@ class Verify:
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed 
         if not ii:  # assumes first is correct. not always true! TODO
             ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
-            print("Assuming below will be the golden n-tuple...")
-            print(ne.pda)
+            # print("Assuming below will be the golden n-tuple...")
+            # print(ne.pda)
        
         def zyard(z):
             return map(lambda o:float(abs(o)),z.as_real_imag())

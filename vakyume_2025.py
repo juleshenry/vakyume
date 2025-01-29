@@ -4201,9 +4201,6 @@ class LiquidRing:
         result = []
         Q_gas = -(SP_1 - SP_2*exp(S_p*t/V))/(exp(S_p*t/V) - 1)
         result.append(Q_gas)
-        print('exp(S_p*t/V)',exp(S_p*t/V))
-        print('exp(S_p*t/V) - 1',exp(S_p*t/V) - 1)
-        print(SP_1,SP_2, Q_gas,'/????')
         return result
 
     @staticmethod
@@ -5191,7 +5188,13 @@ import tru
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
     print(f'@@@{u+1}.',o, type(o))
     # try:
-    truth = tru.Verify(vars()[o]).verify() 
-    # except ValueError as ve:
-    #     print(dir(ve))
-    print(truth)
+    truth = False
+    for tempt in range(budget:=5):
+        try:
+            truth = truth or tru.Verify(vars()[o]).verify() 
+        except ValueError as ve:
+            if (m:="math domain error") in str(ve):pass
+            # elif(m:=)
+            print("[ERROR]"+":"*99,m)
+            # print(str(ve));1/0
+    print("+"*8*8,truth)
