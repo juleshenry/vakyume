@@ -5197,4 +5197,4 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
             # elif(m:=)
             print("[ERROR]"+":"*99,m)
             # print(str(ve));1/0
-    print("+"*8*8,truth)
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))

@@ -532,7 +532,7 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
                 if not ne.todo_suave(
                     d, dd, ii, ne.pda, o
                 ):
-                    fal[dd] = "unsolved or incorrectly solved by AI"
+                    fal[dd] = f"{o} remains elusive"
             ne.pda = {}
         # print(fal)
         if fal:
