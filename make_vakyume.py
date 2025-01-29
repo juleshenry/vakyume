@@ -280,9 +280,9 @@ class Solver:
                 else:
                     if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
                         eqn_number = x[0]
-                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed
                         subnum = x[0].split('-')[1]
                         w=int(''.join([s for s in subnum if not s.isalpha()]))
+                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed because mro() is unintuitive
                         eqn_number = x[0].split('-')[0] + '-' + ('0' + str(w) if w<=9 else str(w)) +  ''.join([s for s in subnum if s.isalpha()])
                         comment = None #""
                     if " = " in l:
@@ -337,8 +337,7 @@ class SetupMethods:
         except NameError as ne:
             pass
 
-
-if __name__ == "__main__":
+def make():
     X = Solver()
     stdout(
         "from math import log, sqrt, exp, pow, e"
@@ -359,3 +358,32 @@ if __name__ == "__main__":
         )
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
+
+truify = """""
+import tru
+
+for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    print(f'@@@{u+1}.',o, type(o))
+    # try:
+    truth = False
+    for tempt in range(budget:=5):
+        try:
+            truth = truth or tru.Verify(vars()[o]).verify() 
+        except ValueError as ve:
+            if (m:="math domain error") in str(ve):pass
+            # elif(m:=)
+            print("[ERROR]"+":"*99,m)
+            # print(str(ve));1/0
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    """""
+import subprocess
+if __name__ == "__main__":
+    make()
+    with open(OUTFILE, "a") as f:
+        f.write(truify)
+    def run_outfile():
+        result = subprocess.run(['python3', OUTFILE], capture_output=True, text=True)
+        return result.stdout
+
+    output = run_outfile()
+    print(output)
