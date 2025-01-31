@@ -359,9 +359,9 @@ def make():
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
 
-truify = """""
+truify = r"""""
 import tru
-
+y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
     print(f'@@@{u+1}.',o, type(o))
     # try:
@@ -375,7 +375,10 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
             print("[ERROR]"+":"*99,m)
             # print(str(ve));1/0
     print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
-    """""
+    y[o] = truth
+print(*[yo for yo in y.items()],sep=('\n\t'))
+
+    """
 import subprocess
 if __name__ == "__main__":
     make()
