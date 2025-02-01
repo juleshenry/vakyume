@@ -344,7 +344,7 @@ def make():
     )
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
     stdout("from scipy.optimize import newton")
-    stdout("from kwasak import kwasak_static")
+    stdout("from kwasak import kwasak_static");stdout("import pandas as pd");stdout("import numpy as np")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files

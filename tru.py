@@ -534,9 +534,10 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
                     fal[dd] = f"{o} remains elusive"
             ne.pda = {}
         # print(fal)
-    #   if fal:
+    #   if isinstance(fal,dict) return fal you have failed:
     #         return fal #(filter(lambda a:a,fal.items()))
         # else:return not fal
+
         return not fal if not fal else fal
 
     def todo_suave(ne, d, dd, ii, pda, o) ->bool:
