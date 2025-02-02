@@ -376,9 +376,10 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
             # print(str(ve));1/0
     print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
     y[o] = truth
-print(*[yo for yo in y.items()],sep=('\n\t'))
-
-    """
+print(*[yo for yo in y.items()],sep=('\n'))
+def export_unfinished():
+    return y
+"""
 import subprocess
 if __name__ == "__main__":
     make()
