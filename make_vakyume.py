@@ -83,7 +83,11 @@ class Solver:
                 t = t.replace(c, "")
             return t
 
-        tokes = set(filter(lambda a: a, map(purge, map(s.unexponentiate, set(tokes)))))
+        tokes = sorted(
+            list(
+                set(filter(lambda a: a, map(purge, map(s.unexponentiate, set(tokes)))))
+            )
+        )
         print("tokens: ", tokes)
         return tokes
 
