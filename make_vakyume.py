@@ -388,7 +388,7 @@ def make():
         X.analyze(chap)
 
 
-truify = r"""""
+truify = r"""
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
