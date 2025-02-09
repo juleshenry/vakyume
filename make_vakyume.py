@@ -214,7 +214,7 @@ class Solver:
             # llm hacky
             line = line.replace("math.", "").replace("^", "**")  # LLm hacky
             if (
-                0
+                0 #FLAG FOR disallowing submethods and import statements solved by llm
                 and not line.strip()
                 or any(
                     m in line

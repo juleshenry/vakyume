@@ -492,7 +492,7 @@ class Verify:
     """
 
     def __init__(ne, lib_class):
-        print("Verifyin`..." + str(lib_class))
+        # print("Verifyin`..." + str(lib_class))
         ne.lib_class = lib_class
 
         ne.sak_funx = list(
