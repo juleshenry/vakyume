@@ -5884,8 +5884,6 @@ class LiquidRing:
         result.append(T_c)
         return result
 
-
-
     @kwasak_static
     def eqn_10_11(T_s: float = None, T_c: float = None, **kwargs):
         return
@@ -7497,6 +7495,7 @@ class LiquidRing:
         bhp_0 = 2000.0 * bhp / (31.0 * mu**0.16 * rho**0.84 + 1000.0)
         result.append(bhp_0)
         return result
+
     @kwasak_static
     def eqn_10_21(P_prime: float = None, P_d: float = None, P: float = None, **kwargs):
         return
@@ -7994,15 +7993,21 @@ class RotaryPistonVane:
         return result
 
 
-#### QUICK VERIFY #### 
+#### QUICK VERIFY ####
 import tru
 
 for o in dir():
-    if str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')):
+    if (
+        str(o)[0].isalpha()
+        and str(o)[0].capitalize() == str(o)[0]
+        and str(o)
+        not in map(
+            lambda a: a.strip(), "I, Piecewise, LambertW, Eq, symbols".split(",")
+        )
+    ):
         print(o, type(o))
         try:
-            truth = tru.Verify(vars()[o]).verify() 
+            truth = tru.Verify(vars()[o]).verify()
         except ValueError as ve:
             print(dir(ve))
         print(truth)
-        
