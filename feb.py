@@ -65,21 +65,14 @@ def murda(cli, base):
     clisp = cli.split("\n")
     gudz = wpp[base]
     prefix = "_".join(list(gudz)[0].split("_")[:2])
-    print(prefix)
+    gudz_max = int(max(gudz, key=lambda a: int(a.split("__")[0].split("_")[-1])).split("__")[0].split("_")[-1])
     badz = [
         prefix + "_" + ("0" + str(s) if int(s) < 9 else str(s))
         for s in range(1,
-            int(
-                max(gudz, key=lambda a: int(a.split("__")[0].split("_")[-1]))
-                .split("__")[0]
-                .split("_")[-1]
-            )
+            gudz_max
         )
         if prefix + "_" + ("0" + str(s) if int(s) < 9 else str(s)) not in gudz
     ]
-    print(gudz)
-    print(badz)
-    1 / 0
     for i, l in enumerate(clisp):
         # gonna assume to lookahead hear at cap at max line
         if i == len(clisp) - 1:
@@ -88,7 +81,7 @@ def murda(cli, base):
         if any([j in clisp[i + 1] for j in gudz]):
             mal = False
             nucli += l + "\n"
-        elif any([j in clisp[i + 1] for j in badz]):
+        elif any([j in clisp[i + 1] for j in badz]) or (prefix in l and int(l.split("_")[2].split("(")[0])>gudz_max):
             mal = True
         elif not mal:
             nucli += l + "\n"
