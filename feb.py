@@ -85,16 +85,14 @@ def murda(cli, base):
             mal = True
         elif not mal:
             nucli += l + "\n"
-    print(nucli)
-    1 / 0
-    return nucli
+    return '\n'.join(nucli.split('\n'))[:-1]
 
-
+ded_clipz = {}
 for o in raw_clipz:
-    murda(raw_clipz[o], o)
+    ded_clipz[o] = murda(raw_clipz[o], o)
 
 
-for i, clip in raw_clipz.items():
+for i, clip in ded_clipz.items():
     with open(f"shard/{i}.py", "w") as f:
         f.write("from ..kwasak import kwasak_static\n")
         f.write(clip)
