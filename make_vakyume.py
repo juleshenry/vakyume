@@ -23,7 +23,6 @@ class Solver:
             return solve(nf, symb)
         except NotImplementedError:
             return []  # Unable to solve at present moment
-    
 
     def valid_toke(s, t):
         valid = t.isidentifier() or t.split("**")[0].strip().isidentifier()
@@ -84,7 +83,11 @@ class Solver:
                 t = t.replace(c, "")
             return t
 
-        tokes = set(filter(lambda a: a, map(purge, map(s.unexponentiate, set(tokes)))))
+        tokes = sorted(
+            list(
+                set(filter(lambda a: a, map(purge, map(s.unexponentiate, set(tokes)))))
+            )
+        )
         print("tokens: ", tokes)
         return tokes
 
@@ -92,7 +95,15 @@ class Solver:
         return t.split("**")[0].strip()
 
     def sympy_backup_2(s, eqn_header, normal_form, token):
-        stdout(TAB*2 + "# [Sympy Failover]")
+        """Writes failover method when Sympy fails to parse an equation
+            can give stdout or return str
+
+            E.G.:
+            `def eqn_8_01__SCON(NC: float, NS: float, installation_cost: float):`
+            `16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35 - (installation_cost)`
+            `SCON`
+        """
+        stdout(TAB * 2 + "# [Sympy Failover]")
         try:
             print(
                 ans1 := escribir_codigo(
@@ -106,34 +117,43 @@ class Solver:
                 ans1 := escribir_codigo(
                     eqn="",
                     single_variable=token,
-                    header = eqn_header,
+                    header=eqn_header,
                     pipin=ans1,
                     p1_i=-1,
                     p2_i=3,
                 )
             )
         except httpx.ConnectError as s:
-            print(s)or stdout(TAB * 2 + 'pass # Ollama offline') 
+            print(s) or stdout(TAB * 2 + "pass # Ollama offline")
             return
-        if any(a in ans1.lower() for a in ('transcendental','numerical','not be possible',)):
+        if any(
+            a in ans1.lower()
+            for a in (
+                "transcendental",
+                "numerical",
+                "not be possible",
+            )
+        ):
             # llm hacky
-            stdout(TAB * 2 + 'pass # no closed form solution')
-            return 
+            stdout(TAB * 2 + "pass # no closed form solution")
+            return
         # print("BEFORE:::")
         # ans1 = make_sure_python_annotated(ans1)
         # print("AFTER:::")
         xtracted_code = extract_code(ans1)
-        if not xtracted_code.strip(): # hacky, can come back un-annotated and llm is quantum noisy these days
+        if (
+            not xtracted_code.strip()
+        ):  # hacky, can come back un-annotated and llm is quantum noisy these days
             xtracted_code = ans1
         print("xtractd()()()")
         print(xtracted_code)
         print("xtractd()()()")
         and2 = s.fine_tune_extracted(xtracted_code, eqn_header)
-        print("??$$"*6)
+        print("??$$" * 6)
         print(eqn_header)
         print(and2)
-        print("??$$"*6)
-        for l in and2.split('\n'):
+        print("??$$" * 6)
+        for l in and2.split("\n"):
             stdout(l)
 
     # def doit():
@@ -150,86 +170,101 @@ class Solver:
     #     for o in sak_funx:
     #         print(o)
     #         print(inspect.signature(getattr(VacuumTheory,o)))
-    
+
     @staticmethod
     def fine_tune_extracted(and1, header):
         """fte(extract_code) -> printable"""
         ans = ""
-        tableau = lambda a:a.startswith(TAB) or a.startswith('\t')
-        print("&"*88)
+        tableau = lambda a: a.startswith(TAB) or a.startswith("\t")
+        print("&" * 88)
         print(and1)
-        print("&"*88)
-        
+        print("&" * 88)
+
         def find_last_return(code_block) -> int:
-            for i,o in enumerate(reversed(w:=code_block.split('\n'))):
-                if o.lstrip().startswith('return'):
+            for i, o in enumerate(reversed(w := code_block.split("\n"))):
+                if o.lstrip().startswith("return"):
                     return len(w) - i - 1
+
         lix = find_last_return(and1)
-        for iii, line in enumerate(spl:=and1.split('\n')):
-            line = line.replace("math.", "").replace('^','**') #LLm hacky
+        for iii, line in enumerate(spl := and1.split("\n")):
+            line = line.replace("math.", "").replace("^", "**")  # LLm hacky
             if tableau(line):
                 # attempt catch the naked, list-less return at the end of the solving code; technically should be index of last return
-                if iii == lix and not ('[' in line and ']' in line):
-                    line = f'{TAB}return [{line.split('return')[1]} ]'
-                ans += (TAB + line) + '\n'
-        
+                if iii == lix and not ("[" in line and "]" in line):
+                    line = f"{TAB}return [{line.split('return')[1]} ]"
+                ans += (TAB + line) + "\n"
+
         return ans
-    
-    
+
     def sympy_backup(s, eqn_header, normal_form, token):
-        stdout(
-            f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]"
-        )
+        stdout(f"{TAB*2}# [FAILED TO PARSE VIA SYMPY]")
         print(eqn_header)
         print(
             ans1 := escribir_codigo(
                 eqn="0 = " + normal_form,
                 lang="Python",
                 single_variable=token,
-                header = eqn_header,
-                p1_i=1+1,
+                header=eqn_header,
+                p1_i=1 + 1,
                 p2_i=1,
             )
         )
 
         extract_0 = extract_code(ans1)
-        print('!'*8**2)
+        print("!" * 8**2)
         print(extract_0)
-        print('!'*8**2)
+        print("!" * 8**2)
         # extract_1 = extract_method_solving_for_(extract_0, token)
         # print(extract_1)
         # print('*'*8**2)
 
-        for line in extract_0.split('\n'):
+        for line in extract_0.split("\n"):
             # llm hacky
-            line = line.replace("math.", "").replace('^','**') #LLm hacky
-            if 0 and not line.strip() or any(m in line for m in ('import' , 'def' , '#', )):
+            line = line.replace("math.", "").replace("^", "**")  # LLm hacky
+            if (
+                0 #FLAG FOR disallowing submethods and import statements solved by llm
+                and not line.strip()
+                or any(
+                    m in line
+                    for m in (
+                        "import",
+                        "def",
+                        "#",
+                    )
+                )
+            ):
                 continue
             else:
-                if 'return' in line and not ('[' in line and ']' in line):
-                    #attempt to wrap formula
-                    line = f'return [{line.split('return')[1]} ]'
+                if "return" in line and not ("[" in line and "]" in line):
+                    # attempt to wrap formula
+                    line = f"return [{line.split('return')[1]} ]"
                 stdout(f"{TAB*2}{line.strip()}")
         # stdout(
         #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
         # )
 
+    def make_normal_form(s, eqn):
+        normal_form = (
+            eqn.split("=")[1].strip().split("#")[0]
+            + f" - ({eqn.split("=")[0].strip()})"
+        )
+        return normal_form
+    
     def permute_and_print(s, eqn, eqn_n, comment=None):
         """1. gets tokes
         2. yields normal form
         3. injects comment
         4. forms method out of them
 
-        """ 
+        """
         tokes = s.get_tokes(eqn)
-        normal_form = (
-            eqn.split("=")[1].strip().split("#")[0]
-            + f" - ({eqn.split("=")[0].strip()})"
-        )
+        normal_form = s.make_normal_form(eqn)
         print("normal_form", normal_form)
         # herin, g
         stdout(f"{n+TAB}@kwasak_static")
-        stdout(f"{TAB}def eqn_{eqn_n.replace("-","_")}({', '.join(f'{a}{TYPE} = None'for a in tokes)},**kwargs):")
+        stdout(
+            f"{TAB}def eqn_{eqn_n.replace("-","_")}({', '.join(f'{a}{TYPE} = None'for a in tokes)},**kwargs):"
+        )
         stdout(f"{TAB*2}return{n}")
         for token in tokes:
             args = sorted(filter(lambda x: x != token, tokes))
@@ -237,7 +272,11 @@ class Solver:
             if typed_args:
                 typed_args += TYPE
             stdout(f"\n{TAB}@staticmethod")
-            stdout((eqn_header:=f'{TAB}def eqn_{eqn_n.replace("-","_")}__{token}({typed_args}):'))
+            stdout(
+                (
+                    eqn_header := f'{TAB}def eqn_{eqn_n.replace("-","_")}__{token}({typed_args}):'
+                )
+            )
             stdout(
                 f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
             )  # original text contains #-comment for units
@@ -280,9 +319,9 @@ class Solver:
                 else:
                     if x := re.compile(r"\d{1,2}-\d{1,2}\w{,2}").findall(l):
                         eqn_number = x[0]
-                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed
                         subnum = x[0].split('-')[1]
                         w=int(''.join([s for s in subnum if not s.isalpha()]))
+                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed because mro() is unintuitive
                         eqn_number = x[0].split('-')[0] + '-' + ('0' + str(w) if w<=9 else str(w)) +  ''.join([s for s in subnum if s.isalpha()])
                         comment = None #""
                     if " = " in l:
@@ -313,7 +352,7 @@ class SetupMethods:
                             # print(ix, l.strip(), "needs name!")
 
     def see_which_notes_are_valid_Python(s):
-        # detect pyeqn files 
+        # detect pyeqn files
         for o in os.listdir(os.getcwd() + "/chapters"):
             if o[0] == "_":
                 continue
@@ -338,14 +377,14 @@ class SetupMethods:
             pass
 
 
-if __name__ == "__main__":
+def make():
     X = Solver()
-    stdout(
-        "from math import log, sqrt, exp, pow, e"
-    )
+    stdout("from math import log, sqrt, exp, pow, e")
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
     stdout("from scipy.optimize import newton")
     stdout("from kwasak import kwasak_static")
+    stdout("import pandas as pd")
+    stdout("import numpy as np")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
@@ -359,3 +398,39 @@ if __name__ == "__main__":
         )
         stdout(f"\n\nclass {cls_name}:")
         X.analyze(chap)
+
+
+truify = r"""
+import tru
+y = {}
+for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    print(f'@@@{u+1}.',o, type(o))
+    # try:
+    truth = False
+    for tempt in range(budget:=5):
+        try:
+            truth = truth or tru.Verify(vars()[o]).verify() 
+        except ValueError as ve:
+            if (m:="math domain error") in str(ve):pass
+            # elif(m:=)
+            print("[ERROR]"+":"*99,m)
+            # print(str(ve));1/0
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    y[o] = truth
+print(*[yo for yo in y.items()],sep=('\n'))
+def export_unfinished():
+    return y
+"""
+import subprocess
+
+if __name__ == "__main__":
+    make()
+    with open(OUTFILE, "a") as f:
+        f.write(truify)
+
+    def run_outfile():
+        result = subprocess.run(["python3", OUTFILE], capture_output=True, text=True)
+        return result.stdout
+
+    output = run_outfile()
+    print(output)

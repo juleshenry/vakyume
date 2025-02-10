@@ -6,7 +6,16 @@ null_str = ""
 dummy = lambda aa: print((n + "*" * 88 + n).join(["", *aa, ""]))
 
 
-def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = None, pipin="", p1_i=None, p2_i=None, p3_i=0):
+def escribir_codigo(
+    eqn: str,
+    lang: str = "Python",
+    single_variable=None,
+    header=None,
+    pipin="",
+    p1_i=None,
+    p2_i=None,
+    p3_i=0,
+):
     """Walrus-routed method for writing code with prompts via ollama"""
     int(
         sum(
@@ -36,9 +45,9 @@ def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = 
                         """,
                     f"""identify the line that is a one liner for a closed-form expression for {single_variable or 'T'}:{n+eqn}""",
                     f"""{eqn};solve for {single_variable}""",
-                    pipin + n
+                    pipin + n,
                 )[p1_i]
-            ) 
+            )
             + (
                 p2 := (
                     null_str,
@@ -55,7 +64,7 @@ def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = 
                     ```
                     {n}""",
                     """Give your answer as one line.""",
-                    f"""Hello, You will write a specific Python function to return {single_variable}; Make sure variables are in terms of {"" if not header else header.split('(')[1].replace(')','')}\n The method header will be:{n}{header}. """
+                    f"""Hello, You will write a specific Python function to return {single_variable}; Make sure variables are in terms of {"" if not header else header.split('(')[1].replace(')','')}\n The method header will be:{n}{header}. """,
                 )[p2_i]
             )
             + (
@@ -64,11 +73,10 @@ def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = 
                     "give back only the methods without additional commentary",
                     f"the equation header will be {header}",
                 )
-               
             )[p3_i],
         },
     ]
-    dummy([mnms[0]['content']])
+    dummy([mnms[0]["content"]])
     response = ollama.chat(
         model="phi3:latest" or "llama3:latest",
         messages=mnms,
@@ -76,10 +84,8 @@ def escribir_codigo(eqn: str, lang:str="Python", single_variable=None, header = 
     return n.join(filter(lambda a: a, response["message"]["content"].split(n)))
 
 
-
-
 def make_sure_python_annotated(code_block):
-    print("makin' sure iz annotated" + '...'*8)
+    print("makin' sure iz annotated" + "..." * 8)
     response = ollama.chat(
         model="llama3:latest",
         messages=[
@@ -95,9 +101,8 @@ def make_sure_python_annotated(code_block):
     return response["message"]["content"]
 
 
-
 def extract_code(text):
-    """ gets actual code snippet (attempts)"""
+    """gets actual code snippet (attempts)"""
     # dummy([text])
     maxxx = 0
     maxxx_str = ""
@@ -108,9 +113,13 @@ def extract_code(text):
             max_str += n
         elif "```" in ii:
             if len(max_str.split(n)) > maxxx:
-                maxxx, maxxx_str, max_str = (len(max_str.split(n)), max_str, "",)
+                maxxx, maxxx_str, max_str = (
+                    len(max_str.split(n)),
+                    max_str,
+                    "",
+                )
         if (a := len(max_str.split(n))) > 1:
-            max_str += (ii if a - 2 else '') + n
+            max_str += (ii if a - 2 else "") + n
     print("$#" * 32 + "extract_code" + "#$" * 32)
     return maxxx_str
 
@@ -136,4 +145,3 @@ def eval_wrap(ans):
                 pass
             # O(n^2)
     return n.join(o[max_bounds[0] : max_bounds[1]])
-

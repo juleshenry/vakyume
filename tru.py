@@ -6,6 +6,7 @@ import inspect
 from suck_consts import *
 import random
 
+
 def test_a():
     class VacuumTheory:
 
@@ -56,7 +57,7 @@ def test_a():
             V: float = None,
             p: float = None,
             R: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -108,7 +109,7 @@ def test_a():
             V: float = None,
             m: float = None,
             R: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -167,7 +168,7 @@ def test_a():
             rho: float = None,
             P: float = None,
             R: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -219,7 +220,7 @@ def test_a():
             T_2: float = None,
             P_1: float = None,
             V_2: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -278,7 +279,7 @@ def test_a():
             W: float = None,
             P: float = None,
             q: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -323,7 +324,9 @@ def test_a():
             return result
 
         @kwasak_static
-        def eqn_1_12(sum_partial_pressures: float = None, Total_P: float = None, **kwargs):
+        def eqn_1_12(
+            sum_partial_pressures: float = None, Total_P: float = None, **kwargs
+        ):
             return
 
         @staticmethod
@@ -397,8 +400,10 @@ def test_a():
             P = p_a / y_a
             result.append(P)
             return result
+
     assert Verify(VacuumTheory).verify()
-    print('exitoso')
+    print("exitoso")
+
 
 def test_b():
     class C:
@@ -408,7 +413,7 @@ def test_b():
             mu: float = None,
             bhp: float = None,
             bhp_0: float = None,
-            **kwargs
+            **kwargs,
         ):
             return
 
@@ -434,13 +439,13 @@ def test_b():
                 * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (25 / 4)
             )
             result.append(mu)
-            mu = -204374584201.104 * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (
-                25 / 4
-            )
+            mu = -204374584201.104 * (
+                bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84
+            ) ** (25 / 4)
             result.append(mu)
-            mu = 204374584201.104 * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (
-                25 / 4
-            )
+            mu = 204374584201.104 * (
+                bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84
+            ) ** (25 / 4)
             result.append(mu)
             return result
 
@@ -461,33 +466,33 @@ def test_b():
             return result
 
     assert Verify(C).verify()
-    print('exitosoB')
+    print("exitosoB")
 
 
 # print = lambda *a:a
 class Verify:
     # iterate all methods and fill with dummy values.
     """
-    #### QUICK VERIFY #### 
-import tru
+        #### QUICK VERIFY ####
+    import tru
 
-for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-    print(f'@@@{u+1}.',o, type(o))
-    # try:
-    truth = False
-    for tempt in range(budget:=5):
-        try:
-            truth = truth or tru.Verify(vars()[o]).verify() 
-        except ValueError as ve:
-            if (m:="math domain error") in str(ve):pass
-            # elif(m:=)
-            print("[ERROR]"+":"*99,m)
-            # print(str(ve));1/0
-    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+        print(f'@@@{u+1}.',o, type(o))
+        # try:
+        truth = False
+        for tempt in range(budget:=5):
+            try:
+                truth = truth or tru.Verify(vars()[o]).verify()
+            except ValueError as ve:
+                if (m:="math domain error") in str(ve):pass
+                # elif(m:=)
+                print("[ERROR]"+":"*99,m)
+                # print(str(ve));1/0
+        print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
     """
 
     def __init__(ne, lib_class):
-        print('Verifyin`...'+str(lib_class))
+        # print("Verifyin`..." + str(lib_class))
         ne.lib_class = lib_class
 
         ne.sak_funx = list(
@@ -512,7 +517,8 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
         return sorted(list(tokes))
 
     @staticmethod
-    def fala():return round(random.random() * 4, 5)
+    def fala():
+        return round(random.random() * 4, 5)
 
     def verify(ne):
         # pda=presetdumargs
@@ -528,17 +534,17 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
                 ii iteration of args
                 dd isolated variable
                 """
-                if not ne.todo_suave(
-                    d, dd, ii, ne.pda, o
-                ):
+                if not ne.todo_suave(d, dd, ii, ne.pda, o):
                     fal[dd] = f"{o} remains elusive"
             ne.pda = {}
         # print(fal)
-        if fal:
-            return fal #(filter(lambda a:a,fal.items()))
-        return not fal
+        #   if isinstance(fal,dict) return fal you have failed:
+        #         return fal #(filter(lambda a:a,fal.items()))
+        # else:return not fal
 
-    def todo_suave(ne, d, dd, ii, pda, o) ->bool:
+        return not fal if not fal else fal
+
+    def todo_suave(ne, d, dd, ii, pda, o) -> bool:
         nao = list(filter(lambda a: a != dd, list(d)))
         kew = {n: ne.pda[n] for n in nao}
 
@@ -547,14 +553,16 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
         rez = getattr(ne.lib_class(), o)(**kew)
         # print('-'*9,'>>>',dd,'=',rez)
 
-        # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed 
+        # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed
         if not ii:  # assumes first is correct. not always true! TODO
-            ne.pda[dd] = ne.fala() if not rez else rez[0] #should fix if first eqn is None ? 
+            ne.pda[dd] = (
+                ne.fala() if not rez else rez[0]
+            )  # should fix if first eqn is None ?
             # print("Assuming below will be the golden n-tuple...")
             # print(ne.pda)
-       
+
         def zyard(z):
-            return map(lambda o:float(abs(o)),z.as_real_imag())
+            return map(lambda o: float(abs(o)), z.as_real_imag())
 
         def ev(a, b):
             # print(*(a, b,), sep=':::::')
@@ -570,8 +578,10 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
                     real, imag = zyard(evaluated)
                     # print('RIIII'*2,real,imag)
                     return real < 1e-10 and imag < 1e-10
-        # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
-        return any(ev(result, pda[dd]) for result in rez) if rez else rez  
 
-if __name__=='__main__':
+        # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
+        return any(ev(result, pda[dd]) for result in rez) if rez else rez
+
+
+if __name__ == "__main__":
     test_b()
