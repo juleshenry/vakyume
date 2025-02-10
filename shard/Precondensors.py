@@ -1,4 +1,7 @@
-from ..kwasak import kwasak_static
+from kwasak import kwasak_static
+
+class Precondensors:
+
     @kwasak_static
     def eqn_7_04ab(P_c: float = None, p: float = None, p_i: float = None, p_nc: float = None,**kwargs):
         return
@@ -37,48 +40,46 @@ from ..kwasak import kwasak_static
         return result
 
     @kwasak_static
-    def eqn_7_14b(A: float = None, Q_condensor_heat_duty: float = None, U: float = None, del_T_1: float = None, del_T_2: float = None,**kwargs):
+    def eqn_7_04ac(P_c: float = None, n_i: float = None, n_nc: float = None, p: float = None, p_i: float = None,**kwargs):
         return
 
 
     @staticmethod
-    def eqn_7_14b__A(Q_condensor_heat_duty: float, U: float, del_T_1: float, del_T_2: float):
-        # [.pyeqn] A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+    def eqn_7_04ac__P_c(n_i: float, n_nc: float, p: float, p_i: float):
+        # [.pyeqn] n_i / n_nc = p_i / (p - P_c)
         result = []
-        A = Q_condensor_heat_duty/(U*(del_T_1 - del_T_2)*log(del_T_1 - del_T_2))
-        result.append(A)
+        P_c = p - n_nc*p_i/n_i
+        result.append(P_c)
         return result
 
     @staticmethod
-    def eqn_7_14b__Q_condensor_heat_duty(A: float, U: float, del_T_1: float, del_T_2: float):
-        # [.pyeqn] A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+    def eqn_7_04ac__n_i(P_c: float, n_nc: float, p: float, p_i: float):
+        # [.pyeqn] n_i / n_nc = p_i / (p - P_c)
         result = []
-        Q_condensor_heat_duty = A*U*(del_T_1 - del_T_2)*log(del_T_1 - del_T_2)
-        result.append(Q_condensor_heat_duty)
+        n_i = n_nc*p_i/(-P_c + p)
+        result.append(n_i)
         return result
 
     @staticmethod
-    def eqn_7_14b__U(A: float, Q_condensor_heat_duty: float, del_T_1: float, del_T_2: float):
-        # [.pyeqn] A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+    def eqn_7_04ac__n_nc(P_c: float, n_i: float, p: float, p_i: float):
+        # [.pyeqn] n_i / n_nc = p_i / (p - P_c)
         result = []
-        U = Q_condensor_heat_duty/(A*(del_T_1 - del_T_2)*log(del_T_1 - del_T_2))
-        result.append(U)
+        n_nc = n_i*(-P_c + p)/p_i
+        result.append(n_nc)
         return result
 
     @staticmethod
-    def eqn_7_14b__del_T_1(A: float, Q_condensor_heat_duty: float, U: float, del_T_2: float):
-        # [.pyeqn] A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+    def eqn_7_04ac__p(P_c: float, n_i: float, n_nc: float, p_i: float):
+        # [.pyeqn] n_i / n_nc = p_i / (p - P_c)
         result = []
-        del_T_1 = del_T_2 + exp(LambertW(Q_condensor_heat_duty/(A*U)))
-        result.append(del_T_1)
+        p = P_c + n_nc*p_i/n_i
+        result.append(p)
         return result
 
     @staticmethod
-    def eqn_7_14b__del_T_2(A: float, Q_condensor_heat_duty: float, U: float, del_T_1: float):
-        # [.pyeqn] A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+    def eqn_7_04ac__p_i(P_c: float, n_i: float, n_nc: float, p: float):
+        # [.pyeqn] n_i / n_nc = p_i / (p - P_c)
         result = []
-        del_T_2 = del_T_1 - exp(LambertW(Q_condensor_heat_duty/(A*U)))
-        result.append(del_T_2)
+        p_i = n_i*(-P_c + p)/n_nc
+        result.append(p_i)
         return result
-
-    @kwasak_static

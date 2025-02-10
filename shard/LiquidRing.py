@@ -1,4 +1,7 @@
-from ..kwasak import kwasak_static
+from kwasak import kwasak_static
+
+class LiquidRing:
+
     @kwasak_static
     def eqn_10_10(bhp: float = None, bhp_0: float = None, mu: float = None, rho: float = None,**kwargs):
         return
@@ -171,5 +174,3 @@ from ..kwasak import kwasak_static
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
         pass # Ollama offline
-
-    @kwasak_static

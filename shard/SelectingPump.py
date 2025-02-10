@@ -1,4 +1,7 @@
-from ..kwasak import kwasak_static
+from kwasak import kwasak_static
+
+class SelectingPump:
+
     @kwasak_static
     def eqn_8_01(NC: float = None, NS: float = None, SCON: float = None, installation_cost: float = None,**kwargs):
         return
@@ -208,5 +211,3 @@ from ..kwasak import kwasak_static
         f = 12.0*adiabatic_power_watts/((P_2/P_1)**0.286 - 1.0)
         result.append(f)
         return result
-
-    @kwasak_static

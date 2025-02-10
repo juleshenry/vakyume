@@ -1,4 +1,7 @@
-from ..kwasak import kwasak_static
+from kwasak import kwasak_static
+
+class ProcessAppI:
+
     @kwasak_static
     def eqn_5_15(M_1: float = None, M_2: float = None, P_0_1: float = None, P_0_2: float = None, a_M_12: float = None,**kwargs):
         return
@@ -47,5 +50,3 @@ from ..kwasak import kwasak_static
         a_M_12 = P_0_1*(M_2/M_1)**(2/5)/P_0_2
         result.append(a_M_12)
         return result
-
-    @kwasak_static

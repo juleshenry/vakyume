@@ -1,6 +1,7 @@
 from vakyume_2025_222 import export_unfinished as eu
 from make_vakyume import Solver
 import os
+import shutil
 
 o = eu()
 S = Solver()
@@ -54,10 +55,6 @@ print(wppp)
 
 raw_clipz = {k: "".join(ooo.despapaye[v[0] : v[1] - 1]) for k, v in wppp.items()}
 
-# Create shard directory if it doesn't exist
-if not os.path.exists("shard"):
-    os.makedirs("shard")
-
 
 def murda(cli, base):
     nucli = ""
@@ -88,18 +85,26 @@ def murda(cli, base):
             nucli += l + "\n"
         elif any([j in clisp[i + 1] for j in badz]) or (prefix in l and int(rep2(l))>gudz_max):
             mal = True
+
         elif not mal:
             nucli += l + "\n"
-    return '\n'.join(nucli.split('\n'))[:-1]
+    return '\n'.join(nucli.split('\n')[:-2])
 
 ded_clipz = {}
 for o in raw_clipz:
     ded_clipz[o] = murda(raw_clipz[o], o)
 
 
+
+# Create shard directory if it doesn't exist
+if not os.path.exists("shard"):
+    os.makedirs("shard")
+    shutil.copy("kwasak.py", "shard/kwasak.py")
+
 for i, clip in ded_clipz.items():
     with open(f"shard/{i}.py", "w") as f:
-        f.write("from ..kwasak import kwasak_static\n")
+        f.write("from kwasak import kwasak_static\n\n")
+        f.write("class " + i + ":\n\n")
         f.write(clip)
 
 # cut up clips into shards -> class header + eqn_X_Y__* .py

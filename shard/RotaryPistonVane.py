@@ -1,4 +1,7 @@
-from ..kwasak import kwasak_static
+from kwasak import kwasak_static
+
+class RotaryPistonVane:
+
     @kwasak_static
     def eqn_11_02(Q: float = None, Q_0: float = None, Q_external_gas_throughput: float = None, SP_1: float = None, SP_2: float = None, S_vol_pump_speed: float = None, V: float = None, t: float = None,**kwargs):
         return
@@ -51,5 +54,3 @@ from ..kwasak import kwasak_static
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
         pass # Ollama offline
-
-    @kwasak_static
