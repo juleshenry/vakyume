@@ -95,6 +95,14 @@ class Solver:
         return t.split("**")[0].strip()
 
     def sympy_backup_2(s, eqn_header, normal_form, token):
+        """Writes failover method when Sympy fails to parse an equation
+            can give stdout or return str
+
+            E.G.:
+            `def eqn_8_01__SCON(NC: float, NS: float, installation_cost: float):`
+            `16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35 - (installation_cost)`
+            `SCON`
+        """
         stdout(TAB * 2 + "# [Sympy Failover]")
         try:
             print(
@@ -235,6 +243,13 @@ class Solver:
         #     f"{TAB*2}pass # {'double parens issue. see reverse polish' if not ('** 0.' in normal_form or '**0.' in normal_form) else 'will not solve float exponential'}"
         # )
 
+    def make_normal_form(s, eqn):
+        normal_form = (
+            eqn.split("=")[1].strip().split("#")[0]
+            + f" - ({eqn.split("=")[0].strip()})"
+        )
+        return normal_form
+    
     def permute_and_print(s, eqn, eqn_n, comment=None):
         """1. gets tokes
         2. yields normal form
@@ -243,10 +258,7 @@ class Solver:
 
         """
         tokes = s.get_tokes(eqn)
-        normal_form = (
-            eqn.split("=")[1].strip().split("#")[0]
-            + f" - ({eqn.split("=")[0].strip()})"
-        )
+        normal_form = s.make_normal_form(eqn)
         print("normal_form", normal_form)
         # herin, g
         stdout(f"{n+TAB}@kwasak_static")
