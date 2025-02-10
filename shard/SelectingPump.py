@@ -1,5 +1,4 @@
-from ..kwasak import kwasak_staticclass SelectingPump:
-
+from ..kwasak import kwasak_static
     @kwasak_static
     def eqn_8_01(NC: float = None, NS: float = None, SCON: float = None, installation_cost: float = None,**kwargs):
         return
@@ -33,27 +32,6 @@ from ..kwasak import kwasak_staticclass SelectingPump:
         result = []
         installation_cost = 1426.00150101399*SCON**(7/20)*(2.0*NC + NS)
         result.append(installation_cost)
-        return result
-
-    @kwasak_static
-    def eqn_8_02(hp: float = None, installed_costs: float = None,**kwargs):
-        return
-
-
-    @staticmethod
-    def eqn_8_02__hp(installed_costs: float):
-        # [.pyeqn] installed_costs = 33000 * (hp / 10) ** 0.5
-        result = []
-        hp = 9.18273645546364e-9*installed_costs**2
-        result.append(hp)
-        return result
-
-    @staticmethod
-    def eqn_8_02__installed_costs(hp: float):
-        # [.pyeqn] installed_costs = 33000 * (hp / 10) ** 0.5
-        result = []
-        installed_costs = 10435.5162785557*sqrt(hp)
-        result.append(installed_costs)
         return result
 
     @kwasak_static
@@ -96,35 +74,6 @@ from ..kwasak import kwasak_staticclass SelectingPump:
         result = []
         installed_costs = 10350.7864343909*hp**(2/5)
         result.append(installed_costs)
-        return result
-
-    @kwasak_static
-    def eqn_8_05(Eff: float = None, actual_brake_horsepower: float = None, theoretical_adiabatic_horsepower: float = None,**kwargs):
-        return
-
-
-    @staticmethod
-    def eqn_8_05__Eff(actual_brake_horsepower: float, theoretical_adiabatic_horsepower: float):
-        # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
-        result = []
-        Eff = theoretical_adiabatic_horsepower/actual_brake_horsepower
-        result.append(Eff)
-        return result
-
-    @staticmethod
-    def eqn_8_05__actual_brake_horsepower(Eff: float, theoretical_adiabatic_horsepower: float):
-        # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
-        result = []
-        actual_brake_horsepower = theoretical_adiabatic_horsepower/Eff
-        result.append(actual_brake_horsepower)
-        return result
-
-    @staticmethod
-    def eqn_8_05__theoretical_adiabatic_horsepower(Eff: float, actual_brake_horsepower: float):
-        # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
-        result = []
-        theoretical_adiabatic_horsepower = Eff*actual_brake_horsepower
-        result.append(theoretical_adiabatic_horsepower)
         return result
 
     @kwasak_static
@@ -261,48 +210,3 @@ from ..kwasak import kwasak_staticclass SelectingPump:
         return result
 
     @kwasak_static
-    def eqn_8_09(E_j: float = None, E_m: float = None, e: float = None, r: float = None, s: float = None,**kwargs):
-        return
-
-
-    @staticmethod
-    def eqn_8_09__E_j(E_m: float, e: float, r: float, s: float):
-        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
-        result = []
-        E_j = 0.341296928327645*E_m*r*s/e
-        result.append(E_j)
-        return result
-
-    @staticmethod
-    def eqn_8_09__E_m(E_j: float, e: float, r: float, s: float):
-        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
-        result = []
-        E_m = 2.93*E_j*e/(r*s)
-        result.append(E_m)
-        return result
-
-    @staticmethod
-    def eqn_8_09__e(E_j: float, E_m: float, r: float, s: float):
-        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
-        result = []
-        e = 0.341296928327645*E_m*r*s/E_j
-        result.append(e)
-        return result
-
-    @staticmethod
-    def eqn_8_09__r(E_j: float, E_m: float, e: float, s: float):
-        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
-        result = []
-        r = 2.93*E_j*e/(E_m*s)
-        result.append(r)
-        return result
-
-    @staticmethod
-    def eqn_8_09__s(E_j: float, E_m: float, e: float, r: float):
-        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
-        result = []
-        s = 2.93*E_j*e/(E_m*r)
-        result.append(s)
-        return result
-
-
