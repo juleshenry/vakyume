@@ -63,16 +63,14 @@ def murda(cli, base):
     gudz = wpp[base]
     print(gudz)
     prefix = "_".join(list(gudz)[0].split("_")[:2])
-    q = lambda n: ''.join(filter(lambda d:d.isnumeric(),n))
+    q = lambda n: "".join(filter(lambda d: d.isnumeric(), n))
     rep = lambda n: q(n.split("__")[0].split("_")[-1])
     rep2 = lambda n: q(n.split("_")[2].split("(")[0])
     # below: bug; but now ignoring
     gudz_max = int(rep(max(gudz, key=lambda a: int(rep(a)))))
     badz = [
         prefix + "_" + ("0" + str(s) if int(s) < 9 else str(s))
-        for s in range(1,
-            gudz_max
-        )
+        for s in range(1, gudz_max)
         if prefix + "_" + ("0" + str(s) if int(s) < 9 else str(s)) not in gudz
     ]
     for i, l in enumerate(clisp):
@@ -83,17 +81,19 @@ def murda(cli, base):
         if any([j in clisp[i + 1] for j in gudz]):
             mal = False
             nucli += l + "\n"
-        elif any([j in clisp[i + 1] for j in badz]) or (prefix in l and int(rep2(l))>gudz_max):
+        elif any([j in clisp[i + 1] for j in badz]) or (
+            prefix in l and int(rep2(l)) > gudz_max
+        ):
             mal = True
 
         elif not mal:
             nucli += l + "\n"
-    return '\n'.join(nucli.split('\n')[:-2])
+    return "\n".join(nucli.split("\n")[:-2])
+
 
 ded_clipz = {}
 for o in raw_clipz:
     ded_clipz[o] = murda(raw_clipz[o], o)
-
 
 
 # Create shard directory if it doesn't exist
