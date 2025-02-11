@@ -125,8 +125,8 @@ if not os.path.exists("shard"):
 
 # reshard a shard
 n = '\n'
-def f():
-    s,k=list(ded_clipz.items())[0]
+def f(s, k):
+    
     inx = "😍"
     print(k)
     wooo = []
@@ -136,7 +136,7 @@ def f():
             if inx not in l:  
                 inx = list(filter(lambda a: a in l, wpp[s]))[0]
                 wooo +=[i]        
-                print(*["$$$$$"*5]*5,sep='\n')
+                # print(*["$$$$$"*5]*5,sep='\n')
             # else:
             #     inx = wpp[s].pop(s)
             print(l)
@@ -145,9 +145,19 @@ def f():
     #     # print(a,b+1)
     #     print(*["@"*54]*5,sep='\n')
     #     print(w:=(n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] )))
-    return {s: [n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] ) for a,b in zip(wooo, wooo[1:]+[len(mama)])]}
+    return {s: [n.join(  ['    @kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] ) for a,b in zip(wooo, wooo[1:]+[len(mama)])]}
 
-print(f())
+
+for s,k in ded_clipz.items():
+    p=f(s,k)
+
+# s,k=list(ded_clipz.items())[0]
+# p = (f(s,k))
+
+    for a,aa in p.items():
+        print(a*88)
+        for aaa in aa:
+            print(aaa[:33])
 
 for i, clip in ded_clipz.items():
     with open(f"shard/{i}.py", "w") as f:
