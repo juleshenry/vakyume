@@ -39,19 +39,41 @@ class Oowoo:
         return f'def {v_eqn.replace("-","_")}__{v}'
 
 
-wpp, wppp = {}, {}
 ooo = Oowoo()
-for a in o.items():
-    if type(a[1]) != bool:
-        # print(a[0]+'\n\t', '\n\t'.join(map(str,a[1].items())))
-        # print(a[0])
-        for aa in sorted(a[1].items()):
-            clip = ooo.fugly(aa[0], aa[1].split(" ")[0])
-            # wpp.update({aa[0]:})
-            wpp.update({a[0]: wpp.get(a[0], set()).union({aa[1].split(" ")[0]})})
-            wppp.update({a[0]: clip})
-print(wpp)
-print(wppp)
+
+def process_equations(equations):
+    equation_names = {}  # Maps class name to set of equation names
+    equation_locations = {}  # Maps class name to location tuples
+
+    for class_name, equations_dict in equations.items():
+        if not isinstance(equations_dict, bool):
+            for var_name, equation in sorted(equations_dict.items()):
+                equation_name = equation.split(" ")[0]
+                location = ooo.fugly(var_name, equation_name)
+                
+                # Add equation name to set for this class
+                if class_name not in equation_names:
+                    equation_names[class_name] = set()
+                equation_names[class_name].add(equation_name)
+                
+                # Store location tuple for this class
+                equation_locations[class_name] = location
+
+    return equation_names, equation_locations
+wpp, wppp = process_equations(o)
+
+# wpp, wppp = {}, {}
+# ooo = Oowoo()
+# for a in o.items():
+#     if type(a[1]) != bool:
+#         # print(a[0]+'\n\t', '\n\t'.join(map(str,a[1].items())))
+#         # print(a[0])
+#         for aa in sorted(a[1].items()):
+#             clip = ooo.fugly(aa[0], aa[1].split(" ")[0])
+#             # wpp.update({aa[0]:})
+#             wpp.update({a[0]: wpp.get(a[0], set()).union({aa[1].split(" ")[0]})})
+#             wppp.update({a[0]: clip})
+print(wpp,wppp,'*'*88,sep='\n')
 
 raw_clipz = {k: "".join(ooo.despapaye[v[0] : v[1] - 1]) for k, v in wppp.items()}
 
@@ -101,11 +123,37 @@ if not os.path.exists("shard"):
     os.makedirs("shard")
     shutil.copy("kwasak.py", "shard/kwasak.py")
 
+# reshard a shard
+n = '\n'
+def f():
+    s,k=list(ded_clipz.items())[0]
+    inx = "😍"
+    print(k)
+    wooo = []
+    for i,l in enumerate(mama:=k.split(n)):
+        # print(l in  wpp[s].union({inx}))
+        if any([j in l for j in wpp[s].union({inx})]):
+            if inx not in l:  
+                inx = list(filter(lambda a: a in l, wpp[s]))[0]
+                wooo +=[i]        
+                print(*["$$$$$"*5]*5,sep='\n')
+            # else:
+            #     inx = wpp[s].pop(s)
+            print(l)
+    print(wooo)
+    for a,b in zip(wooo, wooo[:1]+[len(mama)]):
+        print(a,b)
+        print(mama[a:b])
+    return s or n.join(s) 
+
+print(f())
+
 for i, clip in ded_clipz.items():
     with open(f"shard/{i}.py", "w") as f:
         f.write("from kwasak import kwasak_static\n\n")
         f.write("class " + i + ":\n\n")
         f.write(clip)
+
 
 # cut up clips into shards -> class header + eqn_X_Y__* .py
 # save shard to shard fold
