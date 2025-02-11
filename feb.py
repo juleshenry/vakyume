@@ -141,12 +141,11 @@ def f():
             #     inx = wpp[s].pop(s)
             print(l)
     print(wooo)
-    for a,b in zip(wooo, wooo[1:]+[len(mama)]):
-        # print(a,b+1)
-        print(*["@"*54]*5,sep='\n')
-        
-        print(n.join(mama[a:b]))
-    return s or n.join(s) 
+    # for a,b in zip(wooo, wooo[1:]+[len(mama)]):
+    #     # print(a,b+1)
+    #     print(*["@"*54]*5,sep='\n')
+    #     print(w:=(n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] )))
+    return {s: [n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] ) for a,b in zip(wooo, wooo[1:]+[len(mama)])]}
 
 print(f())
 
