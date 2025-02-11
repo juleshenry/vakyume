@@ -141,9 +141,11 @@ def f():
             #     inx = wpp[s].pop(s)
             print(l)
     print(wooo)
-    for a,b in zip(wooo, wooo[:1]+[len(mama)]):
-        print(a,b)
-        print(mama[a:b])
+    for a,b in zip(wooo, wooo[1:]+[len(mama)]):
+        # print(a,b+1)
+        print(*["@"*54]*5,sep='\n')
+        
+        print(n.join(mama[a:b]))
     return s or n.join(s) 
 
 print(f())
