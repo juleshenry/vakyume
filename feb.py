@@ -128,7 +128,7 @@ n = '\n'
 def f(s, k):
     
     inx = "😍"
-    print(k)
+    # print(k)
     wooo = []
     for i,l in enumerate(mama:=k.split(n)):
         # print(l in  wpp[s].union({inx}))
@@ -139,8 +139,8 @@ def f(s, k):
                 # print(*["$$$$$"*5]*5,sep='\n')
             # else:
             #     inx = wpp[s].pop(s)
-            print(l)
-    print(wooo)
+            # print(l)
+    # print(wooo)
     # for a,b in zip(wooo, wooo[1:]+[len(mama)]):
     #     # print(a,b+1)
     #     print(*["@"*54]*5,sep='\n')
@@ -148,24 +148,27 @@ def f(s, k):
     return {s: [n.join(  ['    @kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] ) for a,b in zip(wooo, wooo[1:]+[len(mama)])]}
 
 
+
+# cut up clips into shards -> class header + eqn_X_Y__* .py
 for s,k in ded_clipz.items():
+    print(s)
     p=f(s,k)
 
 # s,k=list(ded_clipz.items())[0]
 # p = (f(s,k))
+    for a_aa in p.items():
+        a,aa = a_aa
+        "class " + a + ":\n\n"
+        for ii,aaa in enumerate(aa):
+            z=sorted(wpp[s])[ii]
+            # print(aaa[:93])
+            print(z)
+            with open(f"shard/{s}{z.replace("eqn","")}.py", "w") as ff:
+                ff.write("from kwasak import kwasak_static\n\n")
+                ff.write("class " + a + ":\n\n")
+                ff.write(aaa)
 
-    for a,aa in p.items():
-        print(a*88)
-        for aaa in aa:
-            print(aaa[:33])
-
-for i, clip in ded_clipz.items():
-    with open(f"shard/{i}.py", "w") as f:
-        f.write("from kwasak import kwasak_static\n\n")
-        f.write("class " + i + ":\n\n")
-        f.write(clip)
 
 
-# cut up clips into shards -> class header + eqn_X_Y__* .py
 # save shard to shard fold
 # run verify on every shard for budget until complete, allowing for transcendental,unsolvable ...
