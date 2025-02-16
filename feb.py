@@ -41,6 +41,7 @@ class Oowoo:
 
 ooo = Oowoo()
 
+
 def process_equations(equations):
     equation_names = {}  # Maps class name to set of equation names
     equation_locations = {}  # Maps class name to location tuples
@@ -50,16 +51,18 @@ def process_equations(equations):
             for var_name, equation in sorted(equations_dict.items()):
                 equation_name = equation.split(" ")[0]
                 location = ooo.fugly(var_name, equation_name)
-                
+
                 # Add equation name to set for this class
                 if class_name not in equation_names:
                     equation_names[class_name] = set()
                 equation_names[class_name].add(equation_name)
-                
+
                 # Store location tuple for this class
                 equation_locations[class_name] = location
 
     return equation_names, equation_locations
+
+
 wpp, wppp = process_equations(o)
 
 # wpp, wppp = {}, {}
@@ -73,7 +76,7 @@ wpp, wppp = process_equations(o)
 #             # wpp.update({aa[0]:})
 #             wpp.update({a[0]: wpp.get(a[0], set()).union({aa[1].split(" ")[0]})})
 #             wppp.update({a[0]: clip})
-print(wpp,wppp,'*'*88,sep='\n')
+print(wpp, wppp, "*" * 88, sep="\n")
 
 raw_clipz = {k: "".join(ooo.despapaye[v[0] : v[1] - 1]) for k, v in wppp.items()}
 
@@ -124,18 +127,20 @@ if not os.path.exists("shard"):
     shutil.copy("kwasak.py", "shard/kwasak.py")
 
 # reshard a shard
-n = '\n'
+n = "\n"
+
+
 def f(s, k):
-    
+
     inx = "😍"
     # print(k)
     wooo = []
-    for i,l in enumerate(mama:=k.split(n)):
+    for i, l in enumerate(mama := k.split(n)):
         # print(l in  wpp[s].union({inx}))
         if any([j in l for j in wpp[s].union({inx})]):
-            if inx not in l:  
+            if inx not in l:
                 inx = list(filter(lambda a: a in l, wpp[s]))[0]
-                wooo +=[i]        
+                wooo += [i]
                 # print(*["$$$$$"*5]*5,sep='\n')
             # else:
             #     inx = wpp[s].pop(s)
@@ -145,29 +150,41 @@ def f(s, k):
     #     # print(a,b+1)
     #     print(*["@"*54]*5,sep='\n')
     #     print(w:=(n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] )))
-    return {s: [n.join(  ['    @kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] ) for a,b in zip(wooo, wooo[1:]+[len(mama)])]}
-
+    return {
+        s: [
+            n.join(
+                [
+                    (
+                        "    @kwasak_static"
+                        if i - 1 == 0 or 0 == len(mama) - 1 - i
+                        else mama[b]
+                    )
+                ]
+                + mama[a : b - 1]
+            )
+            for a, b in zip(wooo, wooo[1:] + [len(mama)])
+        ]
+    }
 
 
 # cut up clips into shards -> class header + eqn_X_Y__* .py
-for s,k in ded_clipz.items():
+for s, k in ded_clipz.items():
     print(s)
-    p=f(s,k)
+    p = f(s, k)
 
-# s,k=list(ded_clipz.items())[0]
-# p = (f(s,k))
+    # s,k=list(ded_clipz.items())[0]
+    # p = (f(s,k))
     for a_aa in p.items():
-        a,aa = a_aa
+        a, aa = a_aa
         "class " + a + ":\n\n"
-        for ii,aaa in enumerate(aa):
-            z=sorted(wpp[s])[ii]
+        for ii, aaa in enumerate(aa):
+            z = sorted(wpp[s])[ii]
             # print(aaa[:93])
             print(z)
             with open(f"shard/{s}{z.replace("eqn","")}.py", "w") as ff:
                 ff.write("from kwasak import kwasak_static\n\n")
                 ff.write("class " + a + ":\n\n")
                 ff.write(aaa)
-
 
 
 # save shard to shard fold

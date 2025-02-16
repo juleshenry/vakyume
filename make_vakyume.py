@@ -7,9 +7,14 @@ from llm import *
 from suck_consts import *
 
 
-def stdout(s):
+def stdout(s, filepath=OUTFILE):
+    """
+    writes line to OUTFILE or prints to stdout
+
+    Can also give it a filepath
+    """
     if STD:
-        with open(OUTFILE, "a+") as o:
+        with open(filepath, "a+") as o:
             o.write(s + "\n")
     else:
         print(s)
