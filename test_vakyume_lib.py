@@ -1,6 +1,5 @@
-import vakyume_2025 as vakyume_lib
+import shard.LiquidRing_10_10 as vakyume_lib
 from inspect import signature
-from typing import get_type_hints
 
 
 def make_test_case(o):
@@ -20,9 +19,10 @@ def make_test_case(o):
                         1 + i * 0.5 for i in range(len(signature(method).parameters))
                     ]
                     try:
-
+                        print("->" * 22)
                         print(f"{method}({test_args})")
-                        method(*test_args)
+                        j= method(*test_args)
+                        print(j)
                     except Exception as e:
                         print("->" * 88)
                         print(e)
@@ -35,5 +35,3 @@ if __name__ == "__main__":
             make_test_case(o)
         except Exception as e:
             print(e)
-
-# 안

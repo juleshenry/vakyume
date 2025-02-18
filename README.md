@@ -76,4 +76,6 @@ Structure:
 # Process of creation:
 - 1. Sympy attempt
 - 2. LLM failover
-- 3. Can say, with LLM, flow is: MAKE, EVAL(CODE), TEST_CODE / a loop could be created to run in perpetuity until failovers are all working. could even make another function to reiterate over a particular failing test for efficiency
+- 3. Can say, with LLM, flow is: MAKE, EVAL(CODE), TEST_CODE 
+- a loop could be created to run in perpetuity until failovers are all working.
+- could even make another function to reiterate over a particular failing test for efficiency

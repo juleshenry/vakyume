@@ -7,9 +7,14 @@ from llm import *
 from suck_consts import *
 
 
-def stdout(s):
+def stdout(s, filepath=OUTFILE):
+    """
+    writes line to OUTFILE or prints to stdout
+
+    Can also give it a filepath
+    """
     if STD:
-        with open(OUTFILE, "a+") as o:
+        with open(filepath, "a+") as o:
             o.write(s + "\n")
     else:
         print(s)
@@ -124,7 +129,7 @@ class Solver:
                 )
             )
         except httpx.ConnectError as s:
-            print(s) or stdout(TAB * 2 + "pass # Ollama offline")
+            print(s) or stdout(TAB * 2 + "OllamaOffline('Ollama is offline')")
             return
         if any(
             a in ans1.lower()
@@ -135,7 +140,7 @@ class Solver:
             )
         ):
             # llm hacky
-            stdout(TAB * 2 + "pass # no closed form solution")
+            stdout(TAB * 2 + "IntractableSolution('no closed form exists')")
             return
         # print("BEFORE:::")
         # ans1 = make_sure_python_annotated(ans1)
@@ -381,10 +386,11 @@ def make():
     X = Solver()
     stdout("from math import log, sqrt, exp, pow, e")
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
-    stdout("from scipy.optimize import newton")
+    stdout("from scipy.optimize import newton, fsolve")
     stdout("from kwasak import kwasak_static")
     stdout("import pandas as pd")
     stdout("import numpy as np")
+    stdout("from suck_constants import *")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files
