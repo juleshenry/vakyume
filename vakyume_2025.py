@@ -1392,7 +1392,7 @@ class AirLeak:
         return result
 
 
-class ProcessAppI:
+class ProcessApp1:
 
     @kwasak_static
     def eqn_5_01(K_i: float = None, x_i: float = None, y_i: float = None,**kwargs):
@@ -2103,7 +2103,7 @@ class ProcessAppI:
         return result
 
 
-class ProcessAppIi:
+class ProcessApp2:
 
     @kwasak_static
     def eqn_6_01(T_1: float = None, T_2: float = None, T_R: float = None, c_p: float = None, del_h_v: float = None, w_1: float = None, w_2: float = None, w_v: float = None,**kwargs):
@@ -3584,7 +3584,20 @@ class SelectingPump:
     def eqn_8_01__SCON(NC: float, NS: float, installation_cost: float):
         # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Solves for SCON using the given equation and returns its value.
+        
+        Parameters:
+        NC (float): Net Cash Inflows per year
+        NS (float): Number of years
+        installation_cost (float): Cost of the installation
+        
+        Returns:
+        float: Solved value for SCON
+        """
+        SCON = ((installation_cost) / (16000 * (NS + 2 * NC))) ** (1/0e35)
+        return [ SCON ]
+
 
     @staticmethod
     def eqn_8_01__installation_cost(NC: float, NS: float, SCON: float):
@@ -3624,7 +3637,21 @@ class SelectingPump:
     def eqn_8_03__hp(installed_costs: float):
         # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Calculate the horsepower (hp) based on the given installed costs using the provided equation.
+        
+        Parameters:
+        - installed_costs (float): The total cost of installation in dollars.
+        
+        Returns:
+        - hp (float): The calculated horsepower as a float.
+        """
+        
+        power = ((installed_costs) / 38000) ** (1/0.45)
+        hp = 10 * power
+        
+        return [ hp ]
+
 
     @staticmethod
     def eqn_8_03__installed_costs(hp: float):
@@ -3743,7 +3770,7 @@ class SelectingPump:
     def eqn_8_06__k(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
         # [Sympy Failover]
-        pass # Ollama offline
+        pass # no closed form solution
 
     @staticmethod
     def eqn_8_06__w(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float):
@@ -3762,13 +3789,53 @@ class SelectingPump:
     def eqn_8_07__P_1(P_2: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Calculate P_1 using the given equation after isolating it from an original equation.
+        
+        Parameters:
+        P_2 (float): The known value of P_2.
+        adiabatic_hp (float): The known adiabatic power.
+        w (float): Weight in kg/kg-m**3.
+        
+        Returns:
+        float: The calculated value for P_1 in terms of P_2, adiabatic_hp and w.
+        """
+        # Calculate the exponent term first to avoid potential overflow or underflow issues
+        exp_term = pow((w / 20) / adiabatic_hp, 1/0.286)
+        
+        # Now calculate P_1 using the derived expression
+        P_1 = P_2 * exp_term
+        
+        return [ P_1 ]
+
 
     @staticmethod
     def eqn_8_07__P_2(P_1: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Solve the given equation for P_2 using specified parameters.
+        
+        Parameters:
+            - P_1 (float): Pressure 1 in Pascals
+            - adiabatic_hp (float): Adiabatic head in J/kg*K
+            - w (float): Mass flow rate in kg/s
+            
+        Returns:
+            - P_2 (float): Resulting pressure 2 in Pascals
+        """
+        
+        # Calculate the value to raise to power of 1/0.286
+        exponent = 1 / 0.286
+        
+        # Calculate ((adiabatic_hp + (w / 20)) / w) ** (1/0.286)
+        temp_value = ((adiabatic_hp + (w / 20)) / w) ** exponent
+        
+        # Solve for P_2 by multiplying P_1 with the calculated value
+        P_2 = P_1 * temp_value
+        
+        return [ P_2 ]
+
 
     @staticmethod
     def eqn_8_07__adiabatic_hp(P_1: float, P_2: float, w: float):
@@ -3795,13 +3862,46 @@ class SelectingPump:
     def eqn_8_08__P_1(P_2: float, adiabatic_power_watts: float, f: float):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Calculate P_1 using the given equation and parameters.
+        
+        Parameters:
+            P_2 (float): Power in watts at condition 2.
+            adiabatic_power_watts (float): The power dissipated by the device as heat, in watts.
+            f (float): Frequency of operation in Hz.
+            
+        Returns:
+            float: P_1 calculated using the given equation and parameters.
+        """
+        
+        denominator = 1 + adiabatic_power_watts / (f / 12)
+        reciprocal_denominator_exponent = 1 / 0.286
+        
+        P_ratio = P_2 / denominator ** reciprocal_denominator_exponent
+        
+        P_1 = 1 / P_ratio
+        
+        return [ P_1 ]
+
 
     @staticmethod
     def eqn_8_08__P_2(P_1: float, adiabatic_power_watts: float, f: float):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Calculate P_2 based on given parameters using the provided equation.
+        
+        Parameters:
+        - P_1 (float): Initial pressure in Pascals.
+        - adiabatic_power_watts (float): Power generated by an engine under adiabatic conditions in Watts.
+        - f (float): Specific heat ratio.
+        
+        Returns:
+        - float: Calculated P_2 in Pascals.
+        """
+        term = 1 - (adiabatic_power_watts / (f * 12))
+        return [ P_1 / (term ** (1/0.286)) ]
+
 
     @staticmethod
     def eqn_8_08__adiabatic_power_watts(P_1: float, P_2: float, f: float):
@@ -4432,7 +4532,22 @@ class LiquidRing:
     def eqn_10_10__rho(bhp: float, bhp_0: float, mu: float):
         # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Solves the given equation for rho in terms of bhp, bhp_0, and mu.
+        
+        Parameters:
+            bhp (float): The pressure at height h.
+            bhp_0 (float): Reference pressure at ground level.
+            mu (float): Dynamic viscosity.
+            
+        Returns:
+            float: The value of rho calculated from the given parameters and equation.
+        """
+        
+        term = 0.0155 / ((bhp - bhp_0) / bhp_0 + 0.5)
+        rho = (term ** (1/0.84)) * mu ** 0.16
+        return [ rho ]
+
 
     @kwasak_static
     def eqn_10_11(T_c: float = None, T_s: float = None,**kwargs):
@@ -4727,7 +4842,15 @@ class LiquidRing:
     def eqn_10_19__P(S_Th: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
         # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        from scipy.optimize import fsolve
+        
+        def equation(P):
+            return (P - p_s)*(460 + T_i) / ((P - p_c)*(460 + T_e))**0.6 - S_p / S_Th
+        
+        initial_guess = 100  # Starting guess for P, adjust as needed based on problem context
+        result = fsolve(equation, initial_guess)
+        return result[0]
+
 
     @staticmethod
     def eqn_10_19__S_Th(P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
@@ -4802,7 +4925,7 @@ class LiquidRing:
     def eqn_10_20__P(S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        pass # no closed form solution
 
     @staticmethod
     def eqn_10_20__S_0(P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
@@ -4824,31 +4947,50 @@ class LiquidRing:
     def eqn_10_20__T_e(P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        numerator = (S_p * ((P - p_0) * (460 + T_i) * (P - p_c)) / (P * (P - p_s) * (460 + T_e))) ** 0.6
+        denominator = numerator**(-1/0.6) / ((P - p_0) * (460 + T_i) * (P - p_c))
+        
+        result = 1 / denominator - 460
+        
+        return [ result ]
+
 
     @staticmethod
     def eqn_10_20__T_i(P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        numerator = S_0 ** (1/0.6) * (P * (P - p_s)) * (460 + T_e)
+        denominator = (P - p_0) * (P - p_c)
+        
+        T_i = numerator / denominator - 460
+        return [ T_i ]
+
 
     @staticmethod
     def eqn_10_20__p_0(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        pass # no closed form solution
 
     @staticmethod
     def eqn_10_20__p_c(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        def equation(p_c):
+            return S_p * ((P - p_0) * (460 + T_i)) / ((P - p_s)*(460 + T_e))**0.6 - (S_0 * (P * (P - p_s)*(460 + T_e))**0.6)
+        
+        initial_guess = [p_c]  # Initial guess for the solution, can be adjusted based on specific scenario
+        return fsolve(equation, initial_guess)[0]
+
 
     @staticmethod
     def eqn_10_20__p_s(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        numerator = (S_0 / (S_p * ((P - p_0)*(460 + T_i) * (P - p_c))**0.6))) ** 0.5
+        p_s = P * numerator
+        return [ p_s ]
+
 
     @kwasak_static
     def eqn_10_21(P: float = None, P_d: float = None, P_prime: float = None,**kwargs):
@@ -4944,49 +5086,110 @@ class RotaryPistonVane:
     def eqn_11_02__Q(Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        numerator = (SP_1 - Q_external_gas_throughput) - SP_2 * exp(t * (S_vol_pump_speed / V))
+        denominator = exp(t * (S_vol_pump_speed / V)) - 1
+        return [ numerator / denominator + Q_0 ]
+
 
     @staticmethod
     def eqn_11_02__Q_0(Q: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Solve for the external gas throughput (Q_0) using Ward's Criteria in ARDS.
+        
+        Parameters:
+            Q (float): Total volumetric flow rate (mL/min).
+            Q_external_gas_throughput (float): External gas throughput (mL/min).
+            SP_1 (float): Pressure at level 1 (mmHg).
+            SP_2 (float): Pressure at level 2 (mmHg).
+            S_vol_pump_speed (float): Pump speed (RPM).
+            V (float): Time in minutes.
+            t: Target external gas throughput (Q_0) to calculate.
+            
+        Returns:
+            float: Calculated Q_0 value.
+        """
+        
+        # Solve the equation for Q_0 and return it as a float.
+        result = 1 / ((V * log((SP_1 - (Q_external_gas_throughput + t)) / (SP_2 - (Q + t)))) / (S_vol_pump_speed * V))
+        
+        Q_0 = result
+        return [ Q_0 ]
+
 
     @staticmethod
     def eqn_11_02__Q_external_gas_throughput(Q: float, Q_0: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        e_term = exp(t * (S_vol_pump_speed / V))
+        Q_external_gas_throughput = (e_term * (SP_1 - SP_2 - Q - Q_0)) / (SP_1 - SP_2) - Q_0
+        return [ Q_external_gas_throughput ]
+
 
     @staticmethod
     def eqn_11_02__SP_1(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        import math
+        
+        SP_1 = exp((t * S_vol_pump_speed) / V) * (SP_2 - (Q + Q_0)) + (Q_external_gas_throughput + Q_0)
+        
+        return [ SP_1 ]
+
 
     @staticmethod
     def eqn_11_02__SP_2(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+
 
     @staticmethod
     def eqn_11_02__S_vol_pump_speed(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        S_vol_pump_speed = V / (t * log((SP_1 - (Q_external_gas_throughput + Q_0)) / (SP_2 - (Q + Q_0))))
+        return [ S_vol_pump_speed ]
+
 
     @staticmethod
     def eqn_11_02__V(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        ln_ratio = (SP_1 - (Q_external_gas_throughput + Q_0)) / (SP_2 - (Q + Q_0))
+        V = (t * S_vol_pump_speed) / log(ln_ratio)
+        return [ V ]
+
 
     @staticmethod
     def eqn_11_02__t(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        """
+        Solves the given equation for t using given parameters. 
+        
+        Parameters:
+        Q (float): The gas throughput parameter.
+        Q_0 (float): Initial external gas pressure.
+        Q_external_gas_throughput (float): External gas throughput.
+        SP_1 (float): Upper static pressure.
+        SP_2 (float): Lower static pressure.
+        S_vol_pump_speed (float): Volumetric pump speed.
+        V (float): Constant in the equation.
+        
+        Returns:
+        float: The value of t calculated using the given parameters and equation.
+        """
+        
+        numerator = SP_1 - Q_external_gas_throughput - Q_0
+        denominator = SP_2 - (Q + Q_0)
+        
+        result = V * log(numerator / denominator)
+        
+        t = result / S_vol_pump_speed
+        
+        return [ t ]
+
 
     @kwasak_static
     def eqn_11_03(F_s: float = None, t: float = None, t_c: float = None,**kwargs):
@@ -5157,7 +5360,7 @@ class RotaryPistonVane:
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-    # print(f'@@@{u+1}.',o, type(o))
+    print(f'@@@{u+1}.',o, type(o))
     # try:
     truth = False
     for tempt in range(budget:=5):
@@ -5168,10 +5371,7 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
             # elif(m:=)
             print("[ERROR]"+":"*99,m)
             # print(str(ve));1/0
-        except ZeroDivisionError as zde:
-            print("[ERROR]"+":"*99)
-            print(str(zde))
-    # print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
     y[o] = truth
 print(*[yo for yo in y.items()],sep=('\n'))
 def export_unfinished():

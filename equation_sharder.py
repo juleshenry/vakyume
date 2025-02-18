@@ -9,26 +9,26 @@ S = Solver()
 
 class Oowoo:
     def __init__(s):
-        s.despapaye = []
+        s.file_line_list = []
 
     def next_end(se, x):
         """proxima clase"""
         i = 0
-        for i, l in enumerate(se.despapaye[x + 1 :]):
+        for i, l in enumerate(se.file_line_list[x + 1 :]):
             if "class" in l:
                 return i + x + 2
             if (
                 "import" in l
             ):  # yeah this is due to metaprogramming, pushing the script onto the end of the full-class dump
                 return i + x + 2
-        return len(se.despapaye) - 1
+        return len(se.file_line_list) - 1
 
     def fugly(se, v, v_eqn):
         with open("vakyume_2025_222.py") as f:
-            se.despapaye = list(f.readlines())
+            se.file_line_list = list(f.readlines())
             aaa = se.get_def(v, v_eqn)
             es_clase = 0
-            for il in enumerate(se.despapaye):
+            for il in enumerate(se.file_line_list):
                 i, l = il
                 if "class" in l:
                     es_clase = i
@@ -65,20 +65,9 @@ def process_equations(equations):
 
 wpp, wppp = process_equations(o)
 
-# wpp, wppp = {}, {}
-# ooo = Oowoo()
-# for a in o.items():
-#     if type(a[1]) != bool:
-#         # print(a[0]+'\n\t', '\n\t'.join(map(str,a[1].items())))
-#         # print(a[0])
-#         for aa in sorted(a[1].items()):
-#             clip = ooo.fugly(aa[0], aa[1].split(" ")[0])
-#             # wpp.update({aa[0]:})
-#             wpp.update({a[0]: wpp.get(a[0], set()).union({aa[1].split(" ")[0]})})
-#             wppp.update({a[0]: clip})
 print(wpp, wppp, "*" * 88, sep="\n")
 
-raw_clipz = {k: "".join(ooo.despapaye[v[0] : v[1] - 1]) for k, v in wppp.items()}
+raw_clipz = {k: "".join(ooo.file_line_list[v[0] : v[1] - 1]) for k, v in wppp.items()}
 
 
 def murda(cli, base):
@@ -182,6 +171,12 @@ for s, k in ded_clipz.items():
             # print(aaa[:93])
             print(z)
             with open(f"shard/{s}{z.replace("eqn","")}.py", "w") as ff:
+                ff.write("from math import log, sqrt, exp, pow, e\n")
+                ff.write("from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n")
+                ff.write("from scipy.optimize import newton\n")
+                ff.write("from kwasak import kwasak_static\n")
+                ff.write("import pandas as pd\n")
+                ff.write("import numpy as np\n")
                 ff.write("from kwasak import kwasak_static\n\n")
                 ff.write("class " + a + ":\n\n")
                 ff.write(aaa)
@@ -189,3 +184,20 @@ for s, k in ded_clipz.items():
 
 # save shard to shard fold
 # run verify on every shard for budget until complete, allowing for transcendental,unsolvable ...
+
+
+
+
+
+
+# wpp, wppp = {}, {}
+# ooo = Oowoo()
+# for a in o.items():
+#     if type(a[1]) != bool:
+#         # print(a[0]+'\n\t', '\n\t'.join(map(str,a[1].items())))
+#         # print(a[0])
+#         for aa in sorted(a[1].items()):
+#             clip = ooo.fugly(aa[0], aa[1].split(" ")[0])
+#             # wpp.update({aa[0]:})
+#             wpp.update({a[0]: wpp.get(a[0], set()).union({aa[1].split(" ")[0]})})
+#             wppp.update({a[0]: clip})

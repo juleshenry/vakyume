@@ -140,7 +140,7 @@ class Solver:
             )
         ):
             # llm hacky
-            stdout(TAB * 2 + "pass # no closed form solution")
+            stdout(TAB * 2 + "IntractableSolution('no closed form exists')")
             return
         # print("BEFORE:::")
         # ans1 = make_sure_python_annotated(ans1)
