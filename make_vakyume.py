@@ -386,7 +386,7 @@ def make():
     X = Solver()
     stdout("from math import log, sqrt, exp, pow, e")
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
-    stdout("from scipy.optimize import newton")
+    stdout("from scipy.optimize import newton, fsolve")
     stdout("from kwasak import kwasak_static")
     stdout("import pandas as pd")
     stdout("import numpy as np")
