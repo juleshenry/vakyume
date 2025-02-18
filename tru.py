@@ -472,24 +472,7 @@ def test_b():
 # print = lambda *a:a
 class Verify:
     # iterate all methods and fill with dummy values.
-    """
-    #### QUICK VERIFY ####
-    import tru
-
-    for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-        print(f'@@@{u+1}.',o, type(o))
-        # try:
-        truth = False
-        for tempt in range(budget:=5):
-            try:
-                truth = truth or tru.Verify(vars()[o]).verify()
-            except ValueError as ve:
-                if (m:="math domain error") in str(ve):pass
-                # elif(m:=)
-                print("[ERROR]"+":"*99,m)
-                # print(str(ve));1/0
-        print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
-    """
+    
 
     def __init__(self, lib_class):
         self.lib_class = lib_class
@@ -589,7 +572,7 @@ class Verify:
         result = self.non_none_soln(equation_name, equation_method, input_values)
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed
         if not param_index:  # assumes first is correct. not always true! TODO 
-            if not result:return False 
+            if not result:return False
             self.proposed_dummy_args[target_param] = (
                 self.make_rand() if not result else result ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
             )  # should fix if first eqn is None ?
@@ -603,8 +586,8 @@ class Verify:
 
 
         def similarity(a, b):
-            print(*(a, b,), sep=':::::')
-            print('DIFFERENCE IS...', result := a - b, '<?>')
+            # print(*(a, b,), sep=':::::')
+            # print('DIFFERENCE IS...', result := a - b, '<?>')
             if isinstance(c := a - b, float) or isinstance(c, int)or  isinstance(c, complex):
                 return abs(c) < 1e-10
             else:
@@ -637,3 +620,26 @@ class Verify:
 
 if __name__ == "__main__":
     test_b()
+"""
+
+import tru
+y = {}
+for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    print(f'@@@{u+1}.',o, type(o))
+    # try:
+    truth = False
+    for tempt in range(budget:=5):
+        try:
+            truth = truth or tru.Verify(vars()[o]).verify()
+        except ValueError as ve:
+            if (m:="math domain error") in str(ve):pass
+            # elif(m:=)
+            print("[ERROR]"+":"*99,m)
+            # print(str(ve));1/0
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    y[o] = truth
+print(*[yo for yo in y.items()],sep=('\n'))
+def export_unfinished():
+    return y
+
+"""
