@@ -1392,7 +1392,7 @@ class AirLeak:
         return result
 
 
-class ProcessAppI:
+class ProcessApp1:
 
     @kwasak_static
     def eqn_5_01(K_i: float = None, x_i: float = None, y_i: float = None,**kwargs):
@@ -2103,7 +2103,7 @@ class ProcessAppI:
         return result
 
 
-class ProcessAppIi:
+class ProcessApp2:
 
     @kwasak_static
     def eqn_6_01(T_1: float = None, T_2: float = None, T_R: float = None, c_p: float = None, del_h_v: float = None, w_1: float = None, w_2: float = None, w_v: float = None,**kwargs):
@@ -5157,7 +5157,7 @@ class RotaryPistonVane:
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-    # print(f'@@@{u+1}.',o, type(o))
+    print(f'@@@{u+1}.',o, type(o))
     # try:
     truth = False
     for tempt in range(budget:=5):
@@ -5168,10 +5168,7 @@ for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitaliz
             # elif(m:=)
             print("[ERROR]"+":"*99,m)
             # print(str(ve));1/0
-        except ZeroDivisionError as zde:
-            print("[ERROR]"+":"*99)
-            print(str(zde))
-    # print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
+    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
     y[o] = truth
 print(*[yo for yo in y.items()],sep=('\n'))
 def export_unfinished():
