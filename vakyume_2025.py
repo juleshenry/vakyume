@@ -5157,6 +5157,7 @@ class RotaryPistonVane:
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
+    if u+1 != 6:continue
     print(f'@@@{u+1}.',o, type(o))
     # try:
     truth = False

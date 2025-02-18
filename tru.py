@@ -525,7 +525,7 @@ class Verify:
         fal = {}
         for o, d in ne.sak_funx_di.items():
             ne.pda = {d: ne.fala() for d in d}
-            # print("PROPOSEDUMBYARGZ"+str(ne.pda))
+            print("PROPOSEDUMBYARGZ"+str(ne.pda))
             for ii, dd in enumerate(d):
                 # print(o,d,ii,dd)
                 """
@@ -548,18 +548,18 @@ class Verify:
         nao = list(filter(lambda a: a != dd, list(d)))
         kew = {n: ne.pda[n] for n in nao}
 
-        # print('calling .. ',o+'_'+dd,'  w/',kew,end='')
+        print('calling .. ',o+'_'+dd,'  w/',kew,end='')
         # try:
         rez = getattr(ne.lib_class(), o)(**kew)
-        # print('-'*9,'>>>',dd,'=',rez)
+        print('-'*9,'>>>',dd,'=',rez)
 
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed
         if not ii:  # assumes first is correct. not always true! TODO
             ne.pda[dd] = (
                 ne.fala() if not rez else rez[0]
             )  # should fix if first eqn is None ?
-            # print("Assuming below will be the golden n-tuple...")
-            # print(ne.pda)
+            print("Assuming below will be the golden n-tuple...")
+            print(ne.pda)
 
         def zyard(z):
             return map(lambda o: float(abs(o)), z.as_real_imag())
