@@ -589,7 +589,7 @@ class Verify:
         result = self.non_none_soln(equation_name, equation_method, input_values)
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed
         if not param_index:  # assumes first is correct. not always true! TODO 
-            if not result:1/0
+            if not result:return False 
             self.proposed_dummy_args[target_param] = (
                 self.make_rand() if not result else result ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
             )  # should fix if first eqn is None ?
