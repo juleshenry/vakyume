@@ -8,3 +8,7 @@ n = "\n"
 class IntractableSolution(Exception):
     """Exception raised when only numerical methods are allowed."""
     pass
+
+class OllamaOffline(Exception):
+    """Exception raised when the Ollama is offline."""
+    pass

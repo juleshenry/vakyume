@@ -541,9 +541,10 @@ class Verify:
     def verify(self):
         fal = {}
         for o, d in self.equation_params.items():
-            if '15' not in o:continue #CONTROL FLOW ~~~~~~~~~
+            # if '15' not in o:continue #CONTROL FLOW ~~~~~~~~~
             self.proposed_dummy_args = {d: self.make_rand() for d in d}
             print("PROPOSEDUMBYARGZ"+str(self.proposed_dummy_args))
+
             for ii, dd in enumerate(d):
                 # print(o,d,ii,dd)
                 """
@@ -562,14 +563,14 @@ class Verify:
 
         return not fal if not fal else fal
 
-    # def todo_suave(self, d, dd, ii, pda, o) -> bool:
-    #     nao = list(filter(lambda a: a != dd, list(d)))
-    #     kew = {n: self.proposed_dummy_args[n] for n in nao}
-
-    #     print('calling .. ',o+'_'+dd,'  w/',kew,end='')
-    #     # try:
-    #     rez = getattr(self.lib_class(), o)(**kew)
-    #     print('-'*9,'>>>',dd,'=',rez)
+    def non_none_soln(self, equation_name, equation_method, input_values):
+        # Call the equation method with input values
+        try:
+            return getattr(self.lib_class(), equation_name)(**input_values)
+        except OllamaOffline as oo:
+            print(f"Ollama is offline for {equation_method}")
+            return False
+        
     def todo_suave(self, all_params, target_param, param_index, param_values, equation_name) -> bool:
         # Get list of parameters except the target one
         other_params = [p for p in all_params if p != target_param]
@@ -585,52 +586,53 @@ class Verify:
         print(f"calling {equation_method} with {input_values}", end='')
 
         # Call the equation method with input values
-        result = getattr(self.lib_class(), equation_name)(**input_values)
-        
-        # Log the result
-        print('-'*9, '>>>', target_param, '=', result)
-
+        result = self.non_none_soln(equation_name, equation_method, input_values)
         # Sun Jan 26 22:45:17 CST 2025 clearly the solutions must all be allowed
-        if not param_index:  # assumes first is correct. not always true! TODO
+        if not param_index:  # assumes first is correct. not always true! TODO 
+            if not result:1/0
             self.proposed_dummy_args[target_param] = (
-                self.make_rand() if not result else result[0]
+                self.make_rand() if not result else result ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
             )  # should fix if first eqn is None ?
             print("Assuming below will be the golden n-tuple...")
             print(self.proposed_dummy_args)
+        
+        if isinstance(result, list):
+            param_values[target_param] = result
+        # Log the result
+        print('-'*9, '>>>', target_param, '=', result)
 
-        def zyard(z):
-            return map(lambda o: float(abs(o)), z.as_real_imag())
 
-        def ev(a, b):
+        def similarity(a, b):
             print(*(a, b,), sep=':::::')
             print('DIFFERENCE IS...', result := a - b, '<?>')
-            if isinstance(result := a - b, float) or isinstance(a - b, complex):
-                return abs(a - b) < 1e-10
+            if isinstance(c := a - b, float) or isinstance(c, int)or  isinstance(c, complex):
+                return abs(c) < 1e-10
             else:
                 evaluated = result.subs({target_param: param_values[target_param]})
                 if evaluated.is_real:
                     return evaluated < 1e-10
                 else:
                     print(evaluated)
-                    real, imag = zyard(evaluated)
+                    # Complex Yardstick
+                    real, imag = map(lambda o: float(abs(o)), evaluated.as_real_imag())
                     print('RIIII'*2,real,imag)
                     return real < 1e-10 and imag < 1e-10
 
         # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
-        solvable = False 
-        print(result)
-        print(param_values[target_param])
-        # if not rez:
-        #     return rez
-        # for result in pda[dd]:
-        #     if isinstance(result, list):
-        #         for res in result:
-        #             if s:=ev(res, pda[dd]):
-        #                 solvable = s
-        #                 break
-        #     else:
-        #         solvable = ev(result, pda[dd])
-        return any(ev(r, param_values[target_param]) for r in result) if result else result
+
+        if not result:
+            return False
+        for r in result: 
+            pseudo_gold = param_values[target_param]
+            if isinstance(pseudo_gold, list):
+                for pg in pseudo_gold:
+                    if similarity(r, pg):
+                        param_values[target_param] = pg
+                        return True
+            elif similarity(r, pseudo_gold):
+                return True
+                
+        # return any(ev(r, param_values[target_param]) for r in result) if result else result
 
 
 if __name__ == "__main__":

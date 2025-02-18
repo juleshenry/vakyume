@@ -177,7 +177,8 @@ for s, k in ded_clipz.items():
                 ff.write("from kwasak import kwasak_static\n")
                 ff.write("import pandas as pd\n")
                 ff.write("import numpy as np\n")
-                ff.write("from kwasak import kwasak_static\n\n")
+                ff.write("from kwasak import kwasak_static\n")
+                ff.write("from suck_consts import *\n")
                 ff.write("class " + a + ":\n\n")
                 ff.write(aaa)
 

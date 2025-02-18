@@ -129,7 +129,7 @@ class Solver:
                 )
             )
         except httpx.ConnectError as s:
-            print(s) or stdout(TAB * 2 + "pass # Ollama offline")
+            print(s) or stdout(TAB * 2 + "OllamaOffline('Ollama is offline')")
             return
         if any(
             a in ans1.lower()
@@ -390,6 +390,7 @@ def make():
     stdout("from kwasak import kwasak_static")
     stdout("import pandas as pd")
     stdout("import numpy as np")
+    stdout("from suck_constants import *")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files

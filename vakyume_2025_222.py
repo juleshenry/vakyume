@@ -3,6 +3,7 @@ from sympy import I, Piecewise, LambertW, Eq, symbols, solve
 from scipy.optimize import newton
 from kwasak import kwasak_static
 import pandas as pd
+from suck_consts import *
 import numpy as np
 
 
@@ -3584,7 +3585,7 @@ class SelectingPump:
     def eqn_8_01__SCON(NC: float, NS: float, installation_cost: float):
         # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_01__installation_cost(NC: float, NS: float, SCON: float):
@@ -3624,7 +3625,7 @@ class SelectingPump:
     def eqn_8_03__hp(installed_costs: float):
         # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_03__installed_costs(hp: float):
@@ -3743,7 +3744,7 @@ class SelectingPump:
     def eqn_8_06__k(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_06__w(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float):
@@ -3762,13 +3763,13 @@ class SelectingPump:
     def eqn_8_07__P_1(P_2: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_07__P_2(P_1: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_07__adiabatic_hp(P_1: float, P_2: float, w: float):
@@ -3795,13 +3796,13 @@ class SelectingPump:
     def eqn_8_08__P_1(P_2: float, adiabatic_power_watts: float, f: float):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_08__P_2(P_1: float, adiabatic_power_watts: float, f: float):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_8_08__adiabatic_power_watts(P_1: float, P_2: float, f: float):
@@ -4432,7 +4433,7 @@ class LiquidRing:
     def eqn_10_10__rho(bhp: float, bhp_0: float, mu: float):
         # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @kwasak_static
     def eqn_10_11(T_c: float = None, T_s: float = None,**kwargs):
@@ -4727,7 +4728,7 @@ class LiquidRing:
     def eqn_10_19__P(S_Th: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
         # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_19__S_Th(P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
@@ -4802,7 +4803,7 @@ class LiquidRing:
     def eqn_10_20__P(S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_20__S_0(P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
@@ -4824,31 +4825,31 @@ class LiquidRing:
     def eqn_10_20__T_e(P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_20__T_i(P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_20__p_0(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_20__p_c(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_10_20__p_s(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @kwasak_static
     def eqn_10_21(P: float = None, P_d: float = None, P_prime: float = None,**kwargs):
@@ -4944,49 +4945,49 @@ class RotaryPistonVane:
     def eqn_11_02__Q(Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__Q_0(Q: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__Q_external_gas_throughput(Q: float, Q_0: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__SP_1(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_2: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__SP_2(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, S_vol_pump_speed: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__S_vol_pump_speed(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, V: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__V(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, t: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @staticmethod
     def eqn_11_02__t(Q: float, Q_0: float, Q_external_gas_throughput: float, SP_1: float, SP_2: float, S_vol_pump_speed: float, V: float):
         # [.pyeqn] t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         # [Sympy Failover]
-        pass # Ollama offline
+        OllamaOffline('Ollama is offline')
 
     @kwasak_static
     def eqn_11_03(F_s: float = None, t: float = None, t_c: float = None,**kwargs):
@@ -5157,7 +5158,6 @@ class RotaryPistonVane:
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-    if u+1 != 6:continue #%%%BAD
     print(f'@@@{u+1}.',o, type(o))
     # try:
     truth = False
