@@ -34,7 +34,6 @@ Transcription Phase
 Implementation Phase
 - [x] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
 - [x] Implement solver-decorator
-- [ ] Create arbitrary solver demo that scrolls through various calculations, for fun!
 
 Integration Phase
 - [x] Separate the python library that converts equations to dynamic classes
@@ -64,11 +63,11 @@ class Einstein:
 You get returned a generated class code that solves the equation for parameters
 Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
 
-Structure:
+# Structure:
 
 - 1. Original notes, Python equations
 - 2. Python class creation
-- 3. Testing of all existing methods, filling in unresolved equation-stubs or deferring
+- 3. Testing of all existing methods, filling in unresolved equation-stubs or deferring (need help here!)
 - 4. Conversion to C++
 - 5. Testing in C++ all calls
 - 6. Speed tests over compute space
@@ -79,3 +78,11 @@ Structure:
 - 3. Can say, with LLM, flow is: MAKE, EVAL(CODE), TEST_CODE 
 - a loop could be created to run in perpetuity until failovers are all working.
 - could even make another function to reiterate over a particular failing test for efficiency
+
+# Final Goal:
+python3 vakyume.py your_text_book.pdf 
+$ loading formulae
+$$ solving via sympy
+$$$ now leveraging LLM's to solve remaining equations...
+$$$$ spitting out Python libraries
+$$$$$ spitting out C++ library derived from the Python...
