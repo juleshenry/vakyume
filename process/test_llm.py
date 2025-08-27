@@ -71,3 +71,5 @@ def do_extract_code_2():
     # .below may be necessary ymmv
     # print(ans1:=(make_sure_python_annotated(ans1)))
     # print(and1:=extract_code(ans1))
+
+do_extract_code_1()
