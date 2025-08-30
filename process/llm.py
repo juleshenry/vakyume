@@ -51,7 +51,7 @@ def escribir_codigo(
             + (
                 p2 := (
                     null_str,
-                    """print the python code syntax for an equation solving the formula the given variable
+                    f"""print the python code syntax for an equation solving the formula the given variable
                     example: a**2 = b**2 + c**2
                     
                     closed-form for "a"
@@ -120,7 +120,7 @@ def extract_code(text):
                 )
         if (a := len(max_str.split(n))) > 1:
             max_str += (ii if a - 2 else "") + n
-    print("$#" * 32 + "extract_code" + "#$" * 32)
+    print("$#" * 16 + "extract_code" + "#$" * 16)
     return maxxx_str
 
 
