@@ -4,7 +4,7 @@ import timeout_decorator
 import httpx
 from sympy import Symbol, solve, Eq
 from llm import *
-from suck_consts import *
+from config import *
 
 
 def stdout(s, filepath=OUTFILE):
@@ -141,6 +141,7 @@ class Solver:
         ):
             # llm hacky
             stdout(TAB * 2 + "IntractableSolution('no closed form exists')")
+            stdout(TAB * 2 + "return")
             return
         # print("BEFORE:::")
         # ans1 = make_sure_python_annotated(ans1)
@@ -390,7 +391,7 @@ def make():
     stdout("from kwasak import kwasak_static")
     stdout("import pandas as pd")
     stdout("import numpy as np")
-    stdout("from suck_constants import *")
+    stdout("from config import *")
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
             continue  # __.* files

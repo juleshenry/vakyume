@@ -76,13 +76,13 @@ Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
 - 1. Sympy attempt
 - 2. LLM failover
 - 3. Can say, with LLM, flow is: MAKE, EVAL(CODE), TEST_CODE 
-- a loop could be created to run in perpetuity until failovers are all working.
-- could even make another function to reiterate over a particular failing test for efficiency
+- 4. a loop could be created to run in perpetuity until failovers are all working.
+- 5. could even make another function to reiterate over a particular failing test for efficiency
 
 # Final Goal:
 python3 vakyume.py your_text_book.pdf 
-$ loading formulae
-$$ solving via sympy
-$$$ now leveraging LLM's to solve remaining equations...
-$$$$ spitting out Python libraries
-$$$$$ spitting out C++ library derived from the Python...
+[x] loading formulae
+[x] solving via sympy
+[x]  now leveraging LLM's to solve remaining equations...
+[ ] spitting out Python libraries
+[ ]  spitting out C++ library derived from the Python...

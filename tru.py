@@ -1,10 +1,12 @@
 from math import log, sqrt, exp, pow, e
-from sympy import I, Piecewise, LambertW, Eq, symbols, solve
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, Basic
 from scipy.optimize import newton
-from kwasak import kwasak_static
-import inspect
-from suck_consts import *
+from itertools import product
 import random
+import inspect
+
+from kwasak import kwasak_static
+from config import *
 
 
 def test_a():
@@ -479,12 +481,11 @@ class Verify:
         # Get base equation names and their variants
         self.base_equations = self._get_base_equations(lib_class)
         self.equation_variants = self._get_equation_variants(lib_class)
-
         # Build dictionary of equations and their parameters
         self.equation_params = {
-            base_eq: self.construir(base_eq) for base_eq in self.base_equations
+            base_eq: self._collect_free_variables(base_eq)
+            for base_eq in self.base_equations
         }
-
         # Initialize empty dict for dummy arguments
         self.proposed_dummy_args = {}
 
@@ -498,37 +499,25 @@ class Verify:
         """Get list of equation variant names (those starting with 'eqn' with '__')"""
         return [name for name in dir(cls) if name.startswith("eqn") and "__" in name]
 
-    def construir(self, base_equation_name):
-        # Find the first two equation variants that start with the base equation name
+    def _collect_free_variables(self, base_equation_name):
         candidates = [
             variant
             for variant in self.equation_variants
             if variant.startswith(base_equation_name)
         ][:2]
-
-        # Get the signatures of these candidate methods
         signatures = [
             inspect.signature(getattr(self.lib_class, candidate))
             for candidate in candidates
         ]
-
-        # Function to extract parameter names from a signature string
         def extract_parameters(signature_str):
-            # Clean the string: remove parentheses and commas with spaces
             cleaned = (
                 str(signature_str).replace("(", "").replace(")", "").replace(", ", "")
             )
-            # Split on TYPE (assuming TYPE is a defined separator, e.g., "float = None")
             parts = cleaned.split(TYPE)
-            # Filter out empty parts
             return [part for part in parts if part]
-
-        # Collect all unique parameter names from both signatures
         all_parameters = set()
         for sig in signatures:
             all_parameters.update(extract_parameters(sig))
-
-        # Return sorted list of unique parameters
         return sorted(list(all_parameters))
 
     @staticmethod
@@ -539,7 +528,7 @@ class Verify:
         failing_dict = {}
         for equation_name, all_params in self.equation_params.items():
             self.proposed_dummy_args = {p: self.make_rand() for p in all_params}
-            print("PROPOSEDUMBYARGZ" + str(self.proposed_dummy_args))
+            print("\tPROPOSEDUMBYARGZ" + str(self.proposed_dummy_args))
             for param_index, target_param in enumerate(all_params):
                 if not self.todo_suave(
                     all_params,
@@ -550,7 +539,7 @@ class Verify:
                 ):
                     failing_dict[target_param] = f"{equation_name} remains elusive"
             self.proposed_dummy_args = {}
-        return True if not failing_dict else failing_dict
+        return failing_dict or True
 
     def non_none_soln(self, equation_name, equation_method, input_values):
         # Call the equation method with input values
@@ -563,70 +552,72 @@ class Verify:
     def todo_suave(
         self, all_params, target_param, param_index, param_values, equation_name
     ) -> bool:
-        # Get list of parameters except the target one
         other_params = [p for p in all_params if p != target_param]
-
-        # Build dict of values for other parameters
         input_values = {param: param_values[param] for param in other_params}
-
-        # Log the equation being called
         equation_method = f"{equation_name}_{target_param}"
         print(f"calling {equation_method} with {input_values}", end="")
-
-        # Call the equation method with input values
         result = self.non_none_soln(equation_name, equation_method, input_values)
-        if not param_index:  # assumes first is correct. not always true! TODO
-            if not result:
-                return False
+        if not result:
+            return False
+        
+        if param_index == 0 and not result:
+            return False
+        elif param_index == 0:
+            ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            # should fix if first eqn is None ?
+            # assumes first is correct. not always true! TODO
             self.proposed_dummy_args[target_param] = (
-                self.make_rand()
-                if not result
-                else result  ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            )  # should fix if first eqn is None ?
+                self.make_rand() if not result else result
+            )
             print("\nAssuming below will be the golden n-tuple...")
             print(self.proposed_dummy_args)
 
         if isinstance(result, list):
             param_values[target_param] = result
-        # Log the result
+
         print("-" * 9, ">>>", target_param, "=", result)
 
         def are_similar(a, b) -> bool:
-            if (
-                isinstance(c := a - b, float)
-                or isinstance(c, int)
-                or isinstance(c, complex)
-            ):
-                return abs(c) < 1e-10
-            else:
+            try:
+                return abs(a - b) < 1e-10
+            except TypeError:
+                pass 
+            if all(isinstance(v, Basic) for v in (a, b,)):
                 evaluated = result.subs({target_param: param_values[target_param]})
                 if evaluated.is_real:
                     return evaluated < 1e-10
                 else:
-                    print(evaluated)
-                    # Complex Yardstick
                     real, imag = map(lambda o: float(abs(o)), evaluated.as_real_imag())
-                    print("RIIII" * 2, real, imag)
                     return real < 1e-10 and imag < 1e-10
-
+            elif isinstance(a, list) or isinstance(b, list):
+                if not isinstance(a, list):
+                    a = [a]
+                if not isinstance(b, list):
+                    b = [b]
+                for av, bv in product(a, b):
+                    if are_similar(av, bv):
+                        return True
+                return False
+            
         # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
-        if not result:
-            return False
+        # in a nutshell, return upon figuring out parameter values are similar
+        # but also notify param values by updating the dictionary
+        # toying with (bool, <value>) output...
         for r in result:
-            pseudo_gold = param_values[target_param]
-            if isinstance(pseudo_gold, list):
-                for pg in pseudo_gold:
+            dumby_input = param_values[target_param]
+            if isinstance(dumby_input, list):
+                for pg in dumby_input:
                     if are_similar(r, pg):
                         param_values[target_param] = pg
                         return True
-            elif are_similar(r, pseudo_gold):
+            elif are_similar(r, dumby_input):
                 return True
         return False
-        # return any(ev(r, param_values[target_param]) for r in result) if result else result
 
 
 if __name__ == "__main__":
-    test_b()
+    test_a()
+    # test_b()
 """
 
 import tru
