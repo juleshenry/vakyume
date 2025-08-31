@@ -560,9 +560,7 @@ class Verify:
         if not result:
             return False
         
-        if param_index == 0 and not result:
-            return False
-        elif param_index == 0:
+        if param_index == 0:
             ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # should fix if first eqn is None ?
             # assumes first is correct. not always true! TODO
@@ -617,7 +615,7 @@ class Verify:
 
 if __name__ == "__main__":
     test_a()
-    # test_b()
+    test_b()
 """
 
 import tru

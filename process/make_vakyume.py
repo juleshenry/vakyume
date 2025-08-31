@@ -162,21 +162,6 @@ class Solver:
         for l in and2.split("\n"):
             stdout(l)
 
-    # def doit():
-    #     class VacuumTheory:pass
-    #     print(sak_funx:=filter(lambda a:a.startswith('eqn') and '__'not in a,dir(VacuumTheory)))
-    #     print(funx:=filter(lambda a:a.startswith('eqn') and '__' in a,dir(VacuumTheory)))
-
-    #     # iterate all methods and fill with dummy values.
-    #     import inspect
-    #     a,b = map(lambda a:inspect.signature(getattr(VacuumTheory,a)),list(funx)[:2])
-    #     woa = lambda d:str(d).replace(')','').replace('(','').replace(', ','').split(TYPE)
-    #     tokes = set([u for u in woa(a)+woa(b)if u])
-
-    #     for o in sak_funx:
-    #         print(o)
-    #         print(inspect.signature(getattr(VacuumTheory,o)))
-
     @staticmethod
     def fine_tune_extracted(and1, header):
         """fte(extract_code) -> printable"""
@@ -286,13 +271,6 @@ class Solver:
             stdout(
                 f"{TAB*2}# [.pyeqn] {eqn.strip().replace('#','')}"
             )  # original text contains #-comment for units
-            '''TODO:
-            if comment:
-                stdout(f'{TAB*2}"""')
-                for l in comment.split('\n')[1:-1]:
-                    stdout(f"{TAB*2}{l}")
-                stdout(f'{TAB*2}"""')
-            '''
             try:
                 solns = s.get_solns_vanilla_nf(normal_form, Symbol(token))
             except:
@@ -307,7 +285,8 @@ class Solver:
             stdout(TAB * 2 + f"return result")
 
     def analyze(s, i):
-        """1. opens a file in the chapters folder
+        """
+        1. opens a file in the chapters folder
         2. reads lines until equation is found.
         3. permutes the equation
         """
@@ -327,13 +306,10 @@ class Solver:
                         eqn_number = x[0]
                         subnum = x[0].split('-')[1]
                         w=int(''.join([s for s in subnum if not s.isalpha()]))
-                        # there is a bug in Sun Jan 26 20:42:05 CST 2025 keeping inspect signature from processing with kwasak. kwasak is flawed because mro() is unintuitive
                         eqn_number = x[0].split('-')[0] + '-' + ('0' + str(w) if w<=9 else str(w)) +  ''.join([s for s in subnum if s.isalpha()])
                         comment = None #""
                     if " = " in l:
                         print("[DEBUG]", eqn_number,'\n',l)
-                        # kludge:
-                        # k = ''.join(comment.split('"""')[-2:]).split('\n')[1:-1]
                         comment = None # TODO:
                         s.permute_and_print(l, eqn_number, comment=comment)
                         # comment = ""
@@ -383,8 +359,7 @@ class SetupMethods:
             pass
 
 
-def make():
-    X = Solver()
+def write_library_imports():
     stdout("from math import log, sqrt, exp, pow, e")
     stdout("from sympy import I, Piecewise, LambertW, Eq, symbols, solve")
     stdout("from scipy.optimize import newton, fsolve")
@@ -392,36 +367,33 @@ def make():
     stdout("import pandas as pd")
     stdout("import numpy as np")
     stdout("from config import *")
+
+def process_chapters():
+    X = Solver()
     for modules in sorted(os.listdir(os.getcwd() + "/chapters")):
         if modules[2].isalpha():
-            continue  # __.* files
-        chap, mods = modules.split("_")[0], modules.split("_")[1:]
-        # if int(chap) != 8:continue
+            continue
+        chapter_number, mods = modules.split("_")[0], modules.split("_")[1:]
         cls_name = "".join(x[0].upper() + x[1:] for x in mods)[:-3]
-        print(
-            chap,
-            mods,
-            cls_name,
-        )
-        stdout(f"\n\nclass {cls_name}:")
-        X.analyze(chap)
+        # stdout(f"\n\nclass {cls_name}:")
+        X.analyze(chapter_number)
 
+def make():
+    write_library_imports()
+    process_chapters()
 
 truify = r"""
 import tru
 y = {}
 for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
     print(f'@@@{u+1}.',o, type(o))
-    # try:
     truth = False
     for tempt in range(budget:=5):
         try:
             truth = truth or tru.Verify(vars()[o]).verify() 
         except ValueError as ve:
             if (m:="math domain error") in str(ve):pass
-            # elif(m:=)
             print("[ERROR]"+":"*99,m)
-            # print(str(ve));1/0
     print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
     y[o] = truth
 print(*[yo for yo in y.items()],sep=('\n'))
