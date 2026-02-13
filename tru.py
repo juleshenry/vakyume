@@ -6,14 +6,26 @@ import random
 import inspect
 import numpy as np
 
+try:
+    from tqdm import tqdm
+except Exception:
+    tqdm = None
+
 from kwasak import kwasak_static
 from config import *
+
 
 class Verify:
     def __init__(self, lib_class):
         self.lib_class = lib_class
-        self.base_equations = [name for name in dir(lib_class) if name.startswith("eqn") and "__" not in name]
-        self.equation_variants = [name for name in dir(lib_class) if name.startswith("eqn") and "__" in name]
+        self.base_equations = [
+            name
+            for name in dir(lib_class)
+            if name.startswith("eqn") and "__" not in name
+        ]
+        self.equation_variants = [
+            name for name in dir(lib_class) if name.startswith("eqn") and "__" in name
+        ]
 
     def _get_params(self, base_eq):
         variants = [v for v in self.equation_variants if v.startswith(base_eq + "__")]
@@ -31,16 +43,19 @@ class Verify:
         return round(random.uniform(1.1, 10.0), 5)
 
     def are_similar(self, a, b):
-        if a is None or b is None: return False
-        
+        if a is None or b is None:
+            return False
+
         def to_float_or_complex(v):
-            if isinstance(v, (int, float, complex)): return v
+            if isinstance(v, (int, float, complex)):
+                return v
             if isinstance(v, (list, tuple, np.ndarray)):
-                if len(v) > 0: return to_float_or_complex(v[0])
+                if len(v) > 0:
+                    return to_float_or_complex(v[0])
                 return None
             try:
                 # Handle sympy numbers
-                if hasattr(v, 'evalf'):
+                if hasattr(v, "evalf"):
                     return float(v.evalf())
                 return float(v)
             except:
@@ -51,86 +66,112 @@ class Verify:
 
         va = to_float_or_complex(a)
         vb = to_float_or_complex(b)
-        
+
         if va is not None and vb is not None:
             if isinstance(va, complex) or isinstance(vb, complex):
                 return abs(va - vb) < 1e-5
             return abs(float(va) - float(vb)) < 1e-5
 
-        if isinstance(a, (list, tuple, np.ndarray)) or isinstance(b, (list, tuple, np.ndarray)):
-            if not isinstance(a, (list, tuple, np.ndarray)): a = [a]
-            if not isinstance(b, (list, tuple, np.ndarray)): b = [b]
+        if isinstance(a, (list, tuple, np.ndarray)) or isinstance(
+            b, (list, tuple, np.ndarray)
+        ):
+            if not isinstance(a, (list, tuple, np.ndarray)):
+                a = [a]
+            if not isinstance(b, (list, tuple, np.ndarray)):
+                b = [b]
             for av in a:
                 for bv in b:
-                    if self.are_similar(av, bv): return True
+                    if self.are_similar(av, bv):
+                        return True
         return False
 
     def verify_equation(self, base_eq):
         params = self._get_params(base_eq)
         variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
-        
-        results = {} # (source_truth_var) -> { target_var -> success }
-        
+
+        results = {}  # (source_truth_var) -> { target_var -> success }
+
         # Increase trials to be more certain
         num_trials = 3
-        
-        for source_var in variants:
+
+        variant_iterator = (
+            tqdm(variants, desc=f"{base_eq}", unit="variant", leave=False)
+            if tqdm
+            else variants
+        )
+        for source_var in variant_iterator:
             variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
-            
+
             trial_matches = []
             for _ in range(num_trials):
                 test_inputs = {p: self.make_rand() for p in params if p != source_var}
-                
+
                 try:
                     source_values = variant_method(**test_inputs)
                     if not source_values:
                         trial_matches.append(0)
                         continue
-                    
+
                     best_match_for_this_trial = 0
                     for val in source_values:
                         if isinstance(val, complex) and abs(val.imag) > 1e-5:
-                            continue # Skip complex results for now if they are not expected
-                        
+                            continue  # Skip complex results for now if they are not expected
+
                         full_set = test_inputs.copy()
                         full_set[source_var] = val
-                        
+
                         matches = 0
                         for target_var in variants:
-                            if target_var == source_var: 
+                            if target_var == source_var:
                                 matches += 1
                                 continue
-                            
-                            target_method = getattr(self.lib_class, f"{base_eq}__{target_var}")
-                            target_inputs = {p: v for p, v in full_set.items() if p != target_var}
-                            
+
+                            target_method = getattr(
+                                self.lib_class, f"{base_eq}__{target_var}"
+                            )
+                            target_inputs = {
+                                p: v for p, v in full_set.items() if p != target_var
+                            }
+
                             try:
                                 target_values = target_method(**target_inputs)
-                                if self.are_similar(full_set[target_var], target_values):
+                                if self.are_similar(
+                                    full_set[target_var], target_values
+                                ):
                                     matches += 1
                             except:
                                 pass
-                        best_match_for_this_trial = max(best_match_for_this_trial, matches)
+                        best_match_for_this_trial = max(
+                            best_match_for_this_trial, matches
+                        )
                     trial_matches.append(best_match_for_this_trial)
                 except:
                     trial_matches.append(0)
-            
+
             # Use the best trial result or average? Usually if it works once with random, it's likely correct.
             # But here we want consistency.
             results[source_var] = max(trial_matches) if trial_matches else 0
-                
+
         return results
 
     def verify(self):
         overall_results = {}
-        for base_eq in self.base_equations:
+        base_iterator = (
+            tqdm(self.base_equations, desc="Verifying equations", unit="eqn")
+            if tqdm
+            else self.base_equations
+        )
+        for base_eq in base_iterator:
             overall_results[base_eq] = self.verify_equation(base_eq)
         return overall_results
 
+
 def test_a():
     from vakyume_2025_ollama_i import VacuumTheory
+
     v = Verify(VacuumTheory)
     print(v.verify())
+
 
 if __name__ == "__main__":
     # Example usage

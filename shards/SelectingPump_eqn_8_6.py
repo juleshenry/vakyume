@@ -60,3 +60,18 @@ class SelectingPump:
     @staticmethod
     def eqn_8_6__k(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, w: float):
         # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        # [Sympy Failover Placeholder for k]
+        def func(k):
+            # Numerical fallback needed for: ((k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))) - (adiabatic_hp)
+            return eval("((x / (x - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((x - 1) / x) - 1))) - (adiabatic_hp)".replace('x', str(k)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
+
+    @staticmethod
+    def eqn_8_6__w(M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        w = 1980000*M*adiabatic_hp*(k - 1)/(R*T*k*((P_2/P_1)**((k - 1)/k) - 1))
+        result.append(w)
+        return result
+

@@ -1,8 +1,8 @@
 
 I have a set of Python functions that solve an equation for different variables.
 One or more of these functions are incorrect (the 'one-odd-out').
-Based on consistency checks, the following variants are likely wrong: ['dV_dt', 'r_M']
-The scores (consistency matches) are: {'A': 7, 'dV_dt': 6, 'delta_P': 7, 'm': 7, 'mu': 7, 'r': 7, 'r_M': 6}
+Based on consistency checks, the following variants are likely wrong: ['dV_dt', 'mu', 'r_M']
+The scores (consistency matches) are: {'A': 7, 'dV_dt': 6, 'delta_P': 7, 'm': 7, 'mu': 6, 'r': 7, 'r_M': 6}
 
 Here is the code:
 ```python

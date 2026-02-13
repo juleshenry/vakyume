@@ -57,7 +57,6 @@
         "SteamJetInjectors_eqn_9_5.py",
         "LiquidRing_eqn_10_15.py",
         "LiquidRing_eqn_10_21.py",
-        "LiquidRing_eqn_10_4.py",
         "Precondensors_eqn_7_3.py",
         "FluidFlowVacuumLines_eqn_2_3.py",
         "ProcessApp2_eqn_6_7.py",
@@ -92,6 +91,7 @@
         "SelectingPump_eqn_8_5.py",
         "VacuumTheory_eqn_1_8.py",
         "RotaryPistonVane_eqn_11_5.py",
+        "Precondensors_eqn_7_14b.py",
         "Precondensors_eqn_7_9.py",
         "PressMgmt_eqn_3_4.py",
         "ProcessApp1_eqn_5_14.py",
@@ -420,6 +420,21 @@
                 "V": 4
             }
         },
+        "LiquidRing_eqn_10_4.py": {
+            "eqn": "eqn_10_4",
+            "num_variants": 6,
+            "inconsistent_variants": [
+                "S_p"
+            ],
+            "scores": {
+                "Q_gas": 6,
+                "SP_1": 6,
+                "SP_2": 6,
+                "S_p": 0,
+                "V": 6,
+                "t": 6
+            }
+        },
         "FluidFlowVacuumLines_eqn_2_34.py": {
             "eqn": "eqn_2_34",
             "num_variants": 7,
@@ -523,21 +538,6 @@
                 "V_1": 2
             }
         },
-        "Precondensors_eqn_7_14b.py": {
-            "eqn": "eqn_7_14b",
-            "num_variants": 5,
-            "inconsistent_variants": [
-                "A",
-                "Q_condensor_heat_duty"
-            ],
-            "scores": {
-                "A": 0,
-                "Q_condensor_heat_duty": 3,
-                "U": 5,
-                "del_T_1": 5,
-                "del_T_2": 5
-            }
-        },
         "SelectingPump_eqn_8_1.py": {
             "eqn": "eqn_8_1",
             "num_variants": 4,
@@ -559,6 +559,7 @@
             "num_variants": 7,
             "inconsistent_variants": [
                 "dV_dt",
+                "mu",
                 "r_M"
             ],
             "scores": {
@@ -566,7 +567,7 @@
                 "dV_dt": 6,
                 "delta_P": 7,
                 "m": 7,
-                "mu": 7,
+                "mu": 6,
                 "r": 7,
                 "r_M": 6
             }

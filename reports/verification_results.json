@@ -608,7 +608,7 @@
             "Q_gas": 6,
             "SP_1": 6,
             "SP_2": 6,
-            "S_p": 6,
+            "S_p": 0,
             "V": 6,
             "t": 6
         }
@@ -950,8 +950,8 @@
     },
     "Precondensors_eqn_7_14b.py": {
         "eqn_7_14b": {
-            "A": 0,
-            "Q_condensor_heat_duty": 3,
+            "A": 5,
+            "Q_condensor_heat_duty": 5,
             "U": 5,
             "del_T_1": 5,
             "del_T_2": 5
@@ -1020,7 +1020,7 @@
             "dV_dt": 6,
             "delta_P": 7,
             "m": 7,
-            "mu": 7,
+            "mu": 6,
             "r": 7,
             "r_M": 6
         }
