@@ -1,16 +1,58 @@
 # Vakyume
 # A Python Library for Vacuum Design
 
-Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by James L. Ryans and Daniel L. Roper, this project offers functions related to engineering vacuums. 
+Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by James L. Ryans and Daniel L. Roper, this project offers functions related to engineering vacuums.
 
-We revisit the history of low pressure devices, recreating the example calculations programatically. Furthermore, a supplementary decorator is developed to calculate arbitrary missing values for a given formula. 
+We utilize a "One-Odd-Out" (OOO) verification methodology: for any equation family (e.g., $PV=nRT$), if solvers exist for every variable ($P, V, n, R, T$), they must be mathematically consistent. If one solver produces a result that breaks the equality when plugged into the others, it is flagged for LLM-assisted repair.
 
-In a nutshell, we demonstrate how to take a textbook's equations and turn it into a complete equation solver for all permutations. 
+## Quick Start
 
-Later, we convert the Python code to C++ for optimization.
+### 1. Install Dependencies
+```bash
+python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama
+```
 
+### 2. Run the Orchestrator
+The main entry point is `vakyume_master.py`. It handles the entire lifecycle:
+```bash
+python3 vakyume_master.py
+```
+This script will:
+1. **Verify Shards**: Check all equations in `shards/` for mathematical consistency using the `tru.py` engine.
+2. **Analyze Results**: Identify "solved" vs "inconsistent" equations, saved to `reports/analysis.json`.
+3. **Generate Repair Prompts**: Create targeted prompts in `repair_prompts/` for any inconsistent equations.
+4. **Assemble Certified Library**: Create `vakyume_certified.py` containing only the 100% verified equations.
+
+## Workflow for LLM-Assisted Repair
+
+If you have inconsistent shards (check the output of the master run), follow this process to fix them:
+
+1. **Locate Prompt**: Find the corresponding file in `repair_prompts/repair_<shard_name>.txt`.
+2. **Run Repair**: Feed the content of the prompt to an LLM (e.g., via Ollama or ChatGPT).
+   ```bash
+   # Example using Ollama
+   PROMPT=$(cat repair_prompts/repair_SelectingPump_eqn_8_06.py.txt)
+   ollama run phi3 "$PROMPT"
+   ```
+3. **Apply Fix**: Paste the corrected methods back into the shard file in `shards/`.
+4. **Re-Verify**: Run `python3 vakyume_master.py` again. The repaired equation will now be promoted to the certified library if it passes consistency checks.
+
+## Key Files
+- `vakyume_master.py`: Root orchestrator for verification and certification.
+- `tru.py`: The mathematical n-way consistency verification engine (The "Fuzzer").
+- `shards/`: Individual Python files for each equation family.
+- `vakyume_certified.py`: The production-ready, 100% verified subset of the library.
+- `reports/analysis.json`: Detailed report on the consistency of every equation.
+
+## Architecture
+- **Sympy Solvers**: Initial algebraic isolation of variables.
+- **Numerical Fallbacks**: Uses `scipy.optimize.newton` or `fsolve` for transcendental equations where algebraic isolation is impossible.
+- **One-Odd-Out Verification**: Random "fuzzed" inputs are used to verify that moving between any two variables in an equation family returns to the source of truth.
+
+---
 
 # Kwarg Solver Decorator
+(Existing documentation...)
 
 As long as one keyword argument is not given, its value is calculated
 

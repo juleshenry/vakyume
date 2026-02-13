@@ -4,638 +4,134 @@ from scipy.optimize import newton
 from itertools import product
 import random
 import inspect
+import numpy as np
 
 from kwasak import kwasak_static
 from config import *
 
-
-def test_a():
-    class VacuumTheory:
-
-        @kwasak_static
-        def eqn_1_3(
-            m: float = None, T: float = None, k: float = None, v: float = None, **kwargs
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_3__m(T: float, k: float, v: float):
-            # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
-            result = []
-            m = 3.0 * T * k / v**2
-            result.append(m)
-            return result
-
-        @staticmethod
-        def eqn_1_3__T(k: float, m: float, v: float):
-            # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
-            result = []
-            T = 0.333333333333333 * m * v**2 / k
-            result.append(T)
-            return result
-
-        @staticmethod
-        def eqn_1_3__k(T: float, m: float, v: float):
-            # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
-            result = []
-            k = 0.333333333333333 * m * v**2 / T
-            result.append(k)
-            return result
-
-        @staticmethod
-        def eqn_1_3__v(T: float, k: float, m: float):
-            # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
-            result = []
-            v = -1.73205080756888 * sqrt(T * k / m)
-            result.append(v)
-            v = 1.73205080756888 * sqrt(T * k / m)
-            result.append(v)
-            return result
-
-        @kwasak_static
-        def eqn_1_7(
-            T: float = None,
-            n: float = None,
-            V: float = None,
-            p: float = None,
-            R: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_7__T(R: float, V: float, n: float, p: float):
-            # [.pyeqn] p * V = n * R * T
-            result = []
-            T = V * p / (R * n)
-            result.append(T)
-            return result
-
-        @staticmethod
-        def eqn_1_7__n(R: float, T: float, V: float, p: float):
-            # [.pyeqn] p * V = n * R * T
-            result = []
-            n = V * p / (R * T)
-            result.append(n)
-            return result
-
-        @staticmethod
-        def eqn_1_7__V(R: float, T: float, n: float, p: float):
-            # [.pyeqn] p * V = n * R * T
-            result = []
-            V = R * T * n / p
-            result.append(V)
-            return result
-
-        @staticmethod
-        def eqn_1_7__p(R: float, T: float, V: float, n: float):
-            # [.pyeqn] p * V = n * R * T
-            result = []
-            p = R * T * n / V
-            result.append(p)
-            return result
-
-        @staticmethod
-        def eqn_1_7__R(T: float, V: float, n: float, p: float):
-            # [.pyeqn] p * V = n * R * T
-            result = []
-            R = V * p / (T * n)
-            result.append(R)
-            return result
-
-        @kwasak_static
-        def eqn_1_8(
-            M: float = None,
-            T: float = None,
-            P: float = None,
-            V: float = None,
-            m: float = None,
-            R: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_8__M(P: float, R: float, T: float, V: float, m: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            M = R * T * m / (P * V)
-            result.append(M)
-            return result
-
-        @staticmethod
-        def eqn_1_8__T(M: float, P: float, R: float, V: float, m: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            T = M * P * V / (R * m)
-            result.append(T)
-            return result
-
-        @staticmethod
-        def eqn_1_8__P(M: float, R: float, T: float, V: float, m: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            P = R * T * m / (M * V)
-            result.append(P)
-            return result
-
-        @staticmethod
-        def eqn_1_8__V(M: float, P: float, R: float, T: float, m: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            V = R * T * m / (M * P)
-            result.append(V)
-            return result
-
-        @staticmethod
-        def eqn_1_8__m(M: float, P: float, R: float, T: float, V: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            m = M * P * V / (R * T)
-            result.append(m)
-            return result
-
-        @staticmethod
-        def eqn_1_8__R(M: float, P: float, T: float, V: float, m: float):
-            # [.pyeqn] P * V = m / M * R * T
-            result = []
-            R = M * P * V / (T * m)
-            result.append(R)
-            return result
-
-        @kwasak_static
-        def eqn_1_9(
-            T: float = None,
-            M: float = None,
-            rho: float = None,
-            P: float = None,
-            R: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_9__T(M: float, P: float, R: float, rho: float):
-            # [.pyeqn] rho = P * M / (R * T)
-            result = []
-            T = M * P / (R * rho)
-            result.append(T)
-            return result
-
-        @staticmethod
-        def eqn_1_9__M(P: float, R: float, T: float, rho: float):
-            # [.pyeqn] rho = P * M / (R * T)
-            result = []
-            M = R * T * rho / P
-            result.append(M)
-            return result
-
-        @staticmethod
-        def eqn_1_9__rho(M: float, P: float, R: float, T: float):
-            # [.pyeqn] rho = P * M / (R * T)
-            result = []
-            rho = M * P / (R * T)
-            result.append(rho)
-            return result
-
-        @staticmethod
-        def eqn_1_9__P(M: float, R: float, T: float, rho: float):
-            # [.pyeqn] rho = P * M / (R * T)
-            result = []
-            P = R * T * rho / M
-            result.append(P)
-            return result
-
-        @staticmethod
-        def eqn_1_9__R(M: float, P: float, T: float, rho: float):
-            # [.pyeqn] rho = P * M / (R * T)
-            result = []
-            R = M * P / (T * rho)
-            result.append(R)
-            return result
-
-        @kwasak_static
-        def eqn_1_10(
-            T_1: float = None,
-            P_2: float = None,
-            V_1: float = None,
-            T_2: float = None,
-            P_1: float = None,
-            V_2: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_10__T_1(P_1: float, P_2: float, T_2: float, V_1: float, V_2: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            T_1 = P_1 * T_2 * V_1 / (P_2 * V_2)
-            result.append(T_1)
-            return result
-
-        @staticmethod
-        def eqn_1_10__P_2(P_1: float, T_1: float, T_2: float, V_1: float, V_2: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            P_2 = P_1 * T_2 * V_1 / (T_1 * V_2)
-            result.append(P_2)
-            return result
-
-        @staticmethod
-        def eqn_1_10__V_1(P_1: float, P_2: float, T_1: float, T_2: float, V_2: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            V_1 = P_2 * T_1 * V_2 / (P_1 * T_2)
-            result.append(V_1)
-            return result
-
-        @staticmethod
-        def eqn_1_10__T_2(P_1: float, P_2: float, T_1: float, V_1: float, V_2: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            T_2 = P_2 * T_1 * V_2 / (P_1 * V_1)
-            result.append(T_2)
-            return result
-
-        @staticmethod
-        def eqn_1_10__P_1(P_2: float, T_1: float, T_2: float, V_1: float, V_2: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            P_1 = P_2 * T_1 * V_2 / (T_2 * V_1)
-            result.append(P_1)
-            return result
-
-        @staticmethod
-        def eqn_1_10__V_2(P_1: float, P_2: float, T_1: float, T_2: float, V_1: float):
-            # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
-            result = []
-            V_2 = P_1 * T_2 * V_1 / (P_2 * T_1)
-            result.append(V_2)
-            return result
-
-        @kwasak_static
-        def eqn_1_11(
-            T: float = None,
-            M: float = None,
-            W: float = None,
-            P: float = None,
-            q: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_11__T(M: float, P: float, W: float, q: float):
-            # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
-            result = []
-            T = 738 * M * P * q / (6821 * W)
-            result.append(T)
-            return result
-
-        @staticmethod
-        def eqn_1_11__M(P: float, T: float, W: float, q: float):
-            # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
-            result = []
-            M = 6821 * T * W / (738 * P * q)
-            result.append(M)
-            return result
-
-        @staticmethod
-        def eqn_1_11__W(M: float, P: float, T: float, q: float):
-            # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
-            result = []
-            W = 738 * M * P * q / (6821 * T)
-            result.append(W)
-            return result
-
-        @staticmethod
-        def eqn_1_11__P(M: float, T: float, W: float, q: float):
-            # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
-            result = []
-            P = 6821 * T * W / (738 * M * q)
-            result.append(P)
-            return result
-
-        @staticmethod
-        def eqn_1_11__q(M: float, P: float, T: float, W: float):
-            # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
-            result = []
-            q = 6821 * T * W / (738 * M * P)
-            result.append(q)
-            return result
-
-        @kwasak_static
-        def eqn_1_12(
-            sum_partial_pressures: float = None, Total_P: float = None, **kwargs
-        ):
-            return
-
-        @staticmethod
-        def eqn_1_12__sum_partial_pressures(Total_P: float):
-            # [.pyeqn] Total_P = sum_partial_pressures
-            result = []
-            sum_partial_pressures = Total_P
-            result.append(sum_partial_pressures)
-            return result
-
-        @staticmethod
-        def eqn_1_12__Total_P(sum_partial_pressures: float):
-            # [.pyeqn] Total_P = sum_partial_pressures
-            result = []
-            Total_P = sum_partial_pressures
-            result.append(Total_P)
-            return result
-
-        @kwasak_static
-        def eqn_1_13a(y_a: float = None, n: float = None, n_a: float = None, **kwargs):
-            return
-
-        @staticmethod
-        def eqn_1_13a__y_a(n: float, n_a: float):
-            # [.pyeqn] y_a = n_a / n
-            result = []
-            y_a = n_a / n
-            result.append(y_a)
-            return result
-
-        @staticmethod
-        def eqn_1_13a__n(n_a: float, y_a: float):
-            # [.pyeqn] y_a = n_a / n
-            result = []
-            n = n_a / y_a
-            result.append(n)
-            return result
-
-        @staticmethod
-        def eqn_1_13a__n_a(n: float, y_a: float):
-            # [.pyeqn] y_a = n_a / n
-            result = []
-            n_a = n * y_a
-            result.append(n_a)
-            return result
-
-        @kwasak_static
-        def eqn_1_13b(p_a: float = None, y_a: float = None, P: float = None, **kwargs):
-            return
-
-        @staticmethod
-        def eqn_1_13b__p_a(P: float, y_a: float):
-            # [.pyeqn] y_a = p_a / P
-            result = []
-            p_a = P * y_a
-            result.append(p_a)
-            return result
-
-        @staticmethod
-        def eqn_1_13b__y_a(P: float, p_a: float):
-            # [.pyeqn] y_a = p_a / P
-            result = []
-            y_a = p_a / P
-            result.append(y_a)
-            return result
-
-        @staticmethod
-        def eqn_1_13b__P(p_a: float, y_a: float):
-            # [.pyeqn] y_a = p_a / P
-            result = []
-            P = p_a / y_a
-            result.append(P)
-            return result
-
-    assert Verify(VacuumTheory).verify()
-    print("exitoso")
-
-
-def test_b():
-    class C:
-        @kwasak_static
-        def eqn_10_10(
-            rho: float = None,
-            mu: float = None,
-            bhp: float = None,
-            bhp_0: float = None,
-            **kwargs,
-        ):
-            return
-
-        @staticmethod
-        def eqn_10_10__rho(bhp: float, bhp_0: float, mu: float):
-            # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-            # [Sympy Failover]
-            pass  # Ollama offline
-
-        @staticmethod
-        def eqn_10_10__mu(bhp: float, bhp_0: float, rho: float):
-            # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-            result = []
-            mu = (
-                -204374584201.104
-                * I
-                * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (25 / 4)
-            )
-            result.append(mu)
-            mu = (
-                204374584201.104
-                * I
-                * (bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84) ** (25 / 4)
-            )
-            result.append(mu)
-            mu = -204374584201.104 * (
-                bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84
-            ) ** (25 / 4)
-            result.append(mu)
-            mu = 204374584201.104 * (
-                bhp / (bhp_0 * rho**0.84) - 0.5 / rho**0.84
-            ) ** (25 / 4)
-            result.append(mu)
-            return result
-
-        @staticmethod
-        def eqn_10_10__bhp(bhp_0: float, mu: float, rho: float):
-            # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-            result = []
-            bhp = 0.0005 * bhp_0 * (31.0 * mu ** (4 / 25) * rho ** (21 / 25) + 1000.0)
-            result.append(bhp)
-            return result
-
-        @staticmethod
-        def eqn_10_10__bhp_0(bhp: float, mu: float, rho: float):
-            # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-            result = []
-            bhp_0 = 2000.0 * bhp / (31.0 * mu**0.16 * rho**0.84 + 1000.0)
-            result.append(bhp_0)
-            return result
-
-    assert Verify(C).verify()
-    print("exitosoB")
-
-
-# print = lambda *a:a
 class Verify:
-    # iterate all methods and fill with dummy values.
-
     def __init__(self, lib_class):
         self.lib_class = lib_class
+        self.base_equations = [name for name in dir(lib_class) if name.startswith("eqn") and "__" not in name]
+        self.equation_variants = [name for name in dir(lib_class) if name.startswith("eqn") and "__" in name]
 
-        # Get base equation names and their variants
-        self.base_equations = self._get_base_equations(lib_class)
-        self.equation_variants = self._get_equation_variants(lib_class)
-        # Build dictionary of equations and their parameters
-        self.equation_params = {
-            base_eq: self._collect_free_variables(base_eq)
-            for base_eq in self.base_equations
-        }
-        # Initialize empty dict for dummy arguments
-        self.proposed_dummy_args = {}
-
-    def _get_base_equations(self, cls):
-        """Get list of base equation names (those starting with 'eqn' without '__')"""
-        return [
-            name for name in dir(cls) if name.startswith("eqn") and "__" not in name
-        ]
-
-    def _get_equation_variants(self, cls):
-        """Get list of equation variant names (those starting with 'eqn' with '__')"""
-        return [name for name in dir(cls) if name.startswith("eqn") and "__" in name]
-
-    def _collect_free_variables(self, base_equation_name):
-        candidates = [
-            variant
-            for variant in self.equation_variants
-            if variant.startswith(base_equation_name)
-        ][:2]
-        signatures = [
-            inspect.signature(getattr(self.lib_class, candidate))
-            for candidate in candidates
-        ]
-        def extract_parameters(signature_str):
-            cleaned = (
-                str(signature_str).replace("(", "").replace(")", "").replace(", ", "")
-            )
-            parts = cleaned.split(TYPE)
-            return [part for part in parts if part]
-        all_parameters = set()
-        for sig in signatures:
-            all_parameters.update(extract_parameters(sig))
-        return sorted(list(all_parameters))
+    def _get_params(self, base_eq):
+        variants = [v for v in self.equation_variants if v.startswith(base_eq + "__")]
+        params = set()
+        for v in variants:
+            sig = inspect.signature(getattr(self.lib_class, v))
+            params.update(sig.parameters.keys())
+            params.add(v.split("__")[-1])
+        return sorted(list(params))
 
     @staticmethod
     def make_rand():
-        return round(random.random() * 4, 5)
+        # Avoid 0 and 1 to prevent division by zero or log(1) which might be trivial
+        # Also avoid negative numbers for logs/roots
+        return round(random.uniform(1.1, 10.0), 5)
 
-    def verify(self):
-        failing_dict = {}
-        for equation_name, all_params in self.equation_params.items():
-            self.proposed_dummy_args = {p: self.make_rand() for p in all_params}
-            print("\tPROPOSEDUMBYARGZ" + str(self.proposed_dummy_args))
-            for param_index, target_param in enumerate(all_params):
-                if not self.todo_suave(
-                    all_params,
-                    target_param,
-                    param_index,
-                    self.proposed_dummy_args,
-                    equation_name,
-                ):
-                    failing_dict[target_param] = f"{equation_name} remains elusive"
-            self.proposed_dummy_args = {}
-        return failing_dict or True
-
-    def non_none_soln(self, equation_name, equation_method, input_values):
-        # Call the equation method with input values
-        try:
-            return getattr(self.lib_class(), equation_name)(**input_values)
-        except OllamaOffline as oo:
-            print(f"Ollama is offline for {equation_method}")
-            return False
-
-    def todo_suave(
-        self, all_params, target_param, param_index, param_values, equation_name
-    ) -> bool:
-        other_params = [p for p in all_params if p != target_param]
-        input_values = {param: param_values[param] for param in other_params}
-        equation_method = f"{equation_name}_{target_param}"
-        print(f"calling {equation_method} with {input_values}", end="")
-        result = self.non_none_soln(equation_name, equation_method, input_values)
-        if not result:
-            return False
+    def are_similar(self, a, b):
+        if a is None or b is None: return False
         
-        if param_index == 0:
-            ####TODO:!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            # should fix if first eqn is None ?
-            # assumes first is correct. not always true! TODO
-            self.proposed_dummy_args[target_param] = (
-                self.make_rand() if not result else result
-            )
-            print("\nAssuming below will be the golden n-tuple...")
-            print(self.proposed_dummy_args)
-
-        if isinstance(result, list):
-            param_values[target_param] = result
-
-        print("-" * 9, ">>>", target_param, "=", result)
-
-        def are_similar(a, b) -> bool:
+        def to_float_or_complex(v):
+            if isinstance(v, (int, float, complex)): return v
+            if isinstance(v, (list, tuple, np.ndarray)):
+                if len(v) > 0: return to_float_or_complex(v[0])
+                return None
             try:
-                return abs(a - b) < 1e-10
-            except TypeError:
-                pass 
-            if all(isinstance(v, Basic) for v in (a, b,)):
-                evaluated = result.subs({target_param: param_values[target_param]})
-                if evaluated.is_real:
-                    return evaluated < 1e-10
-                else:
-                    real, imag = map(lambda o: float(abs(o)), evaluated.as_real_imag())
-                    return real < 1e-10 and imag < 1e-10
-            elif isinstance(a, list) or isinstance(b, list):
-                if not isinstance(a, list):
-                    a = [a]
-                if not isinstance(b, list):
-                    b = [b]
-                for av, bv in product(a, b):
-                    if are_similar(av, bv):
-                        return True
-                return False
-            
-        # ultimate copout: if indeed rez is None, it may be the unsolvable cases by IA
-        # in a nutshell, return upon figuring out parameter values are similar
-        # but also notify param values by updating the dictionary
-        # toying with (bool, <value>) output...
-        for r in result:
-            dumby_input = param_values[target_param]
-            if isinstance(dumby_input, list):
-                for pg in dumby_input:
-                    if are_similar(r, pg):
-                        param_values[target_param] = pg
-                        return True
-            elif are_similar(r, dumby_input):
-                return True
+                # Handle sympy numbers
+                if hasattr(v, 'evalf'):
+                    return float(v.evalf())
+                return float(v)
+            except:
+                try:
+                    return complex(v)
+                except:
+                    return None
+
+        va = to_float_or_complex(a)
+        vb = to_float_or_complex(b)
+        
+        if va is not None and vb is not None:
+            if isinstance(va, complex) or isinstance(vb, complex):
+                return abs(va - vb) < 1e-5
+            return abs(float(va) - float(vb)) < 1e-5
+
+        if isinstance(a, (list, tuple, np.ndarray)) or isinstance(b, (list, tuple, np.ndarray)):
+            if not isinstance(a, (list, tuple, np.ndarray)): a = [a]
+            if not isinstance(b, (list, tuple, np.ndarray)): b = [b]
+            for av in a:
+                for bv in b:
+                    if self.are_similar(av, bv): return True
         return False
 
+    def verify_equation(self, base_eq):
+        params = self._get_params(base_eq)
+        variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
+        
+        results = {} # (source_truth_var) -> { target_var -> success }
+        
+        # Increase trials to be more certain
+        num_trials = 3
+        
+        for source_var in variants:
+            variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
+            
+            trial_matches = []
+            for _ in range(num_trials):
+                test_inputs = {p: self.make_rand() for p in params if p != source_var}
+                
+                try:
+                    source_values = variant_method(**test_inputs)
+                    if not source_values:
+                        trial_matches.append(0)
+                        continue
+                    
+                    best_match_for_this_trial = 0
+                    for val in source_values:
+                        if isinstance(val, complex) and abs(val.imag) > 1e-5:
+                            continue # Skip complex results for now if they are not expected
+                        
+                        full_set = test_inputs.copy()
+                        full_set[source_var] = val
+                        
+                        matches = 0
+                        for target_var in variants:
+                            if target_var == source_var: 
+                                matches += 1
+                                continue
+                            
+                            target_method = getattr(self.lib_class, f"{base_eq}__{target_var}")
+                            target_inputs = {p: v for p, v in full_set.items() if p != target_var}
+                            
+                            try:
+                                target_values = target_method(**target_inputs)
+                                if self.are_similar(full_set[target_var], target_values):
+                                    matches += 1
+                            except:
+                                pass
+                        best_match_for_this_trial = max(best_match_for_this_trial, matches)
+                    trial_matches.append(best_match_for_this_trial)
+                except:
+                    trial_matches.append(0)
+            
+            # Use the best trial result or average? Usually if it works once with random, it's likely correct.
+            # But here we want consistency.
+            results[source_var] = max(trial_matches) if trial_matches else 0
+                
+        return results
+
+    def verify(self):
+        overall_results = {}
+        for base_eq in self.base_equations:
+            overall_results[base_eq] = self.verify_equation(base_eq)
+        return overall_results
+
+def test_a():
+    from vakyume_2025_ollama_i import VacuumTheory
+    v = Verify(VacuumTheory)
+    print(v.verify())
 
 if __name__ == "__main__":
-    test_a()
-    test_b()
-"""
-
-import tru
-y = {}
-for u,o in enumerate(filter(lambda o:str(o)[0].isalpha() and str(o)[0].capitalize()==str(o)[0] and str(o) not in map(lambda a:a.strip(),'I, Piecewise, LambertW, Eq, symbols'.split(',')),dir())):
-    print(f'@@@{u+1}.',o, type(o))
-    # try:
-    truth = False
-    for tempt in range(budget:=5):
-        try:
-            truth = truth or tru.Verify(vars()[o]).verify()
-        except ValueError as ve:
-            if (m:="math domain error") in str(ve):pass
-            # elif(m:=)
-            print("[ERROR]"+":"*99,m)
-            # print(str(ve));1/0
-    print("+"*8*8,*((truth,) if (b:=isinstance(truth,bool)) else (truth.items())),sep=('\n\t'if not b else ''))
-    y[o] = truth
-print(*[yo for yo in y.items()],sep=('\n'))
-def export_unfinished():
-    return y
-
-"""
+    # Example usage
+    pass

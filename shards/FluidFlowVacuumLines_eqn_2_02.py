@@ -1,0 +1,36 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve
+from scipy.optimize import newton
+from kwasak import kwasak_static
+import numpy as np
+
+class FluidFlowVacuumLines:
+    @kwasak_static
+    def eqn_2_02(delta: float = None, lambd: float = None, psi: float = None, **kwargs):
+        return
+
+    @staticmethod
+    def eqn_2_02__delta(lambd: float, psi: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        delta = 0.474424998328794 * sqrt(lambd / psi)
+        result.append(delta)
+        return result
+
+    @staticmethod
+    def eqn_2_02__lambd(delta: float, psi: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        lambd = 4.44288293815837 * delta**2 * psi
+        result.append(lambd)
+        return result
+
+    @staticmethod
+    def eqn_2_02__psi(delta: float, lambd: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        psi = 0.225079079039277 * lambd / delta**2
+        result.append(psi)
+        return result
+
+
