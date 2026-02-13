@@ -6,7 +6,7 @@ import numpy as np
 
 class ProcessApp1:
     @kwasak_static
-    def eqn_5_11(B: float = None, L_N: float = None, V_0: float = None, **kwargs):
+    def eqn_5_11(B=None, L_N=None, V_0=None, **kwargs):
         return
 
     @staticmethod
@@ -32,5 +32,4 @@ class ProcessApp1:
         V_0 = -B + L_N
         result.append(V_0)
         return result
-
 

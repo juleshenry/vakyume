@@ -6,63 +6,30 @@ import numpy as np
 
 class FluidFlowVacuumLines:
     @kwasak_static
-    def eqn_2_11(
-        D: float = None,
-        L: float = None,
-        f: float = None,
-        g_c: float = None,
-        h_r: float = None,
-        v: float = None,
-        **kwargs
-    ):
+    def eqn_2_11(C_L=None, C_T=None, F_p=None, **kwargs):
         return
 
     @staticmethod
-    def eqn_2_11__D(L: float, f: float, g_c: float, h_r: float, v: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+    def eqn_2_11__C_L(C_T: float, F_p: float):
+        # [.pyeqn] C_T = C_L * F_p
         result = []
-        D = L * f * v**2 / (2 * g_c * h_r)
-        result.append(D)
+        C_L = C_T/F_p
+        result.append(C_L)
         return result
 
     @staticmethod
-    def eqn_2_11__L(D: float, f: float, g_c: float, h_r: float, v: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+    def eqn_2_11__C_T(C_L: float, F_p: float):
+        # [.pyeqn] C_T = C_L * F_p
         result = []
-        L = 2 * D * g_c * h_r / (f * v**2)
-        result.append(L)
+        C_T = C_L*F_p
+        result.append(C_T)
         return result
 
     @staticmethod
-    def eqn_2_11__f(D: float, L: float, g_c: float, h_r: float, v: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+    def eqn_2_11__F_p(C_L: float, C_T: float):
+        # [.pyeqn] C_T = C_L * F_p
         result = []
-        f = 2 * D * g_c * h_r / (L * v**2)
-        result.append(f)
+        F_p = C_T/C_L
+        result.append(F_p)
         return result
-
-    @staticmethod
-    def eqn_2_11__g_c(D: float, L: float, f: float, h_r: float, v: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
-        result = []
-        g_c = L * f * v**2 / (2 * D * h_r)
-        result.append(g_c)
-        return result
-
-    @staticmethod
-    def eqn_2_11__h_r(D: float, L: float, f: float, g_c: float, v: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
-        result = []
-        h_r = L * f * v**2 / (2 * D * g_c)
-        result.append(h_r)
-        return result
-
-    @staticmethod
-    def eqn_2_11__v(D: float, L: float, f: float, g_c: float, h_r: float):
-        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
-        result = []
-        v = sqrt(2) * sqrt(D * g_c * h_r / (L * f))
-        result.append(v)
-        return result
-
 

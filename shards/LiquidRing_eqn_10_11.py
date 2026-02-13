@@ -6,7 +6,7 @@ import numpy as np
 
 class LiquidRing:
     @kwasak_static
-    def eqn_10_11(T_c: float = None, T_s: float = None, **kwargs):
+    def eqn_10_11(T_c=None, T_s=None, **kwargs):
         return
 
     @staticmethod
@@ -24,5 +24,4 @@ class LiquidRing:
         T_s = T_c - 10
         result.append(T_s)
         return result
-
 

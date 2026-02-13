@@ -12,79 +12,68 @@
             "x_i": 3
         }
     },
+    "PressMgmt_eqn_3_15.py": {
+        "eqn_3_15": {
+            "V_PMIN": 1
+        }
+    },
     "LiquidRing_eqn_10_19.py": {
         "eqn_10_19": {
-            "P": 7,
-            "S_Th": 7,
-            "S_p": 7,
-            "T_e": 7,
-            "T_i": 7,
-            "p_c": 7,
-            "p_s": 7
+            "P": 0,
+            "S_Th": 6,
+            "S_p": 6,
+            "T_e": 6,
+            "T_i": 6,
+            "p_c": 6,
+            "p_s": 6
         }
     },
-    "ProcessApp2_eqn_6_07.py": {
-        "eqn_6_07": {
-            "C_1": 9,
-            "C_2": 9,
-            "T_1": 9,
-            "T_2": 9,
-            "c_p": 9,
-            "delta_h_c": 9,
-            "delta_h_v": 9,
-            "m_b": 9,
-            "m_v": 9
+    "RotaryPistonVane_eqn_11_3.py": {
+        "eqn_11_3": {
+            "F_s": 3,
+            "t": 3,
+            "t_c": 3
         }
     },
-    "FluidFlowVacuumLines_eqn_2_08.py": {
-        "eqn_2_08": {
-            "M": 4,
-            "P_c": 4,
-            "T_c": 4,
-            "mu_c": 4
+    "SelectingPump_eqn_8_3.py": {
+        "eqn_8_3": {
+            "hp": 0,
+            "installed_costs": 1
         }
     },
-    "SelectingPump_eqn_8_04.py": {
-        "eqn_8_04": {
-            "hp": 2,
-            "installed_costs": 2
+    "PressMgmt_eqn_3_2.py": {
+        "eqn_3_2": {
+            "G": 5,
+            "G_C": 5,
+            "H": 5,
+            "P": 5,
+            "rho": 5
         }
     },
-    "LiquidRing_eqn_10_09.py": {
-        "eqn_10_09": {
-            "T_c": 3,
-            "T_s": 3,
-            "delta_T": 3
-        }
-    },
-    "PressMgmt_eqn_3_05.py": {
-        "eqn_3_05": {
-            "P": 4,
-            "P_P": 4,
-            "V": 4,
-            "V_P": 4
-        }
-    },
-    "ProcessApp1_eqn_5_06.py": {
-        "eqn_5_06": {
-            "P_0_i": 4,
-            "gamma_i": 4,
-            "p_i": 4,
-            "x_i": 4
+    "LiquidRing_eqn_10_8.py": {
+        "eqn_10_8": {
+            "bhp": 7,
+            "c_p": 7,
+            "delta_T": 7,
+            "delta_h_i": 7,
+            "f_a": 7,
+            "rho": 7,
+            "w_i": 7
         }
     },
     "ProcessApp1_eqn_5_10a.py": {
         "eqn_5_10a": {
-            "D": 3,
+            "D": 2,
             "L_0": 3,
-            "V_1": 3
+            "V_1": 2
         }
     },
-    "AirLeak_eqn_4_07.py": {
-        "eqn_4_07": {
-            "W": 3,
-            "W_T": 3,
-            "sum_individual_leak_rates": 3
+    "PressMgmt_eqn_3_11.py": {
+        "eqn_3_11": {
+            "A_C": 3,
+            "H_2": 4,
+            "P": 3,
+            "V": 3
         }
     },
     "ProcessApp1_eqn_5_12.py": {
@@ -95,41 +84,44 @@
             "T": 4
         }
     },
-    "Precondensors_eqn_7_04a.py": {
-        "eqn_7_04a": {
-            "P": 3,
-            "p_c": 3,
-            "p_nc": 3
+    "SelectingPump_eqn_8_7.py": {
+        "eqn_8_7": {
+            "P_1": 0,
+            "P_2": 0,
+            "adiabatic_hp": 2,
+            "w": 2
         }
     },
-    "SteamJetInjectors_eqn_9_01.py": {
-        "eqn_9_01": {
-            "A": 4,
-            "rho_s": 4,
-            "v": 4,
-            "w_s": 4
+    "FluidFlowVacuumLines_eqn_2_28.py": {
+        "eqn_2_28": {
+            "C": 4,
+            "D": 5,
+            "L": 4,
+            "P_p": 4,
+            "mu": 4
         }
     },
-    "LiquidRing_eqn_9_05.py": {
-        "eqn_9_05": {
-            "V": 4,
-            "r_h": 4,
-            "t_h": 4,
-            "w_h": 4
+    "ProcessApp1_eqn_5_2a.py": {
+        "eqn_5_2a": {
+            "K_1": 3,
+            "K_2": 3,
+            "alpha_1_2": 3
         }
     },
-    "PressMgmt_eqn_3_01.py": {
-        "eqn_3_01": {
-            "Abs_Pressure": 3,
-            "BarometricPressure": 3,
-            "Vacuum": 3
-        }
-    },
-    "FluidFlowVacuumLines_eqn_1_13b.py": {
+    "VacuumTheory_eqn_1_13b.py": {
         "eqn_1_13b": {
             "P": 3,
             "p_a": 3,
             "y_a": 3
+        }
+    },
+    "PressMgmt_eqn_3_6.py": {
+        "eqn_3_6": {
+            "H_1": 5,
+            "H_2": 5,
+            "P": 5,
+            "V": 5,
+            "V_P": 5
         }
     },
     "ProcessApp1_eqn_5_13.py": {
@@ -137,6 +129,37 @@
             "HETP": 3,
             "H_p": 3,
             "N_ES": 3
+        }
+    },
+    "SelectingPump_eqn_8_6.py": {
+        "eqn_8_6": {
+            "M": 7,
+            "P_1": 7,
+            "P_2": 7,
+            "R": 7,
+            "T": 7,
+            "adiabatic_hp": 7,
+            "k": 0,
+            "w": 7
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_29.py": {
+        "eqn_2_29": {
+            "C": 3,
+            "S_1": 3,
+            "S_2": 3
+        }
+    },
+    "RotaryPistonVane_eqn_11_6.py": {
+        "eqn_11_6": {
+            "P_0_V": 8,
+            "P_D": 8,
+            "P_v_0": 8,
+            "S_B": 8,
+            "S_D": 8,
+            "p_b": 8,
+            "p_g": 8,
+            "p_v_max": 8
         }
     },
     "Precondensors_eqn_7_14a.py": {
@@ -147,46 +170,13 @@
             "del_T_LM": 4
         }
     },
-    "SelectingPump_eqn_8_01.py": {
-        "eqn_8_01": {
-            "NC": 4,
-            "NS": 4,
-            "SCON": 4,
-            "installation_cost": 4
-        }
-    },
-    "ProcessApp2_eqn_6_02.py": {
-        "eqn_6_02": {
-            "Q_v": 7,
-            "T_1": 7,
-            "T_2": 7,
-            "T_R": 7,
-            "c_p": 7,
-            "w_1": 7,
-            "w_2": 7
-        }
-    },
-    "ProcessApp1_eqn_5_03.py": {
-        "eqn_5_03": {
-            "P_0_i": 3,
-            "p_i": 3,
-            "x_i": 3
-        }
-    },
-    "VacuumTheory_eqn_1_07.py": {
-        "eqn_1_07": {
-            "R": 5,
-            "T": 5,
-            "V": 5,
-            "n": 5,
-            "p": 5
-        }
-    },
-    "ProcessApp1_eqn_5_02a.py": {
-        "eqn_5_02a": {
-            "K_1": 3,
-            "K_2": 3,
-            "alpha_1_2": 3
+    "ProcessApp1_eqn_5_17.py": {
+        "eqn_5_17": {
+            "H_2_1": 5,
+            "H_2_3": 5,
+            "H_2_mi": 5,
+            "x_1": 5,
+            "x_3": 5
         }
     },
     "LiquidRing_eqn_10_18.py": {
@@ -200,96 +190,75 @@
             "p_s": 7
         }
     },
-    "SelectingPump_eqn_7_18.py": {
-        "eqn_7_18": {
-            "D_0": 11,
-            "D_LM": 11,
-            "D_i": 11,
-            "R_fi": 11,
-            "R_fo": 11,
-            "R_nc": 11,
-            "U_0": 11,
-            "h_c": 11,
-            "h_i": 11,
-            "k_w": 11,
-            "x_w": 11
+    "RotaryPistonVane_eqn_11_2.py": {
+        "eqn_11_2": {
+            "Q": 0,
+            "Q_0": 0,
+            "Q_external_gas_throughput": 0,
+            "SP_1": 0,
+            "SP_2": 0,
+            "S_vol_pump_speed": 0,
+            "V": 0,
+            "t": 0
         }
     },
-    "SteamJetInjectors_eqn_9_04.py": {
-        "eqn_9_04": {
-            "AEL": 4,
-            "SC": 4,
-            "r": 4,
-            "w_s": 4
+    "SelectingPump_eqn_8_2.py": {
+        "eqn_8_2": {
+            "hp": 2,
+            "installed_costs": 2
         }
     },
-    "ProcessApp2_eqn_6_06.py": {
-        "eqn_6_06": {
-            "Q_r": 3,
-            "delta_h_v": 3,
-            "f_m": 3
+    "PressMgmt_eqn_3_3.py": {
+        "eqn_3_3": {
+            "H_1": 4,
+            "H_2": 4,
+            "P": 4,
+            "P_P": 4
         }
     },
-    "SelectingPump_eqn_8_05.py": {
-        "eqn_8_05": {
-            "Eff": 3,
-            "actual_brake_horsepower": 3,
-            "theoretical_adiabatic_horsepower": 3
-        }
-    },
-    "PressMgmt_eqn_3_04.py": {
-        "eqn_3_04": {
-            "KAPPA": 3,
-            "P": 3,
-            "V": 3
-        }
-    },
-    "LiquidRing_eqn_10_08.py": {
-        "eqn_10_08": {
-            "bhp": 7,
-            "c_p": 7,
-            "delta_T": 7,
-            "delta_h_i": 7,
-            "f_a": 7,
-            "rho": 7,
-            "w_i": 7
-        }
-    },
-    "ProcessApp1_eqn_5_07.py": {
-        "eqn_5_07": {
-            "P": 5,
-            "P_0_i": 5,
-            "gamma_i": 5,
-            "x_i": 5,
-            "y_i": 5
-        }
-    },
-    "VacuumTheory_eqn_1_03.py": {
-        "eqn_1_03": {
-            "T": 4,
-            "k": 4,
-            "m": 4,
-            "v": 4
+    "LiquidRing_eqn_10_9.py": {
+        "eqn_10_9": {
+            "T_c": 3,
+            "T_s": 3,
+            "delta_T": 3
         }
     },
     "FluidFlowVacuumLines_eqn_2_12.py": {
         "eqn_2_12": {
-            "L": 7,
-            "d": 7,
-            "delta_P": 7,
-            "f": 7,
-            "g": 7,
-            "rho": 7,
+            "L": 6,
+            "d": 6,
+            "delta_P": 6,
+            "f": 6,
+            "g": 6,
+            "rho": 6,
             "v": 7
         }
     },
-    "Precondensors_eqn_7_05.py": {
-        "eqn_7_05": {
-            "N_i": 5,
-            "N_nc": 5,
-            "P": 5,
-            "P_c": 5,
-            "p_i": 5
+    "ProcessApp1_eqn_5_5.py": {
+        "eqn_5_5": {
+            "P_0_1": 3,
+            "P_0_2": 3,
+            "alpha_12": 3
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_26.py": {
+        "eqn_2_26": {
+            "D": 6,
+            "L": 5,
+            "P_downstream": 5,
+            "P_p": 1,
+            "P_upstream": 5,
+            "mu": 5,
+            "q": 5
+        }
+    },
+    "SelectingPump_eqn_8_9.py": {
+        "eqn_8_9": {
+            "E_j": 5,
+            "E_m": 5,
+            "e": 5,
+            "r": 5,
+            "s": 5
         }
     },
     "LiquidRing_eqn_10_13.py": {
@@ -298,33 +267,46 @@
             "T_s": 2
         }
     },
-    "RotaryPistonVane_eqn_11_06.py": {
-        "eqn_11_06": {
-            "P_0_V": 8,
-            "P_D": 8,
-            "P_v_0": 8,
-            "S_B": 8,
-            "S_D": 8,
-            "p_b": 8,
-            "p_g": 8,
-            "p_v_max": 8
+    "SteamJetInjectors_eqn_9_3.py": {
+        "eqn_9_3": {
+            "P_s": 4,
+            "V": 4,
+            "t_e": 4,
+            "w_j": 4
         }
     },
-    "LiquidRing_eqn_10_03.py": {
-        "eqn_10_03": {
-            "N_mfw": 3,
-            "Q_gas": 3,
-            "T": 3
+    "LiquidRing_eqn_10_2.py": {
+        "eqn_10_2": {
+            "PS": 5,
+            "Q_gas": 5,
+            "V": 5,
+            "dP": 5,
+            "dt": 5
         }
     },
-    "VacuumTheory_eqn_1_08.py": {
-        "eqn_1_08": {
-            "M": 6,
-            "P": 6,
-            "R": 6,
-            "T": 6,
-            "V": 6,
-            "m": 6
+    "Precondensors_eqn_7_4ac.py": {
+        "eqn_7_4ac": {
+            "P_c": 5,
+            "n_i": 5,
+            "n_nc": 5,
+            "p": 5,
+            "p_i": 5
+        }
+    },
+    "Precondensors_eqn_7_5.py": {
+        "eqn_7_5": {
+            "N_i": 5,
+            "N_nc": 5,
+            "P": 5,
+            "P_c": 5,
+            "p_i": 5
+        }
+    },
+    "PressMgmt_eqn_3_8.py": {
+        "eqn_3_8": {
+            "A_C": 3,
+            "H_2": 3,
+            "V_P": 3
         }
     },
     "Precondensors_eqn_7_15.py": {
@@ -333,54 +315,68 @@
             "sum_R": 2
         }
     },
-    "ProcessApp2_eqn_5_17.py": {
-        "eqn_5_17": {
-            "H_2_1": 5,
-            "H_2_3": 5,
-            "H_2_mi": 5,
-            "x_1": 5,
-            "x_3": 5
+    "ProcessApp2_eqn_6_1.py": {
+        "eqn_6_1": {
+            "T_1": 8,
+            "T_2": 8,
+            "T_R": 8,
+            "c_p": 8,
+            "del_h_v": 8,
+            "w_1": 8,
+            "w_2": 8,
+            "w_v": 8
         }
     },
-    "FluidFlowVacuumLines_eqn_2_02.py": {
-        "eqn_2_02": {
-            "delta": 3,
-            "lambd": 3,
-            "psi": 3
+    "FluidFlowVacuumLines_eqn_2_36.py": {
+        "eqn_2_36": {
+            "C": 3,
+            "C_0": 3,
+            "F_t": 3
         }
     },
-    "AirLeak_eqn_3_06.py": {
-        "eqn_3_06": {
-            "H_1": 5,
-            "H_2": 5,
-            "P": 5,
-            "V": 5,
-            "V_P": 5
+    "FluidFlowVacuumLines_eqn_2_5.py": {
+        "eqn_2_5": {
+            "D": 5,
+            "L": 4,
+            "delta_P": 4,
+            "mu": 4,
+            "q": 4
+        }
+    },
+    "ProcessApp1_eqn_5_1.py": {
+        "eqn_5_1": {
+            "K_i": 3,
+            "x_i": 3,
+            "y_i": 3
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_22.py": {
+        "eqn_2_22": {
+            "P_s": 3,
+            "Q_throughput": 3,
+            "S_p": 3
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_16.py": {
+        "eqn_2_16": {
+            "Re": 2,
+            "f": 2
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_18b.py": {
+        "eqn_2_18b": {
+            "R_ll": 3,
+            "h": 3,
+            "w": 3
         }
     },
     "LiquidRing_eqn_10_17.py": {
         "eqn_10_17": {
             "P": 5,
-            "S_0": 2,
-            "S_Th": 2,
+            "S_0": 5,
+            "S_Th": 5,
             "p_0": 5,
             "p_s": 5
-        }
-    },
-    "Precondensors_eqn_7_01.py": {
-        "eqn_7_01": {
-            "P": 3,
-            "p_i": 3,
-            "y_i": 3
-        }
-    },
-    "ProcessApp1_eqn_5_08.py": {
-        "eqn_5_08": {
-            "P_0_1": 5,
-            "P_0_2": 5,
-            "alpha_12": 5,
-            "gamma_1": 5,
-            "gamma_2": 5
         }
     },
     "Precondensors_eqn_7_11.py": {
@@ -391,44 +387,65 @@
             "del_T_LM": 4
         }
     },
-    "RotaryPistonVane_eqn_11_02.py": {
-        "eqn_11_02": {
-            "Q": 8,
-            "Q_0": 8,
-            "Q_external_gas_throughput": 8,
-            "SP_1": 8,
-            "SP_2": 8,
-            "S_vol_pump_speed": 8,
-            "V": 8,
-            "t": 8
+    "Precondensors_eqn_7_1.py": {
+        "eqn_7_1": {
+            "P": 3,
+            "p_i": 3,
+            "y_i": 3
         }
     },
-    "FluidFlowVacuumLines_eqn_2_06.py": {
-        "eqn_2_06": {
-            "lambd": 4,
-            "mu": 4,
-            "rho": 4,
-            "v_a": 4
+    "LiquidRing_eqn_10_6.py": {
+        "eqn_10_6": {
+            "P_1": 5,
+            "P_2": 5,
+            "S_a": 5,
+            "V": 5,
+            "t": 5
         }
     },
-    "ProcessApp2_eqn_6_09.py": {
-        "eqn_6_09": {
-            "A": 7,
-            "dV_dt": 7,
-            "delta_P": 7,
-            "m": 7,
-            "mu": 7,
-            "r": 7,
-            "r_M": 7
+    "FluidFlowVacuumLines_eqn_2_1.py": {
+        "eqn_2_1": {
+            "D": 5,
+            "Re": 5,
+            "mu": 5,
+            "rho": 5,
+            "v": 5
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_19b.py": {
+        "eqn_2_19b": {
+            "Re": 6,
+            "h": 6,
+            "mu": 6,
+            "rho": 6,
+            "v": 6,
+            "w": 6
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_32.py": {
+        "eqn_2_32": {
+            "C_series": 2,
+            "geometric_sum_C": 2
+        }
+    },
+    "ProcessApp2_eqn_6_11a.py": {
+        "eqn_6_11a": {
+            "A_d": 7,
+            "delta_T": 7,
+            "delta_h_i": 7,
+            "delta_m": 7,
+            "h_d": 7,
+            "m_b": 7,
+            "t_R": 7
         }
     },
     "FluidFlowVacuumLines_eqn_2_17.py": {
         "eqn_2_17": {
-            "L": 5,
+            "L": 4,
             "d": 5,
-            "delta_P": 5,
-            "mu": 5,
-            "v": 5
+            "delta_P": 4,
+            "mu": 4,
+            "q": 4
         }
     },
     "LiquidRing_eqn_10_16.py": {
@@ -439,13 +456,6 @@
             "p_0": 4
         }
     },
-    "ProcessApp1_eqn_5_09.py": {
-        "eqn_5_09": {
-            "D": 3,
-            "L_0": 3,
-            "V_1": 3
-        }
-    },
     "Precondensors_eqn_7_10.py": {
         "eqn_7_10": {
             "L_c_P": 3,
@@ -453,60 +463,43 @@
             "del_T": 3
         }
     },
-    "RotaryPistonVane_eqn_11_03.py": {
-        "eqn_11_03": {
-            "F_s": 3,
-            "t": 3,
-            "t_c": 3
+    "ProcessApp2_eqn_6_4.py": {
+        "eqn_6_4": {
+            "Q_v": 3,
+            "delta_h_v": 3,
+            "w_v": 3
         }
     },
-    "LiquidRing_eqn_10_06.py": {
-        "eqn_10_06": {
-            "P_1": 5,
-            "P_2": 5,
-            "S_a": 5,
-            "V": 5,
-            "t": 5
-        }
-    },
-    "FluidFlowVacuumLines_eqn_2_07.py": {
-        "eqn_2_07": {
-            "T": 4,
-            "k": 4,
-            "m": 4,
-            "v_a": 4
-        }
-    },
-    "ProcessApp2_eqn_6_08.py": {
-        "eqn_6_08": {
-            "C_1": 10,
-            "C_2": 10,
-            "T_1": 10,
-            "T_2": 10,
-            "c_p": 10,
-            "delta_h_c": 10,
-            "delta_h_v": 10,
-            "delta_t": 10,
-            "m_b": 10,
-            "w_v": 10
+    "FluidFlowVacuumLines_eqn_2_33.py": {
+        "eqn_2_33": {
+            "C_paralell": 2,
+            "arithmetic_sum_C": 2
         }
     },
     "FluidFlowVacuumLines_eqn_2_13.py": {
         "eqn_2_13": {
-            "L": 6,
-            "d": 6,
-            "delta_P": 6,
-            "f": 6,
+            "L": 5,
+            "d": 5,
+            "delta_P": 5,
+            "f": 5,
             "q": 6,
-            "rho": 6
+            "rho": 5
         }
     },
-    "Precondensors_eqn_7_04aa.py": {
-        "eqn_7_04aa": {
-            "n_i": 4,
-            "n_nc": 4,
-            "p_i": 4,
-            "p_nc": 4
+    "ProcessApp1_eqn_5_4.py": {
+        "eqn_5_4": {
+            "P": 4,
+            "P_0_i": 4,
+            "x_i": 4,
+            "y_i": 4
+        }
+    },
+    "SelectingPump_eqn_8_8.py": {
+        "eqn_8_8": {
+            "P_1": 0,
+            "P_2": 0,
+            "adiabatic_power_watts": 2,
+            "f": 2
         }
     },
     "LiquidRing_eqn_10_12.py": {
@@ -515,40 +508,66 @@
             "T_s": 2
         }
     },
-    "LiquidRing_eqn_10_02.py": {
-        "eqn_10_02": {
-            "PS": 5,
-            "Q_gas": 5,
-            "V": 5,
-            "dP": 5,
-            "dt": 5
+    "SteamJetInjectors_eqn_9_2.py": {
+        "eqn_9_2": {
+            "P_m": 3,
+            "d_n": 4,
+            "rho_s": 3,
+            "w_s": 3
         }
     },
-    "VacuumTheory_eqn_1_09.py": {
-        "eqn_1_09": {
+    "LiquidRing_eqn_10_3.py": {
+        "eqn_10_3": {
+            "N_mfw": 3,
+            "Q_gas": 3,
+            "T": 3
+        }
+    },
+    "Precondensors_eqn_7_4ab.py": {
+        "eqn_7_4ab": {
+            "P_c": 3,
+            "p": 3,
+            "p_i": 1,
+            "p_nc": 3
+        }
+    },
+    "PressMgmt_eqn_3_9.py": {
+        "eqn_3_9": {
+            "A_C": 4,
+            "H_1": 4,
+            "H_2": 5,
+            "P": 4,
+            "V": 4
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_37.py": {
+        "eqn_2_37": {
+            "A": 5,
+            "C": 5,
+            "F_t": 5,
             "M": 5,
-            "P": 5,
-            "R": 5,
-            "T": 5,
-            "rho": 5
+            "T": 5
         }
     },
-    "FluidFlowVacuumLines_eqn_2_03.py": {
-        "eqn_2_03": {
-            "D": 3,
-            "kn": 3,
-            "lambd": 3
+    "FluidFlowVacuumLines_eqn_2_4.py": {
+        "eqn_2_4": {
+            "_beta": 3,
+            "mu": 3,
+            "vel_grad": 3
         }
     },
-    "Precondensors_eqn_6_11a.py": {
-        "eqn_6_11a": {
-            "A_d": 7,
-            "delta_T": 7,
-            "delta_h_i": 7,
-            "delta_m": 7,
-            "h_d": 7,
-            "m_b": 7,
-            "t_R": 7
+    "ProcessApp1_eqn_5_3.py": {
+        "eqn_5_3": {
+            "P_0_i": 3,
+            "p_i": 3,
+            "x_i": 3
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_20.py": {
+        "eqn_2_20": {
+            "L": 3,
+            "sum_equivalent_length": 3,
+            "sum_pipe": 3
         }
     },
     "FluidFlowVacuumLines_eqn_2_14.py": {
@@ -561,13 +580,12 @@
             "v_s": 6
         }
     },
-    "PressMgmt_eqn_2_17.py": {
-        "eqn_2_17": {
-            "L": 5,
-            "d": 5,
-            "delta_P": 5,
-            "mu": 5,
-            "q": 5
+    "SteamJetInjectors_eqn_9_5.py": {
+        "eqn_9_5": {
+            "V": 4,
+            "r_h": 4,
+            "t_h": 4,
+            "w_h": 4
         }
     },
     "LiquidRing_eqn_10_15.py": {
@@ -578,36 +596,49 @@
             "p_s": 4
         }
     },
-    "Precondensors_eqn_7_03.py": {
-        "eqn_7_03": {
+    "LiquidRing_eqn_10_21.py": {
+        "eqn_10_21": {
+            "P": 3,
+            "P_d": 3,
+            "P_prime": 3
+        }
+    },
+    "LiquidRing_eqn_10_4.py": {
+        "eqn_10_4": {
+            "Q_gas": 6,
+            "SP_1": 6,
+            "SP_2": 6,
+            "S_p": 6,
+            "V": 6,
+            "t": 6
+        }
+    },
+    "Precondensors_eqn_7_3.py": {
+        "eqn_7_3": {
             "P_i_0": 4,
             "epsilon_i": 4,
             "p_i": 4,
             "x_i": 4
         }
     },
-    "LiquidRing_eqn_10_05.py": {
-        "eqn_10_05": {
-            "P_1": 5,
-            "P_2": 5,
-            "S_p": 5,
-            "V": 5,
-            "t": 5
+    "FluidFlowVacuumLines_eqn_2_3.py": {
+        "eqn_2_3": {
+            "D": 3,
+            "kn": 3,
+            "lambd": 3
         }
     },
-    "FluidFlowVacuumLines_eqn_2_04.py": {
-        "eqn_2_04": {
-            "_beta": 3,
-            "mu": 3,
-            "vel_grad": 3
-        }
-    },
-    "SelectingPump_eqn_8_08.py": {
-        "eqn_8_08": {
-            "P_1": 4,
-            "P_2": 4,
-            "adiabatic_power_watts": 4,
-            "f": 4
+    "ProcessApp2_eqn_6_7.py": {
+        "eqn_6_7": {
+            "C_1": 9,
+            "C_2": 9,
+            "T_1": 9,
+            "T_2": 9,
+            "c_p": 9,
+            "delta_h_c": 9,
+            "delta_h_v": 9,
+            "m_b": 9,
+            "m_v": 9
         }
     },
     "FluidFlowVacuumLines_eqn_2_10.py": {
@@ -617,24 +648,46 @@
             "oper_press": 3
         }
     },
-    "Precondensors_eqn_7_04ab.py": {
-        "eqn_7_04ab": {
-            "P_c": 3,
-            "p": 3,
+    "ProcessApp1_eqn_5_7.py": {
+        "eqn_5_7": {
+            "P": 5,
+            "P_0_i": 5,
+            "gamma_i": 5,
+            "x_i": 5,
+            "y_i": 5
+        }
+    },
+    "Precondensors_eqn_7_4a.py": {
+        "eqn_7_4a": {
+            "P": 3,
+            "p_c": 3,
             "p_nc": 3
         }
     },
-    "ProcessApp1_eqn_4_10.py": {
-        "eqn_4_10": {
-            "T": 5,
-            "V": 5,
-            "del_P": 5,
-            "leakage": 5,
-            "t": 5
+    "SteamJetInjectors_eqn_9_1.py": {
+        "eqn_9_1": {
+            "A": 4,
+            "rho_s": 4,
+            "v": 4,
+            "w_s": 4
         }
     },
-    "Precondensors_eqn_7_07.py": {
-        "eqn_7_07": {
+    "LiquidRing_eqn_10_11.py": {
+        "eqn_10_11": {
+            "T_c": 2,
+            "T_s": 2
+        }
+    },
+    "Precondensors_eqn_7_4aa.py": {
+        "eqn_7_4aa": {
+            "n_i": 4,
+            "n_nc": 4,
+            "p_i": 4,
+            "p_nc": 4
+        }
+    },
+    "Precondensors_eqn_7_7.py": {
+        "eqn_7_7": {
             "M": 8,
             "P": 8,
             "P_i_0": 8,
@@ -645,26 +698,6 @@
             "x_i": 8
         }
     },
-    "LiquidRing_eqn_10_11.py": {
-        "eqn_10_11": {
-            "T_c": 2,
-            "T_s": 2
-        }
-    },
-    "LiquidRing_eqn_10_01.py": {
-        "eqn_10_01": {
-            "D_r": 3,
-            "sig_R": 3,
-            "w": 3
-        }
-    },
-    "RotaryPistonVane_eqn_11_04.py": {
-        "eqn_11_04": {
-            "p_g": 3,
-            "p_s": 3,
-            "p_v": 3
-        }
-    },
     "Precondensors_eqn_7_17.py": {
         "eqn_7_17": {
             "R_0": 3,
@@ -672,27 +705,67 @@
             "h_c": 3
         }
     },
+    "FluidFlowVacuumLines_eqn_2_34.py": {
+        "eqn_2_34": {
+            "C": 6,
+            "C_1": 6,
+            "C_2": 6,
+            "D": 0,
+            "L": 6,
+            "P_p": 6,
+            "mu": 6
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_7.py": {
+        "eqn_2_7": {
+            "T": 4,
+            "k": 4,
+            "m": 4,
+            "v_a": 4
+        }
+    },
+    "VacuumTheory_eqn_1_7.py": {
+        "eqn_1_7": {
+            "R": 5,
+            "T": 5,
+            "V": 5,
+            "n": 5,
+            "p": 5
+        }
+    },
     "FluidFlowVacuumLines_eqn_2_11.py": {
         "eqn_2_11": {
-            "D": 6,
-            "L": 6,
-            "f": 6,
-            "g_c": 6,
-            "h_r": 6,
-            "v": 6
+            "C_L": 3,
+            "C_T": 3,
+            "F_p": 3
         }
     },
-    "Precondensors_eqn_7_04ac.py": {
-        "eqn_7_04ac": {
-            "P_c": 5,
-            "n_i": 5,
-            "n_nc": 5,
-            "p": 5,
-            "p_i": 5
+    "ProcessApp1_eqn_5_6.py": {
+        "eqn_5_6": {
+            "P_0_i": 4,
+            "gamma_i": 4,
+            "p_i": 4,
+            "x_i": 4
         }
     },
-    "Precondensors_eqn_7_06.py": {
-        "eqn_7_06": {
+    "FluidFlowVacuumLines_eqn_2_25.py": {
+        "eqn_2_25": {
+            "C": 4,
+            "P_1": 4,
+            "P_2": 4,
+            "Q_throughput": 4
+        }
+    },
+    "LiquidRing_eqn_10_10.py": {
+        "eqn_10_10": {
+            "bhp": 2,
+            "bhp_0": 2,
+            "mu": 3,
+            "rho": 0
+        }
+    },
+    "Precondensors_eqn_7_6.py": {
+        "eqn_7_6": {
             "M": 7,
             "P": 7,
             "P_i_0": 7,
@@ -702,20 +775,11 @@
             "x_i": 7
         }
     },
-    "LiquidRing_eqn_10_10.py": {
-        "eqn_10_10": {
-            "bhp": 4,
-            "bhp_0": 4,
-            "mu": 4,
-            "rho": 4
-        }
-    },
-    "RotaryPistonVane_eqn_11_05.py": {
-        "eqn_11_05": {
-            "P_0_v": 4,
-            "P_D": 4,
-            "p_g": 4,
-            "p_v_max": 4
+    "LiquidRing_eqn_10_1.py": {
+        "eqn_10_1": {
+            "D_r": 3,
+            "sig_R": 3,
+            "w": 3
         }
     },
     "Precondensors_eqn_7_16.py": {
@@ -732,13 +796,37 @@
             "x_w": 10
         }
     },
-    "FluidFlowVacuumLines_eqn_2_01.py": {
-        "eqn_2_01": {
-            "D": 5,
-            "Re": 5,
-            "mu": 5,
-            "rho": 5,
-            "v": 5
+    "ProcessApp2_eqn_6_2.py": {
+        "eqn_6_2": {
+            "Q_v": 7,
+            "T_1": 7,
+            "T_2": 7,
+            "T_R": 7,
+            "c_p": 7,
+            "w_1": 7,
+            "w_2": 7
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_6.py": {
+        "eqn_2_6": {
+            "lambd": 4,
+            "mu": 4,
+            "rho": 4,
+            "v_a": 4
+        }
+    },
+    "VacuumTheory_eqn_1_3.py": {
+        "eqn_1_3": {
+            "T": 3,
+            "k": 3,
+            "m": 3,
+            "v": 4
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_18a.py": {
+        "eqn_2_18a": {
+            "D_eq": 2,
+            "R_ll": 2
         }
     },
     "FluidFlowVacuumLines_eqn_2_15.py": {
@@ -747,28 +835,30 @@
             "f": 2
         }
     },
+    "SteamJetInjectors_eqn_9_4.py": {
+        "eqn_9_4": {
+            "AEL": 4,
+            "SC": 4,
+            "r": 4,
+            "w_s": 4
+        }
+    },
     "LiquidRing_eqn_10_14.py": {
         "eqn_10_14": {
             "T_c": 2,
             "T_s": 2
         }
     },
-    "Precondensors_eqn_7_02.py": {
-        "eqn_7_02": {
-            "P_i_0": 3,
-            "p_i": 3,
-            "x_i": 3
-        }
-    },
     "LiquidRing_eqn_10_20.py": {
         "eqn_10_20": {
-            "P": 7,
-            "S_0": 7,
-            "S_p": 7,
-            "T_e": 6,
-            "T_i": 7,
-            "p_c": 7,
-            "p_s": 7
+            "P": 0,
+            "S_0": 2,
+            "S_p": 2,
+            "T_e": 0,
+            "T_i": 0,
+            "p_0": 0,
+            "p_c": 0,
+            "p_s": 0
         }
     },
     "Precondensors_eqn_7_12.py": {
@@ -779,37 +869,96 @@
             "del_T": 4
         }
     },
-    "LiquidRing_eqn_10_04.py": {
-        "eqn_10_04": {
-            "Q_gas": 6,
-            "SP_1": 6,
-            "SP_2": 6,
-            "S_p": 6,
-            "V": 6,
-            "t": 6
+    "LiquidRing_eqn_10_5.py": {
+        "eqn_10_5": {
+            "P_1": 5,
+            "P_2": 5,
+            "S_p": 5,
+            "V": 5,
+            "t": 5
         }
     },
-    "RotaryPistonVane_eqn_11_01.py": {
-        "eqn_11_01": {
-            "PS": 6,
-            "Q_0": 6,
-            "Q_external_gas_throughput": 6,
-            "V": 6,
-            "dP": 6,
-            "dT": 6
+    "Precondensors_eqn_7_2.py": {
+        "eqn_7_2": {
+            "P_i_0": 3,
+            "p_i": 3,
+            "x_i": 3
         }
     },
-    "FluidFlowVacuumLines_eqn_2_05.py": {
-        "eqn_2_05": {
-            "D": 5,
-            "L": 5,
-            "delta_P": 5,
+    "FluidFlowVacuumLines_eqn_2_19a.py": {
+        "eqn_2_19a": {
+            "R_ll": 5,
+            "Re": 5,
             "mu": 5,
-            "q": 5
+            "rho": 5,
+            "v": 5
         }
     },
-    "Precondensors_eqn_7_09.py": {
-        "eqn_7_09": {
+    "FluidFlowVacuumLines_eqn_2_2.py": {
+        "eqn_2_2": {
+            "delta": 3,
+            "lambd": 2,
+            "psi": 2
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_31.py": {
+        "eqn_2_31": {
+            "C": 3,
+            "S_p": 3,
+            "S_pump_speed": 3
+        }
+    },
+    "PressMgmt_eqn_3_13.py": {
+        "eqn_3_13": {
+            "H_1": 4,
+            "H_2": 4,
+            "KAPPA_2": 4,
+            "P": 4
+        }
+    },
+    "ProcessApp1_eqn_5_9.py": {
+        "eqn_5_9": {
+            "D": 2,
+            "L_0": 3,
+            "V_1": 2
+        }
+    },
+    "SelectingPump_eqn_8_5.py": {
+        "eqn_8_5": {
+            "Eff": 3,
+            "actual_brake_horsepower": 3,
+            "theoretical_adiabatic_horsepower": 3
+        }
+    },
+    "VacuumTheory_eqn_1_8.py": {
+        "eqn_1_8": {
+            "M": 6,
+            "P": 6,
+            "R": 6,
+            "T": 6,
+            "V": 6,
+            "m": 6
+        }
+    },
+    "RotaryPistonVane_eqn_11_5.py": {
+        "eqn_11_5": {
+            "P_0_v": 4,
+            "P_D": 4,
+            "p_g": 4,
+            "p_v_max": 4
+        }
+    },
+    "Precondensors_eqn_7_14b.py": {
+        "eqn_7_14b": {
+            "A": 0,
+            "Q_condensor_heat_duty": 3,
+            "U": 5,
+            "del_T_1": 5,
+            "del_T_2": 5
+        }
+    },
+    "Precondensors_eqn_7_9.py": {
+        "eqn_7_9": {
             "L_c": 5,
             "Q_condensor_heat_duty": 5,
             "c_p": 5,
@@ -817,57 +966,11 @@
             "rho": 5
         }
     },
-    "SteamJetInjectors_eqn_9_03.py": {
-        "eqn_9_03": {
-            "P_s": 4,
-            "V": 4,
-            "t_e": 4,
-            "w_j": 4
-        }
-    },
-    "SelectingPump_eqn_8_02.py": {
-        "eqn_8_02": {
-            "hp": 2,
-            "installed_costs": 2
-        }
-    },
-    "Precondensors_eqn_7_14b.py": {
-        "eqn_7_14b": {
-            "A": 5,
-            "Q_condensor_heat_duty": 5,
-            "U": 5,
-            "del_T_1": 5,
-            "del_T_2": 5
-        }
-    },
-    "ProcessApp2_eqn_6_01.py": {
-        "eqn_6_01": {
-            "T_1": 8,
-            "T_2": 8,
-            "T_R": 8,
-            "c_p": 8,
-            "del_h_v": 8,
-            "w_1": 8,
-            "w_2": 8,
-            "w_v": 8
-        }
-    },
-    "ProcessApp1_eqn_5_02b.py": {
-        "eqn_5_02b": {
-            "K_1": 6,
-            "K_2": 6,
-            "x_1": 6,
-            "x_2": 6,
-            "y_1": 6,
-            "y_2": 6
-        }
-    },
-    "PressMgmt_eqn_3_03.py": {
-        "eqn_3_03": {
-            "H_1": 4,
-            "H_2": 4,
-            "P": 4,
-            "P_P": 4
+    "PressMgmt_eqn_3_4.py": {
+        "eqn_3_4": {
+            "KAPPA": 3,
+            "P": 3,
+            "V": 3
         }
     },
     "ProcessApp1_eqn_5_14.py": {
@@ -888,25 +991,38 @@
             "V_2": 6
         }
     },
-    "SteamJetInjectors_eqn_8_09.py": {
-        "eqn_8_09": {
-            "E_j": 5,
-            "E_m": 5,
-            "e": 5,
-            "r": 5,
-            "s": 5
+    "PressMgmt_eqn_3_17.py": {
+        "eqn_3_17": {
+            "P_MIN": 1
         }
     },
-    "SelectingPump_eqn_8_06.py": {
-        "eqn_8_06": {
-            "M": 8,
-            "P_1": 8,
-            "P_2": 8,
-            "R": 8,
-            "T": 8,
-            "adiabatic_hp": 8,
-            "k": 0,
-            "w": 8
+    "RotaryPistonVane_eqn_11_1.py": {
+        "eqn_11_1": {
+            "PS": 6,
+            "Q_0": 6,
+            "Q_external_gas_throughput": 6,
+            "V": 6,
+            "dP": 6,
+            "dT": 6
+        }
+    },
+    "SelectingPump_eqn_8_1.py": {
+        "eqn_8_1": {
+            "NC": 3,
+            "NS": 3,
+            "SCON": 0,
+            "installation_cost": 3
+        }
+    },
+    "ProcessApp2_eqn_6_9.py": {
+        "eqn_6_9": {
+            "A": 7,
+            "dV_dt": 6,
+            "delta_P": 7,
+            "m": 7,
+            "mu": 7,
+            "r": 7,
+            "r_M": 6
         }
     },
     "ProcessApp1_eqn_5_10c.py": {
@@ -916,21 +1032,13 @@
             "R": 3
         }
     },
-    "ProcessApp1_eqn_5_04.py": {
-        "eqn_5_04": {
-            "P": 4,
-            "P_0_i": 4,
-            "x_i": 4,
-            "y_i": 4
-        }
-    },
     "ProcessApp1_eqn_5_15.py": {
         "eqn_5_15": {
-            "M_1": 5,
-            "M_2": 5,
-            "P_0_1": 5,
-            "P_0_2": 5,
-            "a_M_12": 5
+            "M_1": 4,
+            "M_2": 4,
+            "P_0_1": 3,
+            "P_0_2": 3,
+            "a_M_12": 3
         }
     },
     "VacuumTheory_eqn_1_11.py": {
@@ -942,19 +1050,46 @@
             "q": 5
         }
     },
-    "ProcessApp2_eqn_6_04.py": {
-        "eqn_6_04": {
-            "Q_v": 3,
-            "delta_h_v": 3,
-            "w_v": 3
+    "PressMgmt_eqn_3_16.py": {
+        "eqn_3_16": {
+            "V_div_V_P_MAX": 1
         }
     },
-    "SelectingPump_eqn_8_07.py": {
-        "eqn_8_07": {
-            "P_1": 4,
-            "P_2": 4,
-            "adiabatic_hp": 4,
-            "w": 4
+    "ProcessApp2_eqn_6_8.py": {
+        "eqn_6_8": {
+            "C_1": 10,
+            "C_2": 10,
+            "T_1": 10,
+            "T_2": 10,
+            "c_p": 10,
+            "delta_h_c": 10,
+            "delta_h_v": 10,
+            "delta_t": 10,
+            "m_b": 10,
+            "w_v": 10
+        }
+    },
+    "PressMgmt_eqn_3_1.py": {
+        "eqn_3_1": {
+            "Abs_Pressure": 3,
+            "BarometricPressure": 3,
+            "Vacuum": 3
+        }
+    },
+    "AirLeak_eqn_4_7.py": {
+        "eqn_4_7": {
+            "W": 3,
+            "W_T": 3,
+            "sum_individual_leak_rates": 3
+        }
+    },
+    "AirLeak_eqn_4_10.py": {
+        "eqn_4_10": {
+            "T": 5,
+            "V": 5,
+            "del_P": 5,
+            "leakage": 5,
+            "t": 5
         }
     },
     "ProcessApp1_eqn_5_10b.py": {
@@ -964,11 +1099,11 @@
             "V_1": 3
         }
     },
-    "ProcessApp1_eqn_5_05.py": {
-        "eqn_5_05": {
-            "P_0_1": 3,
-            "P_0_2": 3,
-            "alpha_12": 3
+    "PressMgmt_eqn_3_12.py": {
+        "eqn_3_12": {
+            "H_2": 3,
+            "KAPPA_1": 2,
+            "P": 2
         }
     },
     "ProcessApp1_eqn_5_11.py": {
@@ -978,19 +1113,13 @@
             "V_0": 3
         }
     },
-    "Precondensors_eqn_7_08.py": {
-        "eqn_7_08": {
-            "L_c": 4,
-            "Q_condensor_heat_duty": 4,
-            "c_p": 4,
-            "del_T": 4
-        }
-    },
-    "RotaryPistonVane_eqn_10_21.py": {
-        "eqn_10_21": {
-            "P": 3,
-            "P_d": 3,
-            "P_prime": 3
+    "ProcessApp1_eqn_5_8.py": {
+        "eqn_5_8": {
+            "P_0_1": 5,
+            "P_0_2": 5,
+            "alpha_12": 5,
+            "gamma_1": 5,
+            "gamma_2": 5
         }
     },
     "ProcessApp2_eqn_6_10.py": {
@@ -1004,25 +1133,59 @@
             "tau": 7
         }
     },
-    "SteamJetInjectors_eqn_9_02.py": {
-        "eqn_9_02": {
-            "P_m": 4,
-            "d_n": 4,
-            "rho_s": 4,
-            "w_s": 4
-        }
-    },
-    "SelectingPump_eqn_8_03.py": {
-        "eqn_8_03": {
+    "SelectingPump_eqn_8_4.py": {
+        "eqn_8_4": {
             "hp": 2,
-            "installed_costs": 2
+            "installed_costs": 1
         }
     },
-    "ProcessApp1_eqn_5_01.py": {
-        "eqn_5_01": {
-            "K_i": 3,
-            "x_i": 3,
-            "y_i": 3
+    "VacuumTheory_eqn_1_9.py": {
+        "eqn_1_9": {
+            "M": 5,
+            "P": 5,
+            "R": 5,
+            "T": 5,
+            "rho": 5
+        }
+    },
+    "RotaryPistonVane_eqn_11_4.py": {
+        "eqn_11_4": {
+            "p_g": 2,
+            "p_s": 2,
+            "p_v": 3
+        }
+    },
+    "FluidFlowVacuumLines_eqn_2_8.py": {
+        "eqn_2_8": {
+            "M": 3,
+            "P_c": 4,
+            "T_c": 3,
+            "mu_c": 3
+        }
+    },
+    "ProcessApp1_eqn_5_2b.py": {
+        "eqn_5_2b": {
+            "K_1": 6,
+            "K_2": 6,
+            "x_1": 6,
+            "x_2": 6,
+            "y_1": 6,
+            "y_2": 6
+        }
+    },
+    "Precondensors_eqn_7_18.py": {
+        "eqn_7_18": {
+            "D_0": 11,
+            "D_LM": 11,
+            "D_i": 11,
+            "R_fi": 11,
+            "R_fo": 11,
+            "R_nc": 11,
+            "U_0": 11,
+            "h_c": 11,
+            "h_i": 11,
+            "k_w": 11,
+            "x_w": 11
         }
     },
     "VacuumTheory_eqn_1_13a.py": {
@@ -1032,13 +1195,20 @@
             "y_a": 3
         }
     },
-    "PressMgmt_eqn_3_02.py": {
-        "eqn_3_02": {
-            "G": 5,
-            "G_C": 5,
-            "H": 5,
-            "P": 5,
-            "rho": 5
+    "Precondensors_eqn_7_8.py": {
+        "eqn_7_8": {
+            "L_c": 4,
+            "Q_condensor_heat_duty": 4,
+            "c_p": 4,
+            "del_T": 4
+        }
+    },
+    "PressMgmt_eqn_3_5.py": {
+        "eqn_3_5": {
+            "P": 4,
+            "P_P": 4,
+            "V": 4,
+            "V_P": 4
         }
     }
 }

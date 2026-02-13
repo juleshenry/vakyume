@@ -1,0 +1,48 @@
+
+I have a set of Python functions that solve an equation for different variables.
+One or more of these functions are incorrect (the 'one-odd-out').
+Based on consistency checks, the following variants are likely wrong: ['lambd', 'psi']
+The scores (consistency matches) are: {'delta': 3, 'lambd': 2, 'psi': 2}
+
+Here is the code:
+```python
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve
+from scipy.optimize import newton
+from kwasak import kwasak_static
+import numpy as np
+
+class FluidFlowVacuumLines:
+    @kwasak_static
+    def eqn_2_2(delta=None, lambd=None, psi=None, **kwargs):
+        return
+
+    @staticmethod
+    def eqn_2_2__delta(lambd: float, psi: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        delta = -0.474424998328794*sqrt(lambd/psi)
+        result.append(delta)
+        delta = 0.474424998328794*sqrt(lambd/psi)
+        result.append(delta)
+        return result
+
+    @staticmethod
+    def eqn_2_2__lambd(delta: float, psi: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        lambd = 4.44288293815837*delta**2*psi
+        result.append(lambd)
+        return result
+
+    @staticmethod
+    def eqn_2_2__psi(delta: float, lambd: float):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        psi = 0.225079079039277*lambd/delta**2
+        result.append(psi)
+        return result
+```
+
+Please fix the inconsistent variants so that they are all mathematically equivalent and consistent with each other.
+Return only the corrected methods.

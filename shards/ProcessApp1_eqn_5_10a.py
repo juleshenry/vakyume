@@ -6,7 +6,7 @@ import numpy as np
 
 class ProcessApp1:
     @kwasak_static
-    def eqn_5_10a(D: float = None, L_0: float = None, V_1: float = None, **kwargs):
+    def eqn_5_10a(D=None, L_0=None, V_1=None, **kwargs):
         return
 
     @staticmethod
@@ -21,6 +21,8 @@ class ProcessApp1:
     def eqn_5_10a__L_0(D: float, V_1: float):
         # [.pyeqn] L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
         result = []
+        L_0 = 0
+        result.append(L_0)
         L_0 = -D + V_1
         result.append(L_0)
         return result
@@ -32,5 +34,4 @@ class ProcessApp1:
         V_1 = D + L_0
         result.append(V_1)
         return result
-
 

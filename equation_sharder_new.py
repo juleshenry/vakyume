@@ -1,7 +1,14 @@
 from vakyume_2025_222 import export_unfinished as eu
 from make_vakyume import Solver
+import argparse
 import os
 import shutil
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--overwrite", action="store_true", help="Overwrite shards directory"
+)
+args = parser.parse_args()
 
 o = eu()
 S = Solver()
@@ -36,10 +43,14 @@ class Oowoo:
                     return (es_clase, se.next_end(es_clase))
 
     def get_def(se, v, v_eqn):
-        return f'def {v_eqn.replace("-","_")}__{v}'
+        return f"def {v_eqn.replace('-', '_')}__{v}"
 
 
 ooo = Oowoo()
+
+
+def normalize_class_name(name: str) -> str:
+    return name[:-3] if name.endswith(".py") else name
 
 
 def process_equations(equations):
@@ -128,17 +139,20 @@ for o in raw_clipz:
     ded_clipz[o] = murda(raw_clipz[o], o)
 
 
-# Create shard directory if it doesn't exist
-if not os.path.exists("shard"):
-    os.makedirs("shard")
-    shutil.copy("kwasak.py", "shard/kwasak.py")
+# Create shard directory (optionally overwrite)
+if os.path.exists("shard"):
+    if args.overwrite:
+        shutil.rmtree("shard")
+    else:
+        raise SystemExit("shard directory exists; use --overwrite to replace")
+os.makedirs("shard")
+shutil.copy("kwasak.py", "shard/kwasak.py")
 
 # reshard a shard
 n = "\n"
 
 
 def f(s, k):
-
     inx = "😍"
     # print(k)
     wooo = []
@@ -160,13 +174,7 @@ def f(s, k):
     return {
         s: [
             n.join(
-                [
-                    (
-                        "    @kwasak_static"
-                        if i - 1 == 0 or 0 == len(mama) - 1 - i
-                        else mama[b]
-                    )
-                ]
+                [("    @kwasak_static" if a == 0 or b == len(mama) else mama[b])]
                 + mama[a : b - 1]
             )
             for a, b in zip(wooo, wooo[1:] + [len(mama)])
@@ -188,22 +196,23 @@ for s, k in ded_clipz.items():
             z = sorted(wpp[s])[ii]
             # print(aaa[:93])
             print(z)
-            with open(f"shard/{s}{z.replace("eqn","")}.py", "w") as ff:
+            with open(f"shard/{s}{z.replace('eqn', '')}.py", "w") as ff:
                 ff.write("from math import log, sqrt, exp, pow, e\n")
-                ff.write("from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n")
+                ff.write(
+                    "from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n"
+                )
                 ff.write("from scipy.optimize import newton\n")
                 ff.write("from kwasak import kwasak_static\n")
                 ff.write("import pandas as pd\n")
                 ff.write("import numpy as np\n")
                 ff.write("from kwasak import kwasak_static\n")
                 ff.write("from suck_consts import *\n")
-                ff.write("class " + a + ":\n\n")
+                ff.write("class " + normalize_class_name(a) + ":\n\n")
                 ff.write(aaa)
 
 
 # save shard to shard fold
 # run verify on every shard for budget until complete, allowing for transcendental,unsolvable ...
-
 
 
 # wpp, wppp = {}, {}

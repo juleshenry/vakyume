@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vakyume"
+version = "0.1.0"
+description = "A Python Library for Vacuum Design"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "httpx",
+    "numpy",
+    "ollama",
+    "pandas",
+    "scipy",
+    "sympy",
+    "timeout-decorator",
+]
+
+[tool.setuptools]
+py-modules = [
+    "config",
+    "equation_sharder_new",
+    "kwasak",
+    "tru",
+    "vakyume",
+    "vakyume_certified",
+    "vakyume_master",
+]

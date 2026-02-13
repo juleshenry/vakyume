@@ -6,69 +6,46 @@ import numpy as np
 
 class LiquidRing:
     @kwasak_static
-    def eqn_10_16(
-        P: float = None,
-        S_0: float = None,
-        S_Th: float = None,
-        p_0: float = None,
-        **kwargs
-    ):
+    def eqn_10_16(P=None, S_0=None, S_Th=None, p_0=None, **kwargs):
         return
 
     @staticmethod
     def eqn_10_16__P(S_0: float, S_Th: float, p_0: float):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
-        try:
-            # S_Th/S_0 = abs(P/(P-p_0))**0.6
-            # abs(P/(P-p_0)) = abs(S_Th/S_0)**(5/3)
-            ratio_term = abs(S_Th / S_0) ** (5/3)
-            if abs(ratio_term - 1.0) < 1e-9:
-                return []
-            P = p_0 * ratio_term / (ratio_term - 1.0)
-            result.append(P)
-        except:
-            pass
-        return result
-
-    @staticmethod
-    def eqn_10_16__p_0(P: float, S_0: float, S_Th: float):
-        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
-        result = []
-        try:
-            ratio_term = abs(S_Th / S_0) ** (5/3)
-            if abs(ratio_term) < 1e-12:
-                return []
-            p_0 = P - P / ratio_term
-            result.append(p_0)
-        except:
-            pass
+        P = p_0*(S_Th/S_0)**(5/3)/((S_Th/S_0)**1.66666666666667 - 1.0)
+        result.append(P)
+        P = p_0*(-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5/((-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5 - 1.0)
+        result.append(P)
+        P = p_0*(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5/((-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5 - 1.0)
+        result.append(P)
         return result
 
     @staticmethod
     def eqn_10_16__S_0(P: float, S_Th: float, p_0: float):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
-        try:
-            if abs(P - p_0) < 1e-12:
-                return []
-            S_0 = S_Th / (abs(P / (P - p_0)) ** 0.6)
-            result.append(S_0)
-        except:
-            pass
+        S_0 = S_Th/(P/(P - p_0))**(3/5)
+        result.append(S_0)
         return result
 
     @staticmethod
     def eqn_10_16__S_Th(P: float, S_0: float, p_0: float):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
-        try:
-            if abs(P - p_0) < 1e-12:
-                return []
-            S_Th = S_0 * (abs(P / (P - p_0)) ** 0.6)
-            result.append(S_Th)
-        except:
-            pass
+        S_Th = S_0*(P/(P - p_0))**(3/5)
+        result.append(S_Th)
         return result
 
+    @staticmethod
+    def eqn_10_16__p_0(P: float, S_0: float, S_Th: float):
+        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
+        result = []
+        p_0 = P - P/(S_Th/S_0)**(5/3)
+        result.append(p_0)
+        p_0 = P - P/(-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
+        result.append(p_0)
+        p_0 = P - P/(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
+        result.append(p_0)
+        return result
 

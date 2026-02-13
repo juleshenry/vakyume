@@ -1,0 +1,57 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve
+from scipy.optimize import newton
+from kwasak import kwasak_static
+import numpy as np
+
+class FluidFlowVacuumLines:
+    @kwasak_static
+    def eqn_2_28(C=None, D=None, L=None, P_p=None, mu=None, **kwargs):
+        return
+
+    @staticmethod
+    def eqn_2_28__C(D: float, L: float, P_p: float, mu: float):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        C = 0.0245436926061703*D**4*P_p/(L*mu)
+        result.append(C)
+        return result
+
+    @staticmethod
+    def eqn_2_28__D(C: float, L: float, P_p: float, mu: float):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        D = -2.52647511098426*I*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*I*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = -2.52647511098426*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        return result
+
+    @staticmethod
+    def eqn_2_28__L(C: float, D: float, P_p: float, mu: float):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        L = 0.0245436926061703*D**4*P_p/(C*mu)
+        result.append(L)
+        return result
+
+    @staticmethod
+    def eqn_2_28__P_p(C: float, D: float, L: float, mu: float):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        P_p = 40.7436654315252*C*L*mu/D**4
+        result.append(P_p)
+        return result
+
+    @staticmethod
+    def eqn_2_28__mu(C: float, D: float, L: float, P_p: float):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        mu = 0.0245436926061703*D**4*P_p/(C*L)
+        result.append(mu)
+        return result
+

@@ -6,12 +6,7 @@ import numpy as np
 
 class FluidFlowVacuumLines:
     @kwasak_static
-    def eqn_2_10(
-        Suc_Pres: float = None,
-        delta_P: float = None,
-        oper_press: float = None,
-        **kwargs
-    ):
+    def eqn_2_10(Suc_Pres=None, delta_P=None, oper_press=None, **kwargs):
         return
 
     @staticmethod
@@ -37,5 +32,4 @@ class FluidFlowVacuumLines:
         oper_press = Suc_Pres + delta_P
         result.append(oper_press)
         return result
-
 

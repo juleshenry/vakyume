@@ -6,14 +6,14 @@ import numpy as np
 
 class Precondensors:
     @kwasak_static
-    def eqn_7_17(R_0: float = None, R_nc: float = None, h_c: float = None, **kwargs):
+    def eqn_7_17(R_0=None, R_nc=None, h_c=None, **kwargs):
         return
 
     @staticmethod
     def eqn_7_17__R_0(R_nc: float, h_c: float):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
-        R_0 = R_nc + 1 / h_c
+        R_0 = R_nc + 1/h_c
         result.append(R_0)
         return result
 
@@ -21,7 +21,7 @@ class Precondensors:
     def eqn_7_17__R_nc(R_0: float, h_c: float):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
-        R_nc = R_0 - 1 / h_c
+        R_nc = R_0 - 1/h_c
         result.append(R_nc)
         return result
 
@@ -29,8 +29,7 @@ class Precondensors:
     def eqn_7_17__h_c(R_0: float, R_nc: float):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
-        h_c = 1 / (R_0 - R_nc)
+        h_c = 1/(R_0 - R_nc)
         result.append(h_c)
         return result
-
 

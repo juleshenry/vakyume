@@ -6,14 +6,14 @@ import numpy as np
 
 class VacuumTheory:
     @kwasak_static
-    def eqn_1_13a(n: float = None, n_a: float = None, y_a: float = None, **kwargs):
+    def eqn_1_13a(n=None, n_a=None, y_a=None, **kwargs):
         return
 
     @staticmethod
     def eqn_1_13a__n(n_a: float, y_a: float):
         # [.pyeqn] y_a = n_a / n
         result = []
-        n = n_a / y_a
+        n = n_a/y_a
         result.append(n)
         return result
 
@@ -21,7 +21,7 @@ class VacuumTheory:
     def eqn_1_13a__n_a(n: float, y_a: float):
         # [.pyeqn] y_a = n_a / n
         result = []
-        n_a = n * y_a
+        n_a = n*y_a
         result.append(n_a)
         return result
 
@@ -29,8 +29,7 @@ class VacuumTheory:
     def eqn_1_13a__y_a(n: float, n_a: float):
         # [.pyeqn] y_a = n_a / n
         result = []
-        y_a = n_a / n
+        y_a = n_a/n
         result.append(y_a)
         return result
-
 

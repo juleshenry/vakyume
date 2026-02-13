@@ -6,7 +6,7 @@ import numpy as np
 
 class VacuumTheory:
     @kwasak_static
-    def eqn_1_12(Total_P: float = None, sum_partial_pressures: float = None, **kwargs):
+    def eqn_1_12(Total_P=None, sum_partial_pressures=None, **kwargs):
         return
 
     @staticmethod
@@ -24,5 +24,4 @@ class VacuumTheory:
         sum_partial_pressures = Total_P
         result.append(sum_partial_pressures)
         return result
-
 

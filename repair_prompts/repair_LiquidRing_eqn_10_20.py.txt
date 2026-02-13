@@ -1,8 +1,8 @@
 
 I have a set of Python functions that solve an equation for different variables.
 One or more of these functions are incorrect (the 'one-odd-out').
-Based on consistency checks, the following variants are likely wrong: ['P', 'S_0', 'S_p', 'T_e', 'T_i', 'p_c', 'p_s']
-The scores (consistency matches) are: {'P': 0, 'S_0': 5, 'S_p': 1, 'T_e': 5, 'T_i': 0, 'p_c': 5, 'p_s': 5}
+Based on consistency checks, the following variants are likely wrong: ['P', 'S_0', 'S_p', 'T_e', 'T_i', 'p_0', 'p_c', 'p_s']
+The scores (consistency matches) are: {'P': 0, 'S_0': 2, 'S_p': 2, 'T_e': 0, 'T_i': 0, 'p_0': 0, 'p_c': 0, 'p_s': 0}
 
 Here is the code:
 ```python
@@ -14,258 +14,84 @@ import numpy as np
 
 class LiquidRing:
     @kwasak_static
-    def eqn_10_20(
-        P: float = None,
-        S_0: float = None,
-        S_p: float = None,
-        T_e: float = None,
-        T_i: float = None,
-        p_0: float = None,
-        p_c: float = None,
-        p_s: float = None,
-        **kwargs
-    ):
+    def eqn_10_20(P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None, **kwargs):
         return
 
     @staticmethod
-    def eqn_10_20__P(
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-    ):
+    def eqn_10_20__P(S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # [Sympy Failover]
-        def equation(P):
-            # Define the equation as: f(P) = 0
-            left_side = S_0
-            right_side = (
-                S_p
-                * (
-                    ((P - p_0) * (460 + T_i) * (P - p_c))
-                    / (P * (P - p_s) * (460 + T_e))
-                )
-                ** 0.6
-            )
-            return left_side - right_side
-
-        # Initial guess for P
-        initial_guess = max(p_0, p_c, p_s) + 10
-
-        # Solve the equation numerically
-        result = fsolve(equation, initial_guess)
-
-        return result[0]
+        # [Sympy Failover Placeholder for P]
+        def func(P):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((x - p_0)*(460 + T_i) * (x - p_c) / (x * (x - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(P)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__S_0(
-        P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__S_0(P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        S_0 = S_p * (
-            (
-                P**2 * T_i
-                + 460.0 * P**2
-                - P * T_i * p_0
-                - P * T_i * p_c
-                - 460.0 * P * p_0
-                - 460.0 * P * p_c
-                + T_i * p_0 * p_c
-                + 460.0 * p_0 * p_c
-            )
-            / (P * (P * T_e + 460.0 * P - T_e * p_s - 460.0 * p_s))
-        ) ** (3 / 5)
+        S_0 = S_p*((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
         result.append(S_0)
         return result
 
     @staticmethod
-    def eqn_10_20__S_p(
-        P: float, S_0: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__S_p(P: float, S_0: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        S_p = S_0 / (
-            (
-                P**2 * T_i
-                + 460.0 * P**2
-                - P * T_i * p_0
-                - P * T_i * p_c
-                - 460.0 * P * p_0
-                - 460.0 * P * p_c
-                + T_i * p_0 * p_c
-                + 460.0 * p_0 * p_c
-            )
-            / (P * (P * T_e + 460.0 * P - T_e * p_s - 460.0 * p_s))
-        ) ** (3 / 5)
+        S_p = S_0/((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
         result.append(S_p)
         return result
 
     @staticmethod
-    def eqn_10_20__T_e(
-        P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__T_e(P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # [Sympy Failover]
-        """
-        Parameters:
-        P: pressure value
-        S_0: flow rate
-        S_p: specific value
-        T_i: inlet temperature
-        p_0, p_c, p_s: pressure constants
-
-        Returns:
-        T_e: calculated external temperature
-        """
-        # First, isolate the expression inside the power
-        # S_0 = S_p * (expression) ** 0.6
-        # (S_0 / S_p) ** (1/0.6) = expression
-
-        # Calculate the expression without T_e
-        numerator = (P - p_0) * (460 + T_i) * (P - p_c)
-
-        # Calculate what denominator should be
-        expression_value = (S_0 / S_p) ** (1 / 0.6)
-        required_denominator = numerator / expression_value
-
-        # Solve for T_e
-        # required_denominator = P * (P - p_s) * (460 + T_e)
-        # (460 + T_e) = required_denominator / (P * (P - p_s))
-        T_e = (required_denominator / (P * (P - p_s))) - 460
-
-        return [T_e]
+        # [Sympy Failover Placeholder for T_e]
+        def func(T_e):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + x) ) )**0.6) - (S_0)".replace('x', str(T_e)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__T_i(
-        P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__T_i(P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # [Sympy Failover]
-        """Parameters:
-        P: pressure value
-        S_0: flow rate
-        S_p: specific value
-        T_i: inlet temperature
-        p_0, p_c, p_s: pressure constants
-
-        Returns:
-        T_e: calculated external temperature
-        """
-        # First, isolate the expression inside the power
-        # S_0 = S_p * (expression) ** 0.6
-        # (S_0 / S_p) ** (1/0.6) = expression
-
-        # Calculate the expression without T_e
-        numerator = (P - p_0) * (460 + T_i) * (P - p_c)
-
-        # Calculate what denominator should be
-        expression_value = (S_0 / S_p) ** (1 / 0.6)
-        required_denominator = numerator / expression_value
-
-        # Solve for T_e
-        # required_denominator = P * (P - p_s) * (460 + T_e)
-        # (460 + T_e) = required_denominator / (P * (P - p_s))
-        T_e = (required_denominator / (P * (P - p_s))) - 460
-
-        return [T_e]
+        # [Sympy Failover Placeholder for T_i]
+        def func(T_i):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + x) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(T_i)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__p_c(
-        P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float
-    ):
-        """
-        Solve equation 10-20 for p_c given all other parameters.
-
-        Original equation:
-        S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-
-        Parameters:
-        P: pressure value
-        S_0: flow rate
-        S_p: specific value
-        T_e: external temperature
-        T_i: inlet temperature
-        p_0, p_s: pressure constants
-
-        Returns:
-        p_c: calculated pressure constant
-        """
-        # First, isolate the expression inside the power
-        # S_0 = S_p * (expression) ** 0.6
-        # (S_0 / S_p) ** (1/0.6) = expression
-        expression_value = (S_0 / S_p) ** (1 / 0.6)
-
-        # The expression is:
-        # (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e)) = expression_value
-
-        # Rearrange to isolate p_c:
-        # expression_value * (P * (P - p_s)*(460 + T_e)) = (P - p_0)*(460 + T_i) * (P - p_c)
-        # expression_value * (P * (P - p_s)*(460 + T_e)) / ((P - p_0)*(460 + T_i)) = (P - p_c)
-        # P - expression_value * (P * (P - p_s)*(460 + T_e)) / ((P - p_0)*(460 + T_i)) = p_c
-
-        denominator = (P - p_0) * (460 + T_i)
-        if denominator == 0:
-            raise ValueError(
-                "Division by zero error: (P - p_0) * (460 + T_i) equals zero"
-            )
-
-        p_c = P - (expression_value * (P * (P - p_s) * (460 + T_e))) / denominator
-
-        return [p_c]
+    def eqn_10_20__p_0(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_0]
+        def func(p_0):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - x)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_0)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__p_s(
-        P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float
-    ):
-        """
-        Solve equation 10-20 for p_s given all other parameters.
+    def eqn_10_20__p_c(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_c]
+        def func(p_c):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - x) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_c)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
-        Original equation:
-        S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-
-        Parameters:
-        P: pressure value
-        S_0: flow rate
-        S_p: specific value
-        T_e: external temperature
-        T_i: inlet temperature
-        p_0, p_c: pressure constants
-
-        Returns:
-        p_s: calculated pressure constant
-        """
-        # First, isolate the expression inside the power
-        # S_0 = S_p * (expression) ** 0.6
-        # (S_0 / S_p) ** (1/0.6) = expression
-        expression_value = (S_0 / S_p) ** (1 / 0.6)
-
-        # The expression is:
-        # (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e)) = expression_value
-
-        # Rearrange to isolate p_s:
-        # expression_value * (P * (P - p_s)*(460 + T_e)) = (P - p_0)*(460 + T_i) * (P - p_c)
-        # expression_value * P * (P - p_s) * (460 + T_e) = (P - p_0)*(460 + T_i) * (P - p_c)
-        # expression_value * P * (460 + T_e) * (P - p_s) = (P - p_0)*(460 + T_i) * (P - p_c)
-        # (P - p_s) = (P - p_0)*(460 + T_i) * (P - p_c) / (expression_value * P * (460 + T_e))
-        # -p_s = (P - p_0)*(460 + T_i) * (P - p_c) / (expression_value * P * (460 + T_e)) - P
-        # p_s = P - (P - p_0)*(460 + T_i) * (P - p_c) / (expression_value * P * (460 + T_e))
-
-        denominator = expression_value * P * (460 + T_e)
-        if denominator == 0:
-            raise ValueError(
-                "Division by zero error: expression_value * P * (460 + T_e) equals zero"
-            )
-
-        p_s = P - ((P - p_0) * (460 + T_i) * (P - p_c)) / denominator
-
-        return [p_s]
-
-
-
+    @staticmethod
+    def eqn_10_20__p_s(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_s]
+        def func(p_s):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - x)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_s)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 ```
 
 Please fix the inconsistent variants so that they are all mathematically equivalent and consistent with each other.

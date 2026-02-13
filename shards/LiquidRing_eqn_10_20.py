@@ -6,147 +6,82 @@ import numpy as np
 
 class LiquidRing:
     @kwasak_static
-    def eqn_10_20(
-        P: float = None,
-        S_0: float = None,
-        S_p: float = None,
-        T_e: float = None,
-        T_i: float = None,
-        p_0: float = None,
-        p_c: float = None,
-        p_s: float = None,
-        **kwargs
-    ):
+    def eqn_10_20(P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None, **kwargs):
         return
 
     @staticmethod
-    def eqn_10_20__P(
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-    ):
+    def eqn_10_20__P(S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        def equation(P_val):
-            try:
-                den = (P_val * (P_val - p_s) * (460 + T_e))
-                if abs(den) < 1e-12: return 1e12
-                ratio = ((P_val - p_0) * (460 + T_i) * (P_val - p_c)) / den
-                return S_0 - S_p * (abs(ratio) ** 0.6)
-            except:
-                return 1e12
-
-        try:
-            from scipy.optimize import fsolve
-            # Try multiple guesses to cover different regions
-            for guess in [max(p_0, p_c, p_s) + 1.0, 100.0, 1.0, 0.1, 1000.0, -100.0]:
-                result, info, ier, msg = fsolve(equation, guess, full_output=True)
-                if ier == 1:
-                    if abs(equation(result[0])) < 1e-6:
-                        return [float(result[0])]
-            return []
-        except:
-            return []
+        # [Sympy Failover Placeholder for P]
+        def func(P):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((x - p_0)*(460 + T_i) * (x - p_c) / (x * (x - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(P)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__S_0(
-        P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__S_0(P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        try:
-            den = (P * (P - p_s) * (460 + T_e))
-            if abs(den) < 1e-12: return []
-            base = ((P - p_0) * (460 + T_i) * (P - p_c)) / den
-            S_0 = S_p * (abs(base) ** 0.6)
-            result.append(S_0)
-        except:
-            pass
+        S_0 = S_p*((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
+        result.append(S_0)
         return result
 
     @staticmethod
-    def eqn_10_20__S_p(
-        P: float, S_0: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__S_p(P: float, S_0: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        try:
-            den = (P * (P - p_s) * (460 + T_e))
-            if abs(den) < 1e-12: return []
-            base = ((P - p_0) * (460 + T_i) * (P - p_c)) / den
-            # S_0 = S_p * abs(base)**0.6 => S_p = S_0 / abs(base)**0.6
-            denominator = abs(base) ** 0.6
-            if abs(denominator) < 1e-18: return []
-            S_p = S_0 / denominator
-            result.append(S_p)
-        except:
-            pass
+        S_p = S_0/((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
+        result.append(S_p)
         return result
 
     @staticmethod
-    def eqn_10_20__T_e(
-        P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float
-    ):
+    def eqn_10_20__T_e(P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        try:
-            # (S_0/S_p)**(5/3) = ((P-p_0)*(460+T_i)*(P-p_c)) / (P*(P-p_s)*(460+T_e))
-            # Let K = (S_0/S_p)**(5/3)
-            # 460 + T_e = ((P-p_0)*(460+T_i)*(P-p_c)) / (K * P * (P-p_s))
-            K = abs(S_0 / S_p) ** (5/3)
-            if abs(K) < 1e-18: return []
-            num = (P - p_0) * (460 + T_i) * (P - p_c)
-            den = K * P * (P - p_s)
-            if abs(den) < 1e-18: return []
-            T_e = (num / den) - 460
-            return [T_e]
-        except:
-            return []
+        # [Sympy Failover Placeholder for T_e]
+        def func(T_e):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + x) ) )**0.6) - (S_0)".replace('x', str(T_e)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__T_i(
-        P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float
-    ):
-        try:
-            K = abs(S_0 / S_p) ** (5/3)
-            num = K * P * (P - p_s) * (460 + T_e)
-            den = (P - p_0) * (P - p_c)
-            if abs(den) < 1e-18: return []
-            T_i = (num / den) - 460
-            return [T_i]
-        except:
-            return []
+    def eqn_10_20__T_i(P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for T_i]
+        def func(T_i):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + x) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(T_i)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__p_c(
-        P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float
-    ):
-        try:
-            K = abs(S_0 / S_p) ** (5/3)
-            # K = ((P-p_0)*(460+T_i)*(P-p_c)) / (P*(P-p_s)*(460+T_e))
-            # P - p_c = (K * P * (P-p_s) * (460+T_e)) / ((P-p_0)*(460+T_i))
-            den = (P - p_0) * (460 + T_i)
-            if abs(den) < 1e-18: return []
-            p_c = P - (K * P * (P - p_s) * (460 + T_e)) / den
-            return [p_c]
-        except:
-            return []
+    def eqn_10_20__p_0(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_0]
+        def func(p_0):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - x)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_0)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
     @staticmethod
-    def eqn_10_20__p_s(
-        P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float
-    ):
-        try:
-            K = abs(S_0 / S_p) ** (5/3)
-            # K = ((P-p_0)*(460+T_i)*(P-p_c)) / (P*(P-p_s)*(460+T_e))
-            # P - p_s = ((P-p_0)*(460+T_i)*(P-p_c)) / (K * P * (460+T_e))
-            den = K * P * (460 + T_e)
-            if abs(den) < 1e-18: return []
-            p_s = P - ((P - p_0) * (460 + T_i) * (P - p_c)) / den
-            return [p_s]
-        except:
-            return []
+    def eqn_10_20__p_c(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_c]
+        def func(p_c):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - x) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_c)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 
+    @staticmethod
+    def eqn_10_20__p_s(P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # [Sympy Failover Placeholder for p_s]
+        def func(p_s):
+            # Numerical fallback needed for: (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
+            return eval("(S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - x)*(460 + T_e) ) )**0.6) - (S_0)".replace('x', str(p_s)))
+        # result = [newton(func, 1.0)]
+        return [] # Pending LLM/Manual Repair
 

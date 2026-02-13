@@ -6,20 +6,14 @@ import numpy as np
 
 class Precondensors:
     @kwasak_static
-    def eqn_7_12(
-        A: float = None,
-        Q_condensor_heat_duty: float = None,
-        U: float = None,
-        del_T: float = None,
-        **kwargs
-    ):
+    def eqn_7_12(A=None, Q_condensor_heat_duty=None, U=None, del_T=None, **kwargs):
         return
 
     @staticmethod
     def eqn_7_12__A(Q_condensor_heat_duty: float, U: float, del_T: float):
         # [.pyeqn] Q_condensor_heat_duty = U * A * del_T
         result = []
-        A = Q_condensor_heat_duty / (U * del_T)
+        A = Q_condensor_heat_duty/(U*del_T)
         result.append(A)
         return result
 
@@ -27,7 +21,7 @@ class Precondensors:
     def eqn_7_12__Q_condensor_heat_duty(A: float, U: float, del_T: float):
         # [.pyeqn] Q_condensor_heat_duty = U * A * del_T
         result = []
-        Q_condensor_heat_duty = A * U * del_T
+        Q_condensor_heat_duty = A*U*del_T
         result.append(Q_condensor_heat_duty)
         return result
 
@@ -35,7 +29,7 @@ class Precondensors:
     def eqn_7_12__U(A: float, Q_condensor_heat_duty: float, del_T: float):
         # [.pyeqn] Q_condensor_heat_duty = U * A * del_T
         result = []
-        U = Q_condensor_heat_duty / (A * del_T)
+        U = Q_condensor_heat_duty/(A*del_T)
         result.append(U)
         return result
 
@@ -43,8 +37,7 @@ class Precondensors:
     def eqn_7_12__del_T(A: float, Q_condensor_heat_duty: float, U: float):
         # [.pyeqn] Q_condensor_heat_duty = U * A * del_T
         result = []
-        del_T = Q_condensor_heat_duty / (A * U)
+        del_T = Q_condensor_heat_duty/(A*U)
         result.append(del_T)
         return result
-
 
