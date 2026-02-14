@@ -1,0 +1,8 @@
+Chapter 15: Heat Exchangers
+15-1 Heat Transfer Rate
+Q = U * A * delta_T
+where:
+Q := heat transfer rate
+U := overall heat transfer coefficient
+A := heat transfer area
+delta_T := temperature difference

@@ -6,6 +6,7 @@ import json
 import re
 import timeout_decorator
 import argparse
+import time
 
 try:
     from tqdm import tqdm
@@ -14,14 +15,16 @@ except ImportError:
 from sympy import Symbol, solve, Eq
 from tru import Verify
 
-# Import from process.llm if available, else mock
+# Import from llm if available, else mock
 from typing import Callable, Optional
 
 try:
-    from process.llm import escribir_codigo as _escribir_codigo
-    from process.llm import extract_code as _extract_code
-except ImportError:
+    from llm import escribir_codigo as _escribir_codigo
+    from llm import repair_codigo as _repair_codigo
+    from llm import extract_code as _extract_code
+except Exception:
     _escribir_codigo = None
+    _repair_codigo = None
     _extract_code = None
 
 
@@ -29,6 +32,12 @@ def escribir_codigo(*args, **kwargs):
     if _escribir_codigo is None:
         return "# LLM Mock: No Ollama"
     return _escribir_codigo(*args, **kwargs)
+
+
+def repair_codigo(*args, **kwargs):
+    if _repair_codigo is None:
+        return "# LLM Mock: No Ollama"
+    return _repair_codigo(*args, **kwargs)
 
 
 def extract_code(text):
@@ -73,9 +82,12 @@ class Solver:
     )
     def get_solns_vanilla_nf(self, nf: str, symb: Symbol):
         try:
-            return solve(nf, symb)
+            solns = solve(nf, symb)
+            if not solns:
+                raise UnsolvedException("Sympy solve returned empty")
+            return solns
         except Exception:
-            return []
+            raise UnsolvedException("Sympy solve failed")
 
     def tokenize(self, eqn):
         malos = {"ln", "log"}
@@ -121,13 +133,12 @@ class Solver:
             f"{TAB * 3}# Numerical fallback needed for: {normal_form}",
             f"{TAB * 3}return eval(\"{normal_form.replace(token, 'x')}\".replace('x', str({token})))",
             f"{TAB * 2}# result = [newton(func, 1.0)]",
-            f"{TAB * 2}return [] # Pending LLM/Manual Repair",
+            f'{TAB * 2}raise UnsolvedException("Pending LLM/Manual Repair")',
         ]
         return "\n".join(code)
 
 
 def shard_from_chapters():
-    print("Scraping equations from chapters...")
     solver = Solver()
 
     if not os.path.exists(CHAPTERS_DIR):
@@ -135,13 +146,18 @@ def shard_from_chapters():
         return
 
     chapter_files = sorted(os.listdir(CHAPTERS_DIR))
-    iterator = (
-        tqdm(chapter_files, desc="Scraping", unit="file") if tqdm else chapter_files
-    )
-    for chapter_file in iterator:
-        if not chapter_file.endswith(".py") or chapter_file.startswith("__"):
-            continue
+    created_count = 0
 
+    # Pre-check if anything needs to be done to avoid noisy tqdm
+    to_process = []
+    for chapter_file in chapter_files:
+        if chapter_file.endswith(".py") and not chapter_file.startswith("__"):
+            to_process.append(chapter_file)
+
+    if not to_process:
+        return
+
+    for chapter_file in to_process:
         chapter_path = os.path.join(CHAPTERS_DIR, chapter_file)
         # Extract class name from filename: 01_vacuum_theory.py -> VacuumTheory
         base_name = os.path.splitext(chapter_file)[0]
@@ -168,7 +184,13 @@ def shard_from_chapters():
 
                 shard_name = f"{class_name}_eqn_{eqn_number}.py"
                 shard_path = os.path.join(SHARDS_DIR, shard_name)
+                if os.path.exists(shard_path):
+                    continue
 
+                if created_count == 0:
+                    print("Scraping new equations from chapters...")
+
+                created_count += 1
                 with open(shard_path, "w") as sf:
                     sf.write("from math import log, sqrt, exp, pow, e\n")
                     sf.write(
@@ -192,16 +214,16 @@ def shard_from_chapters():
 
                         try:
                             solns = solver.get_solns_vanilla_nf(nf, Symbol(token))
-                            if not solns:
-                                sf.write(
-                                    solver.sympy_failover(header, nf, token) + "\n\n"
-                                )
-                            else:
+                            if solns:
                                 sf.write(f"{TAB * 2}result = []\n")
                                 for soln in solns:
                                     sf.write(f"{TAB * 2}{token} = {soln}\n")
                                     sf.write(f"{TAB * 2}result.append({token})\n")
                                 sf.write(f"{TAB * 2}return result\n\n")
+                            else:
+                                sf.write(
+                                    solver.sympy_failover(header, nf, token) + "\n\n"
+                                )
                         except timeout_decorator.timeout_decorator.TimeoutError:
                             sf.write(f"{TAB * 2}# Timeout during Sympy solve\n")
                             sf.write(solver.sympy_failover(header, nf, token) + "\n\n")
@@ -209,13 +231,16 @@ def shard_from_chapters():
                             sf.write(f"{TAB * 2}# Error during Sympy solve: {e}\n")
                             sf.write(solver.sympy_failover(header, nf, token) + "\n\n")
 
+    if created_count > 0:
+        print(f"Scraped {created_count} new equations.")
+
 
 def verify_all_shards():
     print("Verifying shards...")
     all_results = {}
-    shard_files = [
-        f for f in os.listdir(SHARDS_DIR) if f.endswith(".py") and f != "kwasak.py"
-    ]
+    shard_files = sorted(
+        [f for f in os.listdir(SHARDS_DIR) if f.endswith(".py") and f != "kwasak.py"]
+    )
 
     iterator = (
         tqdm(shard_files, desc="Verifying", unit="shard") if tqdm else shard_files
@@ -240,8 +265,8 @@ def verify_all_shards():
                         shard_results = v.verify()
                         all_results[f] = shard_results
         except Exception as e:
-            print(f"Error verifying {f}: {e}")
-            all_results[f] = None
+            # Silence noisy verification errors, they are captured in all_results
+            all_results[f] = {"error": str(e)}
 
     with open(os.path.join(REPORTS_DIR, "verification_results.json"), "w") as rf:
         json.dump(all_results, rf, indent=4)
@@ -253,8 +278,15 @@ def analyze_results(all_results):
     analysis = {"solved": [], "inconsistent": {}, "failed": []}
 
     for shard_file, eqn_results in all_results.items():
-        if not eqn_results:
-            analysis["failed"].append(shard_file)
+        if not eqn_results or "error" in eqn_results:
+            analysis["failed"].append(
+                {
+                    "file": shard_file,
+                    "error": eqn_results.get("error")
+                    if eqn_results
+                    else "Unknown error",
+                }
+            )
             continue
 
         for eqn_name, variants in eqn_results.items():
@@ -277,52 +309,6 @@ def analyze_results(all_results):
     with open(os.path.join(REPORTS_DIR, "analysis.json"), "w") as af:
         json.dump(analysis, af, indent=4)
     return analysis
-
-
-def build_repair_prompt(
-    shard_file, eqn_name, inconsistent_variants, scores, shard_code
-):
-    return (
-        "\n"
-        "I have a set of Python functions that solve an equation for different variables.\n"
-        "One or more of these functions are incorrect (the 'one-odd-out').\n"
-        f"Based on consistency checks, the following variants are likely wrong: {inconsistent_variants}\n"
-        f"The scores (consistency matches) are: {scores}\n\n"
-        "Here is the code:\n"
-        "```python\n"
-        f"{shard_code}\n"
-        "```\n\n"
-        "Please fix the inconsistent variants so that they are all mathematically equivalent and consistent with each other.\n"
-        "Return only the corrected methods.\n"
-    )
-
-
-def generate_repair_prompts(analysis):
-    if not os.path.exists(REPAIR_PROMPTS_DIR):
-        os.makedirs(REPAIR_PROMPTS_DIR)
-
-    prompts = {}
-    for shard_file, info in analysis.get("inconsistent", {}).items():
-        shard_path = os.path.join(SHARDS_DIR, shard_file)
-        if not os.path.exists(shard_path):
-            continue
-        with open(shard_path, "r") as sf:
-            shard_code = sf.read().rstrip()
-
-        prompt = build_repair_prompt(
-            shard_file=shard_file,
-            eqn_name=info.get("eqn"),
-            inconsistent_variants=info.get("inconsistent_variants", []),
-            scores=info.get("scores", {}),
-            shard_code=shard_code,
-        )
-
-        prompt_path = os.path.join(REPAIR_PROMPTS_DIR, f"repair_{shard_file}.txt")
-        with open(prompt_path, "w") as pf:
-            pf.write(prompt)
-        prompts[shard_file] = prompt_path
-
-    return prompts
 
 
 def extract_code_block(text):
@@ -404,18 +390,24 @@ def replace_method_in_file(file_lines, method_name, new_block_lines):
     return False
 
 
-def attempt_repair_shard(shard_path, prompt_text, inconsistent_variants):
-    try:
-        import ollama
-    except Exception:
-        return False
+def attempt_repair_shard(
+    shard_file, shard_code, error=None, inconsistent_variants=None, scores=None
+):
+    shard_path = os.path.join(SHARDS_DIR, shard_file)
 
-    response = ollama.chat(
-        model="phi3:latest",
-        messages=[{"role": "user", "content": prompt_text}],
+    # Using the optimized repair prompt
+    raw = repair_codigo(
+        shard_file=shard_file,
+        shard_code=shard_code,
+        error=error,
+        inconsistent_variants=inconsistent_variants,
+        scores=scores,
     )
-    raw = response.get("message", {}).get("content", "")
-    code_text = extract_code(raw) or extract_code_block(raw)
+
+    code_text = extract_code(raw)
+    if not code_text.strip():
+        code_text = extract_code_block(raw)
+
     if not code_text.strip():
         return False
 
@@ -427,16 +419,20 @@ def attempt_repair_shard(shard_path, prompt_text, inconsistent_variants):
         file_lines = sf.readlines()
 
     updated = False
-    for variant in inconsistent_variants:
-        method_name = None
-        for candidate in blocks.keys():
-            if candidate.endswith(f"__{variant}"):
-                method_name = candidate
-                break
-        if not method_name:
-            continue
-        new_block = normalize_block(blocks[method_name])
-        if new_block and replace_method_in_file(file_lines, method_name, new_block):
+    for candidate in blocks.keys():
+        # If we have specific variants, check if this candidate matches one
+        if inconsistent_variants:
+            match = False
+            for v in inconsistent_variants:
+                if candidate.endswith(f"__{v}"):
+                    match = True
+                    break
+            if not match:
+                continue
+
+        # If match or if we are repairing everything
+        new_block = normalize_block(blocks[candidate])
+        if new_block and replace_method_in_file(file_lines, candidate, new_block):
             updated = True
 
     if updated:
@@ -447,6 +443,12 @@ def attempt_repair_shard(shard_path, prompt_text, inconsistent_variants):
 
 def run_pipeline(max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=False):
     analysis = {"solved": [], "inconsistent": {}, "failed": []}
+
+    if not os.path.exists(REPORTS_DIR):
+        os.makedirs(REPORTS_DIR)
+    if not os.path.exists(REPAIR_PROMPTS_DIR):
+        os.makedirs(REPAIR_PROMPTS_DIR)
+
     if overwrite:
         clear_shards()
     elif not os.path.exists(SHARDS_DIR):
@@ -454,34 +456,86 @@ def run_pipeline(max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=Fals
     shard_from_chapters()
 
     for round_idx in range(1, max_rounds + 1):
-        print(f"\n--- Verification Round {round_idx}/{max_rounds} ---")
+        if round_idx == 1:
+            print("\n--- Initial OOO Status Scan ---")
+        else:
+            print(f"\n--- Verification Round {round_idx}/{max_rounds} ---")
+
         results = verify_all_shards()
         analysis = analyze_results(results)
+
+        print(
+            f"OOO Status: {len(analysis['solved'])} families fully functional / solved, "
+            f"{len(analysis['inconsistent'])} inconsistent, "
+            f"{len(analysis['failed'])} failed."
+        )
+
         assemble_certified_library(analysis)
 
-        if not analysis.get("inconsistent"):
-            print("All equations aligned. Stopping early.")
+        if not analysis.get("inconsistent") and not analysis.get("failed"):
+            print("All equations aligned and no failures. Stopping early.")
             return analysis
 
-        prompts = generate_repair_prompts(analysis)
-        if not auto_repair:
-            print("Auto-repair disabled. Repair prompts generated.")
-            return analysis
-
+        print(f"Starting auto-repair round...")
         any_updates = False
-        for shard_file, info in analysis.get("inconsistent", {}).items():
-            shard_path = os.path.join(SHARDS_DIR, shard_file)
-            prompt_path = prompts.get(shard_file)
-            if not prompt_path:
-                continue
-            with open(prompt_path, "r") as pf:
-                prompt_text = pf.read()
-            updated = attempt_repair_shard(
-                shard_path,
-                prompt_text,
-                info.get("inconsistent_variants", []),
+
+        # Combine inconsistent and failed for repair
+        to_repair = []
+        for sf, info in analysis.get("inconsistent", {}).items():
+            to_repair.append(
+                {
+                    "file": sf,
+                    "variants": info.get("inconsistent_variants", []),
+                    "scores": info.get("scores", {}),
+                    "error": None,
+                }
             )
+        for fail_info in analysis.get("failed", []):
+            to_repair.append(
+                {
+                    "file": fail_info["file"],
+                    "variants": [],
+                    "scores": {},
+                    "error": fail_info.get("error"),
+                }
+            )
+
+        iterator = (
+            tqdm(to_repair, desc="Repairing Shards", unit="shard")
+            if tqdm
+            else to_repair
+        )
+        for item in iterator:
+            shard_file = item["file"]
+            shard_path = os.path.join(SHARDS_DIR, shard_file)
+
+            if not os.path.exists(shard_path):
+                continue
+
+            # Update progress display
+            if not isinstance(iterator, list):
+                iterator.set_postfix(shard=shard_file)
+            else:
+                print(f"Attempting auto-repair for {shard_file}...")
+
+            with open(shard_path, "r") as sf:
+                shard_code = sf.read().rstrip()
+
+            updated = attempt_repair_shard(
+                shard_file=shard_file,
+                shard_code=shard_code,
+                error=item["error"],
+                inconsistent_variants=item["variants"],
+                scores=item["scores"],
+            )
+
+            if updated and isinstance(iterator, list):
+                print(f"Auto-repair succeeded for {shard_file}.")
             any_updates = any_updates or updated
+
+            # Cool down to prevent hardware overheating during heavy LLM inference
+            if COOLDOWN_SECONDS > 0:
+                time.sleep(COOLDOWN_SECONDS)
 
         if not any_updates:
             print("No shard updates produced by auto-repair. Stopping.")

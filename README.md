@@ -13,36 +13,83 @@ python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama
 ```
 
 ### 2. Run the Orchestrator
-The main entry point is `vakyume_master.py`. It handles the entire lifecycle:
+The main entry point is `vakyume.py`. It uses a project-centric directory structure:
 ```bash
-python3 vakyume_master.py
+python3 vakyume.py projects/VacuumTheory
 ```
-This script will:
-1. **Verify Shards**: Check all equations in `shards/` for mathematical consistency using the `tru.py` engine.
-2. **Analyze Results**: Identify "solved" vs "inconsistent" equations, saved to `reports/analysis.json`.
-3. **Generate Repair Prompts**: Create targeted prompts in `repair_prompts/` for any inconsistent equations.
-4. **Assemble Certified Library**: Create `vakyume_certified.py` containing only the 100% verified equations.
 
-## Workflow for LLM-Assisted Repair
+## Project Structure
+Each project (e.g., `projects/VacuumTheory/`) contains:
+- `notes/`: Python-like equation definitions (Input).
+- `shards/`: Individual generated solvers (Intermediate).
+- `reports/`: Verification and analysis logs.
+- `repair_prompts/`: LLM interaction logs.
+- `vakyume_certified.py`: The finalized, verified Python library.
+- `vakyume.cpp`: The generated C++ library (if `--cpp` is used).
 
-If you have inconsistent shards (check the output of the master run), follow this process to fix them:
+## Setting Up a New Project
 
-1. **Locate Prompt**: Find the corresponding file in `repair_prompts/repair_<shard_name>.txt`.
-2. **Run Repair**: Feed the content of the prompt to an LLM (e.g., via Ollama or ChatGPT).
+To start a new project from a textbook PDF:
+
+1. **Create the Project Directory**:
    ```bash
-   # Example using Ollama
-   PROMPT=$(cat repair_prompts/repair_SelectingPump_eqn_8_06.py.txt)
-   ollama run phi3 "$PROMPT"
+   mkdir -p projects/MyNewProject/notes
    ```
-3. **Apply Fix**: Paste the corrected methods back into the shard file in `shards/`.
-4. **Re-Verify**: Run `python3 vakyume_master.py` again. The repaired equation will now be promoted to the certified library if it passes consistency checks.
+2. **Run Vakyume with the PDF**:
+   ```bash
+   python3 vakyume.py projects/MyNewProject --pdf path/to/textbook.pdf
+   ```
+   This will attempt to extract formulas from the PDF into `projects/MyNewProject/notes/extracted_notes.py`. 
+   
+   *Note: For best results, ensure `pdftotext` is installed on your system.*
 
-## Key Files
-- `vakyume_master.py`: Root orchestrator for verification and certification.
-- `tru.py`: The mathematical n-way consistency verification engine (The "Fuzzer").
-- `shards/`: Individual Python files for each equation family.
-- `vakyume_certified.py`: The production-ready, 100% verified subset of the library.
-- `reports/analysis.json`: Detailed report on the consistency of every equation.
+3. **Manual Notes (Optional)**:
+   You can also manually add `.py` files to the `notes/` directory. Use the following format:
+   ```python
+   # 1-1 Ideal Gas Law
+   """
+   p := pressure
+   V := volume
+   n := moles
+   R := gas constant
+   T := temperature
+   """
+   p * V = n * R * T
+   ```
+
+4. **Verify and Generate**:
+   ```bash
+   python3 vakyume.py projects/MyNewProject --cpp
+   ```
+
+## Resume & Testing
+The orchestrator naturally supports resuming. If a shard file already exists in the project's `shards/` directory, it is tested but not re-scraped unless you use the `--overwrite` flag.
+
+## Vacuum Theory Example
+The default `chapters/` directory contains equations extracted from the 1986 edition of *Process Vacuum System Design and Operation*. These files (`01_vacuum_theory.py`, etc.) serve as a primary example of how the pipeline processes a complex engineering textbook.
+
+## Accomplished & Discoveries
+
+- **One-Odd-Out (OOO) Methodology**: We've proven that verifying $f(x, y) \to z$ and $f(x, z) \to y$ consistency is highly effective at catching algebraic errors in LLM-generated or SymPy-isolated functions.
+- **Project-Centric Structure**: Successfully transitioned to a formal Python package (`vakyume/`) with a project-based directory structure (e.g., `projects/VacuumTheory/`).
+- **Resumability**: The pipeline automatically skips existing shards, allowing for long-running verification or repair tasks to be resumed.
+- **C++ Library Generation**: High-performance C++ code is generated using local LLMs (Phi-3 via Ollama), strictly enforcing `double` precision and `std::complex` for imaginary numbers.
+- **Parallelization**: Parallelizing Ollama calls (using 2-4 workers) significantly speeds up the verification of large equation sets (~500+ functions).
+
+## Examples
+
+### Vacuum Theory
+Equations extracted from *Process Vacuum System Design and Operation* (1986).
+```bash
+python3 vakyume.py projects/VacuumTheory --cpp
+```
+
+### Building Models
+Physics kinematics equations extracted from *Building Models To Describe Our World*.
+```bash
+python3 vakyume.py projects/BuildingModels --cpp
+```
+
 
 ## Architecture
 - **Sympy Solvers**: Initial algebraic isolation of variables.

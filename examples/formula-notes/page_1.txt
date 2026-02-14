@@ -1,0 +1,15 @@
+Chapter 12: Advanced Pump Systems
+12-1 Pump Efficiency
+The efficiency of a pump is defined as the ratio of useful power to total power input.
+eta = P_out / P_in
+where:
+eta := efficiency
+P_out := useful power output
+P_in := total power input
+
+12-2 Compression Ratio
+The compression ratio Cr is given by:
+Cr = P_discharge / P_suction
+where:
+P_discharge := discharge pressure
+P_suction := suction pressure

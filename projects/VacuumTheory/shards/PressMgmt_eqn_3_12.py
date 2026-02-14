@@ -1,0 +1,34 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve
+from scipy.optimize import newton
+from kwasak import kwasak_static
+import numpy as np
+
+class PressMgmt:
+    @kwasak_static
+    def eqn_3_12(H_2=None, KAPPA_1=None, P=None, **kwargs):
+        return
+
+    @staticmethod
+    def eqn_3_12__H_2(KAPPA_1: float, P: float):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        H_2 = -sqrt(P/KAPPA_1)
+        result.append(H_2)
+        H_2 = sqrt(P/KAPPA_1)
+        result.append(H_2)
+        return result
+
+    @staticmethod
+    def eqn_3_12__KAPPA_1(H_2: float, P: float):
+        if H_2 is not None and P is not None:
+            result = KAPHA_1 / (P/pow(H_2, 2))
+            return [result] * 2
+
+
+    @staticmethod
+    def eqn_3_12__P(H_2: float, KAPHA_1: float):
+        if H_2 is not None and KAPHA_1 is not None:
+            result = pow(KAPHA_1, 0.5) * H_2**2
+            return [result] * 2
+

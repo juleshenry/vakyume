@@ -94,12 +94,7 @@ class Verify:
         # Increase trials to be more certain
         num_trials = 3
 
-        variant_iterator = (
-            tqdm(variants, desc=f"{base_eq}", unit="variant", leave=False)
-            if tqdm
-            else variants
-        )
-        for source_var in variant_iterator:
+        for source_var in variants:
             variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
 
             trial_matches = []
@@ -156,12 +151,7 @@ class Verify:
 
     def verify(self):
         overall_results = {}
-        base_iterator = (
-            tqdm(self.base_equations, desc="Verifying equations", unit="eqn")
-            if tqdm
-            else self.base_equations
-        )
-        for base_eq in base_iterator:
+        for base_eq in self.base_equations:
             overall_results[base_eq] = self.verify_equation(base_eq)
         return overall_results
 
