@@ -10,36 +10,46 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_15__M_1(P_0_2, P_0_1, a_M_12):  # Note the corrected order of arguments to match mathematical expressions consistently.
+    def eqn_5_15__M_1(M_2: float, P_0_1: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
         result = []
-        M_1 = -(a_M_12 * (P_0_2 / P_0_1)) ** (5/2)
+        M_1 = -M_2/(P_0_2*a_M_12/P_0_1)**(5/2)
         result.append(M_1)
-
+        M_1 = M_2/(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_1)
+        return result
 
     @staticmethod
-    def eqn_5_15__M_2(M_1, P_0_2, P_0_1, a_M_12):  # Corrected the sign and consistent parameter order for consistency.
+    def eqn_5_15__M_2(M_1: float, P_0_1: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
         result = []
-        M_2 = -P_0_2 * (a_M_12 / (M_1 ** 5))
+        M_2 = -M_1*(P_0_2*a_M_12/P_0_1)**(5/2)
         result.append(M_2)
-
+        M_2 = M_1*(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_2)
+        return result
 
     @staticmethod
-    def eqn_5_15__P_0_1(M_1, M_2, a_M_12):  # Corrected the equation for P_0_1 and consistent parameter order.
+    def eqn_5_15__P_0_1(M_1: float, M_2: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
         result = []
-        P_0_1 = (a_M_12 * M_2 / (M_1 ** 5))
+        P_0_1 = P_0_2*a_M_12/(M_2/M_1)**(2/5)
         result.append(P_0_1)
-
+        return result
 
     @staticmethod
-    def eqn_5_15__P_0_2(M_1, M_2, a_M_12):  # Corrected the equation for P_0_2 and consistent parameter order.
+    def eqn_5_15__P_0_2(M_1: float, M_2: float, P_0_1: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
         result = []
-        P_0_2 = (a_M_12 * M_2 / (M_1 ** 5))**(4/5) - Pow((Pow((M_2 / M_1), 0.8)), 2)/3
+        P_0_2 = P_0_1*(M_2/M_1)**(2/5)/a_M_12
         result.append(P_0_2)
-
+        return result
 
     @staticmethod
-    def eqn_5_15__a_M_12(M_1, P_0_1, P_0_2):  # Corrected the equation and parameter order for a_M_12.
+    def eqn_5_15__a_M_12(M_1: float, M_2: float, P_0_1: float, P_0_2: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
         result = []
-        a_M_12 = (P_0_1 * M_2) / ((M_2/M_1) ** (8/5)) - P_0_2/(P_0_1**(4/5)*M_1**3.69734)
+        a_M_12 = P_0_1*(M_2/M_1)**(2/5)/P_0_2
         result.append(a_M_12)
+        return result
 

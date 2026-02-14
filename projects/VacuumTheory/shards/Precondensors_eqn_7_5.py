@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_5__N_i(N_nc: float, P: float, P_c: float, p_i: float):
+    def eqn_7_5__N_i(N_nc: float, P: float, P_c: float, p_i: float, **kwargs):
         # [.pyeqn] N_i = N_nc * (p_i) / (P - P_c)
         result = []
         N_i = N_nc*p_i/(P - P_c)
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_5__N_nc(N_i: float, P: float, P_c: float, p_i: float):
+    def eqn_7_5__N_nc(N_i: float, P: float, P_c: float, p_i: float, **kwargs):
         # [.pyeqn] N_i = N_nc * (p_i) / (P - P_c)
         result = []
         N_nc = N_i*(P - P_c)/p_i
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_5__P(N_i: float, N_nc: float, P_c: float, p_i: float):
+    def eqn_7_5__P(N_i: float, N_nc: float, P_c: float, p_i: float, **kwargs):
         # [.pyeqn] N_i = N_nc * (p_i) / (P - P_c)
         result = []
         P = P_c + N_nc*p_i/N_i
@@ -34,7 +34,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_5__P_c(N_i: float, N_nc: float, P: float, p_i: float):
+    def eqn_7_5__P_c(N_i: float, N_nc: float, P: float, p_i: float, **kwargs):
         # [.pyeqn] N_i = N_nc * (p_i) / (P - P_c)
         result = []
         P_c = P - N_nc*p_i/N_i
@@ -42,7 +42,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_5__p_i(N_i: float, N_nc: float, P: float, P_c: float):
+    def eqn_7_5__p_i(N_i: float, N_nc: float, P: float, P_c: float, **kwargs):
         # [.pyeqn] N_i = N_nc * (p_i) / (P - P_c)
         result = []
         p_i = N_i*(P - P_c)/N_nc

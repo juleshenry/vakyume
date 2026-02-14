@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_8__A_C(H_2: float, V_P: float):
+    def eqn_3_8__A_C(H_2: float, V_P: float, **kwargs):
         # [.pyeqn] V_P = A_C * H_2
         result = []
         A_C = V_P/H_2
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_8__H_2(A_C: float, V_P: float):
+    def eqn_3_8__H_2(A_C: float, V_P: float, **kwargs):
         # [.pyeqn] V_P = A_C * H_2
         result = []
         H_2 = V_P/A_C
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_8__V_P(A_C: float, H_2: float):
+    def eqn_3_8__V_P(A_C: float, H_2: float, **kwargs):
         # [.pyeqn] V_P = A_C * H_2
         result = []
         V_P = A_C*H_2

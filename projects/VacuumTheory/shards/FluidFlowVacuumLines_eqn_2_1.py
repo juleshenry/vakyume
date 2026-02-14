@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_1__D(Re: float, mu: float, rho: float, v: float):
+    def eqn_2_1__D(Re: float, mu: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = rho * D * v / mu
         result = []
         D = Re*mu/(rho*v)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_1__Re(D: float, mu: float, rho: float, v: float):
+    def eqn_2_1__Re(D: float, mu: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = rho * D * v / mu
         result = []
         Re = D*rho*v/mu
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_1__mu(D: float, Re: float, rho: float, v: float):
+    def eqn_2_1__mu(D: float, Re: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = rho * D * v / mu
         result = []
         mu = D*rho*v/Re
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_1__rho(D: float, Re: float, mu: float, v: float):
+    def eqn_2_1__rho(D: float, Re: float, mu: float, v: float, **kwargs):
         # [.pyeqn] Re = rho * D * v / mu
         result = []
         rho = Re*mu/(D*v)
@@ -42,7 +42,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_1__v(D: float, Re: float, mu: float, rho: float):
+    def eqn_2_1__v(D: float, Re: float, mu: float, rho: float, **kwargs):
         # [.pyeqn] Re = rho * D * v / mu
         result = []
         v = Re*mu/(D*rho)

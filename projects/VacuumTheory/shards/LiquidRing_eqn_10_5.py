@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_5__P_1(P_2: float, S_p: float, V: float, t: float):
+    def eqn_10_5__P_1(P_2: float, S_p: float, V: float, t: float, **kwargs):
         # [.pyeqn] t = V / S_p * log(P_1 / P_2)
         result = []
         P_1 = P_2*exp(S_p*t/V)
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_5__P_2(P_1: float, S_p: float, V: float, t: float):
+    def eqn_10_5__P_2(P_1: float, S_p: float, V: float, t: float, **kwargs):
         # [.pyeqn] t = V / S_p * log(P_1 / P_2)
         result = []
         P_2 = P_1*exp(-S_p*t/V)
@@ -26,7 +26,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_5__S_p(P_1: float, P_2: float, V: float, t: float):
+    def eqn_10_5__S_p(P_1: float, P_2: float, V: float, t: float, **kwargs):
         # [.pyeqn] t = V / S_p * log(P_1 / P_2)
         result = []
         S_p = V*log(P_1/P_2)/t
@@ -34,7 +34,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_5__V(P_1: float, P_2: float, S_p: float, t: float):
+    def eqn_10_5__V(P_1: float, P_2: float, S_p: float, t: float, **kwargs):
         # [.pyeqn] t = V / S_p * log(P_1 / P_2)
         result = []
         V = S_p*t/log(P_1/P_2)
@@ -42,7 +42,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_5__t(P_1: float, P_2: float, S_p: float, V: float):
+    def eqn_10_5__t(P_1: float, P_2: float, S_p: float, V: float, **kwargs):
         # [.pyeqn] t = V / S_p * log(P_1 / P_2)
         result = []
         t = V*log(P_1/P_2)/S_p

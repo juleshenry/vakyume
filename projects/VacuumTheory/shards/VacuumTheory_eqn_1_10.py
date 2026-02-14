@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_10__P_1(P_2: float, T_1: float, T_2: float, V_1: float, V_2: float):
+    def eqn_1_10__P_1(P_2: float, T_1: float, T_2: float, V_1: float, V_2: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         P_1 = P_2*T_1*V_2/(T_2*V_1)
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_10__P_2(P_1: float, T_1: float, T_2: float, V_1: float, V_2: float):
+    def eqn_1_10__P_2(P_1: float, T_1: float, T_2: float, V_1: float, V_2: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         P_2 = P_1*T_2*V_1/(T_1*V_2)
@@ -26,7 +26,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_10__T_1(P_1: float, P_2: float, T_2: float, V_1: float, V_2: float):
+    def eqn_1_10__T_1(P_1: float, P_2: float, T_2: float, V_1: float, V_2: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         T_1 = P_1*T_2*V_1/(P_2*V_2)
@@ -34,7 +34,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_10__T_2(P_1: float, P_2: float, T_1: float, V_1: float, V_2: float):
+    def eqn_1_10__T_2(P_1: float, P_2: float, T_1: float, V_1: float, V_2: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         T_2 = P_2*T_1*V_2/(P_1*V_1)
@@ -42,7 +42,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_10__V_1(P_1: float, P_2: float, T_1: float, T_2: float, V_2: float):
+    def eqn_1_10__V_1(P_1: float, P_2: float, T_1: float, T_2: float, V_2: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         V_1 = P_2*T_1*V_2/(P_1*T_2)
@@ -50,7 +50,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_10__V_2(P_1: float, P_2: float, T_1: float, T_2: float, V_1: float):
+    def eqn_1_10__V_2(P_1: float, P_2: float, T_1: float, T_2: float, V_1: float, **kwargs):
         # [.pyeqn] P_1 * V_1 / T_1 = P_2 * V_2 / T_2
         result = []
         V_2 = P_1*T_2*V_1/(P_2*T_1)

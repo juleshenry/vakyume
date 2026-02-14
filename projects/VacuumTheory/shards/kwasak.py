@@ -52,6 +52,7 @@ Working examples. Wed May 24 22:19:54 CDT 2023
 Fri Jul 28 20:37:55 CDT 2023
 Published.
 """
+
 import inspect
 
 
@@ -64,6 +65,6 @@ def kwasak_static(func):
             # print(str(func))
             # print(str(inspect.signature(func).parameters))
             raise ValueError("Must have exactly one missing variable for which to solve.")
-        return getattr(self, func.__name__ + "__" + m[0])(*[x[1] for x in sorted(kw.items(), key=lambda kv: kv[0])])
+        return getattr(self, func.__name__ + "__" + m[0])(**kw)
     return wrapper
     # fmt:on

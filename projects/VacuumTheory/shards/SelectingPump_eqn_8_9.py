@@ -10,7 +10,7 @@ class SelectingPump:
         return
 
     @staticmethod
-    def eqn_8_9__E_j(E_m: float, e: float, r: float, s: float):
+    def eqn_8_9__E_j(E_m: float, e: float, r: float, s: float, **kwargs):
         # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         E_j = 0.341296928327645*E_m*r*s/e
@@ -18,7 +18,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_9__E_m(E_j: float, e: float, r: float, s: float):
+    def eqn_8_9__E_m(E_j: float, e: float, r: float, s: float, **kwargs):
         # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         E_m = 2.93*E_j*e/(r*s)
@@ -26,7 +26,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_9__e(E_j: float, E_m: float, r: float, s: float):
+    def eqn_8_9__e(E_j: float, E_m: float, r: float, s: float, **kwargs):
         # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         e = 0.341296928327645*E_m*r*s/E_j
@@ -34,7 +34,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_9__r(E_j: float, E_m: float, e: float, s: float):
+    def eqn_8_9__r(E_j: float, E_m: float, e: float, s: float, **kwargs):
         # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         r = 2.93*E_j*e/(E_m*s)
@@ -42,7 +42,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_9__s(E_j: float, E_m: float, e: float, r: float):
+    def eqn_8_9__s(E_j: float, E_m: float, e: float, r: float, **kwargs):
         # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         s = 2.93*E_j*e/(E_m*r)

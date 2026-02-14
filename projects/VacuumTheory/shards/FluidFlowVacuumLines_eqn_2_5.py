@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_5__D(L: float, delta_P: float, mu: float, q: float):
+    def eqn_2_5__D(L: float, delta_P: float, mu: float, q: float, **kwargs):
         # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
         D = -2.52647511098426*I*(L*mu*q/delta_P)**(1/4)
@@ -24,7 +24,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_5__L(D: float, delta_P: float, mu: float, q: float):
+    def eqn_2_5__L(D: float, delta_P: float, mu: float, q: float, **kwargs):
         # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
         L = 0.0245436926061703*D**4*delta_P/(mu*q)
@@ -32,7 +32,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_5__delta_P(D: float, L: float, mu: float, q: float):
+    def eqn_2_5__delta_P(D: float, L: float, mu: float, q: float, **kwargs):
         # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
         delta_P = 40.7436654315252*L*mu*q/D**4
@@ -40,7 +40,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_5__mu(D: float, L: float, delta_P: float, q: float):
+    def eqn_2_5__mu(D: float, L: float, delta_P: float, q: float, **kwargs):
         # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
         mu = 0.0245436926061703*D**4*delta_P/(L*q)
@@ -48,7 +48,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_5__q(D: float, L: float, delta_P: float, mu: float):
+    def eqn_2_5__q(D: float, L: float, delta_P: float, mu: float, **kwargs):
         # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
         result = []
         q = 0.0245436926061703*D**4*delta_P/(L*mu)

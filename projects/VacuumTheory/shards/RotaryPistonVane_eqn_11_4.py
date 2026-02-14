@@ -10,17 +10,15 @@ class RotaryPistonVane:
         return
 
     @staticmethod
-    def eqn_11_4__p_g(p_s: float, p_v: float):
-        # [.pyeqn] Assuming the relationship between P_g and other pressures is known or can be derived from additional constraints not provided in your snippet (e.g., conservation of mass).
-        if p_s == 0 to prevent division by zero which would raise an error when calculating with actual numbers:
-            return None, float('inf')  # Or handle it more gracefully depending on context or implement a proper fallback strategy for the special case where P_s is zero.
-
-        result = (p_v - p_g) / (1 + p_v/p_s)
-        return None, result
-
+    def eqn_11_4__p_g(p_s: float, p_v: float, **kwargs):
+        # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
+        result = []
+        p_g = p_s - p_v
+        result.append(p_g)
+        return result
 
     @staticmethod
-    def eqn_11_4__p_s(p_g: float, p_v: float):
+    def eqn_11_4__p_s(p_g: float, p_v: float, **kwargs):
         # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
         result = []
         p_s = p_g + p_v
@@ -28,7 +26,7 @@ class RotaryPistonVane:
         return result
 
     @staticmethod
-    def eqn_11_4__p_v(p_g: float, p_s: float):
+    def eqn_11_4__p_v(p_g: float, p_s: float, **kwargs):
         # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
         result = []
         p_v = 0

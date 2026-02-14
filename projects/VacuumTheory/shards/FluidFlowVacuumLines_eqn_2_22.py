@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_22__P_s(Q_throughput: float, S_p: float):
+    def eqn_2_22__P_s(Q_throughput: float, S_p: float, **kwargs):
         # [.pyeqn] Q_throughput = S_p * P_s
         result = []
         P_s = Q_throughput/S_p
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_22__Q_throughput(P_s: float, S_p: float):
+    def eqn_2_22__Q_throughput(P_s: float, S_p: float, **kwargs):
         # [.pyeqn] Q_throughput = S_p * P_s
         result = []
         Q_throughput = P_s*S_p
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_22__S_p(P_s: float, Q_throughput: float):
+    def eqn_2_22__S_p(P_s: float, Q_throughput: float, **kwargs):
         # [.pyeqn] Q_throughput = S_p * P_s
         result = []
         S_p = Q_throughput/P_s

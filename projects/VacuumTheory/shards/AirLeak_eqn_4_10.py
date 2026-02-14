@@ -10,7 +10,7 @@ class AirLeak:
         return
 
     @staticmethod
-    def eqn_4_10__T(V: float, del_P: float, leakage: float, t: float):
+    def eqn_4_10__T(V: float, del_P: float, leakage: float, t: float, **kwargs):
         # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
         T = 3.127*V*del_P/(leakage*t)
@@ -18,7 +18,7 @@ class AirLeak:
         return result
 
     @staticmethod
-    def eqn_4_10__V(T: float, del_P: float, leakage: float, t: float):
+    def eqn_4_10__V(T: float, del_P: float, leakage: float, t: float, **kwargs):
         # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
         V = 0.319795330988168*T*leakage*t/del_P
@@ -26,7 +26,7 @@ class AirLeak:
         return result
 
     @staticmethod
-    def eqn_4_10__del_P(T: float, V: float, leakage: float, t: float):
+    def eqn_4_10__del_P(T: float, V: float, leakage: float, t: float, **kwargs):
         # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
         del_P = 0.319795330988168*T*leakage*t/V
@@ -34,7 +34,7 @@ class AirLeak:
         return result
 
     @staticmethod
-    def eqn_4_10__leakage(T: float, V: float, del_P: float, t: float):
+    def eqn_4_10__leakage(T: float, V: float, del_P: float, t: float, **kwargs):
         # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
         leakage = 3.127*V*del_P/(T*t)
@@ -42,7 +42,7 @@ class AirLeak:
         return result
 
     @staticmethod
-    def eqn_4_10__t(T: float, V: float, del_P: float, leakage: float):
+    def eqn_4_10__t(T: float, V: float, del_P: float, leakage: float, **kwargs):
         # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
         t = 3.127*V*del_P/(T*leakage)

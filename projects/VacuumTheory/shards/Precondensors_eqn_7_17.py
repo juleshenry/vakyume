@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_17__R_0(R_nc: float, h_c: float):
+    def eqn_7_17__R_0(R_nc: float, h_c: float, **kwargs):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
         R_0 = R_nc + 1/h_c
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_17__R_nc(R_0: float, h_c: float):
+    def eqn_7_17__R_nc(R_0: float, h_c: float, **kwargs):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
         R_nc = R_0 - 1/h_c
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_17__h_c(R_0: float, R_nc: float):
+    def eqn_7_17__h_c(R_0: float, R_nc: float, **kwargs):
         # [.pyeqn] R_0 = R_nc + 1 / h_c
         result = []
         h_c = 1/(R_0 - R_nc)

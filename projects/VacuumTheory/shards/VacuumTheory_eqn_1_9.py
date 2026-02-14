@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_9__M(P: float, R: float, T: float, rho: float):
+    def eqn_1_9__M(P: float, R: float, T: float, rho: float, **kwargs):
         # [.pyeqn] rho = P * M / (R * T)
         result = []
         M = R*T*rho/P
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_9__P(M: float, R: float, T: float, rho: float):
+    def eqn_1_9__P(M: float, R: float, T: float, rho: float, **kwargs):
         # [.pyeqn] rho = P * M / (R * T)
         result = []
         P = R*T*rho/M
@@ -26,7 +26,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_9__R(M: float, P: float, T: float, rho: float):
+    def eqn_1_9__R(M: float, P: float, T: float, rho: float, **kwargs):
         # [.pyeqn] rho = P * M / (R * T)
         result = []
         R = M*P/(T*rho)
@@ -34,7 +34,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_9__T(M: float, P: float, R: float, rho: float):
+    def eqn_1_9__T(M: float, P: float, R: float, rho: float, **kwargs):
         # [.pyeqn] rho = P * M / (R * T)
         result = []
         T = M*P/(R*rho)
@@ -42,7 +42,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_9__rho(M: float, P: float, R: float, T: float):
+    def eqn_1_9__rho(M: float, P: float, R: float, T: float, **kwargs):
         # [.pyeqn] rho = P * M / (R * T)
         result = []
         rho = M*P/(R*T)

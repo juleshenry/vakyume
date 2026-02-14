@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_1__Abs_Pressure(BarometricPressure: float, Vacuum: float):
+    def eqn_3_1__Abs_Pressure(BarometricPressure: float, Vacuum: float, **kwargs):
         # [.pyeqn] Abs_Pressure = BarometricPressure - Vacuum
         result = []
         Abs_Pressure = BarometricPressure - Vacuum
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_1__BarometricPressure(Abs_Pressure: float, Vacuum: float):
+    def eqn_3_1__BarometricPressure(Abs_Pressure: float, Vacuum: float, **kwargs):
         # [.pyeqn] Abs_Pressure = BarometricPressure - Vacuum
         result = []
         BarometricPressure = Abs_Pressure + Vacuum
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_1__Vacuum(Abs_Pressure: float, BarometricPressure: float):
+    def eqn_3_1__Vacuum(Abs_Pressure: float, BarometricPressure: float, **kwargs):
         # [.pyeqn] Abs_Pressure = BarometricPressure - Vacuum
         result = []
         Vacuum = -Abs_Pressure + BarometricPressure

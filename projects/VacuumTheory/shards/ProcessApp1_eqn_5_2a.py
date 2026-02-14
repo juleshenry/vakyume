@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_2a__K_1(K_2: float, alpha_1_2: float):
+    def eqn_5_2a__K_1(K_2: float, alpha_1_2: float, **kwargs):
         # [.pyeqn] alpha_1_2 = K_1 / K_2
         result = []
         K_1 = K_2*alpha_1_2
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2a__K_2(K_1: float, alpha_1_2: float):
+    def eqn_5_2a__K_2(K_1: float, alpha_1_2: float, **kwargs):
         # [.pyeqn] alpha_1_2 = K_1 / K_2
         result = []
         K_2 = K_1/alpha_1_2
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2a__alpha_1_2(K_1: float, K_2: float):
+    def eqn_5_2a__alpha_1_2(K_1: float, K_2: float, **kwargs):
         # [.pyeqn] alpha_1_2 = K_1 / K_2
         result = []
         alpha_1_2 = K_1/K_2

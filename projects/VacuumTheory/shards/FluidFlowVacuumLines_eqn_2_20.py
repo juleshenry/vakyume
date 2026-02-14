@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_20__L(sum_equivalent_length: float, sum_pipe: float):
+    def eqn_2_20__L(sum_equivalent_length: float, sum_pipe: float, **kwargs):
         # [.pyeqn] L = sum_pipe + sum_equivalent_length
         result = []
         L = sum_equivalent_length + sum_pipe
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_20__sum_equivalent_length(L: float, sum_pipe: float):
+    def eqn_2_20__sum_equivalent_length(L: float, sum_pipe: float, **kwargs):
         # [.pyeqn] L = sum_pipe + sum_equivalent_length
         result = []
         sum_equivalent_length = L - sum_pipe
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_20__sum_pipe(L: float, sum_equivalent_length: float):
+    def eqn_2_20__sum_pipe(L: float, sum_equivalent_length: float, **kwargs):
         # [.pyeqn] L = sum_pipe + sum_equivalent_length
         result = []
         sum_pipe = L - sum_equivalent_length

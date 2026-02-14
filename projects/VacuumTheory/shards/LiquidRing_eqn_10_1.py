@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_1__D_r(sig_R: float, w: float):
+    def eqn_10_1__D_r(sig_R: float, w: float, **kwargs):
         # [.pyeqn] sig_R = 0.00436 * D_r * w
         result = []
         D_r = 229.357798165138*sig_R/w
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_1__sig_R(D_r: float, w: float):
+    def eqn_10_1__sig_R(D_r: float, w: float, **kwargs):
         # [.pyeqn] sig_R = 0.00436 * D_r * w
         result = []
         sig_R = 0.00436*D_r*w
@@ -26,7 +26,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_1__w(D_r: float, sig_R: float):
+    def eqn_10_1__w(D_r: float, sig_R: float, **kwargs):
         # [.pyeqn] sig_R = 0.00436 * D_r * w
         result = []
         w = 229.357798165138*sig_R/D_r

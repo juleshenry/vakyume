@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_3__N_mfw(Q_gas: float, T: float):
+    def eqn_10_3__N_mfw(Q_gas: float, T: float, **kwargs):
         # [.pyeqn] Q_gas = 9.25 * N_mfw * T
         result = []
         N_mfw = 0.108108108108108*Q_gas/T
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_3__Q_gas(N_mfw: float, T: float):
+    def eqn_10_3__Q_gas(N_mfw: float, T: float, **kwargs):
         # [.pyeqn] Q_gas = 9.25 * N_mfw * T
         result = []
         Q_gas = 9.25*N_mfw*T
@@ -26,7 +26,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_3__T(N_mfw: float, Q_gas: float):
+    def eqn_10_3__T(N_mfw: float, Q_gas: float, **kwargs):
         # [.pyeqn] Q_gas = 9.25 * N_mfw * T
         result = []
         T = 0.108108108108108*Q_gas/N_mfw

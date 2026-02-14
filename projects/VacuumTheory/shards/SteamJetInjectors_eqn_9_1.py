@@ -10,7 +10,7 @@ class SteamJetInjectors:
         return
 
     @staticmethod
-    def eqn_9_1__A(rho_s: float, v: float, w_s: float):
+    def eqn_9_1__A(rho_s: float, v: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = v * A * rho_s
         result = []
         A = w_s/(rho_s*v)
@@ -18,7 +18,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_1__rho_s(A: float, v: float, w_s: float):
+    def eqn_9_1__rho_s(A: float, v: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = v * A * rho_s
         result = []
         rho_s = w_s/(A*v)
@@ -26,7 +26,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_1__v(A: float, rho_s: float, w_s: float):
+    def eqn_9_1__v(A: float, rho_s: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = v * A * rho_s
         result = []
         v = w_s/(A*rho_s)
@@ -34,7 +34,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_1__w_s(A: float, rho_s: float, v: float):
+    def eqn_9_1__w_s(A: float, rho_s: float, v: float, **kwargs):
         # [.pyeqn] w_s = v * A * rho_s
         result = []
         w_s = A*rho_s*v

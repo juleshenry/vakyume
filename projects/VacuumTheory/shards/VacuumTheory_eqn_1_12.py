@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_12__Total_P(sum_partial_pressures: float):
+    def eqn_1_12__Total_P(sum_partial_pressures: float, **kwargs):
         # [.pyeqn] Total_P = sum_partial_pressures
         result = []
         Total_P = sum_partial_pressures
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_12__sum_partial_pressures(Total_P: float):
+    def eqn_1_12__sum_partial_pressures(Total_P: float, **kwargs):
         # [.pyeqn] Total_P = sum_partial_pressures
         result = []
         sum_partial_pressures = Total_P

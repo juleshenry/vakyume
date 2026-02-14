@@ -10,7 +10,7 @@ class ProcessApp2:
         return
 
     @staticmethod
-    def eqn_6_11a__A_d(delta_T: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float, t_R: float):
+    def eqn_6_11a__A_d(delta_T: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         A_d = delta_h_i*delta_m*m_b/(delta_T*h_d*t_R)
@@ -18,7 +18,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__delta_T(A_d: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float, t_R: float):
+    def eqn_6_11a__delta_T(A_d: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         delta_T = delta_h_i*delta_m*m_b/(A_d*h_d*t_R)
@@ -26,7 +26,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__delta_h_i(A_d: float, delta_T: float, delta_m: float, h_d: float, m_b: float, t_R: float):
+    def eqn_6_11a__delta_h_i(A_d: float, delta_T: float, delta_m: float, h_d: float, m_b: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         delta_h_i = A_d*delta_T*h_d*t_R/(delta_m*m_b)
@@ -34,7 +34,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__delta_m(A_d: float, delta_T: float, delta_h_i: float, h_d: float, m_b: float, t_R: float):
+    def eqn_6_11a__delta_m(A_d: float, delta_T: float, delta_h_i: float, h_d: float, m_b: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         delta_m = A_d*delta_T*h_d*t_R/(delta_h_i*m_b)
@@ -42,7 +42,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__h_d(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, m_b: float, t_R: float):
+    def eqn_6_11a__h_d(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, m_b: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         h_d = delta_h_i*delta_m*m_b/(A_d*delta_T*t_R)
@@ -50,7 +50,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__m_b(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, h_d: float, t_R: float):
+    def eqn_6_11a__m_b(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, h_d: float, t_R: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         m_b = A_d*delta_T*h_d*t_R/(delta_h_i*delta_m)
@@ -58,7 +58,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_11a__t_R(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float):
+    def eqn_6_11a__t_R(A_d: float, delta_T: float, delta_h_i: float, delta_m: float, h_d: float, m_b: float, **kwargs):
         # [.pyeqn] t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)
         result = []
         t_R = delta_h_i*delta_m*m_b/(A_d*delta_T*h_d)

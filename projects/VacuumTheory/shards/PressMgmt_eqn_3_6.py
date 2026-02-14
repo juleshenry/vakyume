@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_6__H_1(H_2: float, P: float, V: float, V_P: float):
+    def eqn_3_6__H_1(H_2: float, P: float, V: float, V_P: float, **kwargs):
         # [.pyeqn] P = V_P * (H_2 - H_1) / (V - V_P)
         result = []
         H_1 = H_2 - P*V/V_P + P
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_6__H_2(H_1: float, P: float, V: float, V_P: float):
+    def eqn_3_6__H_2(H_1: float, P: float, V: float, V_P: float, **kwargs):
         # [.pyeqn] P = V_P * (H_2 - H_1) / (V - V_P)
         result = []
         H_2 = H_1 + P*V/V_P - P
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_6__P(H_1: float, H_2: float, V: float, V_P: float):
+    def eqn_3_6__P(H_1: float, H_2: float, V: float, V_P: float, **kwargs):
         # [.pyeqn] P = V_P * (H_2 - H_1) / (V - V_P)
         result = []
         P = V_P*(-H_1 + H_2)/(V - V_P)
@@ -34,7 +34,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_6__V(H_1: float, H_2: float, P: float, V_P: float):
+    def eqn_3_6__V(H_1: float, H_2: float, P: float, V_P: float, **kwargs):
         # [.pyeqn] P = V_P * (H_2 - H_1) / (V - V_P)
         result = []
         V = V_P*(-H_1 + H_2 + P)/P
@@ -42,7 +42,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_6__V_P(H_1: float, H_2: float, P: float, V: float):
+    def eqn_3_6__V_P(H_1: float, H_2: float, P: float, V: float, **kwargs):
         # [.pyeqn] P = V_P * (H_2 - H_1) / (V - V_P)
         result = []
         V_P = P*V/(-H_1 + H_2 + P)

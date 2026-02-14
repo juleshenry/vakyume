@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_33__C_paralell(arithmetic_sum_C: float):
+    def eqn_2_33__C_paralell(arithmetic_sum_C: float, **kwargs):
         # [.pyeqn] 1 / C_paralell = arithmetic_sum_C
         result = []
         C_paralell = 1/arithmetic_sum_C
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_33__arithmetic_sum_C(C_paralell: float):
+    def eqn_2_33__arithmetic_sum_C(C_paralell: float, **kwargs):
         # [.pyeqn] 1 / C_paralell = arithmetic_sum_C
         result = []
         arithmetic_sum_C = 1/C_paralell

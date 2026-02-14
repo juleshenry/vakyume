@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_17__H_2_1(H_2_3: float, H_2_mi: float, x_1: float, x_3: float):
+    def eqn_5_17__H_2_1(H_2_3: float, H_2_mi: float, x_1: float, x_3: float, **kwargs):
         # [.pyeqn] log(H_2_mi) = x_1 * log(H_2_1) + x_3 * log(H_2_3)
         result = []
         H_2_1 = exp((-x_3*log(H_2_3) + log(H_2_mi))/x_1)
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_17__H_2_3(H_2_1: float, H_2_mi: float, x_1: float, x_3: float):
+    def eqn_5_17__H_2_3(H_2_1: float, H_2_mi: float, x_1: float, x_3: float, **kwargs):
         # [.pyeqn] log(H_2_mi) = x_1 * log(H_2_1) + x_3 * log(H_2_3)
         result = []
         H_2_3 = exp((-x_1*log(H_2_1) + log(H_2_mi))/x_3)
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_17__H_2_mi(H_2_1: float, H_2_3: float, x_1: float, x_3: float):
+    def eqn_5_17__H_2_mi(H_2_1: float, H_2_3: float, x_1: float, x_3: float, **kwargs):
         # [.pyeqn] log(H_2_mi) = x_1 * log(H_2_1) + x_3 * log(H_2_3)
         result = []
         H_2_mi = exp(x_1*log(H_2_1) + x_3*log(H_2_3))
@@ -34,7 +34,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_17__x_1(H_2_1: float, H_2_3: float, H_2_mi: float, x_3: float):
+    def eqn_5_17__x_1(H_2_1: float, H_2_3: float, H_2_mi: float, x_3: float, **kwargs):
         # [.pyeqn] log(H_2_mi) = x_1 * log(H_2_1) + x_3 * log(H_2_3)
         result = []
         x_1 = (-x_3*log(H_2_3) + log(H_2_mi))/log(H_2_1)
@@ -42,7 +42,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_17__x_3(H_2_1: float, H_2_3: float, H_2_mi: float, x_1: float):
+    def eqn_5_17__x_3(H_2_1: float, H_2_3: float, H_2_mi: float, x_1: float, **kwargs):
         # [.pyeqn] log(H_2_mi) = x_1 * log(H_2_1) + x_3 * log(H_2_3)
         result = []
         x_3 = (-x_1*log(H_2_1) + log(H_2_mi))/log(H_2_3)

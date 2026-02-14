@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_21__P(P_d: float, P_prime: float):
+    def eqn_10_21__P(P_d: float, P_prime: float, **kwargs):
         # [.pyeqn] P_prime = P / P_d * 760
         result = []
         P = P_d*P_prime/760
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_21__P_d(P: float, P_prime: float):
+    def eqn_10_21__P_d(P: float, P_prime: float, **kwargs):
         # [.pyeqn] P_prime = P / P_d * 760
         result = []
         P_d = 760*P/P_prime
@@ -26,7 +26,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_21__P_prime(P: float, P_d: float):
+    def eqn_10_21__P_prime(P: float, P_d: float, **kwargs):
         # [.pyeqn] P_prime = P / P_d * 760
         result = []
         P_prime = 760*P/P_d

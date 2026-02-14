@@ -10,7 +10,7 @@ class SteamJetInjectors:
         return
 
     @staticmethod
-    def eqn_9_4__AEL(SC: float, r: float, w_s: float):
+    def eqn_9_4__AEL(SC: float, r: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = AEL * r * SC
         result = []
         AEL = w_s/(SC*r)
@@ -18,7 +18,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_4__SC(AEL: float, r: float, w_s: float):
+    def eqn_9_4__SC(AEL: float, r: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = AEL * r * SC
         result = []
         SC = w_s/(AEL*r)
@@ -26,7 +26,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_4__r(AEL: float, SC: float, w_s: float):
+    def eqn_9_4__r(AEL: float, SC: float, w_s: float, **kwargs):
         # [.pyeqn] w_s = AEL * r * SC
         result = []
         r = w_s/(AEL*SC)
@@ -34,7 +34,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_4__w_s(AEL: float, SC: float, r: float):
+    def eqn_9_4__w_s(AEL: float, SC: float, r: float, **kwargs):
         # [.pyeqn] w_s = AEL * r * SC
         result = []
         w_s = AEL*SC*r

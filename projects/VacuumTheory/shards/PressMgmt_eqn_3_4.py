@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_4__KAPPA(P: float, V: float):
+    def eqn_3_4__KAPPA(P: float, V: float, **kwargs):
         # [.pyeqn] P * V = KAPPA
         result = []
         KAPPA = P*V
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_4__P(KAPPA: float, V: float):
+    def eqn_3_4__P(KAPPA: float, V: float, **kwargs):
         # [.pyeqn] P * V = KAPPA
         result = []
         P = KAPPA/V
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_4__V(KAPPA: float, P: float):
+    def eqn_3_4__V(KAPPA: float, P: float, **kwargs):
         # [.pyeqn] P * V = KAPPA
         result = []
         V = KAPPA/P

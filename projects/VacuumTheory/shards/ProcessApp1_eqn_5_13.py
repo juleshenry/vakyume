@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_13__HETP(H_p: float, N_ES: float):
+    def eqn_5_13__HETP(H_p: float, N_ES: float, **kwargs):
         # [.pyeqn] H_p = N_ES * HETP
         result = []
         HETP = H_p/N_ES
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_13__H_p(HETP: float, N_ES: float):
+    def eqn_5_13__H_p(HETP: float, N_ES: float, **kwargs):
         # [.pyeqn] H_p = N_ES * HETP
         result = []
         H_p = HETP*N_ES
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_13__N_ES(HETP: float, H_p: float):
+    def eqn_5_13__N_ES(HETP: float, H_p: float, **kwargs):
         # [.pyeqn] H_p = N_ES * HETP
         result = []
         N_ES = H_p/HETP

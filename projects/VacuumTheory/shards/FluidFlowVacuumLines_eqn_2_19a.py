@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_19a__R_ll(Re: float, mu: float, rho: float, v: float):
+    def eqn_2_19a__R_ll(Re: float, mu: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = 4 * R_ll * rho * v / mu
         result = []
         R_ll = Re*mu/(4*rho*v)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19a__Re(R_ll: float, mu: float, rho: float, v: float):
+    def eqn_2_19a__Re(R_ll: float, mu: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = 4 * R_ll * rho * v / mu
         result = []
         Re = 4*R_ll*rho*v/mu
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19a__mu(R_ll: float, Re: float, rho: float, v: float):
+    def eqn_2_19a__mu(R_ll: float, Re: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = 4 * R_ll * rho * v / mu
         result = []
         mu = 4*R_ll*rho*v/Re
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19a__rho(R_ll: float, Re: float, mu: float, v: float):
+    def eqn_2_19a__rho(R_ll: float, Re: float, mu: float, v: float, **kwargs):
         # [.pyeqn] Re = 4 * R_ll * rho * v / mu
         result = []
         rho = Re*mu/(4*R_ll*v)
@@ -42,7 +42,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19a__v(R_ll: float, Re: float, mu: float, rho: float):
+    def eqn_2_19a__v(R_ll: float, Re: float, mu: float, rho: float, **kwargs):
         # [.pyeqn] Re = 4 * R_ll * rho * v / mu
         result = []
         v = Re*mu/(4*R_ll*rho)

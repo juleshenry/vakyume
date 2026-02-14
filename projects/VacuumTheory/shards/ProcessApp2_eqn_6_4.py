@@ -10,7 +10,7 @@ class ProcessApp2:
         return
 
     @staticmethod
-    def eqn_6_4__Q_v(delta_h_v: float, w_v: float):
+    def eqn_6_4__Q_v(delta_h_v: float, w_v: float, **kwargs):
         # [.pyeqn] w_v = 12000 * Q_v / delta_h_v
         result = []
         Q_v = delta_h_v*w_v/12000
@@ -18,7 +18,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_4__delta_h_v(Q_v: float, w_v: float):
+    def eqn_6_4__delta_h_v(Q_v: float, w_v: float, **kwargs):
         # [.pyeqn] w_v = 12000 * Q_v / delta_h_v
         result = []
         delta_h_v = 12000*Q_v/w_v
@@ -26,7 +26,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_4__w_v(Q_v: float, delta_h_v: float):
+    def eqn_6_4__w_v(Q_v: float, delta_h_v: float, **kwargs):
         # [.pyeqn] w_v = 12000 * Q_v / delta_h_v
         result = []
         w_v = 12000*Q_v/delta_h_v

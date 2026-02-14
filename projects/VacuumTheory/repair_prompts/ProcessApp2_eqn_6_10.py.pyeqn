@@ -1,0 +1,1 @@
+dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )

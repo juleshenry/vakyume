@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_6__P_0_i(gamma_i: float, p_i: float, x_i: float):
+    def eqn_5_6__P_0_i(gamma_i: float, p_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * gamma_i * P_0_i
         result = []
         P_0_i = p_i/(gamma_i*x_i)
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_6__gamma_i(P_0_i: float, p_i: float, x_i: float):
+    def eqn_5_6__gamma_i(P_0_i: float, p_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * gamma_i * P_0_i
         result = []
         gamma_i = p_i/(P_0_i*x_i)
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_6__p_i(P_0_i: float, gamma_i: float, x_i: float):
+    def eqn_5_6__p_i(P_0_i: float, gamma_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * gamma_i * P_0_i
         result = []
         p_i = P_0_i*gamma_i*x_i
@@ -34,7 +34,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_6__x_i(P_0_i: float, gamma_i: float, p_i: float):
+    def eqn_5_6__x_i(P_0_i: float, gamma_i: float, p_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * gamma_i * P_0_i
         result = []
         x_i = p_i/(P_0_i*gamma_i)

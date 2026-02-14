@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_16__V_div_V_P_MAX():
+    def eqn_3_16__V_div_V_P_MAX(, **kwargs):
         # [.pyeqn] V_div_V_P_MAX = 200000 / (3.141592653589793 / 4)
         result = []
         V_div_V_P_MAX = 254647.908947033

@@ -1,0 +1,1 @@
+W_i = W_air * (M * x_i * epsilon_i * P_i_0) / (29 * (P - p_c))

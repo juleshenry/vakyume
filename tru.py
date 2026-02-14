@@ -89,7 +89,7 @@ class Verify:
         params = self._get_params(base_eq)
         variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
 
-        results = {}  # (source_truth_var) -> { target_var -> success }
+        results = {}  # (source_truth_var) -> matches
 
         # Increase trials to be more certain
         num_trials = 3
@@ -98,24 +98,28 @@ class Verify:
             variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
 
             trial_matches = []
-            for _ in range(num_trials):
+            for trial_idx in range(num_trials):
                 test_inputs = {p: self.make_rand() for p in params if p != source_var}
 
                 try:
                     source_values = variant_method(**test_inputs)
                     if not source_values:
+                        print(
+                            f"  [OOO] {base_eq}__{source_var} returned no values with inputs {test_inputs}"
+                        )
                         trial_matches.append(0)
                         continue
 
                     best_match_for_this_trial = 0
                     for val in source_values:
                         if isinstance(val, complex) and abs(val.imag) > 1e-5:
-                            continue  # Skip complex results for now if they are not expected
+                            continue
 
                         full_set = test_inputs.copy()
                         full_set[source_var] = val
 
                         matches = 0
+                        mismatches = []
                         for target_var in variants:
                             if target_var == source_var:
                                 matches += 1
@@ -134,17 +138,28 @@ class Verify:
                                     full_set[target_var], target_values
                                 ):
                                     matches += 1
-                            except:
-                                pass
+                                else:
+                                    mismatches.append((target_var, target_values))
+                            except Exception as e:
+                                mismatches.append((target_var, f"Error: {e}"))
+
+                        if matches < len(variants):
+                            print(
+                                f"  [OOO] Trial {trial_idx}: {base_eq}__{source_var} output {val} is inconsistent."
+                            )
+                            for m_var, m_val in mismatches:
+                                print(
+                                    f"    |- {base_eq}__{m_var} expected {full_set[m_var]} but got {m_val}"
+                                )
+
                         best_match_for_this_trial = max(
                             best_match_for_this_trial, matches
                         )
                     trial_matches.append(best_match_for_this_trial)
-                except:
+                except Exception as e:
+                    print(f"  [OOO] {base_eq}__{source_var} crashed: {e}")
                     trial_matches.append(0)
 
-            # Use the best trial result or average? Usually if it works once with random, it's likely correct.
-            # But here we want consistency.
             results[source_var] = max(trial_matches) if trial_matches else 0
 
         return results
@@ -154,15 +169,3 @@ class Verify:
         for base_eq in self.base_equations:
             overall_results[base_eq] = self.verify_equation(base_eq)
         return overall_results
-
-
-def test_a():
-    from vakyume_2025_ollama_i import VacuumTheory
-
-    v = Verify(VacuumTheory)
-    print(v.verify())
-
-
-if __name__ == "__main__":
-    # Example usage
-    pass

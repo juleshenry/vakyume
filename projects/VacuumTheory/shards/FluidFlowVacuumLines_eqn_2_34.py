@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_34__C(C_1: float, C_2: float, D: float, L: float, P_p: float, mu: float):
+    def eqn_2_34__C(C_1: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
         # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
         C = D**3*(C_1*D*P_p + C_2*mu)/(L*mu)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_34__C_1(C: float, C_2: float, D: float, L: float, P_p: float, mu: float):
+    def eqn_2_34__C_1(C: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
         # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
         C_1 = mu*(C*L - C_2*D**3)/(D**4*P_p)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_34__C_2(C: float, C_1: float, D: float, L: float, P_p: float, mu: float):
+    def eqn_2_34__C_2(C: float, C_1: float, D: float, L: float, P_p: float, mu: float, **kwargs):
         # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
         C_2 = C*L/D**3 - C_1*D*P_p/mu
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_34__D(C: float, C_1: float, C_2: float, L: float, P_p: float, mu: float):
+    def eqn_2_34__D(C: float, C_1: float, C_2: float, L: float, P_p: float, mu: float, **kwargs):
         # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
         D = Piecewise((-sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), Eq(C*L*mu/(C_1*P_p), 0)), (-sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) - 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), True))
@@ -48,25 +48,26 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_34__L(C: float, C_1: float, D: float):
-        L = symbols('L')  # Let's define 'L' as a symbol.
-        equation = Eq((C / (D ** 4)) - ((C_1 * mu + C_2) * P_p), C)
-        solution = solve(equation, L)[0] if D else None  # Avoid division by zero error for this fixed method to work correctly.
-        return [solution]
-
-
-    @staticmethod
-    def eqn_2_34__P_p(C: float, C_1: float, mu: float, L: float):
-        P_p = symbols('P_p')  # Let's define 'P_p' as a symbol.
-        equation = Eq((C / (L * mu)) - ((C_1 * D ** 4) + C_2), C)
-        solution = solve(equation, P_p)[0] if L else None  # Avoid division by zero error for this fixed method to work correctly.
-        return [solution]
-
+    def eqn_2_34__L(C: float, C_1: float, C_2: float, D: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        L = D**3*(C_1*D*P_p + C_2*mu)/(C*mu)
+        result.append(L)
+        return result
 
     @staticmethod
-    def eqn_2_34__mu(C: float, C_1: float, D: float, P_p: float):
-        mu = symbols('mu')  # Let's define 'mu' as a symbol.
-        L = ComplexRelationshipModel.eqn_2_34__L(C=C, C_1=C_1, D=D)
-        solution = solve((C - ((C_1 * (solve(equation for mu)[0] ** 4 / P_p)) + C_2)), symbols='mu')[0] if len(solve(equation, L)) > 0 else None
-        return [solution]
+    def eqn_2_34__P_p(C: float, C_1: float, C_2: float, D: float, L: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        P_p = mu*(C*L - C_2*D**3)/(C_1*D**4)
+        result.append(P_p)
+        return result
+
+    @staticmethod
+    def eqn_2_34__mu(C: float, C_1: float, C_2: float, D: float, L: float, P_p: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        mu = C_1*D**4*P_p/(C*L - C_2*D**3)
+        result.append(mu)
+        return result
 

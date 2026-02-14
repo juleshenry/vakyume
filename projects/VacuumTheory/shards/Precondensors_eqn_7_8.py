@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_8__L_c(Q_condensor_heat_duty: float, c_p: float, del_T: float):
+    def eqn_7_8__L_c(Q_condensor_heat_duty: float, c_p: float, del_T: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T)
         result = []
         L_c = Q_condensor_heat_duty/(c_p*del_T)
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_8__Q_condensor_heat_duty(L_c: float, c_p: float, del_T: float):
+    def eqn_7_8__Q_condensor_heat_duty(L_c: float, c_p: float, del_T: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T)
         result = []
         Q_condensor_heat_duty = L_c*c_p*del_T
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_8__c_p(L_c: float, Q_condensor_heat_duty: float, del_T: float):
+    def eqn_7_8__c_p(L_c: float, Q_condensor_heat_duty: float, del_T: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T)
         result = []
         c_p = Q_condensor_heat_duty/(L_c*del_T)
@@ -34,7 +34,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_8__del_T(L_c: float, Q_condensor_heat_duty: float, c_p: float):
+    def eqn_7_8__del_T(L_c: float, Q_condensor_heat_duty: float, c_p: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T)
         result = []
         del_T = Q_condensor_heat_duty/(L_c*c_p)

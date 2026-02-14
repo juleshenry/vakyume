@@ -10,7 +10,7 @@ class ProcessApp2:
         return
 
     @staticmethod
-    def eqn_6_9__A(dV_dt: float, delta_P: float, m: float, mu: float, r: float, r_M: float):
+    def eqn_6_9__A(dV_dt: float, delta_P: float, m: float, mu: float, r: float, r_M: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         A = (dV_dt*r_M - sqrt(dV_dt*(dV_dt*r_M**2 + 4*delta_P**2*m*mu*r)))/(2*delta_P)
@@ -20,12 +20,15 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_9__dV_dt(A: float, delta_P: float, m: float, mu: float, r: float, r_M: float):
-        return (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
-
+    def eqn_6_9__dV_dt(A: float, delta_P: float, m: float, mu: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        dV_dt = A**2*delta_P/(A*r_M + delta_P*m*mu*r)
+        result.append(dV_dt)
+        return result
 
     @staticmethod
-    def eqn_6_9__delta_P(A: float, dV_dt: float, m: float, mu: float, r: float, r_M: float):
+    def eqn_6_9__delta_P(A: float, dV_dt: float, m: float, mu: float, r: float, r_M: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         delta_P = A*dV_dt*r_M/(A**2 - dV_dt*m*mu*r)
@@ -33,7 +36,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_9__m(A: float, dV_dt: float, delta_P: float, mu: float, r: float, r_M: float):
+    def eqn_6_9__m(A: float, dV_dt: float, delta_P: float, mu: float, r: float, r_M: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         m = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*mu*r)
@@ -41,7 +44,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_9__mu(A: float, dV_dt: float, delta_P: float, m: float, r: float, r_M: float):
+    def eqn_6_9__mu(A: float, dV_dt: float, delta_P: float, m: float, r: float, r_M: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         mu = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*m*r)
@@ -49,7 +52,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_9__r(A: float, dV_dt: float, delta_P: float, m: float, mu: float, r_M: float):
+    def eqn_6_9__r(A: float, dV_dt: float, delta_P: float, m: float, mu: float, r_M: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         r = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*m*mu)
@@ -57,7 +60,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_9__r_M(A: float, dV_dt: float, delta_P: float, m: float, mu: float, r: float):
+    def eqn_6_9__r_M(A: float, dV_dt: float, delta_P: float, m: float, mu: float, r: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
         result = []
         r_M = A*delta_P/dV_dt - delta_P*m*mu*r/A

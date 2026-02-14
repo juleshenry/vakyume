@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_4___beta(mu: float, vel_grad: float):
+    def eqn_2_4___beta(mu: float, vel_grad: float, **kwargs):
         # [.pyeqn] _beta = mu * vel_grad
         result = []
         _beta = mu*vel_grad
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_4__mu(_beta: float, vel_grad: float):
+    def eqn_2_4__mu(_beta: float, vel_grad: float, **kwargs):
         # [.pyeqn] _beta = mu * vel_grad
         result = []
         mu = _beta/vel_grad
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_4__vel_grad(_beta: float, mu: float):
+    def eqn_2_4__vel_grad(_beta: float, mu: float, **kwargs):
         # [.pyeqn] _beta = mu * vel_grad
         result = []
         vel_grad = _beta/mu

@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_13a__n(n_a: float, y_a: float):
+    def eqn_1_13a__n(n_a: float, y_a: float, **kwargs):
         # [.pyeqn] y_a = n_a / n
         result = []
         n = n_a/y_a
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_13a__n_a(n: float, y_a: float):
+    def eqn_1_13a__n_a(n: float, y_a: float, **kwargs):
         # [.pyeqn] y_a = n_a / n
         result = []
         n_a = n*y_a
@@ -26,7 +26,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_13a__y_a(n: float, n_a: float):
+    def eqn_1_13a__y_a(n: float, n_a: float, **kwargs):
         # [.pyeqn] y_a = n_a / n
         result = []
         y_a = n_a/n

@@ -10,7 +10,7 @@ class ProcessApp2:
         return
 
     @staticmethod
-    def eqn_6_10__A(dV_dt: float, delta_P: float, mu: float, r_c: float, s: float, tau: float):
+    def eqn_6_10__A(dV_dt: float, delta_P: float, mu: float, r_c: float, s: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         A = dV_dt*delta_P**(s - 1)*mu*r_c*tau
@@ -18,7 +18,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__dV_dt(A: float, delta_P: float, mu: float, r_c: float, s: float, tau: float):
+    def eqn_6_10__dV_dt(A: float, delta_P: float, mu: float, r_c: float, s: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         dV_dt = A*delta_P**(1 - s)/(mu*r_c*tau)
@@ -26,7 +26,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__delta_P(A: float, dV_dt: float, mu: float, r_c: float, s: float, tau: float):
+    def eqn_6_10__delta_P(A: float, dV_dt: float, mu: float, r_c: float, s: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         delta_P = (dV_dt*mu*r_c*tau/A)**(-1/(s - 1))
@@ -34,7 +34,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__mu(A: float, dV_dt: float, delta_P: float, r_c: float, s: float, tau: float):
+    def eqn_6_10__mu(A: float, dV_dt: float, delta_P: float, r_c: float, s: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         mu = A*delta_P**(1 - s)/(dV_dt*r_c*tau)
@@ -42,7 +42,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__r_c(A: float, dV_dt: float, delta_P: float, mu: float, s: float, tau: float):
+    def eqn_6_10__r_c(A: float, dV_dt: float, delta_P: float, mu: float, s: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         r_c = A*delta_P**(1 - s)/(dV_dt*mu*tau)
@@ -50,7 +50,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__s(A: float, dV_dt: float, delta_P: float, mu: float, r_c: float, tau: float):
+    def eqn_6_10__s(A: float, dV_dt: float, delta_P: float, mu: float, r_c: float, tau: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         s = log(A*delta_P/(dV_dt*mu*r_c*tau))/log(delta_P)
@@ -58,7 +58,7 @@ class ProcessApp2:
         return result
 
     @staticmethod
-    def eqn_6_10__tau(A: float, dV_dt: float, delta_P: float, mu: float, r_c: float, s: float):
+    def eqn_6_10__tau(A: float, dV_dt: float, delta_P: float, mu: float, r_c: float, s: float, **kwargs):
         # [.pyeqn] dV_dt = (A * delta_P**(1 - s) ) / ( mu * tau * r_c )
         result = []
         tau = A*delta_P**(1 - s)/(dV_dt*mu*r_c)

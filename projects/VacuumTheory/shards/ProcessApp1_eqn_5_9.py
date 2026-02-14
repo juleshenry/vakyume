@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_9__D(L_0: float, V_1: float):
+    def eqn_5_9__D(L_0: float, V_1: float, **kwargs):
         # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
         result = []
         D = -L_0 + V_1
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_9__L_0(D: float, V_1: float):
+    def eqn_5_9__L_0(D: float, V_1: float, **kwargs):
         # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
         result = []
         L_0 = 0
@@ -28,7 +28,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_9__V_1(D: float, L_0: float):
+    def eqn_5_9__V_1(D: float, L_0: float, **kwargs):
         # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
         result = []
         V_1 = D + L_0

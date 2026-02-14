@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_6__lambd(mu: float, rho: float, v_a: float):
+    def eqn_2_6__lambd(mu: float, rho: float, v_a: float, **kwargs):
         # [.pyeqn] mu = 0.35 * rho * lambd * v_a
         result = []
         lambd = 2.85714285714286*mu/(rho*v_a)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_6__mu(lambd: float, rho: float, v_a: float):
+    def eqn_2_6__mu(lambd: float, rho: float, v_a: float, **kwargs):
         # [.pyeqn] mu = 0.35 * rho * lambd * v_a
         result = []
         mu = 0.35*lambd*rho*v_a
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_6__rho(lambd: float, mu: float, v_a: float):
+    def eqn_2_6__rho(lambd: float, mu: float, v_a: float, **kwargs):
         # [.pyeqn] mu = 0.35 * rho * lambd * v_a
         result = []
         rho = 2.85714285714286*mu/(lambd*v_a)
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_6__v_a(lambd: float, mu: float, rho: float):
+    def eqn_2_6__v_a(lambd: float, mu: float, rho: float, **kwargs):
         # [.pyeqn] mu = 0.35 * rho * lambd * v_a
         result = []
         v_a = 2.85714285714286*mu/(lambd*rho)

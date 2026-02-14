@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_18b__R_ll(h: float, w: float):
+    def eqn_2_18b__R_ll(h: float, w: float, **kwargs):
         # [.pyeqn] R_ll = w * h / (2 * (w + h))
         result = []
         R_ll = h*w/(2*(h + w))
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_18b__h(R_ll: float, w: float):
+    def eqn_2_18b__h(R_ll: float, w: float, **kwargs):
         # [.pyeqn] R_ll = w * h / (2 * (w + h))
         result = []
         h = 2*R_ll*w/(-2*R_ll + w)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_18b__w(R_ll: float, h: float):
+    def eqn_2_18b__w(R_ll: float, h: float, **kwargs):
         # [.pyeqn] R_ll = w * h / (2 * (w + h))
         result = []
         w = 2*R_ll*h/(-2*R_ll + h)

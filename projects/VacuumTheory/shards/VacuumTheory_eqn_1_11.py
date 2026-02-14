@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_11__M(P: float, T: float, W: float, q: float):
+    def eqn_1_11__M(P: float, T: float, W: float, q: float, **kwargs):
         # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
         result = []
         M = 6821*T*W/(738*P*q)
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_11__P(M: float, T: float, W: float, q: float):
+    def eqn_1_11__P(M: float, T: float, W: float, q: float, **kwargs):
         # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
         result = []
         P = 6821*T*W/(738*M*q)
@@ -26,7 +26,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_11__T(M: float, P: float, W: float, q: float):
+    def eqn_1_11__T(M: float, P: float, W: float, q: float, **kwargs):
         # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
         result = []
         T = 738*M*P*q/(6821*W)
@@ -34,7 +34,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_11__W(M: float, P: float, T: float, q: float):
+    def eqn_1_11__W(M: float, P: float, T: float, q: float, **kwargs):
         # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
         result = []
         W = 738*M*P*q/(6821*T)
@@ -42,7 +42,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_11__q(M: float, P: float, T: float, W: float):
+    def eqn_1_11__q(M: float, P: float, T: float, W: float, **kwargs):
         # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
         result = []
         q = 6821*T*W/(738*M*P)

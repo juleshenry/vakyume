@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_16__P(S_0: float, S_Th: float, p_0: float):
+    def eqn_10_16__P(S_0: float, S_Th: float, p_0: float, **kwargs):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
         P = p_0*(S_Th/S_0)**(5/3)/((S_Th/S_0)**1.66666666666667 - 1.0)
@@ -22,7 +22,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_16__S_0(P: float, S_Th: float, p_0: float):
+    def eqn_10_16__S_0(P: float, S_Th: float, p_0: float, **kwargs):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
         S_0 = S_Th/(P/(P - p_0))**(3/5)
@@ -30,7 +30,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_16__S_Th(P: float, S_0: float, p_0: float):
+    def eqn_10_16__S_Th(P: float, S_0: float, p_0: float, **kwargs):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
         S_Th = S_0*(P/(P - p_0))**(3/5)
@@ -38,7 +38,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_16__p_0(P: float, S_0: float, S_Th: float):
+    def eqn_10_16__p_0(P: float, S_0: float, S_Th: float, **kwargs):
         # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
         result = []
         p_0 = P - P/(S_Th/S_0)**(5/3)

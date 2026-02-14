@@ -1,6 +1,8 @@
 import os
+import sys
 import shutil
 import inspect
+import importlib
 import importlib.util
 import json
 import re
@@ -125,8 +127,6 @@ class Solver:
         return f"({parts[1].split('#')[0].strip()}) - ({parts[0].strip()})"
 
     def sympy_failover(self, eqn_header, normal_form, token):
-        # In a real scenario, this would call LLM.
-        # For now, we leave a placeholder or a numerical hint.
         code = [
             f"{TAB * 2}# [Sympy Failover Placeholder for {token}]",
             f"{TAB * 2}def func({token}):",
@@ -148,7 +148,6 @@ def shard_from_chapters():
     chapter_files = sorted(os.listdir(CHAPTERS_DIR))
     created_count = 0
 
-    # Pre-check if anything needs to be done to avoid noisy tqdm
     to_process = []
     for chapter_file in chapter_files:
         if chapter_file.endswith(".py") and not chapter_file.startswith("__"):
@@ -159,7 +158,6 @@ def shard_from_chapters():
 
     for chapter_file in to_process:
         chapter_path = os.path.join(CHAPTERS_DIR, chapter_file)
-        # Extract class name from filename: 01_vacuum_theory.py -> VacuumTheory
         base_name = os.path.splitext(chapter_file)[0]
         parts = base_name.split("_")[1:]
         class_name = "".join(p.capitalize() for p in parts)
@@ -208,7 +206,7 @@ def shard_from_chapters():
 
                     for token in tokes:
                         other_args = [t for t in tokes if t != token]
-                        header = f"{TAB}@staticmethod\n{TAB}def eqn_{eqn_number}__{token}({', '.join(f'{t}: float' for t in other_args)}):"
+                        header = f"{TAB}@staticmethod\n{TAB}def eqn_{eqn_number}__{token}({', '.join(f'{t}: float' for t in other_args)}, **kwargs):"
                         sf.write(header + "\n")
                         sf.write(f"{TAB * 2}# [.pyeqn] {line.strip()}\n")
 
@@ -235,6 +233,32 @@ def shard_from_chapters():
         print(f"Scraped {created_count} new equations.")
 
 
+def verify_single_shard(shard_file: str):
+    shard_path = os.path.join(SHARDS_DIR, shard_file)
+    module_name = shard_file[:-3]
+    importlib.invalidate_caches()
+    if module_name in sys.modules:
+        del sys.modules[module_name]
+
+    try:
+        spec = importlib.util.spec_from_file_location(module_name, shard_path)
+        if spec and spec.loader:
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            for name, obj in inspect.getmembers(module):
+                if (
+                    inspect.isclass(obj)
+                    and name != "Verify"
+                    and obj.__module__ == module_name
+                ):
+                    v = Verify(obj)
+                    return v.verify()
+    except Exception as e:
+        return {"error": str(e)}
+    return {}
+
+
 def verify_all_shards():
     print("Verifying shards...")
     all_results = {}
@@ -246,27 +270,7 @@ def verify_all_shards():
         tqdm(shard_files, desc="Verifying", unit="shard") if tqdm else shard_files
     )
     for f in iterator:
-        shard_path = os.path.join(SHARDS_DIR, f)
-        module_name = f[:-3]
-
-        try:
-            spec = importlib.util.spec_from_file_location(module_name, shard_path)
-            if spec and spec.loader:
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-
-                for name, obj in inspect.getmembers(module):
-                    if (
-                        inspect.isclass(obj)
-                        and name != "Verify"
-                        and obj.__module__ == module_name
-                    ):
-                        v = Verify(obj)
-                        shard_results = v.verify()
-                        all_results[f] = shard_results
-        except Exception as e:
-            # Silence noisy verification errors, they are captured in all_results
-            all_results[f] = {"error": str(e)}
+        all_results[f] = verify_single_shard(f)
 
     with open(os.path.join(REPORTS_DIR, "verification_results.json"), "w") as rf:
         json.dump(all_results, rf, indent=4)
@@ -291,18 +295,20 @@ def analyze_results(all_results):
 
         for eqn_name, variants in eqn_results.items():
             num_variants = len(variants)
-            valid_scores = [s for s in variants.values() if s is not None]
+            if num_variants == 0:
+                continue
 
-            if valid_scores and all(s == num_variants for s in valid_scores):
+            max_score = max(variants.values()) if variants else 0
+            if max_score == num_variants:
                 analysis["solved"].append(shard_file)
             else:
-                inconsistent = [
-                    v for v, s in variants.items() if s is None or s < num_variants
-                ]
+                trusted = [v for v, s in variants.items() if s == max_score and s > 1]
+                broken = [v for v, s in variants.items() if s < max_score or s <= 1]
                 analysis["inconsistent"][shard_file] = {
                     "eqn": eqn_name,
                     "num_variants": num_variants,
-                    "inconsistent_variants": inconsistent,
+                    "trusted_variants": trusted,
+                    "broken_variants": broken,
                     "scores": variants,
                 }
 
@@ -315,7 +321,6 @@ def extract_code_block(text):
     fence = "```"
     if fence not in text:
         return text
-
     in_code = False
     code_lines = []
     for line in text.splitlines():
@@ -391,50 +396,63 @@ def replace_method_in_file(file_lines, method_name, new_block_lines):
 
 
 def attempt_repair_shard(
-    shard_file, shard_code, error=None, inconsistent_variants=None, scores=None
+    shard_file,
+    shard_code,
+    error=None,
+    broken_variants=None,
+    trusted_variants=None,
+    scores=None,
 ):
     shard_path = os.path.join(SHARDS_DIR, shard_file)
-
-    # Using the optimized repair prompt
-    raw = repair_codigo(
+    raw_iterator = repair_codigo(
         shard_file=shard_file,
         shard_code=shard_code,
         error=error,
-        inconsistent_variants=inconsistent_variants,
+        broken_variants=broken_variants,
+        trusted_variants=trusted_variants,
         scores=scores,
+        stream=True,
     )
+
+    print(f"\n--- Code for {shard_file} ---")
+    raw = ""
+    for chunk in raw_iterator:
+        msg = (
+            chunk.get("message")
+            if isinstance(chunk, dict)
+            else getattr(chunk, "message", None)
+        )
+        content = (
+            msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
+        )
+        content = str(content or "")
+        raw += content
+        print(content, end="", flush=True)
+    print("\n--- End of Code ---")
 
     code_text = extract_code(raw)
     if not code_text.strip():
         code_text = extract_code_block(raw)
-
     if not code_text.strip():
         return False
-
     blocks = extract_method_blocks(code_text)
     if not blocks:
         return False
-
     with open(shard_path, "r") as sf:
         file_lines = sf.readlines()
-
     updated = False
     for candidate in blocks.keys():
-        # If we have specific variants, check if this candidate matches one
-        if inconsistent_variants:
+        if broken_variants:
             match = False
-            for v in inconsistent_variants:
+            for v in broken_variants:
                 if candidate.endswith(f"__{v}"):
                     match = True
                     break
             if not match:
                 continue
-
-        # If match or if we are repairing everything
         new_block = normalize_block(blocks[candidate])
         if new_block and replace_method_in_file(file_lines, candidate, new_block):
             updated = True
-
     if updated:
         with open(shard_path, "w") as sf:
             sf.writelines(file_lines)
@@ -442,51 +460,33 @@ def attempt_repair_shard(
 
 
 def run_pipeline(max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=False):
-    analysis = {"solved": [], "inconsistent": {}, "failed": []}
-
-    if not os.path.exists(REPORTS_DIR):
-        os.makedirs(REPORTS_DIR)
-    if not os.path.exists(REPAIR_PROMPTS_DIR):
-        os.makedirs(REPAIR_PROMPTS_DIR)
-
     if overwrite:
         clear_shards()
     elif not os.path.exists(SHARDS_DIR):
         clear_shards()
     shard_from_chapters()
 
+    analysis = {"solved": [], "inconsistent": {}, "failed": []}
     for round_idx in range(1, max_rounds + 1):
-        if round_idx == 1:
-            print("\n--- Initial OOO Status Scan ---")
-        else:
-            print(f"\n--- Verification Round {round_idx}/{max_rounds} ---")
-
+        print(f"\n--- Round {round_idx}/{max_rounds} ---")
         results = verify_all_shards()
         analysis = analyze_results(results)
-
         print(
-            f"OOO Status: {len(analysis['solved'])} families fully functional / solved, "
-            f"{len(analysis['inconsistent'])} inconsistent, "
-            f"{len(analysis['failed'])} failed."
+            f"Status: {len(analysis['solved'])} solved, {len(analysis['inconsistent'])} inconsistent, {len(analysis['failed'])} failed."
         )
-
         assemble_certified_library(analysis)
-
         if not analysis.get("inconsistent") and not analysis.get("failed"):
-            print("All equations aligned and no failures. Stopping early.")
+            print("Done.")
             return analysis
 
-        print(f"Starting auto-repair round...")
-        any_updates = False
-
-        # Combine inconsistent and failed for repair
         to_repair = []
         for sf, info in analysis.get("inconsistent", {}).items():
             to_repair.append(
                 {
                     "file": sf,
-                    "variants": info.get("inconsistent_variants", []),
-                    "scores": info.get("scores", {}),
+                    "broken": info["broken_variants"],
+                    "trusted": info["trusted_variants"],
+                    "scores": info["scores"],
                     "error": None,
                 }
             )
@@ -494,29 +494,29 @@ def run_pipeline(max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=Fals
             to_repair.append(
                 {
                     "file": fail_info["file"],
-                    "variants": [],
+                    "broken": [],
+                    "trusted": [],
                     "scores": {},
                     "error": fail_info.get("error"),
                 }
             )
 
-        iterator = (
-            tqdm(to_repair, desc="Repairing Shards", unit="shard")
-            if tqdm
-            else to_repair
-        )
-        for item in iterator:
-            shard_file = item["file"]
-            shard_path = os.path.join(SHARDS_DIR, shard_file)
+        if not to_repair:
+            print("Nothing to repair. Stopping.")
+            break
 
-            if not os.path.exists(shard_path):
-                continue
+        # Focus on ONE shard at a time
+        item = to_repair[0]
+        shard_file = item["file"]
+        shard_path = os.path.join(SHARDS_DIR, shard_file)
+        if not os.path.exists(shard_path):
+            print(f"Shard path {shard_path} not found. Skipping.")
+            continue
 
-            # Update progress display
-            if not isinstance(iterator, list):
-                iterator.set_postfix(shard=shard_file)
-            else:
-                print(f"Attempting auto-repair for {shard_file}...")
+        attempt = 1
+        while True:
+            sys.stdout.write(f"\r[Repair] Shard: {shard_file} | Attempt: {attempt}")
+            sys.stdout.flush()
 
             with open(shard_path, "r") as sf:
                 shard_code = sf.read().rstrip()
@@ -525,62 +525,68 @@ def run_pipeline(max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=Fals
                 shard_file=shard_file,
                 shard_code=shard_code,
                 error=item["error"],
-                inconsistent_variants=item["variants"],
+                broken_variants=item["broken"],
+                trusted_variants=item["trusted"],
                 scores=item["scores"],
             )
 
-            if updated and isinstance(iterator, list):
-                print(f"Auto-repair succeeded for {shard_file}.")
-            any_updates = any_updates or updated
+            if updated:
+                new_results = verify_single_shard(shard_file)
+                is_solved = False
+                if new_results and "error" not in new_results:
+                    is_solved = True
+                    for eqn_name, variants in new_results.items():
+                        if not isinstance(variants, dict):
+                            is_solved = False
+                            break
+                        num_v = len(variants)
+                        if not all(s == num_v for s in variants.values()):
+                            is_solved = False
+                            break
 
-            # Cool down to prevent hardware overheating during heavy LLM inference
+                if is_solved:
+                    print(f"\n |- Result: SUCCESS for {shard_file}")
+                    break
+                else:
+                    print(
+                        f"\n |- Result: FAILED (Still Inconsistent/Error). Retrying..."
+                    )
+            else:
+                print(f"\n |- Result: NO CHANGE (LLM produced no update). Retrying...")
+
+            attempt += 1
             if COOLDOWN_SECONDS > 0:
                 time.sleep(COOLDOWN_SECONDS)
 
-        if not any_updates:
-            print("No shard updates produced by auto-repair. Stopping.")
-            return analysis
-
-    print("Reached maximum repair rounds.")
+        # After one shard is fixed, go to next round
+        continue
     return analysis
 
 
 def assemble_certified_library(analysis):
-    print(
-        f"Assembling certified library from {len(analysis['solved'])} aligned equations..."
-    )
     certified_file = os.path.join(ROOT, "vakyume_certified.py")
-
     with open(certified_file, "w") as out:
-        out.write("from math import log, sqrt, exp, pow, e\n")
-        out.write("from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n")
-        out.write("from scipy.optimize import newton\n")
-        out.write("from kwasak import kwasak_static\n")
-        out.write("import numpy as np\n\n")
-
+        out.write(
+            "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve\nfrom scipy.optimize import newton\nfrom kwasak import kwasak_static\nimport numpy as np\n\n"
+        )
         class_groups = {}
         for shard_file in sorted(analysis["solved"]):
             class_name = shard_file.split("_")[0]
             with open(os.path.join(SHARDS_DIR, shard_file), "r") as sf:
                 lines = sf.readlines()
-                body = []
                 in_class = False
                 for line in lines:
                     if line.startswith(f"class {class_name}:"):
                         in_class = True
                         continue
                     if in_class:
-                        body.append(line)
-
-                if class_name not in class_groups:
-                    class_groups[class_name] = []
-                class_groups[class_name].extend(body)
-
+                        if class_name not in class_groups:
+                            class_groups[class_name] = []
+                        class_groups[class_name].append(line)
         for class_name, bodies in class_groups.items():
             out.write(f"class {class_name}:\n")
             out.writelines(bodies)
             out.write("\n")
-    print(f"Certified library created: {certified_file}")
 
 
 def _parse_bool(value: str) -> bool:
@@ -589,30 +595,7 @@ def _parse_bool(value: str) -> bool:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--overwrite",
-        nargs="?",
-        const="true",
-        default="false",
-        help="Overwrite shards directory (true/false)",
-    )
-    parser.add_argument(
-        "--max-rounds",
-        type=int,
-        default=DEFAULT_MAX_ROUNDS,
-        help="Maximum verification rounds",
-    )
+    parser.add_argument("--overwrite", nargs="?", const="true", default="false")
+    parser.add_argument("--max-rounds", type=int, default=DEFAULT_MAX_ROUNDS)
     args = parser.parse_args()
-
-    final_analysis = {"solved": [], "inconsistent": {}, "failed": []}
-    final_analysis = run_pipeline(
-        max_rounds=args.max_rounds,
-        auto_repair=True,
-        overwrite=_parse_bool(args.overwrite),
-    )
-
-    print("\n" + "=" * 40)
-    print(f"SOLVED (Aligned):      {len(final_analysis['solved'])}")
-    print(f"INCONSISTENT:          {len(final_analysis['inconsistent'])}")
-    print(f"UNSOLVABLE/FAILED:     {len(final_analysis['failed'])}")
-    print("=" * 40)
+    run_pipeline(max_rounds=args.max_rounds, overwrite=_parse_bool(args.overwrite))

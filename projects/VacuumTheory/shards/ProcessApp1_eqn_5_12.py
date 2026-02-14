@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_12__Eff(N_ES: float, N_t: float, T: float):
+    def eqn_5_12__Eff(N_ES: float, N_t: float, T: float, **kwargs):
         # [.pyeqn] N_t = N_ES / Eff ** T
         result = []
         Eff = (N_ES/N_t)**(1/T)
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_12__N_ES(Eff: float, N_t: float, T: float):
+    def eqn_5_12__N_ES(Eff: float, N_t: float, T: float, **kwargs):
         # [.pyeqn] N_t = N_ES / Eff ** T
         result = []
         N_ES = Eff**T*N_t
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_12__N_t(Eff: float, N_ES: float, T: float):
+    def eqn_5_12__N_t(Eff: float, N_ES: float, T: float, **kwargs):
         # [.pyeqn] N_t = N_ES / Eff ** T
         result = []
         N_t = N_ES/Eff**T
@@ -34,7 +34,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_12__T(Eff: float, N_ES: float, N_t: float):
+    def eqn_5_12__T(Eff: float, N_ES: float, N_t: float, **kwargs):
         # [.pyeqn] N_t = N_ES / Eff ** T
         result = []
         T = log(N_ES/N_t)/log(Eff)

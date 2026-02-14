@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_2__G(G_C: float, H: float, P: float, rho: float):
+    def eqn_3_2__G(G_C: float, H: float, P: float, rho: float, **kwargs):
         # [.pyeqn] P = G / (G_C * rho * H)
         result = []
         G = G_C*H*P*rho
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_2__G_C(G: float, H: float, P: float, rho: float):
+    def eqn_3_2__G_C(G: float, H: float, P: float, rho: float, **kwargs):
         # [.pyeqn] P = G / (G_C * rho * H)
         result = []
         G_C = G/(H*P*rho)
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_2__H(G: float, G_C: float, P: float, rho: float):
+    def eqn_3_2__H(G: float, G_C: float, P: float, rho: float, **kwargs):
         # [.pyeqn] P = G / (G_C * rho * H)
         result = []
         H = G/(G_C*P*rho)
@@ -34,7 +34,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_2__P(G: float, G_C: float, H: float, rho: float):
+    def eqn_3_2__P(G: float, G_C: float, H: float, rho: float, **kwargs):
         # [.pyeqn] P = G / (G_C * rho * H)
         result = []
         P = G/(G_C*H*rho)
@@ -42,7 +42,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_2__rho(G: float, G_C: float, H: float, P: float):
+    def eqn_3_2__rho(G: float, G_C: float, H: float, P: float, **kwargs):
         # [.pyeqn] P = G / (G_C * rho * H)
         result = []
         rho = G/(G_C*H*P)

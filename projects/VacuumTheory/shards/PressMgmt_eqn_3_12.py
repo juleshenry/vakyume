@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_12__H_2(KAPPA_1: float, P: float):
+    def eqn_3_12__H_2(KAPPA_1: float, P: float, **kwargs):
         # [.pyeqn] P = KAPPA_1 * H_2 ** 2
         result = []
         H_2 = -sqrt(P/KAPPA_1)
@@ -20,15 +20,18 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_12__KAPPA_1(H_2: float, P: float):
-        if H_2 is not None and P is not None:
-            result = KAPHA_1 / (P/pow(H_2, 2))
-            return [result] * 2
-
+    def eqn_3_12__KAPPA_1(H_2: float, P: float, **kwargs):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        KAPPA_1 = P/H_2**2
+        result.append(KAPPA_1)
+        return result
 
     @staticmethod
-    def eqn_3_12__P(H_2: float, KAPHA_1: float):
-        if H_2 is not None and KAPHA_1 is not None:
-            result = pow(KAPHA_1, 0.5) * H_2**2
-            return [result] * 2
+    def eqn_3_12__P(H_2: float, KAPPA_1: float, **kwargs):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        P = H_2**2*KAPPA_1
+        result.append(P)
+        return result
 

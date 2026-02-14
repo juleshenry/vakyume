@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_16__Re(f: float):
+    def eqn_2_16__Re(f: float, **kwargs):
         # [.pyeqn] f = 64 / Re
         result = []
         Re = 64/f
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_16__f(Re: float):
+    def eqn_2_16__f(Re: float, **kwargs):
         # [.pyeqn] f = 64 / Re
         result = []
         f = 64/Re

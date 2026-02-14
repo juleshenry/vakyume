@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_2__PS(Q_gas: float, V: float, dP: float, dt: float):
+    def eqn_10_2__PS(Q_gas: float, V: float, dP: float, dt: float, **kwargs):
         # [.pyeqn] PS = - V * dP / dt + Q_gas
         result = []
         PS = Q_gas - V*dP/dt
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_2__Q_gas(PS: float, V: float, dP: float, dt: float):
+    def eqn_10_2__Q_gas(PS: float, V: float, dP: float, dt: float, **kwargs):
         # [.pyeqn] PS = - V * dP / dt + Q_gas
         result = []
         Q_gas = PS + V*dP/dt
@@ -26,7 +26,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_2__V(PS: float, Q_gas: float, dP: float, dt: float):
+    def eqn_10_2__V(PS: float, Q_gas: float, dP: float, dt: float, **kwargs):
         # [.pyeqn] PS = - V * dP / dt + Q_gas
         result = []
         V = dt*(-PS + Q_gas)/dP
@@ -34,7 +34,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_2__dP(PS: float, Q_gas: float, V: float, dt: float):
+    def eqn_10_2__dP(PS: float, Q_gas: float, V: float, dt: float, **kwargs):
         # [.pyeqn] PS = - V * dP / dt + Q_gas
         result = []
         dP = dt*(-PS + Q_gas)/V
@@ -42,7 +42,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_2__dt(PS: float, Q_gas: float, V: float, dP: float):
+    def eqn_10_2__dt(PS: float, Q_gas: float, V: float, dP: float, **kwargs):
         # [.pyeqn] PS = - V * dP / dt + Q_gas
         result = []
         dt = -V*dP/(PS - Q_gas)

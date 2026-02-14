@@ -10,7 +10,7 @@ class LiquidRing:
         return
 
     @staticmethod
-    def eqn_10_13__T_c(T_s: float):
+    def eqn_10_13__T_c(T_s: float, **kwargs):
         # [.pyeqn] T_c = T_s + 25
         result = []
         T_c = T_s + 25
@@ -18,7 +18,7 @@ class LiquidRing:
         return result
 
     @staticmethod
-    def eqn_10_13__T_s(T_c: float):
+    def eqn_10_13__T_s(T_c: float, **kwargs):
         # [.pyeqn] T_c = T_s + 25
         result = []
         T_s = T_c - 25

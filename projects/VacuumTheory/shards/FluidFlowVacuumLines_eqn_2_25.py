@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_25__C(P_1: float, P_2: float, Q_throughput: float):
+    def eqn_2_25__C(P_1: float, P_2: float, Q_throughput: float, **kwargs):
         # [.pyeqn] C = Q_throughput / (P_1 - P_2)
         result = []
         C = Q_throughput/(P_1 - P_2)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_25__P_1(C: float, P_2: float, Q_throughput: float):
+    def eqn_2_25__P_1(C: float, P_2: float, Q_throughput: float, **kwargs):
         # [.pyeqn] C = Q_throughput / (P_1 - P_2)
         result = []
         P_1 = P_2 + Q_throughput/C
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_25__P_2(C: float, P_1: float, Q_throughput: float):
+    def eqn_2_25__P_2(C: float, P_1: float, Q_throughput: float, **kwargs):
         # [.pyeqn] C = Q_throughput / (P_1 - P_2)
         result = []
         P_2 = P_1 - Q_throughput/C
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_25__Q_throughput(C: float, P_1: float, P_2: float):
+    def eqn_2_25__Q_throughput(C: float, P_1: float, P_2: float, **kwargs):
         # [.pyeqn] C = Q_throughput / (P_1 - P_2)
         result = []
         Q_throughput = C*(P_1 - P_2)

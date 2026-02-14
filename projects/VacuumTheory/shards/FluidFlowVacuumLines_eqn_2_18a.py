@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_18a__D_eq(R_ll: float):
+    def eqn_2_18a__D_eq(R_ll: float, **kwargs):
         # [.pyeqn] D_eq = 4 * R_ll
         result = []
         D_eq = 4*R_ll
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_18a__R_ll(D_eq: float):
+    def eqn_2_18a__R_ll(D_eq: float, **kwargs):
         # [.pyeqn] D_eq = 4 * R_ll
         result = []
         R_ll = D_eq/4

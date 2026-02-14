@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_9__L_c(Q_condensor_heat_duty: float, c_p: float, del_T: float, rho: float):
+    def eqn_7_9__L_c(Q_condensor_heat_duty: float, c_p: float, del_T: float, rho: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T * rho * 8.02)
         result = []
         L_c = 0.124688279301746*Q_condensor_heat_duty/(c_p*del_T*rho)
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_9__Q_condensor_heat_duty(L_c: float, c_p: float, del_T: float, rho: float):
+    def eqn_7_9__Q_condensor_heat_duty(L_c: float, c_p: float, del_T: float, rho: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T * rho * 8.02)
         result = []
         Q_condensor_heat_duty = 8.02*L_c*c_p*del_T*rho
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_9__c_p(L_c: float, Q_condensor_heat_duty: float, del_T: float, rho: float):
+    def eqn_7_9__c_p(L_c: float, Q_condensor_heat_duty: float, del_T: float, rho: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T * rho * 8.02)
         result = []
         c_p = 0.124688279301746*Q_condensor_heat_duty/(L_c*del_T*rho)
@@ -34,7 +34,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_9__del_T(L_c: float, Q_condensor_heat_duty: float, c_p: float, rho: float):
+    def eqn_7_9__del_T(L_c: float, Q_condensor_heat_duty: float, c_p: float, rho: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T * rho * 8.02)
         result = []
         del_T = 0.124688279301746*Q_condensor_heat_duty/(L_c*c_p*rho)
@@ -42,7 +42,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_9__rho(L_c: float, Q_condensor_heat_duty: float, c_p: float, del_T: float):
+    def eqn_7_9__rho(L_c: float, Q_condensor_heat_duty: float, c_p: float, del_T: float, **kwargs):
         # [.pyeqn] L_c = Q_condensor_heat_duty / (c_p * del_T * rho * 8.02)
         result = []
         rho = 0.124688279301746*Q_condensor_heat_duty/(L_c*c_p*del_T)

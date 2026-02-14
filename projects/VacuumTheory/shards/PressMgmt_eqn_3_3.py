@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_3__H_1(H_2: float, P: float, P_P: float):
+    def eqn_3_3__H_1(H_2: float, P: float, P_P: float, **kwargs):
         # [.pyeqn] P_P - P = H_2 - H_1
         result = []
         H_1 = H_2 + P - P_P
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_3__H_2(H_1: float, P: float, P_P: float):
+    def eqn_3_3__H_2(H_1: float, P: float, P_P: float, **kwargs):
         # [.pyeqn] P_P - P = H_2 - H_1
         result = []
         H_2 = H_1 - P + P_P
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_3__P(H_1: float, H_2: float, P_P: float):
+    def eqn_3_3__P(H_1: float, H_2: float, P_P: float, **kwargs):
         # [.pyeqn] P_P - P = H_2 - H_1
         result = []
         P = H_1 - H_2 + P_P
@@ -34,7 +34,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_3__P_P(H_1: float, H_2: float, P: float):
+    def eqn_3_3__P_P(H_1: float, H_2: float, P: float, **kwargs):
         # [.pyeqn] P_P - P = H_2 - H_1
         result = []
         P_P = -H_1 + H_2 + P

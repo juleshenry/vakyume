@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_11__B(L_N: float, V_0: float):
+    def eqn_5_11__B(L_N: float, V_0: float, **kwargs):
         # [.pyeqn] L_N / V_0 = (V_0 + B) / V_0
         result = []
         B = L_N - V_0
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_11__L_N(B: float, V_0: float):
+    def eqn_5_11__L_N(B: float, V_0: float, **kwargs):
         # [.pyeqn] L_N / V_0 = (V_0 + B) / V_0
         result = []
         L_N = B + V_0
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_11__V_0(B: float, L_N: float):
+    def eqn_5_11__V_0(B: float, L_N: float, **kwargs):
         # [.pyeqn] L_N / V_0 = (V_0 + B) / V_0
         result = []
         V_0 = -B + L_N

@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_3__T(k: float, m: float, v: float):
+    def eqn_1_3__T(k: float, m: float, v: float, **kwargs):
         # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
         result = []
         T = 0.333333333333333*m*v**2/k
@@ -18,34 +18,23 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_3__k(T: float, m: float, v: float):
-        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T => k = (m*v^2) / (3*T)
+    def eqn_1_3__k(T: float, m: float, v: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
         result = []
-        if T > 0 and m > 0 and sqrt(v).is_real:
-            k = (m * pow(v, 2)) / (3.0 * T)
-            result.append(k)
-        else:
-            # Handle cases where input values might lead to errors or non-physical results
-            return None
-        return [k] if len(result) == 1 else []
-
+        k = 0.333333333333333*m*v**2/T
+        result.append(k)
+        return result
 
     @staticmethod
-    def eqn_1_3__m(T: float, k: float, v: float):
-        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T => m = (k*T) / ((v^2)/2)
+    def eqn_1_3__m(T: float, k: float, v: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
         result = []
-        if T > 0 and k > 0 and pow(v, 2):
-            # Handle cases where input values might lead to errors or non-physical results
-            return None
-
-        m = (k * T) / ((pow(v, 2)) / 2.0) if len(result) == 1 else []
-        result.append(m) if not np.isnan(m).any() and not np.isinf(m).any() else None
-        return [m] if m is not None else []
-
-    # Assuming eqn_10__k was meant to be corrected here, as it's referenced but undefined in the provided code snippet:
+        m = 3.0*T*k/v**2
+        result.append(m)
+        return result
 
     @staticmethod
-    def eqn_1_3__v(T: float, k: float, m: float):
+    def eqn_1_3__v(T: float, k: float, m: float, **kwargs):
         # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
         result = []
         v = -1.73205080756888*sqrt(T*k/m)

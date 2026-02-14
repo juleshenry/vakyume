@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_29__C(S_1: float, S_2: float):
+    def eqn_2_29__C(S_1: float, S_2: float, **kwargs):
         # [.pyeqn] S_1 ** -1 = S_2 ** -1 + 1 / C
         result = []
         C = -S_1*S_2/(S_1 - S_2)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_29__S_1(C: float, S_2: float):
+    def eqn_2_29__S_1(C: float, S_2: float, **kwargs):
         # [.pyeqn] S_1 ** -1 = S_2 ** -1 + 1 / C
         result = []
         S_1 = C*S_2/(C + S_2)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_29__S_2(C: float, S_1: float):
+    def eqn_2_29__S_2(C: float, S_1: float, **kwargs):
         # [.pyeqn] S_1 ** -1 = S_2 ** -1 + 1 / C
         result = []
         S_2 = C*S_1/(C - S_1)

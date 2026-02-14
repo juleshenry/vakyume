@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_31__C(S_p: float, S_pump_speed: float):
+    def eqn_2_31__C(S_p: float, S_pump_speed: float, **kwargs):
         # [.pyeqn] S_pump_speed = (S_p * C) / (S_p + C)
         result = []
         C = S_p*S_pump_speed/(S_p - S_pump_speed)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_31__S_p(C: float, S_pump_speed: float):
+    def eqn_2_31__S_p(C: float, S_pump_speed: float, **kwargs):
         # [.pyeqn] S_pump_speed = (S_p * C) / (S_p + C)
         result = []
         S_p = C*S_pump_speed/(C - S_pump_speed)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_31__S_pump_speed(C: float, S_p: float):
+    def eqn_2_31__S_pump_speed(C: float, S_p: float, **kwargs):
         # [.pyeqn] S_pump_speed = (S_p * C) / (S_p + C)
         result = []
         S_pump_speed = C*S_p/(C + S_p)

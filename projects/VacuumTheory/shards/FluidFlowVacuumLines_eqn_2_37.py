@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_37__A(C: float, F_t: float, M: float, T: float):
+    def eqn_2_37__A(C: float, F_t: float, M: float, T: float, **kwargs):
         # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
         A = 0.000681714375311032*C**2*M/(F_t*T)
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_37__C(A: float, F_t: float, M: float, T: float):
+    def eqn_2_37__C(A: float, F_t: float, M: float, T: float, **kwargs):
         # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
         C = 38.3*sqrt(A*F_t*T/M)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_37__F_t(A: float, C: float, M: float, T: float):
+    def eqn_2_37__F_t(A: float, C: float, M: float, T: float, **kwargs):
         # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
         F_t = 0.000681714375311032*C**2*M/(A*T)
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_37__M(A: float, C: float, F_t: float, T: float):
+    def eqn_2_37__M(A: float, C: float, F_t: float, T: float, **kwargs):
         # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
         M = 1466.89*A*F_t*T/C**2
@@ -42,7 +42,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_37__T(A: float, C: float, F_t: float, M: float):
+    def eqn_2_37__T(A: float, C: float, F_t: float, M: float, **kwargs):
         # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
         result = []
         T = 0.000681714375311032*C**2*M/(A*F_t)

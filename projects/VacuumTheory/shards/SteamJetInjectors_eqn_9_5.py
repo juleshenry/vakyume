@@ -10,7 +10,7 @@ class SteamJetInjectors:
         return
 
     @staticmethod
-    def eqn_9_5__V(r_h: float, t_h: float, w_h: float):
+    def eqn_9_5__V(r_h: float, t_h: float, w_h: float, **kwargs):
         # [.pyeqn] w_h = r_h * V / t_h
         result = []
         V = t_h*w_h/r_h
@@ -18,7 +18,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_5__r_h(V: float, t_h: float, w_h: float):
+    def eqn_9_5__r_h(V: float, t_h: float, w_h: float, **kwargs):
         # [.pyeqn] w_h = r_h * V / t_h
         result = []
         r_h = t_h*w_h/V
@@ -26,7 +26,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_5__t_h(V: float, r_h: float, w_h: float):
+    def eqn_9_5__t_h(V: float, r_h: float, w_h: float, **kwargs):
         # [.pyeqn] w_h = r_h * V / t_h
         result = []
         t_h = V*r_h/w_h
@@ -34,7 +34,7 @@ class SteamJetInjectors:
         return result
 
     @staticmethod
-    def eqn_9_5__w_h(V: float, r_h: float, t_h: float):
+    def eqn_9_5__w_h(V: float, r_h: float, t_h: float, **kwargs):
         # [.pyeqn] w_h = r_h * V / t_h
         result = []
         w_h = V*r_h/t_h

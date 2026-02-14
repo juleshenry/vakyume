@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_10__Suc_Pres(delta_P: float, oper_press: float):
+    def eqn_2_10__Suc_Pres(delta_P: float, oper_press: float, **kwargs):
         # [.pyeqn] Suc_Pres = oper_press - delta_P
         result = []
         Suc_Pres = -delta_P + oper_press
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_10__delta_P(Suc_Pres: float, oper_press: float):
+    def eqn_2_10__delta_P(Suc_Pres: float, oper_press: float, **kwargs):
         # [.pyeqn] Suc_Pres = oper_press - delta_P
         result = []
         delta_P = -Suc_Pres + oper_press
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_10__oper_press(Suc_Pres: float, delta_P: float):
+    def eqn_2_10__oper_press(Suc_Pres: float, delta_P: float, **kwargs):
         # [.pyeqn] Suc_Pres = oper_press - delta_P
         result = []
         oper_press = Suc_Pres + delta_P

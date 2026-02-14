@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_2b__K_1(K_2: float, x_1: float, x_2: float, y_1: float, y_2: float):
+    def eqn_5_2b__K_1(K_2: float, x_1: float, x_2: float, y_1: float, y_2: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         K_1 = K_2*x_2*y_1/(x_1*y_2)
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2b__K_2(K_1: float, x_1: float, x_2: float, y_1: float, y_2: float):
+    def eqn_5_2b__K_2(K_1: float, x_1: float, x_2: float, y_1: float, y_2: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         K_2 = K_1*x_1*y_2/(x_2*y_1)
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2b__x_1(K_1: float, K_2: float, x_2: float, y_1: float, y_2: float):
+    def eqn_5_2b__x_1(K_1: float, K_2: float, x_2: float, y_1: float, y_2: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         x_1 = K_2*x_2*y_1/(K_1*y_2)
@@ -34,7 +34,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2b__x_2(K_1: float, K_2: float, x_1: float, y_1: float, y_2: float):
+    def eqn_5_2b__x_2(K_1: float, K_2: float, x_1: float, y_1: float, y_2: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         x_2 = K_1*x_1*y_2/(K_2*y_1)
@@ -42,7 +42,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2b__y_1(K_1: float, K_2: float, x_1: float, x_2: float, y_2: float):
+    def eqn_5_2b__y_1(K_1: float, K_2: float, x_1: float, x_2: float, y_2: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         y_1 = K_1*x_1*y_2/(K_2*x_2)
@@ -50,7 +50,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_2b__y_2(K_1: float, K_2: float, x_1: float, x_2: float, y_1: float):
+    def eqn_5_2b__y_2(K_1: float, K_2: float, x_1: float, x_2: float, y_1: float, **kwargs):
         # [.pyeqn] K_1 / K_2 = y_1 * x_2 / (y_2 * x_1)
         result = []
         y_2 = K_2*x_2*y_1/(K_1*x_1)

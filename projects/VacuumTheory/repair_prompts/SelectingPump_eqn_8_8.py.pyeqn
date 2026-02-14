@@ -1,0 +1,1 @@
+adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)

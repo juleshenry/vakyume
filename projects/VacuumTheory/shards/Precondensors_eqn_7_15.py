@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_15__U(sum_R: float):
+    def eqn_7_15__U(sum_R: float, **kwargs):
         # [.pyeqn] 1 / U = sum_R
         result = []
         U = 1/sum_R
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_15__sum_R(U: float):
+    def eqn_7_15__sum_R(U: float, **kwargs):
         # [.pyeqn] 1 / U = sum_R
         result = []
         sum_R = 1/U

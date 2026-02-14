@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_1__P(p_i: float, y_i: float):
+    def eqn_7_1__P(p_i: float, y_i: float, **kwargs):
         # [.pyeqn] y_i = p_i / P
         result = []
         P = p_i/y_i
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_1__p_i(P: float, y_i: float):
+    def eqn_7_1__p_i(P: float, y_i: float, **kwargs):
         # [.pyeqn] y_i = p_i / P
         result = []
         p_i = P*y_i
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_1__y_i(P: float, p_i: float):
+    def eqn_7_1__y_i(P: float, p_i: float, **kwargs):
         # [.pyeqn] y_i = p_i / P
         result = []
         y_i = p_i/P

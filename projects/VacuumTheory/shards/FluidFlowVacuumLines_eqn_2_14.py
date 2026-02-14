@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_14__M(R: float, T: float, g_c: float, k: float, v_s: float):
+    def eqn_2_14__M(R: float, T: float, g_c: float, k: float, v_s: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         M = R*T*g_c*k/v_s**2
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_14__R(M: float, T: float, g_c: float, k: float, v_s: float):
+    def eqn_2_14__R(M: float, T: float, g_c: float, k: float, v_s: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         R = M*v_s**2/(T*g_c*k)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_14__T(M: float, R: float, g_c: float, k: float, v_s: float):
+    def eqn_2_14__T(M: float, R: float, g_c: float, k: float, v_s: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         T = M*v_s**2/(R*g_c*k)
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_14__g_c(M: float, R: float, T: float, k: float, v_s: float):
+    def eqn_2_14__g_c(M: float, R: float, T: float, k: float, v_s: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         g_c = M*v_s**2/(R*T*k)
@@ -42,7 +42,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_14__k(M: float, R: float, T: float, g_c: float, v_s: float):
+    def eqn_2_14__k(M: float, R: float, T: float, g_c: float, v_s: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         k = M*v_s**2/(R*T*g_c)
@@ -50,7 +50,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_14__v_s(M: float, R: float, T: float, g_c: float, k: float):
+    def eqn_2_14__v_s(M: float, R: float, T: float, g_c: float, k: float, **kwargs):
         # [.pyeqn] v_s = (k * g_c * R / M * T) ** 0.5
         result = []
         v_s = sqrt(R*T*g_c*k/M)

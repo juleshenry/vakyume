@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_5__P(P_P: float, V: float, V_P: float):
+    def eqn_3_5__P(P_P: float, V: float, V_P: float, **kwargs):
         # [.pyeqn] P_P = P * (V / V_P)
         result = []
         P = P_P*V_P/V
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_5__P_P(P: float, V: float, V_P: float):
+    def eqn_3_5__P_P(P: float, V: float, V_P: float, **kwargs):
         # [.pyeqn] P_P = P * (V / V_P)
         result = []
         P_P = P*V/V_P
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_5__V(P: float, P_P: float, V_P: float):
+    def eqn_3_5__V(P: float, P_P: float, V_P: float, **kwargs):
         # [.pyeqn] P_P = P * (V / V_P)
         result = []
         V = P_P*V_P/P
@@ -34,7 +34,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_5__V_P(P: float, P_P: float, V: float):
+    def eqn_3_5__V_P(P: float, P_P: float, V: float, **kwargs):
         # [.pyeqn] P_P = P * (V / V_P)
         result = []
         V_P = P*V/P_P

@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_13__H_1(H_2: float, KAPPA_2: float, P: float):
+    def eqn_3_13__H_1(H_2: float, KAPPA_2: float, P: float, **kwargs):
         # [.pyeqn] P = KAPPA_2 * (H_2 - H_1)
         result = []
         H_1 = H_2 - P/KAPPA_2
@@ -18,7 +18,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_13__H_2(H_1: float, KAPPA_2: float, P: float):
+    def eqn_3_13__H_2(H_1: float, KAPPA_2: float, P: float, **kwargs):
         # [.pyeqn] P = KAPPA_2 * (H_2 - H_1)
         result = []
         H_2 = H_1 + P/KAPPA_2
@@ -26,7 +26,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_13__KAPPA_2(H_1: float, H_2: float, P: float):
+    def eqn_3_13__KAPPA_2(H_1: float, H_2: float, P: float, **kwargs):
         # [.pyeqn] P = KAPPA_2 * (H_2 - H_1)
         result = []
         KAPPA_2 = -P/(H_1 - H_2)
@@ -34,7 +34,7 @@ class PressMgmt:
         return result
 
     @staticmethod
-    def eqn_3_13__P(H_1: float, H_2: float, KAPPA_2: float):
+    def eqn_3_13__P(H_1: float, H_2: float, KAPPA_2: float, **kwargs):
         # [.pyeqn] P = KAPPA_2 * (H_2 - H_1)
         result = []
         P = KAPPA_2*(-H_1 + H_2)

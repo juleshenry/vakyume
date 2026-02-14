@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_14__M(P_0: float, T: float, W_E: float):
+    def eqn_5_14__M(P_0: float, T: float, W_E: float, **kwargs):
         # [.pyeqn] W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
         M = 294.213699178261*T*W_E**2/P_0**2
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_14__P_0(M: float, T: float, W_E: float):
+    def eqn_5_14__P_0(M: float, T: float, W_E: float, **kwargs):
         # [.pyeqn] W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
         P_0 = 17.1526586620926*W_E/sqrt(M/T)
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_14__T(M: float, P_0: float, W_E: float):
+    def eqn_5_14__T(M: float, P_0: float, W_E: float, **kwargs):
         # [.pyeqn] W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
         T = 0.00339889*M*P_0**2/W_E**2
@@ -34,7 +34,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_14__W_E(M: float, P_0: float, T: float):
+    def eqn_5_14__W_E(M: float, P_0: float, T: float, **kwargs):
         # [.pyeqn] W_E = 0.0583 * P_0 * (M / T) ** 0.5
         result = []
         W_E = 0.0583*P_0*sqrt(M/T)

@@ -10,7 +10,7 @@ class PressMgmt:
         return
 
     @staticmethod
-    def eqn_3_17__P_MIN():
+    def eqn_3_17__P_MIN(, **kwargs):
         # [.pyeqn] P_MIN = (3.141592653589793 / 4) / (200000)
         result = []
         P_MIN = 0.00000392699081698724

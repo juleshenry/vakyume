@@ -10,7 +10,7 @@ class Precondensors:
         return
 
     @staticmethod
-    def eqn_7_3__P_i_0(epsilon_i: float, p_i: float, x_i: float):
+    def eqn_7_3__P_i_0(epsilon_i: float, p_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * epsilon_i * P_i_0
         result = []
         P_i_0 = p_i/(epsilon_i*x_i)
@@ -18,7 +18,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_3__epsilon_i(P_i_0: float, p_i: float, x_i: float):
+    def eqn_7_3__epsilon_i(P_i_0: float, p_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * epsilon_i * P_i_0
         result = []
         epsilon_i = p_i/(P_i_0*x_i)
@@ -26,7 +26,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_3__p_i(P_i_0: float, epsilon_i: float, x_i: float):
+    def eqn_7_3__p_i(P_i_0: float, epsilon_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * epsilon_i * P_i_0
         result = []
         p_i = P_i_0*epsilon_i*x_i
@@ -34,7 +34,7 @@ class Precondensors:
         return result
 
     @staticmethod
-    def eqn_7_3__x_i(P_i_0: float, epsilon_i: float, p_i: float):
+    def eqn_7_3__x_i(P_i_0: float, epsilon_i: float, p_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * epsilon_i * P_i_0
         result = []
         x_i = p_i/(P_i_0*epsilon_i)

@@ -10,7 +10,7 @@ class VacuumTheory:
         return
 
     @staticmethod
-    def eqn_1_7__R(T: float, V: float, n: float, p: float):
+    def eqn_1_7__R(T: float, V: float, n: float, p: float, **kwargs):
         # [.pyeqn] p * V = n * R * T
         result = []
         R = V*p/(T*n)
@@ -18,7 +18,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_7__T(R: float, V: float, n: float, p: float):
+    def eqn_1_7__T(R: float, V: float, n: float, p: float, **kwargs):
         # [.pyeqn] p * V = n * R * T
         result = []
         T = V*p/(R*n)
@@ -26,7 +26,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_7__V(R: float, T: float, n: float, p: float):
+    def eqn_1_7__V(R: float, T: float, n: float, p: float, **kwargs):
         # [.pyeqn] p * V = n * R * T
         result = []
         V = R*T*n/p
@@ -34,7 +34,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_7__n(R: float, T: float, V: float, p: float):
+    def eqn_1_7__n(R: float, T: float, V: float, p: float, **kwargs):
         # [.pyeqn] p * V = n * R * T
         result = []
         n = V*p/(R*T)
@@ -42,7 +42,7 @@ class VacuumTheory:
         return result
 
     @staticmethod
-    def eqn_1_7__p(R: float, T: float, V: float, n: float):
+    def eqn_1_7__p(R: float, T: float, V: float, n: float, **kwargs):
         # [.pyeqn] p * V = n * R * T
         result = []
         p = R*T*n/V

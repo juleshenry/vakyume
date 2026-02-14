@@ -10,7 +10,7 @@ class SelectingPump:
         return
 
     @staticmethod
-    def eqn_8_5__Eff(actual_brake_horsepower: float, theoretical_adiabatic_horsepower: float):
+    def eqn_8_5__Eff(actual_brake_horsepower: float, theoretical_adiabatic_horsepower: float, **kwargs):
         # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
         result = []
         Eff = theoretical_adiabatic_horsepower/actual_brake_horsepower
@@ -18,7 +18,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_5__actual_brake_horsepower(Eff: float, theoretical_adiabatic_horsepower: float):
+    def eqn_8_5__actual_brake_horsepower(Eff: float, theoretical_adiabatic_horsepower: float, **kwargs):
         # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
         result = []
         actual_brake_horsepower = theoretical_adiabatic_horsepower/Eff
@@ -26,7 +26,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_5__theoretical_adiabatic_horsepower(Eff: float, actual_brake_horsepower: float):
+    def eqn_8_5__theoretical_adiabatic_horsepower(Eff: float, actual_brake_horsepower: float, **kwargs):
         # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
         result = []
         theoretical_adiabatic_horsepower = Eff*actual_brake_horsepower

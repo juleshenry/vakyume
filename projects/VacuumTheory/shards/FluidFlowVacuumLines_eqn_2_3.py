@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_3__D(kn: float, lambd: float):
+    def eqn_2_3__D(kn: float, lambd: float, **kwargs):
         # [.pyeqn] kn = lambd / D
         result = []
         D = lambd/kn
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_3__kn(D: float, lambd: float):
+    def eqn_2_3__kn(D: float, lambd: float, **kwargs):
         # [.pyeqn] kn = lambd / D
         result = []
         kn = lambd/D
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_3__lambd(D: float, kn: float):
+    def eqn_2_3__lambd(D: float, kn: float, **kwargs):
         # [.pyeqn] kn = lambd / D
         result = []
         lambd = D*kn

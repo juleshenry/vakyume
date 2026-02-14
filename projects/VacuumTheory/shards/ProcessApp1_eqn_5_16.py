@@ -10,7 +10,7 @@ class ProcessApp1:
         return
 
     @staticmethod
-    def eqn_5_16__H_i(p_i: float, x_i: float):
+    def eqn_5_16__H_i(p_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * H_i
         result = []
         H_i = p_i/x_i
@@ -18,7 +18,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_16__p_i(H_i: float, x_i: float):
+    def eqn_5_16__p_i(H_i: float, x_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * H_i
         result = []
         p_i = H_i*x_i
@@ -26,7 +26,7 @@ class ProcessApp1:
         return result
 
     @staticmethod
-    def eqn_5_16__x_i(H_i: float, p_i: float):
+    def eqn_5_16__x_i(H_i: float, p_i: float, **kwargs):
         # [.pyeqn] p_i = x_i * H_i
         result = []
         x_i = p_i/H_i

@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_19b__Re(h: float, mu: float, rho: float, v: float, w: float):
+    def eqn_2_19b__Re(h: float, mu: float, rho: float, v: float, w: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         Re = 2*h*rho*v*w/(mu*(h + w))
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19b__h(Re: float, mu: float, rho: float, v: float, w: float):
+    def eqn_2_19b__h(Re: float, mu: float, rho: float, v: float, w: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         h = Re*mu*w/(-Re*mu + 2*rho*v*w)
@@ -26,7 +26,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19b__mu(Re: float, h: float, rho: float, v: float, w: float):
+    def eqn_2_19b__mu(Re: float, h: float, rho: float, v: float, w: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         mu = 2*h*rho*v*w/(Re*(h + w))
@@ -34,7 +34,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19b__rho(Re: float, h: float, mu: float, v: float, w: float):
+    def eqn_2_19b__rho(Re: float, h: float, mu: float, v: float, w: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         rho = Re*mu*(h + w)/(2*h*v*w)
@@ -42,7 +42,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19b__v(Re: float, h: float, mu: float, rho: float, w: float):
+    def eqn_2_19b__v(Re: float, h: float, mu: float, rho: float, w: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         v = Re*mu*(h + w)/(2*h*rho*w)
@@ -50,7 +50,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_19b__w(Re: float, h: float, mu: float, rho: float, v: float):
+    def eqn_2_19b__w(Re: float, h: float, mu: float, rho: float, v: float, **kwargs):
         # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
         result = []
         w = Re*h*mu/(-Re*mu + 2*h*rho*v)

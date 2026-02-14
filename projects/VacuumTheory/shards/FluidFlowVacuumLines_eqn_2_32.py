@@ -10,7 +10,7 @@ class FluidFlowVacuumLines:
         return
 
     @staticmethod
-    def eqn_2_32__C_series(geometric_sum_C: float):
+    def eqn_2_32__C_series(geometric_sum_C: float, **kwargs):
         # [.pyeqn] 1 / C_series = geometric_sum_C
         result = []
         C_series = 1/geometric_sum_C
@@ -18,7 +18,7 @@ class FluidFlowVacuumLines:
         return result
 
     @staticmethod
-    def eqn_2_32__geometric_sum_C(C_series: float):
+    def eqn_2_32__geometric_sum_C(C_series: float, **kwargs):
         # [.pyeqn] 1 / C_series = geometric_sum_C
         result = []
         geometric_sum_C = 1/C_series

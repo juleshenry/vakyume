@@ -10,7 +10,7 @@ class SelectingPump:
         return
 
     @staticmethod
-    def eqn_8_2__hp(installed_costs: float):
+    def eqn_8_2__hp(installed_costs: float, **kwargs):
         # [.pyeqn] installed_costs = 33000 * (hp / 10) ** 0.5
         result = []
         hp = 9.18273645546364e-9*installed_costs**2
@@ -18,7 +18,7 @@ class SelectingPump:
         return result
 
     @staticmethod
-    def eqn_8_2__installed_costs(hp: float):
+    def eqn_8_2__installed_costs(hp: float, **kwargs):
         # [.pyeqn] installed_costs = 33000 * (hp / 10) ** 0.5
         result = []
         installed_costs = 10435.5162785557*sqrt(hp)
