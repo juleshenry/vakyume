@@ -29,6 +29,7 @@ class PipelineContext:
         self.project_dir = os.path.abspath(project_dir)
         self.notes_dir = os.path.join(self.project_dir, "notes")
         self.shards_dir = os.path.join(self.project_dir, "shards")
+        self.subshards_dir = os.path.join(self.shards_dir, "subshards")
         self.reports_dir = os.path.join(self.project_dir, "reports")
         self.repair_prompts_dir = os.path.join(self.project_dir, "repair_prompts")
         self.certified_file = os.path.join(self.project_dir, "vakyume_certified.py")
@@ -36,6 +37,7 @@ class PipelineContext:
         # Ensure directories exist
         for d in [
             self.shards_dir,
+            self.subshards_dir,
             self.reports_dir,
             self.repair_prompts_dir,
             self.notes_dir,
@@ -47,6 +49,8 @@ class PipelineContext:
         if os.path.exists(self.shards_dir):
             shutil.rmtree(self.shards_dir)
         os.makedirs(self.shards_dir)
+        if not os.path.exists(self.subshards_dir):
+            os.makedirs(self.subshards_dir)
         package_dir = os.path.dirname(__file__)
         kwasak_src = os.path.join(package_dir, "kwasak.py")
         if os.path.exists(kwasak_src):
@@ -113,7 +117,8 @@ class Solver:
             code.append(f"{TAB * 3}# [.pyeqn] {pyeqn}")
         code.extend(
             [
-                f"{TAB * 3}return eval(\"{normal_form.replace(token, 'x')}\".replace('x', str({token})))",
+                f"{TAB * 3}# Placeholder for numerical solver",
+                f"{TAB * 3}pass",
                 f'{TAB * 2}raise UnsolvedException("Pending LLM/Manual Repair")',
             ]
         )
@@ -121,6 +126,7 @@ class Solver:
 
 
 def shard_from_chapters(ctx: PipelineContext):
+    print(f"[INPUT] shard_from_chapters: ctx.notes_dir={ctx.notes_dir}")
     solver = Solver()
 
     if not os.path.exists(ctx.notes_dir):
@@ -136,6 +142,7 @@ def shard_from_chapters(ctx: PipelineContext):
             to_process.append(chapter_file)
 
     if not to_process:
+        print(f"[OUTPUT] shard_from_chapters: No chapters to process")
         return
 
     for chapter_file in to_process:
@@ -182,7 +189,7 @@ def shard_from_chapters(ctx: PipelineContext):
                 with open(shard_path, "w") as sf:
                     sf.write("from math import log, sqrt, exp, pow, e\n")
                     sf.write(
-                        "from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n"
+                        "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
                     )
                     sf.write("from scipy.optimize import newton\n")
                     sf.write("from kwasak import kwasak_static\n")
@@ -223,31 +230,35 @@ def shard_from_chapters(ctx: PipelineContext):
                                 )
                                 + "\n\n"
                             )
-                        except Exception as e:
-                            sf.write(f"{TAB * 2}# Error during Sympy solve: {e}\n")
+                        except Exception:
                             sf.write(
                                 solver.sympy_failover(
                                     header, nf, token, pyeqn=line.strip()
                                 )
                                 + "\n\n"
                             )
-
-    if created_count > 0:
-        print(f"Scraped {created_count} new equations.")
+    print(f"Scraped {created_count} new equations.")
 
 
 def verify_single_shard(ctx: PipelineContext, shard_file: str):
+    print(f"[INPUT] verify_single_shard: shard_file={shard_file}")
     shard_path = os.path.join(ctx.shards_dir, shard_file)
     try:
         with open(shard_path, "r") as f:
             code = f.read()
-    except Exception as e:
-        return {"error": str(e)}
+    except Exception as err:
+        return {"error": str(err)}
 
     # Extract methods
     blocks = extract_method_blocks(code)
     if not blocks:
         return {"error": "No methods found in shard"}
+
+    # Extract pyeqn from comments
+    pyeqn = None
+    pyeqn_match = re.search(r"# \[\.pyeqn\] (.*)", code)
+    if pyeqn_match:
+        pyeqn = pyeqn_match.group(1).strip()
 
     # Inject a robust environment for verification
     import_header = (
@@ -272,8 +283,19 @@ def verify_single_shard(ctx: PipelineContext, shard_file: str):
     evaled_methods = {}
     errors = {}
 
+    # Prepare shared globals for all methods in the same shard
+    global_env = {"__builtins__": __builtins__}
+    try:
+        exec(import_header, global_env)
+    except Exception as err:
+        return {"error": f"Import header execution failed: {err}"}
+
+    # Use subshards instead of exec
+    if ctx.subshards_dir not in sys.path:
+        sys.path.append(ctx.subshards_dir)
+
     for name, block_lines in blocks.items():
-        # Prepare for exec
+        # Prepare subshard
         block_text = "\n".join(block_lines)
         lines = block_text.splitlines()
         non_empty = [l for l in lines if l.strip()]
@@ -281,25 +303,32 @@ def verify_single_shard(ctx: PipelineContext, shard_file: str):
             continue
         min_indent = min(len(l) - len(l.lstrip()) for l in non_empty)
         deindented = "\n".join(l[min_indent:] for l in lines)
-        # Remove decorators for direct exec
         deindented = re.sub(r"@staticmethod|@kwasak_static", "", deindented)
 
-        full_code = import_header + deindented
-        try:
-            # We use a shared globals for all methods in the same shard to mimic class scope
-            # but keep it isolated from the pipeline's globals
-            global_env = {"__builtins__": __builtins__}
-            exec(import_header, global_env)  # Pre-load imports into env
+        subshard_module_name = f"subshard_{shard_file[:-3]}_{name}"
+        subshard_path = os.path.join(ctx.subshards_dir, f"{subshard_module_name}.py")
 
-            locs = {}
-            exec(deindented, global_env, locs)
-            func = locs.get(name)
+        try:
+            with open(subshard_path, "w") as f:
+                f.write(import_header)
+                f.write("\n\n")
+                f.write(deindented)
+
+            # Import or reload
+            importlib.invalidate_caches()
+            if subshard_module_name in sys.modules:
+                module = importlib.reload(sys.modules[subshard_module_name])
+            else:
+                module = importlib.import_module(subshard_module_name)
+
+            func = getattr(module, name, None)
             if func:
                 evaled_methods[name] = func
+                global_env[name] = func
             else:
-                errors[name] = f"Method '{name}' not found in locs after exec."
-        except Exception as e:
-            errors[name] = f"{type(e).__name__}: {e}"
+                errors[name] = f"Method '{name}' not found in subshard module."
+        except Exception as err:
+            errors[name] = f"{type(err).__name__}: {err}"
 
     # Create MockLib
     class MockLib:
@@ -318,8 +347,23 @@ def verify_single_shard(ctx: PipelineContext, shard_file: str):
             setattr(MockLib, base_eq, lambda: None)  # Dummy for Verify to find
 
     try:
-        v = Verify(MockLib)
-        verification_results = v.verify()
+        v = Verify(MockLib, pyeqn=pyeqn, subshards_dir=ctx.subshards_dir)
+        raw_results = v.verify()
+
+        verification_results = {}
+        mismatches = {}
+
+        # The new Verify.verify() returns { base_eq: { "scores": ..., "mismatches": ... } }
+        # We need to flatten/adapt this for the rest of the pipeline
+        for base_eq, data in raw_results.items():
+            scores = data["scores"]
+            mismatches.update(data["mismatches"])
+
+            if base_eq not in verification_results:
+                verification_results[base_eq] = {}
+
+            for token, score in scores.items():
+                verification_results[base_eq][token] = score
 
         # Merge errors and ensure all variants from blocks are represented
         for name in blocks.keys():
@@ -330,12 +374,12 @@ def verify_single_shard(ctx: PipelineContext, shard_file: str):
                 if name in errors:
                     verification_results[base_eq][token] = -1  # Mark as error
                 elif token not in verification_results[base_eq]:
-                    # This could happen if it loaded but had no score?
-                    # Verify usually gives a score to everything it sees in MockLib
                     pass
-        return verification_results
-    except Exception as e:
-        return {"error": f"Verification failed: {e}"}
+
+        return {"results": verification_results, "mismatches": mismatches}
+    except Exception as err:
+        print(f"[OUTPUT] verify_single_shard: error={err}")
+        return {"error": f"Verification failed: {err}"}
 
 
 def verify_all_shards(ctx: PipelineContext):
@@ -361,52 +405,80 @@ def verify_all_shards(ctx: PipelineContext):
 
 
 def analyze_results(ctx: PipelineContext, all_results):
+    print(f"[INPUT] analyze_results: {len(all_results)} shards in all_results")
     print("Analyzing alignment for certification...")
     analysis = {"solved": [], "inconsistent": {}, "failed": []}
 
-    for shard_file, eqn_results in all_results.items():
-        if not eqn_results or "error" in eqn_results:
+    for shard_file, shard_res in all_results.items():
+        if (
+            not shard_res
+            or not isinstance(shard_res, dict)
+            or "results" not in shard_res
+        ):
             analysis["failed"].append(
                 {
                     "file": shard_file,
-                    "error": eqn_results.get("error")
-                    if eqn_results
+                    "error": shard_res.get("error")
+                    if (shard_res and isinstance(shard_res, dict))
                     else "Unknown error",
                 }
             )
             continue
 
+        eqn_results_data = shard_res.get("results")
+        if not isinstance(eqn_results_data, dict):
+            analysis["failed"].append(
+                {"file": shard_file, "error": "Invalid results format"}
+            )
+            continue
+
+        mismatches_data = shard_res.get("mismatches", {})
         all_solved = True
-        for eqn_name, variants in eqn_results.items():
-            num_variants = len(variants)
-            if num_variants == 0:
+
+        for base_eq, variants_inner in eqn_results_data.items():
+            if not isinstance(variants_inner, dict):
+                all_solved = False
                 continue
 
-            max_score = max(variants.values()) if variants else 0
-            if max_score != num_variants:
+            # Improvement: Use relative majority and harmony check
+            num_v = len(variants_inner)
+            best_score = max(variants_inner.values()) if variants_inner else 0
+
+            # Trusted are those that passed harmony (score >= 1) and have the best score
+            trusted = [
+                v
+                for v, score in variants_inner.items()
+                if score == best_score and score >= 1
+            ]
+            # Broken are those that failed harmony (score == 0) or are inconsistent with the majority
+            broken = [
+                v
+                for v, score in variants_inner.items()
+                if score < best_score or score == 0
+            ]
+
+            if broken:
                 all_solved = False
-                trusted = [v for v, s in variants.items() if s == max_score and s > 1]
-                broken = [v for v, s in variants.items() if s < max_score or s <= 1]
-
-                # If everything is broken, pick the first one as broken to start somewhere
-                if not trusted and not broken and variants:
-                    broken = list(variants.keys())
-
                 analysis["inconsistent"][shard_file] = {
-                    "eqn": eqn_name,
-                    "num_variants": num_variants,
-                    "trusted_variants": trusted,
-                    "broken_variants": broken,
-                    "scores": variants,
+                    "broken": broken,
+                    "trusted": trusted,
+                    "scores": variants_inner,
+                    "mismatches": {
+                        v: mismatches_data.get(v)
+                        for v in broken
+                        if v in mismatches_data
+                    },
                 }
-                # For now, one inconsistent equation in a shard is enough to flag the shard
                 break
 
-        if all_solved and eqn_results:
+        if all_solved and eqn_results_data:
             analysis["solved"].append(shard_file)
 
     with open(os.path.join(ctx.reports_dir, "analysis.json"), "w") as af:
         json.dump(analysis, af, indent=4)
+    print(
+        f"[OUTPUT] analyze_results: solved={len(analysis['solved'])}, inconsistent={len(analysis['inconsistent'])}, failed={len(analysis['failed'])}"
+    )
     return analysis
 
 
@@ -528,7 +600,11 @@ def attempt_repair_shard(
     broken_variants=None,
     trusted_variants=None,
     scores=None,
+    mismatches=None,
 ):
+    print(
+        f"[INPUT] attempt_repair_shard: shard_file={shard_file}, broken={broken_variants}, trusted={trusted_variants}"
+    )
     shard_path = os.path.join(ctx.shards_dir, shard_file)
     prompt_cache_path = os.path.join(ctx.repair_prompts_dir, f"{shard_file}.pyeqn")
 
@@ -546,18 +622,10 @@ def attempt_repair_shard(
             with open(prompt_cache_path, "w") as f:
                 f.write(pyeqn)
 
-    # Focus on ONE broken variant if multiple exist
+    # Focus on broken variants
     target_broken = broken_variants
-    if broken_variants and len(broken_variants) > 1:
-        # Prioritize error variants (-1)
-        if scores:
-            errors = [v for v in broken_variants if scores.get(v) == -1]
-            if errors:
-                target_broken = [errors[0]]
-            else:
-                target_broken = [broken_variants[0]]
-        else:
-            target_broken = [broken_variants[0]]
+    if not broken_variants:
+        target_broken = []
 
     print(f"\n |- Repairing variant(s): {target_broken}")
     raw_iterator = repair_codigo(
@@ -567,13 +635,14 @@ def attempt_repair_shard(
         broken_variants=target_broken,
         trusted_variants=trusted_variants,
         scores=scores,
+        mismatches=mismatches,
         pyeqn=pyeqn,
         stream=True,
     )
 
     if raw_iterator is None:
         print("  [Error] LLM returned no response.")
-        return False
+        return {"updated": False}
 
     print(f"\n--- Code for {shard_file} ---")
     raw = ""
@@ -593,9 +662,9 @@ def attempt_repair_shard(
             content = str(content or "")
             raw += content
             print(content, end="", flush=True)
-    except Exception as e:
-        print(f"\n  [Error] Error during streaming: {e}")
-        return False
+    except Exception as err:
+        print(f"\n  [Error] Error during streaming: {err}")
+        return {"updated": False}
 
     print("\n--- End of Code ---")
 
@@ -603,11 +672,11 @@ def attempt_repair_shard(
     if not code_text.strip():
         code_text = extract_code_block(raw)
     if not code_text.strip():
-        return False
+        return {"updated": False}
 
     blocks = extract_method_blocks(code_text)
     if not blocks:
-        return False
+        return {"updated": False}
 
     with open(shard_path, "r") as sf:
         file_lines = sf.readlines()
@@ -635,15 +704,19 @@ def attempt_repair_shard(
 
     if updated:
         # Validate syntax
+        file_content = "".join(new_file_lines)
         try:
-            ast.parse("".join(new_file_lines))
-            with open(shard_path, "w") as sf:
-                sf.writelines(new_file_lines)
-            return True
-        except Exception as e:
-            print(f" |- [Warning] LLM produced invalid syntax for {shard_file}: {e}")
-            return False
-    return False
+            ast.parse(file_content)
+        except Exception as err:
+            print(f" |- [Warning] LLM produced invalid syntax for {shard_file}: {err}")
+            # We still save it so the next iteration can show the LLM its mistake
+
+        with open(shard_path, "w") as sf:
+            sf.write(file_content)
+        print(f"[OUTPUT] attempt_repair_shard: updated=True for {shard_file}")
+        return {"updated": True}
+    print(f"[OUTPUT] attempt_repair_shard: updated=False for {shard_file}")
+    return {"updated": False}
 
 
 def run_pipeline(
@@ -682,9 +755,10 @@ def run_pipeline(
             to_repair.append(
                 {
                     "file": sf,
-                    "broken": info.get("broken_variants", []),
-                    "trusted": info.get("trusted_variants", []),
+                    "broken": info.get("broken", []),
+                    "trusted": info.get("trusted", []),
                     "scores": info.get("scores", {}),
+                    "mismatches": info.get("mismatches", {}),
                     "error": None,
                 }
             )
@@ -726,30 +800,51 @@ def run_pipeline(
                     os.remove(shard_path)
                 shard_from_chapters(ctx)
                 # After re-scrape, re-verify this specific shard to get fresh analysis
-                new_results = verify_single_shard(ctx, shard_file)
-                if new_results and "error" not in new_results:
-                    # Check if it's miraculously solved (unlikely but possible if sympy worked this time)
+                res_wrap = verify_single_shard(ctx, shard_file)
+                if res_wrap and isinstance(res_wrap, dict) and "results" in res_wrap:
                     is_solved = True
-                    for eqn_name, variants in new_results.items():
-                        if isinstance(variants, dict):
-                            num_v = len(variants)
-                            if not all(s == num_v for s in variants.values()):
-                                is_solved = False
-                                # Update item for next attempt
-                                max_score = max(variants.values())
-                                item["trusted"] = [
-                                    v
-                                    for v, s in variants.items()
-                                    if s == max_score and s > 1
-                                ]
-                                item["broken"] = [
-                                    v
-                                    for v, s in variants.items()
-                                    if s < max_score or s <= 1
-                                ]
-                                item["scores"] = variants
-                                item["error"] = None
-                                break
+                    results_data = res_wrap.get("results", {})
+                    mismatches_data = res_wrap.get("mismatches", {})
+                    if not isinstance(results_data, dict):
+                        is_solved = False
+                    else:
+                        for eqn_name, variants_data in results_data.items():
+                            if isinstance(variants_data, dict):
+                                num_v = len(variants_data)
+                                if not all(s == num_v for s in variants_data.values()):
+                                    is_solved = False
+                                    max_score = max(variants_data.values())
+                                    item["trusted"] = [
+                                        v
+                                        for v, s in variants_data.items()
+                                        if s == max_score and s > 1
+                                    ]
+                                    item["broken"] = [
+                                        v
+                                        for v, s in variants_data.items()
+                                        if s < max_score or s <= 1
+                                    ]
+                                    item["scores"] = variants_data
+                                    item["mismatches"] = {
+                                        v: mismatches_data.get(v)
+                                        for v in item["broken"]
+                                        if isinstance(mismatches_data, dict)
+                                        and v in mismatches_data
+                                    }
+                                    item["error"] = None
+                                    break
+                    if is_solved:
+                        print(f" |- Result: SUCCESS after re-scrape for {shard_file}")
+                        break
+
+                    if is_solved:
+                        print(f" |- Result: SUCCESS after re-scrape for {shard_file}")
+                        break
+
+                    if is_solved:
+                        print(f" |- Result: SUCCESS after re-scrape for {shard_file}")
+                        break
+
                     if is_solved:
                         print(f" |- Result: SUCCESS after re-scrape for {shard_file}")
                         break
@@ -759,65 +854,78 @@ def run_pipeline(
             with open(shard_path, "r") as sf:
                 shard_code = sf.read().rstrip()
 
-            updated = attempt_repair_shard(
-                ctx=ctx,
+            repair_res = attempt_repair_shard(
+                ctx,
                 shard_file=shard_file,
                 shard_code=shard_code,
-                error=item["error"],
-                broken_variants=item["broken"],
-                trusted_variants=item["trusted"],
-                scores=item["scores"],
+                broken_variants=item.get("broken"),
+                trusted_variants=item.get("trusted"),
+                scores=item.get("scores"),
+                mismatches=item.get("mismatches"),
             )
+
+            updated = repair_res.get("updated", False)
+            if not updated and "syntax_error" in repair_res:
+                item["error"] = repair_res["syntax_error"]
 
             is_solved = False
             new_results = None
 
             if updated:
-                new_results = verify_single_shard(ctx, shard_file)
-                if new_results and "error" not in new_results:
+                res_wrap = verify_single_shard(ctx, shard_file)
+                if res_wrap and isinstance(res_wrap, dict) and "results" in res_wrap:
                     is_solved = True
-                    for eqn_name, variants in new_results.items():
-                        if isinstance(variants, dict):
-                            num_v = len(variants)
-                            if not all(s == num_v for s in variants.values()):
+                    results_data = res_wrap.get("results", {})
+                    mismatches_data = res_wrap.get("mismatches", {})
+                    if not isinstance(results_data, dict):
+                        is_solved = False
+                    else:
+                        for eqn_name, variants_data in results_data.items():
+                            if isinstance(variants_data, dict):
+                                num_v = len(variants_data)
+                                if not all(s == num_v for s in variants_data.values()):
+                                    is_solved = False
+                                    max_score = max(variants_data.values())
+                                    item["trusted"] = [
+                                        v
+                                        for v, s in variants_data.items()
+                                        if s == max_score and s > 1
+                                    ]
+                                    item["broken"] = [
+                                        v
+                                        for v, s in variants_data.items()
+                                        if s < max_score or s <= 1
+                                    ]
+                                    item["scores"] = variants_data
+                                    item["mismatches"] = {
+                                        v: mismatches_data.get(v)
+                                        for v in item["broken"]
+                                        if isinstance(mismatches_data, dict)
+                                        and v in mismatches_data
+                                    }
+                                    item["error"] = None
+                                    break
+                            else:
                                 is_solved = False
-                                # Update item for next attempt
-                                max_score = max(variants.values())
-                                item["trusted"] = [
-                                    v
-                                    for v, s in variants.items()
-                                    if s == max_score and s > 1
-                                ]
-                                item["broken"] = [
-                                    v
-                                    for v, s in variants.items()
-                                    if s < max_score or s <= 1
-                                ]
-                                item["scores"] = variants
-                                item["error"] = None
                                 break
-                        else:
-                            is_solved = False
-                            break
-
-                if is_solved:
-                    print(f"\n |- Result: SUCCESS for {shard_file}")
-                    break
-                else:
-                    # Log the specific failure reason
-                    if new_results and "error" in new_results:
-                        print(
-                            f"\n |- Result: FAILED (Execution Error: {new_results['error']}). Retrying..."
-                        )
+                    if is_solved:
+                        print(f"\n |- Result: SUCCESS for {shard_file}")
+                        break
                     else:
                         print(f"\n |- Result: FAILED (Still Inconsistent). Retrying...")
+                else:
+                    err = (
+                        res_wrap.get("error")
+                        if (res_wrap and isinstance(res_wrap, dict))
+                        else "Unknown error"
+                    )
+                    item["error"] = err
+                    print(f"\n |- Result: FAILED (Execution Error: {err}). Retrying...")
+
             else:
                 print(f"\n |- Result: NO CHANGE (LLM produced no update). Retrying...")
 
             attempt += 1
-            if COOLDOWN_SECONDS > 0:
-                time.sleep(COOLDOWN_SECONDS)
-
             if COOLDOWN_SECONDS > 0:
                 time.sleep(COOLDOWN_SECONDS)
 

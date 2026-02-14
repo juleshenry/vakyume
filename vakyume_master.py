@@ -131,8 +131,8 @@ class Solver:
             f"{TAB * 2}# [Sympy Failover Placeholder for {token}]",
             f"{TAB * 2}def func({token}):",
             f"{TAB * 3}# Numerical fallback needed for: {normal_form}",
-            f"{TAB * 3}return eval(\"{normal_form.replace(token, 'x')}\".replace('x', str({token})))",
-            f"{TAB * 2}# result = [newton(func, 1.0)]",
+            f"{TAB * 3}# TODO: Implement solver without eval",
+            f"{TAB * 3}pass",
             f'{TAB * 2}raise UnsolvedException("Pending LLM/Manual Repair")',
         ]
         return "\n".join(code)

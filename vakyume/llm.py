@@ -8,6 +8,9 @@ def ask_llm(
     system_prompt: str, user_prompt: str, model: str = "phi3:latest", stream=False
 ):
     """Base call to Ollama."""
+    print(
+        f"[INPUT] ask_llm: model={model}, system_prompt_len={len(system_prompt)}, user_prompt_len={len(user_prompt)}"
+    )
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
@@ -21,9 +24,14 @@ def ask_llm(
     if stream:
         return response
     # The response object can be a dict or a ChatResponse object depending on the version
+    content = ""
     if hasattr(response, "message"):
-        return response.message.content
-    return response["message"]["content"]
+        content = response.message.content
+    else:
+        content = response["message"]["content"]
+
+    print(f"[OUTPUT] ask_llm: content_len={len(content)}")
+    return content
 
 
 def escribir_codigo(
@@ -71,11 +79,15 @@ def repair_codigo(
     broken_variants=None,
     trusted_variants=None,
     scores=None,
+    mismatches=None,
     pyeqn=None,
     stream=False,
     **kwargs,
 ):
     """Refined prompt for Phi-3 to repair existing code with majority context."""
+    print(
+        f"[INPUT] repair_codigo: shard_file={shard_file}, broken={broken_variants}, trusted={trusted_variants}"
+    )
 
     system_prompt = (
         "You are a mathematical code repair assistant. Your goal is to fix inconsistencies or errors in Python equation solver classes.\n"
@@ -86,7 +98,7 @@ def repair_codigo(
         "- Do NOT add any chatty comments, explanations, or docstrings.\n"
         "- ALWAYS preserve the '# [.pyeqn] <original_equation>' comment at the start of each method body.\n"
         "- DO NOT remove or rename arguments in the method signature. Keep the signature exactly as provided.\n"
-        "- Ensure all methods in the class are mathematically equivalent.\n"
+        "- Ensure all methods in the class are mathematically equivalent and satisfy the original equation.\n"
         "- Use the 'trusted' variants as the ground truth if provided.\n"
         "- Return executable code only, no markdown markers."
     )
@@ -95,10 +107,38 @@ def repair_codigo(
     if pyeqn:
         context = f"Original Equation: {pyeqn}\n"
 
+    mismatch_context = ""
+    if mismatches:
+        mismatch_context = "HARMONY FAILURES (Specific examples where code is wrong):\n"
+        for var, trials in mismatches.items():
+            if trials:
+                # Just show the first few trials to keep prompt size manageable
+                for i, trial in enumerate(trials[:2]):
+                    mismatch_context += f"Variant {var}, Example {i + 1}:\n"
+                    if "inputs" in trial:
+                        mismatch_context += f"  Inputs: {trial['inputs']}\n"
+                        mismatch_context += f"  Got Output: {trial['output']}\n"
+                        for m in trial.get("mismatches", []):
+                            if "target" in m:
+                                mismatch_context += f"  Mismatch with {m['target']}:"
+                                if "expected" in m:
+                                    mismatch_context += f" expected {m['expected']},"
+                                if "got" in m:
+                                    mismatch_context += f" got {m['got']}"
+                                mismatch_context += "\n"
+                            elif "error" in m:
+                                mismatch_context += (
+                                    f"  Error in {m['target']}: {m['error']}\n"
+                                )
+                    elif "error" in trial:
+                        mismatch_context += f"  Error: {trial['error']}\n"
+        mismatch_context += "\n"
+
     if error:
         user_prompt = (
             f"The Python shard '{shard_file}' failed with error: {error}\n\n"
             f"{context}"
+            f"{mismatch_context}"
             "CODE TO FIX:\n"
             f"{shard_code}\n\n"
             "Please fix the syntax and logical errors. Return the corrected methods."
@@ -107,6 +147,7 @@ def repair_codigo(
         user_prompt = (
             f"The Python shard '{shard_file}' has inconsistent variants.\n"
             f"{context}"
+            f"{mismatch_context}"
             f"TRUSTED (Correct): {trusted_variants}\n"
             f"BROKEN (Incorrect): {broken_variants}\n"
             f"Scores: {scores}\n\n"
@@ -119,6 +160,7 @@ def repair_codigo(
         user_prompt = (
             f"The Python shard '{shard_file}' has inconsistent variants.\n"
             f"{context}"
+            f"{mismatch_context}"
             f"Inconsistent: {broken_variants}\n"
             f"Scores: {scores}\n\n"
             "CODE TO REPAIR:\n"

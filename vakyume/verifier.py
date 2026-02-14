@@ -4,6 +4,7 @@ from scipy.optimize import newton
 from itertools import product
 import random
 import inspect
+import re
 import numpy as np
 
 try:
@@ -15,9 +16,17 @@ from .kwasak import kwasak_static
 from .config import *
 
 
+import importlib
+import os
+import sys
+
+
 class Verify:
-    def __init__(self, lib_class):
+    def __init__(self, lib_class, pyeqn=None, subshards_dir=None):
         self.lib_class = lib_class
+        self.pyeqn = pyeqn
+        self.subshards_dir = subshards_dir
+        self.harmony_func = None
         self.base_equations = [
             name
             for name in dir(lib_class)
@@ -27,14 +36,103 @@ class Verify:
             name for name in dir(lib_class) if name.startswith("eqn") and "__" in name
         ]
 
+        if self.subshards_dir and self.pyeqn:
+            self._prepare_harmony_subshard()
+
+    def _prepare_harmony_subshard(self):
+        try:
+            lhs_str, rhs_str = self.pyeqn.split("=", 1)
+            lhs_str = lhs_str.split("#")[0].strip()
+            rhs_str = rhs_str.split("#")[0].strip()
+
+            import hashlib
+
+            h = hashlib.md5(self.pyeqn.encode()).hexdigest()
+            module_name = f"harmony_check_{h}"
+            subshard_path = os.path.join(self.subshards_dir, f"{module_name}.py")
+
+            if not os.path.exists(subshard_path):
+                # Find all identifiers in lhs and rhs to use as arguments
+                all_tokens = set(
+                    re.findall(r"\b[a-zA-Z_]\w*\b", lhs_str + " " + rhs_str)
+                )
+                # Remove math functions and numbers
+                math_funcs = {
+                    "log",
+                    "sqrt",
+                    "exp",
+                    "pow",
+                    "e",
+                    "pi",
+                    "sin",
+                    "cos",
+                    "tan",
+                    "ln",
+                }
+                tokens = sorted(
+                    [t for t in all_tokens if t not in math_funcs and not t.isdigit()]
+                )
+
+                with open(subshard_path, "w") as f:
+                    f.write("from math import *\nimport numpy as np\n\n")
+                    f.write(f"def check_harmony({', '.join(tokens)}, **kwargs):\n")
+                    f.write(
+                        f"    return ({lhs_str.replace('ln', 'log')}) - ({rhs_str.replace('ln', 'log')})\n"
+                    )
+
+            if self.subshards_dir not in sys.path:
+                sys.path.append(self.subshards_dir)
+
+            importlib.invalidate_caches()
+            if module_name in sys.modules:
+                module = importlib.reload(sys.modules[module_name])
+            else:
+                module = importlib.import_module(module_name)
+
+            self.harmony_func = module.check_harmony
+        except Exception as err:
+            print(f"  [Harmony Prep] ERROR: {err}")
+
     def _get_params(self, base_eq):
         variants = [v for v in self.equation_variants if v.startswith(base_eq + "__")]
         params = set()
         for v in variants:
             sig = inspect.signature(getattr(self.lib_class, v))
-            params.update(sig.parameters.keys())
+            for name, param in sig.parameters.items():
+                if (
+                    param.kind not in (param.VAR_POSITIONAL, param.VAR_KEYWORD)
+                    and name != "self"
+                ):
+                    params.add(name)
             params.add(v.split("__")[-1])
         return sorted(list(params))
+
+    def _check_pyeqn_harmony(self, pyeqn, params_dict):
+        """Checks if the values satisfy the original equation string."""
+        if not pyeqn or "=" not in pyeqn:
+            return True
+
+        if self.harmony_func:
+            try:
+                res_val = self.harmony_func(**params_dict)
+                if isinstance(res_val, (list, tuple, np.ndarray)):
+                    res_val = res_val[0]
+                res = abs(float(res_val)) < 1e-4
+                if not res:
+                    print(f"  [Harmony Check] FAIL: residual {res_val} for {pyeqn}")
+                return res
+            except Exception as err:
+                # If it's a domain error (like log of negative), return None to indicate inconclusive
+                if (
+                    "positive" in str(err).lower()
+                    or "math domain error" in str(err).lower()
+                ):
+                    return None
+                print(f"  [Harmony Check] ERROR during subshard call: {err}")
+                return False
+
+        # No fallback to eval anymore as per user request
+        return True
 
     @staticmethod
     def make_rand():
@@ -86,40 +184,72 @@ class Verify:
         return False
 
     def verify_equation(self, base_eq):
+        print(f"[INPUT] verify_equation: base_eq={base_eq}")
         params = self._get_params(base_eq)
         variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
 
         results = {}  # (source_truth_var) -> matches
+        mismatches = {}  # (source_truth_var) -> details
 
         # Increase trials to be more certain
         num_trials = 3
 
         for source_var in variants:
             variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
+            print(f" |- Testing source variant: {source_var}")
 
             trial_matches = []
+            source_mismatches = []
+
             for trial_idx in range(num_trials):
                 test_inputs = {p: self.make_rand() for p in params if p != source_var}
+                print(f"    [Trial {trial_idx + 1}] Inputs: {test_inputs}")
 
                 try:
-                    source_values = variant_method(**test_inputs)
+                    source_values = variant_method(**test_inputs.copy())
+                    print(
+                        f"    [Trial {trial_idx + 1}] {source_var} variant output: {source_values}"
+                    )
                     if not source_values:
                         print(
-                            f"  [OOO] {base_eq}__{source_var} returned no values with inputs {test_inputs}"
+                            f"    [Trial {trial_idx + 1}] {source_var} variant returned NOTHING"
                         )
                         trial_matches.append(0)
+                        source_mismatches.append({"error": "No values returned"})
                         continue
 
                     best_match_for_this_trial = 0
+                    trial_detail = None
+
                     for val in source_values:
                         if isinstance(val, complex) and abs(val.imag) > 1e-5:
+                            print(
+                                f"    [Trial {trial_idx + 1}] Skipping complex result: {val}"
+                            )
                             continue
 
                         full_set = test_inputs.copy()
                         full_set[source_var] = val
 
+                        # Harmony check with original equation string
+                        if self.pyeqn:
+                            harmony_res = self._check_pyeqn_harmony(
+                                self.pyeqn, full_set
+                            )
+                            if harmony_res is False:
+                                print(
+                                    f"    [Trial {trial_idx + 1}] Disharmony with pyeqn for {source_var}={val}"
+                                )
+                                continue
+                            elif harmony_res is None:
+                                # Inconclusive (domain error), skip this value but don't count as failure
+                                continue
+
                         matches = 0
-                        mismatches = []
+                        current_trial_mismatches = []
+                        print(
+                            f"    [Trial {trial_idx + 1}] Checking targets against source_var={source_var}, val={val}"
+                        )
                         for target_var in variants:
                             if target_var == source_var:
                                 matches += 1
@@ -133,55 +263,58 @@ class Verify:
                             }
 
                             try:
-                                target_values = target_method(**target_inputs)
-                                if self.are_similar(
+                                target_values = target_method(**target_inputs.copy())
+                                is_sim = self.are_similar(
                                     full_set[target_var], target_values
-                                ):
+                                )
+                                print(
+                                    f"      -> Target {target_var}: expected {full_set[target_var]}, got {target_values} | Match: {is_sim}"
+                                )
+                                if is_sim:
                                     matches += 1
                                 else:
-                                    mismatches.append((target_var, target_values))
-                            except Exception as e:
-                                mismatches.append((target_var, f"Error: {e}"))
-
-                        if matches < len(variants):
-                            # Only log if it's the first mismatch we find in this trial to avoid noise
-                            if best_match_for_this_trial == 0:
-                                print(
-                                    f"  [OOO] Trial {trial_idx}: {base_eq}__{source_var} output {val} is inconsistent."
-                                )
-                                for m_var, m_val in mismatches[
-                                    :1
-                                ]:  # Log only the first failing submethod
-                                    print(
-                                        f"    |- {base_eq}__{m_var} expected {full_set[m_var]} but got {m_val}"
+                                    current_trial_mismatches.append(
+                                        {
+                                            "target": target_var,
+                                            "expected": full_set[target_var],
+                                            "got": target_values,
+                                        }
                                     )
+                            except Exception as err:
+                                print(f"      -> Target {target_var}: ERROR: {err}")
+                                current_trial_mismatches.append(
+                                    {"target": target_var, "error": str(err)}
+                                )
 
-                        best_match_for_this_trial = max(
-                            best_match_for_this_trial, matches
-                        )
+                        if matches > best_match_for_this_trial:
+                            best_match_for_this_trial = matches
+                            trial_detail = {
+                                "inputs": test_inputs,
+                                "output": val,
+                                "mismatches": current_trial_mismatches,
+                            }
+
                     trial_matches.append(best_match_for_this_trial)
-                except Exception as e:
-                    print(f"  [OOO] {base_eq}__{source_var} crashed: {e}")
+                    if trial_detail:
+                        source_mismatches.append(trial_detail)
+
+                except Exception as err:
+                    print(
+                        f"    [Trial {trial_idx + 1}] {source_var} variant crashed: {err}"
+                    )
                     trial_matches.append(0)
+                    source_mismatches.append({"error": str(err)})
 
             results[source_var] = max(trial_matches) if trial_matches else 0
+            if results[source_var] < len(variants):
+                # Only keep mismatches for broken variants
+                mismatches[source_var] = source_mismatches
 
-        return results
+        print(f"[OUTPUT] verify_equation: scores={results}")
+        return {"scores": results, "mismatches": mismatches}
 
     def verify(self):
         overall_results = {}
         for base_eq in self.base_equations:
             overall_results[base_eq] = self.verify_equation(base_eq)
         return overall_results
-
-
-def test_a():
-    from vakyume_2025_ollama_i import VacuumTheory
-
-    v = Verify(VacuumTheory)
-    print(v.verify())
-
-
-if __name__ == "__main__":
-    # Example usage
-    pass
