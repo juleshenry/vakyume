@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_8_5__Eff(actual_brake_horsepower: float, theoretical_adiabatic_horsepower: float, **kwargs):
+    # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
+    result = []
+    Eff = theoretical_adiabatic_horsepower/actual_brake_horsepower
+    result.append(Eff)
+    return result

@@ -1,0 +1,10 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_8_3__hp(installed_costs: float, **kwargs):
+    # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
+    # Placeholder for numerical solver
+    raise UnsolvedException("Pending LLM/Manual Repair")

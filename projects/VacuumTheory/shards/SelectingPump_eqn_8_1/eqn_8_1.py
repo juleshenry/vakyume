@@ -1,0 +1,21 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+from vakyume.kwasak import kwasak_static
+from .eqn_8_1__NC_cap import eqn_8_1__NC
+from .eqn_8_1__NS_cap import eqn_8_1__NS
+from .eqn_8_1__SCON_cap import eqn_8_1__SCON
+from .eqn_8_1__installation_cost import eqn_8_1__installation_cost
+
+class SelectingPump:
+    eqn_8_1__NC = staticmethod(eqn_8_1__NC)
+    eqn_8_1__NS = staticmethod(eqn_8_1__NS)
+    eqn_8_1__SCON = staticmethod(eqn_8_1__SCON)
+    eqn_8_1__installation_cost = staticmethod(eqn_8_1__installation_cost)
+
+    @kwasak_static
+    def eqn_8_1(NC=None, NS=None, SCON=None, installation_cost=None, **kwargs):
+        return

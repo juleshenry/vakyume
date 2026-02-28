@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_2_4___beta(mu: float, vel_grad: float, **kwargs):
+    # [.pyeqn] _beta = mu * vel_grad
+    result = []
+    _beta = mu*vel_grad
+    result.append(_beta)
+    return result

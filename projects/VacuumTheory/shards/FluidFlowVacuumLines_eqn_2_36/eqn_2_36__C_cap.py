@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_2_36__C(C_0: float, F_t: float, **kwargs):
+    # [.pyeqn] C = C_0 * F_t
+    result = []
+    C = C_0*F_t
+    result.append(C)
+    return result

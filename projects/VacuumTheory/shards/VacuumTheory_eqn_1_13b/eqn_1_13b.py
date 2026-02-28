@@ -1,0 +1,19 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+from vakyume.kwasak import kwasak_static
+from .eqn_1_13b__P_cap import eqn_1_13b__P
+from .eqn_1_13b__p_a import eqn_1_13b__p_a
+from .eqn_1_13b__y_a import eqn_1_13b__y_a
+
+class VacuumTheory:
+    eqn_1_13b__P = staticmethod(eqn_1_13b__P)
+    eqn_1_13b__p_a = staticmethod(eqn_1_13b__p_a)
+    eqn_1_13b__y_a = staticmethod(eqn_1_13b__y_a)
+
+    @kwasak_static
+    def eqn_1_13b(P=None, p_a=None, y_a=None, **kwargs):
+        return

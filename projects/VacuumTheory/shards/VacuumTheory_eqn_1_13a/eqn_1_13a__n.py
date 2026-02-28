@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_1_13a__n(n_a: float, y_a: float, **kwargs):
+    # [.pyeqn] y_a = n_a / n
+    result = []
+    n = n_a/y_a
+    result.append(n)
+    return result

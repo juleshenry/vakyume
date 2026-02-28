@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_5_12__N_t(Eff: float, N_ES: float, T: float, **kwargs):
+    # [.pyeqn] N_t = N_ES / Eff ** T
+    result = []
+    N_t = N_ES/Eff**T
+    result.append(N_t)
+    return result

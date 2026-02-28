@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_1_8__R(M: float, P: float, T: float, V: float, m: float, **kwargs):
+    # [.pyeqn] P * V = m / M * R * T
+    result = []
+    R = M*P*V/(T*m)
+    result.append(R)
+    return result

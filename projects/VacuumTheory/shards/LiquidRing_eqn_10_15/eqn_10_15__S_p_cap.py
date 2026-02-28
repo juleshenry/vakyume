@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_10_15__S_p(P: float, S_Th: float, p_s: float, **kwargs):
+    # [.pyeqn] S_p = S_Th * (P - p_s) / P
+    result = []
+    S_p = S_Th*(P - p_s)/P
+    result.append(S_p)
+    return result

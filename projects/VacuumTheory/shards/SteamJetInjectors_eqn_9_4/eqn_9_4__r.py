@@ -1,0 +1,12 @@
+from math import log, sqrt, exp, pow, e
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_9_4__r(AEL: float, SC: float, w_s: float, **kwargs):
+    # [.pyeqn] w_s = AEL * r * SC
+    result = []
+    r = w_s/(AEL*SC)
+    result.append(r)
+    return result
