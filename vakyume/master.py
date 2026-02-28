@@ -33,6 +33,32 @@ from .llm import escribir_codigo, repair_codigo, extract_code
 DEFAULT_MAX_ROUNDS = 10
 
 
+class VakyumeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, "evalf"):
+            try:
+                if hasattr(obj, "is_number") and obj.is_number:
+                    if hasattr(obj, "is_complex") and obj.is_complex and not obj.is_real:
+                        return str(obj)
+                    return float(obj.evalf())
+                return str(obj)
+            except:
+                return str(obj)
+        if isinstance(obj, (set, tuple)):
+            return list(obj)
+        if type(obj).__module__ == "numpy":
+            if hasattr(obj, "tolist"):
+                return obj.tolist()
+            try:
+                return float(obj)
+            except:
+                try:
+                    return int(obj)
+                except:
+                    return str(obj)
+        return str(obj)
+
+
 class PipelineContext:
     def __init__(self, project_dir):
         self.project_dir = os.path.abspath(project_dir)
@@ -338,7 +364,7 @@ def verify_all_shards(ctx: PipelineContext):
         all_results[family_name] = verify_family(ctx, family_name)
 
     with open(os.path.join(ctx.reports_dir, "verification_results.json"), "w") as rf:
-        json.dump(all_results, rf, indent=4)
+        json.dump(all_results, rf, indent=4, cls=VakyumeEncoder)
     return all_results
 
 
@@ -398,7 +424,7 @@ def analyze_results(ctx: PipelineContext, all_results):
             analysis["solved"].append(family_name)
 
     with open(os.path.join(ctx.reports_dir, "analysis.json"), "w") as af:
-        json.dump(analysis, af, indent=4)
+        json.dump(analysis, af, indent=4, cls=VakyumeEncoder)
     return analysis
 
 
