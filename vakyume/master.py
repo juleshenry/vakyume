@@ -16,7 +16,7 @@ try:
     from tqdm import tqdm
 except ImportError:
     tqdm = None
-from sympy import Symbol, solve, Eq
+from sympy import Symbol, solve, Eq, sympify, symbols
 from .verifier import Verify
 from .config import (
     TAB,
@@ -71,14 +71,17 @@ class Solver:
         MAX_COMP_TIME_SECONDS,
         timeout_exception=timeout_decorator.timeout_decorator.TimeoutError,
     )
-    def get_solns_vanilla_nf(self, nf: str, symb: Symbol):
+    def get_solns_vanilla_nf(self, nf: str, symb: Symbol, tokens: list = None):
         try:
-            solns = solve(nf, symb)
+            # Use explicit symbols to avoid conflicts (like 'Q' being assumptions)
+            local_dict = {t: Symbol(t) for t in tokens} if tokens else {}
+            expr = sympify(nf, locals=local_dict)
+            solns = solve(expr, symb)
             if not solns:
                 raise UnsolvedException("Sympy solve returned empty")
             return solns
-        except Exception:
-            raise UnsolvedException("Sympy solve failed")
+        except Exception as e:
+            raise UnsolvedException(f"Sympy solve failed: {e}")
 
     def tokenize(self, eqn):
         malos = {"ln", "log"}
@@ -113,7 +116,8 @@ class Solver:
         parts = eqn.split("=")
         if len(parts) != 2:
             return None
-        return f"({parts[1].split('#')[0].strip()}) - ({parts[0].strip()})"
+        nf = f"({parts[1].split('#')[0].strip()}) - ({parts[0].strip()})"
+        return nf.replace("ln(", "log(").replace("ln (", "log(")
 
     def sympy_failover(self):
         code = [
@@ -198,7 +202,7 @@ def shard_from_chapters(ctx: PipelineContext):
                     shard_content += f"{TAB}# [.pyeqn] {line.strip()}\n"
 
                     try:
-                        solns = solver.get_solns_vanilla_nf(nf, Symbol(token))
+                        solns = solver.get_solns_vanilla_nf(nf, Symbol(token), tokens=tokes)
                         if solns:
                             shard_content += f"{TAB}result = []\n"
                             for soln in solns:
