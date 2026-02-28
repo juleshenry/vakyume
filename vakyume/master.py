@@ -210,30 +210,6 @@ def shard_from_chapters(ctx: PipelineContext):
                     except Exception:
                         shard_content += solver.sympy_failover() + "\n"
 
-                    # One-shot LLM repair if SymPy failed
-                    if "UnsolvedException" in shard_content:
-                        # Use a stream to collect response but don't log to console
-                        raw_iterator = repair_codigo(
-                            shard_file=shard_name,
-                            shard_code=shard_content,
-                            pyeqn=line.strip(),
-                            broken_variants=[token],
-                            is_subshard=True,
-                            stream=True
-                        )
-                        raw = ""
-                        for chunk in raw_iterator:
-                            msg = chunk.get("message") if isinstance(chunk, dict) else getattr(chunk, "message", None)
-                            content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
-                            raw += str(content or "")
-                        
-                        code_text = extract_code(raw, target_name=method_name)
-                        if code_text.strip():
-                            if "import " not in code_text:
-                                shard_content = import_header + code_text
-                            else:
-                                shard_content = code_text
-
                     with open(shard_path, "w") as sf:
                         sf.write(shard_content)
 
