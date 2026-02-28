@@ -165,8 +165,8 @@ class Verify:
 
         if va is not None and vb is not None:
             if isinstance(va, complex) or isinstance(vb, complex):
-                return abs(va - vb) < 1e-5
-            return abs(float(va) - float(vb)) < 1e-5
+                return abs(va - vb) < 1e-6
+            return abs(float(va) - float(vb)) < 1e-6
 
         if isinstance(a, (list, tuple, np.ndarray)) or isinstance(
             b, (list, tuple, np.ndarray)

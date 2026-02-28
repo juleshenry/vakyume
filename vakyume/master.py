@@ -38,6 +38,7 @@ class PipelineContext:
         self.project_dir = os.path.abspath(project_dir)
         self.notes_dir = os.path.join(self.project_dir, "notes")
         self.shards_dir = os.path.join(self.project_dir, "shards")
+        # Every method itself a shard in a family
         self.reports_dir = os.path.join(self.project_dir, "reports")
         self.repair_prompts_dir = os.path.join(self.project_dir, "repair_prompts")
         self.certified_file = os.path.join(self.project_dir, "vakyume_certified.py")
@@ -114,19 +115,11 @@ class Solver:
             return None
         return f"({parts[1].split('#')[0].strip()}) - ({parts[0].strip()})"
 
-    def sympy_failover(self, eqn_header, normal_form, token, pyeqn=None):
+    def sympy_failover(self):
         code = [
-            f"{TAB * 2}def func({token}):",
+            f"{TAB}# Placeholder for numerical solver",
+            f'{TAB}raise UnsolvedException("Pending LLM/Manual Repair")',
         ]
-        if pyeqn:
-            code.append(f"{TAB * 3}# [.pyeqn] {pyeqn}")
-        code.extend(
-            [
-                f"{TAB * 3}# Placeholder for numerical solver",
-                f"{TAB * 3}pass",
-                f'{TAB * 2}raise UnsolvedException("Pending LLM/Manual Repair")',
-            ]
-        )
         return "\n".join(code)
 
 
@@ -155,7 +148,7 @@ def shard_from_chapters(ctx: PipelineContext):
         "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
         "from scipy.optimize import newton\n"
         "import numpy as np\n"
-        "from kwasak import kwasak_static\n\n"
+        "from vakyume.config import UnsolvedException\n\n"
     )
 
     for chapter_file in to_process:
@@ -189,62 +182,85 @@ def shard_from_chapters(ctx: PipelineContext):
                 if not os.path.exists(family_dir):
                     os.makedirs(family_dir)
 
-                # Main shard for the equation (kwasak entry point)
-                main_shard_path = os.path.join(family_dir, f"eqn_{eqn_number}.py")
-                if not os.path.exists(main_shard_path):
-                    with open(main_shard_path, "w") as sf:
-                        sf.write(import_header)
-                        sf.write(f"class {class_name}:\n")
-                        sf.write(f"{TAB}@kwasak_static\n")
-                        sf.write(
-                            f"{TAB}def eqn_{eqn_number}({', '.join(f'{t}=None' for t in tokes)}, **kwargs):\n"
-                        )
-                        sf.write(f"{TAB * 2}return\n")
-
-                # Shards for each variable
+                # Individual Shards for each variable (Functions, no class)
                 for token in tokes:
-                    shard_name = f"eqn_{eqn_number}__{token}.py"
+                    method_name = f"eqn_{eqn_number}__{token}"
+                    shard_name = f"{method_name}.py"
                     shard_path = os.path.join(family_dir, shard_name)
                     if os.path.exists(shard_path):
                         continue
 
                     created_count += 1
-                    with open(shard_path, "w") as sf:
-                        sf.write(import_header)
-                        sf.write(f"class {class_name}:\n")
-                        other_args = [t for t in tokes if t != token]
-                        header = f"{TAB}@staticmethod\n{TAB}def eqn_{eqn_number}__{token}({', '.join(f'{t}: float' for t in other_args)}, **kwargs):"
-                        sf.write(header + "\n")
-                        sf.write(f"{TAB * 2}# [.pyeqn] {line.strip()}\n")
+                    shard_content = import_header
+                    other_args = [t for t in tokes if t != token]
+                    header = f"def {method_name}({', '.join(f'{t}: float' for t in other_args)}, **kwargs):"
+                    shard_content += header + "\n"
+                    shard_content += f"{TAB}# [.pyeqn] {line.strip()}\n"
 
-                        try:
-                            solns = solver.get_solns_vanilla_nf(nf, Symbol(token))
-                            if solns:
-                                sf.write(f"{TAB * 2}result = []\n")
-                                for soln in solns:
-                                    sf.write(f"{TAB * 2}{token} = {soln}\n")
-                                    sf.write(f"{TAB * 2}result.append({token})\n")
-                                sf.write(f"{TAB * 2}return result\n")
+                    try:
+                        solns = solver.get_solns_vanilla_nf(nf, Symbol(token))
+                        if solns:
+                            shard_content += f"{TAB}result = []\n"
+                            for soln in solns:
+                                shard_content += f"{TAB}{token} = {soln}\n"
+                                shard_content += f"{TAB}result.append({token})\n"
+                            shard_content += f"{TAB}return result\n"
+                        else:
+                            shard_content += solver.sympy_failover() + "\n"
+                    except Exception:
+                        shard_content += solver.sympy_failover() + "\n"
+
+                    # One-shot LLM repair if SymPy failed
+                    if "UnsolvedException" in shard_content:
+                        # Use a stream to collect response but don't log to console
+                        raw_iterator = repair_codigo(
+                            shard_file=shard_name,
+                            shard_code=shard_content,
+                            pyeqn=line.strip(),
+                            broken_variants=[token],
+                            is_subshard=True,
+                            stream=True
+                        )
+                        raw = ""
+                        for chunk in raw_iterator:
+                            msg = chunk.get("message") if isinstance(chunk, dict) else getattr(chunk, "message", None)
+                            content = msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
+                            raw += str(content or "")
+                        
+                        code_text = extract_code(raw, target_name=method_name)
+                        if code_text.strip():
+                            if "import " not in code_text:
+                                shard_content = import_header + code_text
                             else:
-                                sf.write(
-                                    solver.sympy_failover(
-                                        header, nf, token, pyeqn=line.strip()
-                                    )
-                                    + "\n"
-                                )
-                        except Exception:
-                            sf.write(
-                                solver.sympy_failover(
-                                    header, nf, token, pyeqn=line.strip()
-                                )
-                                + "\n"
-                            )
+                                shard_content = code_text
 
-                    # py_compile one by one each shard to verify it at least is valid python
+                    with open(shard_path, "w") as sf:
+                        sf.write(shard_content)
+
+                    # py_compile check
                     try:
                         py_compile.compile(shard_path, doraise=True)
                     except py_compile.PyCompileError as e:
                         print(f"  [py_compile] FAILED for {shard_path}: {e}")
+
+                # Main shard for the equation (Class and kwasak entry point)
+                main_shard_path = os.path.join(family_dir, f"eqn_{eqn_number}.py")
+                if not os.path.exists(main_shard_path):
+                    with open(main_shard_path, "w") as sf:
+                        sf.write(import_header)
+                        sf.write("from vakyume.kwasak import kwasak_static\n")
+                        for token in tokes:
+                            method_name = f"eqn_{eqn_number}__{token}"
+                            sf.write(f"from .{method_name} import {method_name}\n")
+                        sf.write(f"\nclass {class_name}:\n")
+                        for token in tokes:
+                            method_name = f"eqn_{eqn_number}__{token}"
+                            sf.write(f"{TAB}{method_name} = staticmethod({method_name})\n")
+                        sf.write(f"\n{TAB}@kwasak_static\n")
+                        sf.write(
+                            f"{TAB}def eqn_{eqn_number}({', '.join(f'{t}=None' for t in tokes)}, **kwargs):\n"
+                        )
+                        sf.write(f"{TAB * 2}return\n")
 
     print(f"Scraped {created_count} new shards.")
 
@@ -255,60 +271,55 @@ def verify_family(ctx: PipelineContext, family_name: str):
     if not os.path.exists(family_dir):
         return {"error": f"Family directory {family_name} not found"}
 
-    shard_files = [f for f in os.listdir(family_dir) if f.endswith(".py")]
+    # We load the main equation file which imports all variants
+    class_name = family_name.split("_")[0]
+    eqn_num_match = re.search(r"_eqn_(.*)", family_name)
+    if not eqn_num_match:
+        return {"error": f"Invalid family name {family_name}"}
+    eqn_number = eqn_num_match.group(1)
+    
+    main_shard_path = os.path.join(family_dir, f"eqn_{eqn_number}.py")
+    if not os.path.exists(main_shard_path):
+        return {"error": f"Main shard {main_shard_path} not found"}
 
-    # We need to assemble a MockLib from all shards in the family
-    class MockLib:
-        pass
+    # Ensure shards_dir is in sys.path
+    if ctx.shards_dir not in sys.path:
+        sys.path.append(ctx.shards_dir)
+    
+    # We need the parent directory of family_dir in sys.path to import it as a package
+    parent_dir = os.path.dirname(family_dir)
+    if parent_dir not in sys.path:
+        sys.path.append(parent_dir)
 
-    pyeqn = None
-    evaled_methods = {}
-    errors = {}
-
-    for sf in shard_files:
-        shard_path = os.path.join(family_dir, sf)
-        # pycompile check
-        try:
-            py_compile.compile(shard_path, doraise=True)
-        except py_compile.PyCompileError as e:
-            errors[sf] = f"Syntax error: {e}"
-            continue
-
-        module_name = f"shard_{family_name}_{sf[:-3]}"
-        try:
-            spec = importlib.util.spec_from_file_location(module_name, shard_path)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-
-            class_name = family_name.split("_")[0]
-            cls = getattr(module, class_name, None)
-            if cls:
-                for name, attr in inspect.getmembers(cls):
-                    if name.startswith("eqn_"):
-                        setattr(MockLib, name, attr)
-                        evaled_methods[name] = attr
-                        if not pyeqn:
-                            try:
-                                source = inspect.getsource(attr)
-                                match = re.search(r"# \[\.pyeqn\] (.*)", source)
-                                if match:
-                                    pyeqn = match.group(1).strip()
-                            except:
-                                pass
-            else:
-                errors[sf] = f"Class {class_name} not found"
-        except Exception as e:
-            errors[sf] = str(e)
-
-    if not evaled_methods:
-        return {"error": "No methods found to verify", "shard_errors": errors}
-
+    module_name = f"{family_name}.eqn_{eqn_number}"
+    
     try:
+        # Import the main shard
+        # Because we use relative imports in the main shard (from .eqn_... import ...),
+        # we must import it as part of a package.
+        module = importlib.import_module(module_name)
+        cls = getattr(module, class_name, None)
+        if not cls:
+            return {"error": f"Class {class_name} not found in {module_name}"}
+
+        # Find pyeqn from one of the variants
+        pyeqn = None
+        for name, attr in inspect.getmembers(cls):
+            if name.startswith(f"eqn_{eqn_number}__"):
+                try:
+                    source = inspect.getsource(attr)
+                    match = re.search(r"# \[\.pyeqn\] (.*)", source)
+                    if match:
+                        pyeqn = match.group(1).strip()
+                        break
+                except:
+                    pass
+
         subshards_dir = os.path.join(ctx.shards_dir, "subshards")
         if not os.path.exists(subshards_dir):
             os.makedirs(subshards_dir)
 
-        v = Verify(MockLib, pyeqn=pyeqn, subshards_dir=subshards_dir)
+        v = Verify(cls, pyeqn=pyeqn, subshards_dir=subshards_dir)
         raw_results = v.verify()
 
         verification_results = {}
@@ -322,10 +333,11 @@ def verify_family(ctx: PipelineContext, family_name: str):
         return {
             "results": verification_results,
             "mismatches": mismatches,
-            "shard_errors": errors,
+            "shard_errors": {},
         }
-    except Exception as err:
-        return {"error": f"Verification failed: {err}"}
+    except Exception as e:
+        import traceback
+        return {"error": f"Verification failed: {e}\n{traceback.format_exc()}"}
 
 
 def verify_all_shards(ctx: PipelineContext):
@@ -380,12 +392,12 @@ def analyze_results(ctx: PipelineContext, all_results):
             trusted = [
                 v
                 for v, score in variants_inner.items()
-                if score == best_score and score >= 1
+                if score == best_score and score >= num_v
             ]
             broken = [
                 v
                 for v, score in variants_inner.items()
-                if score < best_score or score == 0
+                if score < num_v
             ]
 
             if broken:
@@ -417,20 +429,17 @@ def attempt_repair_shard(
     trusted_variants: list,
     scores: dict,
     mismatches: dict,
+    error: str = None
 ):
     """Repairs a single shard file."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
-    shard_file = None
-    for f in os.listdir(family_dir):
-        if f.endswith(f"__{broken_variant}.py"):
-            shard_file = f
-            break
+    shard_file = f"eqn_{family_name.split('_eqn_')[1]}__{broken_variant}.py"
+    shard_path = os.path.join(family_dir, shard_file)
 
-    if not shard_file:
-        print(f"  [Repair] Shard for {broken_variant} not found in {family_name}")
+    if not os.path.exists(shard_path):
+        print(f"  [Repair] Shard {shard_file} not found in {family_name}")
         return {"updated": False}
 
-    shard_path = os.path.join(family_dir, shard_file)
     with open(shard_path, "r") as f:
         shard_code = f.read()
 
@@ -441,13 +450,14 @@ def attempt_repair_shard(
     raw_iterator = repair_codigo(
         shard_file=shard_file,
         shard_code=shard_code,
-        error=None,
+        error=error,
         broken_variants=[broken_variant],
         trusted_variants=trusted_variants,
         scores=scores,
         mismatches=mismatches,
         pyeqn=pyeqn,
         stream=True,
+        is_subshard=True,
     )
 
     if raw_iterator is None:
@@ -466,14 +476,25 @@ def attempt_repair_shard(
             else getattr(msg, "content", "")
         )
         raw += str(content or "")
-        print(content, end="", flush=True)
 
-    code_text = extract_code(raw)
+    method_name = f"eqn_{family_name.split('_eqn_')[1]}__{broken_variant}"
+    code_text = extract_code(raw, target_name=method_name)
     if not code_text.strip():
         return {"updated": False}
 
     try:
         ast.parse(code_text)
+        # Ensure it has the correct header
+        import_header = (
+            "from math import log, sqrt, exp, pow, e\n"
+            "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
+            "from scipy.optimize import newton\n"
+            "import numpy as np\n"
+            "from vakyume.config import UnsolvedException\n\n"
+        )
+        if "import " not in code_text:
+            code_text = import_header + code_text
+            
         with open(shard_path, "w") as f:
             f.write(code_text)
         return {"updated": True}
@@ -510,23 +531,71 @@ def run_pipeline(
             print("All equations aligned. Stopping early.")
             break
 
+        # Focus on ONE family at a time for repair
+        target_family = None
         if analysis["inconsistent"]:
-            family_name = sorted(analysis["inconsistent"].keys())[0]
-            info = analysis["inconsistent"][family_name]
-            broken_variant = info["broken"][0]
-            attempt_repair_shard(
-                ctx,
-                family_name,
-                broken_variant,
-                info["trusted"],
-                info["scores"],
-                info["mismatches"],
-            )
+            target_family = sorted(analysis["inconsistent"].keys())[0]
+            repair_info = analysis["inconsistent"][target_family]
+            repair_type = "inconsistent"
         elif analysis["failed"]:
-            family_name = analysis["failed"][0]["file"]
-            print(f"Family {family_name} failed. Re-scraping...")
-            shutil.rmtree(os.path.join(ctx.shards_dir, family_name), ignore_errors=True)
-            shard_from_chapters(ctx)
+            target_family = analysis["failed"][0]["file"]
+            repair_info = {
+                "broken": [], # Will be populated
+                "trusted": [],
+                "scores": {},
+                "mismatches": {},
+                "error": analysis["failed"][0].get("error")
+            }
+            # Populate variants for failed family
+            family_dir = os.path.join(ctx.shards_dir, target_family)
+            if os.path.exists(family_dir):
+                repair_info["broken"] = [f.split("__")[1].replace(".py", "") for f in os.listdir(family_dir) if "__" in f]
+            repair_type = "failed"
+
+        if not target_family:
+            break
+
+        attempt = 1
+        max_attempts = 3
+        while attempt <= max_attempts:
+            print(f" |- [Repair] Family: {target_family} | Attempt: {attempt}/{max_attempts}")
+            
+            for broken_variant in repair_info["broken"]:
+                attempt_repair_shard(
+                    ctx,
+                    target_family,
+                    broken_variant,
+                    repair_info.get("trusted", []),
+                    repair_info.get("scores", {}),
+                    repair_info.get("mismatches", {}),
+                    error=repair_info.get("error")
+                )
+            
+            # Re-verify immediately
+            print(f" |- Re-verifying family {target_family}...")
+            new_res = verify_family(ctx, target_family)
+            
+            if not new_res.get("error"):
+                eqn_name = f"eqn_{target_family.split('_eqn_')[1]}"
+                scores = new_res["results"].get(eqn_name, {})
+                num_v = len(scores)
+                if num_v > 0 and all(s == num_v for s in scores.values()):
+                    print(f" |- SUCCESS: Family {target_family} is now certified.")
+                    break
+                else:
+                    print(f" |- Still inconsistent: {scores}")
+                    # Update repair_info for next attempt
+                    repair_info["scores"] = scores
+                    repair_info["broken"] = [v for v, s in scores.items() if s < num_v]
+                    repair_info["trusted"] = [v for v, s in scores.items() if s == num_v]
+                    repair_info["mismatches"] = new_res.get("mismatches", {})
+            else:
+                print(f" |- Still failing: {new_res.get('error')}")
+                repair_info["error"] = new_res.get("error")
+
+            attempt += 1
+            if COOLDOWN_SECONDS > 0:
+                time.sleep(COOLDOWN_SECONDS)
 
     return analysis
 
@@ -538,7 +607,8 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
             "from math import log, sqrt, exp, pow, e\n"
             "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
             "from scipy.optimize import newton\n"
-            "from kwasak import kwasak_static\n"
+            "from vakyume.kwasak import kwasak_static\n"
+            "from vakyume.config import UnsolvedException\n"
             "import numpy as np\n\n"
         )
         class_groups = {}
@@ -550,28 +620,130 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
             if class_name not in class_groups:
                 class_groups[class_name] = []
 
+            seen_methods = set()
+
+            # Read all methods from the family
             for sf in sorted(os.listdir(family_dir)):
                 if not sf.endswith(".py"):
                     continue
-                with open(os.path.join(family_dir, sf), "r") as f:
-                    lines = f.readlines()
-                    in_class = False
-                    for line in lines:
-                        if line.startswith(f"class {class_name}:"):
-                            in_class = True
-                            continue
-                        if in_class:
-                            # Skip decorators if they are already there or handled by assemble
-                            # Actually just take everything inside the class
-                            class_groups[class_name].append(line)
+                shard_path = os.path.join(family_dir, sf)
+                
+                with open(shard_path, "r") as f:
+                    content = f.read()
+                    try:
+                        tree = ast.parse(content)
+                    except:
+                        continue
+                    
+                    for node in tree.body:
+                        if isinstance(node, ast.FunctionDef):
+                            if node.name not in seen_methods:
+                                seen_methods.add(node.name)
+                                method_source = get_standalone_method_source(shard_path, node.name)
+                                if method_source:
+                                    # Indent it for the class
+                                    indented = "\n".join([f"{TAB}{line}" for line in method_source.splitlines()])
+                                    class_groups[class_name].append(indented)
+                        elif isinstance(node, ast.ClassDef):
+                            # This is the main shard's class
+                            for item in node.body:
+                                if isinstance(item, ast.FunctionDef):
+                                    if item.name not in seen_methods:
+                                        seen_methods.add(item.name)
+                                        method_source = get_method_source_from_class(shard_path, class_name, item.name)
+                                        if method_source:
+                                            class_groups[class_name].append(method_source)
 
         for class_name, bodies in class_groups.items():
             out.write(f"class {class_name}:\n")
-            # We need to make sure we don't duplicate methods if multiple shards have them
-            # But the new structure has one method per shard, so it should be fine.
-            # We might need to handle indentation if it's inconsistent.
-            out.writelines(bodies)
-            out.write("\n")
+            for body in bodies:
+                out.write(body)
+                out.write("\n")
+
+
+def get_standalone_method_source(file_path, method_name):
+    """Extracts a top-level function source."""
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+    
+    target_idx = -1
+    for idx, line in enumerate(lines):
+        if line.startswith(f"def {method_name}("):
+            target_idx = idx
+            break
+    
+    if target_idx == -1:
+        return ""
+    
+    start_idx = target_idx
+    while start_idx > 0 and lines[start_idx - 1].strip().startswith("@"):
+        start_idx -= 1
+        
+    end_idx = target_idx + 1
+    while end_idx < len(lines):
+        if lines[end_idx].strip():
+             if not lines[end_idx].startswith(" "):
+                 # Check if it's a new top level thing
+                 stripped = lines[end_idx].lstrip()
+                 if stripped.startswith(("def ", "class ", "@")):
+                     break
+        end_idx += 1
+    return "".join(lines[start_idx:end_idx])
+
+
+def get_method_source_from_class(file_path, class_name, method_name):
+    """Helper to extract method source from class in file."""
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+    
+    # Find the class first
+    class_idx = -1
+    for idx, line in enumerate(lines):
+        if line.startswith(f"class {class_name}:") or line.startswith(f"class {class_name}("):
+            class_idx = idx
+            break
+    
+    if class_idx == -1:
+        return ""
+
+    target_idx = -1
+    for idx in range(class_idx + 1, len(lines)):
+        line = lines[idx]
+        if re.search(rf"def\s+{method_name}\s*\(", line):
+            target_idx = idx
+            break
+        # If we hit another top-level class or def, we're done with this class
+        if line.strip() and not line.startswith(" "):
+            break
+    
+    if target_idx == -1:
+        return ""
+    
+    # Go up to find decorators
+    start_idx = target_idx
+    while start_idx > class_idx + 1 and lines[start_idx - 1].strip().startswith("@"):
+        start_idx -= 1
+    
+    # Find end of method by indentation
+    line_with_indent = lines[target_idx]
+    indent_len = len(line_with_indent) - len(line_with_indent.lstrip())
+    
+    end_idx = target_idx + 1
+    while end_idx < len(lines):
+        line = lines[end_idx]
+        if line.strip():
+            curr_indent = len(line) - len(line.lstrip())
+            if curr_indent <= indent_len:
+                # Check if it's a new method or class
+                stripped = line.lstrip()
+                if stripped.startswith(("def ", "class ", "@")):
+                    break
+                # Also if indent is 0, it's definitely over
+                if curr_indent == 0:
+                    break
+        end_idx += 1
+    
+    return "".join(lines[start_idx:end_idx])
 
 
 def extract_code_block(text):
