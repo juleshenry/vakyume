@@ -1,13 +1,3 @@
-TAB = " " * 4
-TYPE = ": float"
-STD = 1
-OUTFILE = "vakyume_2025.py"
-MAX_COMP_TIME_SECONDS = 1
-FUNKTORZ = "*()/-+"
-n = "\n"
-COOLDOWN_SECONDS = 2
-
-
 class IntractableSolution(Exception):
     """Exception raised when only numerical methods are allowed."""
 
@@ -24,3 +14,10 @@ class UnsolvedException(Exception):
     """Exception raised when equation solving is unavailable."""
 
     pass
+
+
+# Code generation constants
+TAB = " " * 4
+MAX_COMP_TIME_SECONDS = 1
+COOLDOWN_SECONDS = 2
+FUNKTORZ = "*()/-+"

@@ -13,8 +13,6 @@ except Exception:
     tqdm = None
 
 from .kwasak import kwasak_static
-from .config import *
-
 
 import importlib
 import os

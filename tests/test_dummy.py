@@ -15,7 +15,7 @@ z = x + y
 BASIC_SHARD_MESSED = """from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
-from kwasak import kwasak_static
+from vakyume.kwasak import kwasak_static
 import numpy as np
 
 class Basic:
@@ -59,7 +59,7 @@ t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2
 ROTARY_SHARD_MESSED = """from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve
 from scipy.optimize import newton
-from kwasak import kwasak_static
+from vakyume.kwasak import kwasak_static
 import numpy as np
 
 class Rotary:
@@ -108,7 +108,9 @@ def run_vakyume():
     print("Running vakyume (NO overwrite to test repair)...")
     # We DO NOT use --overwrite here because we want to keep the messed up shards and fix them.
     # However, shard_from_chapters skips existing files, so it will proceed to verification.
-    cmd = ["python3", "vakyume.py", PROJECT_DIR, "--max-rounds", "3"]
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    vakyume_script = os.path.join(base_dir, "vakyume.py")
+    cmd = ["python3", vakyume_script, PROJECT_DIR, "--max-rounds", "3"]
     result = subprocess.run(cmd, capture_output=True, text=True)
     print(result.stdout)
     if result.stderr:

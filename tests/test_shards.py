@@ -1,7 +1,7 @@
 import pytest
 import importlib.util
 import os
-from tru import Verify
+from vakyume.verifier import Verify
 
 SHARDS_DIR = 'shards'
 
