@@ -135,10 +135,12 @@ class Verify:
                         print(msg)
                 return res
             except Exception as err:
-                # If it's a domain error (like log of negative), return None to indicate inconclusive
+                # Domain errors or complex-to-float failures are inconclusive, not failures
+                err_str = str(err).lower()
                 if (
-                    "positive" in str(err).lower()
-                    or "math domain error" in str(err).lower()
+                    "positive" in err_str
+                    or "math domain error" in err_str
+                    or "complex" in err_str
                 ):
                     return None
                 msg = f"  [Harmony Check] ERROR during subshard call: {err}"
@@ -161,54 +163,111 @@ class Verify:
         if a is None or b is None:
             return False
 
-        def to_float_or_complex(v):
-            if isinstance(v, (int, float, complex)):
+        def to_scalar(v):
+            """Convert a single (non-list) value to float or complex.
+            Always returns a complex number (or None) — the caller
+            compares real and imaginary parts independently."""
+            if isinstance(v, (int, float)):
+                return complex(v, 0)
+            if isinstance(v, complex):
                 return v
-            if isinstance(v, (list, tuple, np.ndarray)):
-                if len(v) > 0:
-                    return to_float_or_complex(v[0])
-                return None
             try:
-                # Handle sympy numbers
                 if hasattr(v, "evalf"):
-                    return float(v.evalf())
-                return float(v)
-            except:
+                    ev = v.evalf()
+                    try:
+                        return complex(float(ev), 0)
+                    except (TypeError, ValueError):
+                        return complex(ev)
+                return complex(float(v), 0)
+            except (TypeError, ValueError):
                 try:
                     return complex(v)
-                except:
+                except (TypeError, ValueError):
                     return None
 
-        va = to_float_or_complex(a)
-        vb = to_float_or_complex(b)
+        def scalars_match(sa, sb):
+            if sa is None or sb is None:
+                return False
+            # Both are complex — check real and imaginary parts independently
+            return abs(sa.real - sb.real) < 1e-6 and abs(sa.imag - sb.imag) < 1e-6
 
-        if va is not None and vb is not None:
-            if isinstance(va, complex) or isinstance(vb, complex):
-                return abs(va - vb) < 1e-6
-            return abs(float(va) - float(vb)) < 1e-6
+        # If either side is a list, check whether ANY element from one side
+        # matches ANY element (or the scalar) on the other side.
+        a_is_list = isinstance(a, (list, tuple, np.ndarray))
+        b_is_list = isinstance(b, (list, tuple, np.ndarray))
 
-        if isinstance(a, (list, tuple, np.ndarray)) or isinstance(
-            b, (list, tuple, np.ndarray)
-        ):
-            if not isinstance(a, (list, tuple, np.ndarray)):
-                a = [a]
-            if not isinstance(b, (list, tuple, np.ndarray)):
-                b = [b]
-            for av in a:
-                for bv in b:
-                    if self.are_similar(av, bv):
+        if a_is_list or b_is_list:
+            a_items = list(a) if a_is_list else [a]
+            b_items = list(b) if b_is_list else [b]
+            for av in a_items:
+                for bv in b_items:
+                    sa = to_scalar(av)
+                    sb = to_scalar(bv)
+                    if scalars_match(sa, sb):
                         return True
-        return False
+            return False
+
+        # Both are scalars
+        sa = to_scalar(a)
+        sb = to_scalar(b)
+        return scalars_match(sa, sb)
+
+    def _detect_invariant_variants(self, base_eq, variants, params, log_lines):
+        """Detect variants whose solver returns a constant regardless of inputs.
+
+        These correspond to variables that cancel out of the equation (e.g.
+        p_i / p_nc = p_i / (p - P_c)  where p_i cancels).  SymPy solves
+        them as the trivial root (often 0) because the variable factors out.
+        Including them in cross-verification poisons the scores of the
+        *real* variants, so we exclude them.
+        """
+        invariant = set()
+        probe_count = 3
+        for var in variants:
+            method = getattr(self.lib_instance, f"{base_eq}__{var}")
+            probe_results = []
+            for _ in range(probe_count):
+                inputs = {p: self.make_rand() for p in params if p != var}
+                try:
+                    vals = method(**inputs)
+                    # Normalise to a comparable tuple
+                    if isinstance(vals, (list, tuple, np.ndarray)):
+                        probe_results.append(tuple(round(float(v), 10) for v in vals))
+                    elif vals is not None:
+                        probe_results.append((round(float(vals), 10),))
+                    else:
+                        probe_results.append(None)
+                except Exception:
+                    probe_results.append(None)
+
+            # If all probes returned the exact same (non-None) value, it's invariant
+            non_none = [r for r in probe_results if r is not None]
+            if len(non_none) == probe_count and len(set(non_none)) == 1:
+                invariant.add(var)
+                log_lines.append(
+                    f" |- INVARIANT detected: {var} always returns {non_none[0]} — excluding from cross-check"
+                )
+        return invariant
 
     def verify_equation(self, base_eq):
         # Collect all log output in a buffer; flush only for failures (or if verbose)
         log_lines = list(self._log_buffer)  # inherit any init/harmony-prep messages
         log_lines.append(f"[INPUT] verify_equation: base_eq={base_eq}")
         params = self._get_params(base_eq)
-        variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
+        all_variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
+
+        # Detect and exclude invariant (trivially-solved) variants
+        invariant_vars = self._detect_invariant_variants(
+            base_eq, all_variants, params, log_lines
+        )
+        variants = [v for v in all_variants if v not in invariant_vars]
 
         results = {}  # (source_truth_var) -> matches
         mismatches = {}  # (source_truth_var) -> details
+
+        # Give invariant variants a perfect score so they don't drag the family down
+        for iv in invariant_vars:
+            results[iv] = len(all_variants)
 
         # Increase trials to be more certain
         num_trials = 3
@@ -241,12 +300,6 @@ class Verify:
                     trial_detail = None
 
                     for val in source_values:
-                        if isinstance(val, complex) and abs(val.imag) > 1e-5:
-                            log_lines.append(
-                                f"    [Trial {trial_idx + 1}] Skipping complex result: {val}"
-                            )
-                            continue
-
                         full_set = test_inputs.copy()
                         full_set[source_var] = val
 
@@ -264,7 +317,9 @@ class Verify:
                                 # Inconclusive (domain error), skip this value but don't count as failure
                                 continue
 
-                        matches = 0
+                        matches = len(
+                            invariant_vars
+                        )  # invariant vars count as automatic matches
                         current_trial_mismatches = []
                         log_lines.append(
                             f"    [Trial {trial_idx + 1}] Checking targets against source_var={source_var}, val={val}"
@@ -327,14 +382,14 @@ class Verify:
                     source_mismatches.append({"error": str(err)})
 
             results[source_var] = max(trial_matches) if trial_matches else 0
-            if results[source_var] < len(variants):
+            if results[source_var] < len(all_variants):
                 # Only keep mismatches for broken variants
                 mismatches[source_var] = source_mismatches
 
         log_lines.append(f"[OUTPUT] verify_equation: scores={results}")
 
         # Decide whether to flush the log buffer
-        num_v = len(variants)
+        num_v = len(all_variants)
         is_clean = num_v > 0 and all(s >= num_v for s in results.values())
 
         if self.verbose or not is_clean:

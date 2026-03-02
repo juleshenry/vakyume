@@ -120,6 +120,146 @@ class FluidFlowVacuumLines:
         result.append(oper_press)
         return result
     @kwasak_static
+    def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
+        return
+
+    def eqn_2_11__D(self, L: float, f: float, g_c: float, h_r: float, v: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        D = L*f*v**2/(2*g_c*h_r)
+        result.append(D)
+        return result
+    def eqn_2_11__L(self, D: float, f: float, g_c: float, h_r: float, v: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        L = 2*D*g_c*h_r/(f*v**2)
+        result.append(L)
+        return result
+    def eqn_2_11__f(self, D: float, L: float, g_c: float, h_r: float, v: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        f = 2*D*g_c*h_r/(L*v**2)
+        result.append(f)
+        return result
+    def eqn_2_11__g_c(self, D: float, L: float, f: float, h_r: float, v: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        g_c = L*f*v**2/(2*D*h_r)
+        result.append(g_c)
+        return result
+    def eqn_2_11__h_r(self, D: float, L: float, f: float, g_c: float, v: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        h_r = L*f*v**2/(2*D*g_c)
+        result.append(h_r)
+        return result
+    def eqn_2_11__v(self, D: float, L: float, f: float, g_c: float, h_r: float, **kwargs):
+        # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
+        result = []
+        v = -sqrt(2)*sqrt(D*g_c*h_r/(L*f))
+        result.append(v)
+        v = sqrt(2)*sqrt(D*g_c*h_r/(L*f))
+        result.append(v)
+        return result
+    @kwasak_static
+    def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
+        return
+
+    def eqn_2_12__L(self, d: float, delta_P: float, f: float, g: float, rho: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        L = 0.464037122969838*d*delta_P*g/(f*rho*v**2)
+        result.append(L)
+        return result
+    def eqn_2_12__d(self, L: float, delta_P: float, f: float, g: float, rho: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        d = 2.155*L*f*rho*v**2/(delta_P*g)
+        result.append(d)
+        return result
+    def eqn_2_12__delta_P(self, L: float, d: float, f: float, g: float, rho: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        delta_P = 2.155*L*f*rho*v**2/(d*g)
+        result.append(delta_P)
+        return result
+    def eqn_2_12__f(self, L: float, d: float, delta_P: float, g: float, rho: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        f = 0.464037122969838*d*delta_P*g/(L*rho*v**2)
+        result.append(f)
+        return result
+    def eqn_2_12__g(self, L: float, d: float, delta_P: float, f: float, rho: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        g = 2.155*L*f*rho*v**2/(d*delta_P)
+        result.append(g)
+        return result
+    def eqn_2_12__rho(self, L: float, d: float, delta_P: float, f: float, g: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        rho = 0.464037122969838*d*delta_P*g/(L*f*v**2)
+        result.append(rho)
+        return result
+    def eqn_2_12__v(self, L: float, d: float, delta_P: float, f: float, g: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
+        result = []
+        v = -0.681202703290172*sqrt(d*delta_P*g/(L*f*rho))
+        result.append(v)
+        v = 0.681202703290172*sqrt(d*delta_P*g/(L*f*rho))
+        result.append(v)
+        return result
+    @kwasak_static
+    def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
+        return
+
+    def eqn_2_13__L(self, d: float, delta_P: float, f: float, q: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        L = 0.465116279069767*d**5*delta_P/(f*q**2*rho)
+        result.append(L)
+        return result
+    def eqn_2_13__d(self, L: float, delta_P: float, f: float, q: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        d = 1.16543402167043*(L*f*q**2*rho/delta_P)**(1/5)
+        result.append(d)
+        d = -0.942855929354115*(L*f*q**2*rho/delta_P)**(1/5) - 0.685024930457783*I*(L*f*q**2*rho/delta_P)**(1/5)
+        result.append(d)
+        d = -0.942855929354115*(L*f*q**2*rho/delta_P)**(1/5) + 0.685024930457783*I*(L*f*q**2*rho/delta_P)**(1/5)
+        result.append(d)
+        d = 0.360138918518902*(L*f*q**2*rho/delta_P)**(1/5) - 1.10839362062173*I*(L*f*q**2*rho/delta_P)**(1/5)
+        result.append(d)
+        d = 0.360138918518902*(L*f*q**2*rho/delta_P)**(1/5) + 1.10839362062173*I*(L*f*q**2*rho/delta_P)**(1/5)
+        result.append(d)
+        return result
+    def eqn_2_13__delta_P(self, L: float, d: float, f: float, q: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        delta_P = 2.15*L*f*q**2*rho/d**5
+        result.append(delta_P)
+        return result
+    def eqn_2_13__f(self, L: float, d: float, delta_P: float, q: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        f = 0.465116279069767*d**5*delta_P/(L*q**2*rho)
+        result.append(f)
+        return result
+    def eqn_2_13__q(self, L: float, d: float, delta_P: float, f: float, rho: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        q = -0.681994339470473*sqrt(d**5*delta_P/(L*f*rho))
+        result.append(q)
+        q = 0.681994339470473*sqrt(d**5*delta_P/(L*f*rho))
+        result.append(q)
+        return result
+    def eqn_2_13__rho(self, L: float, d: float, delta_P: float, f: float, q: float, **kwargs):
+        # [.pyeqn] delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
+        result = []
+        rho = 0.465116279069767*d**5*delta_P/(L*f*q**2)
+        result.append(rho)
+        return result
+    @kwasak_static
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
         return
 
@@ -190,6 +330,48 @@ class FluidFlowVacuumLines:
         result = []
         f = 64/Re
         result.append(f)
+        return result
+    @kwasak_static
+    def eqn_2_17(self, L=None, d=None, delta_P=None, mu=None, v=None):
+        return
+
+    def eqn_2_17__L(self, d: float, delta_P: float, mu: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        L = 28.9855072463768*d**2*delta_P/(mu*v)
+        result.append(L)
+        return result
+    def eqn_2_17__d(self, L: float, delta_P: float, mu: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        d = -0.185741756210067*sqrt(L*mu*v/delta_P)
+        result.append(d)
+        d = 0.185741756210067*sqrt(L*mu*v/delta_P)
+        result.append(d)
+        return result
+    def eqn_2_17__delta_P(self, L: float, d: float, mu: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        delta_P = 0.0345*L*mu*v/d**2
+        result.append(delta_P)
+        return result
+    def eqn_2_17__mu(self, L: float, d: float, delta_P: float, v: float, **kwargs):
+        # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        mu = 28.9855072463768*d**2*delta_P/(L*v)
+        result.append(mu)
+        return result
+    def eqn_2_17__q(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+        # [.pyeqn] delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        q = 9.52380952380952*d**4*delta_P/(L*mu)
+        result.append(q)
+        return result
+    def eqn_2_17__v(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+        # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        v = 28.9855072463768*d**2*delta_P/(L*mu)
+        result.append(v)
         return result
     @kwasak_static
     def eqn_2_18a(self, D_eq=None, R_ll=None):
@@ -304,6 +486,30 @@ class FluidFlowVacuumLines:
         result.append(w)
         return result
     @kwasak_static
+    def eqn_2_2(self, delta=None, lambd=None, psi=None):
+        return
+
+    def eqn_2_2__delta(self, lambd: float, psi: float, **kwargs):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        delta = -0.474424998328794*sqrt(lambd/psi)
+        result.append(delta)
+        delta = 0.474424998328794*sqrt(lambd/psi)
+        result.append(delta)
+        return result
+    def eqn_2_2__lambd(self, delta: float, psi: float, **kwargs):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        lambd = 4.44288293815837*delta**2*psi
+        result.append(lambd)
+        return result
+    def eqn_2_2__psi(self, delta: float, lambd: float, **kwargs):
+        # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
+        result = []
+        psi = 0.225079079039277*lambd/delta**2
+        result.append(psi)
+        return result
+    @kwasak_static
     def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
         return
 
@@ -374,6 +580,98 @@ class FluidFlowVacuumLines:
         result = []
         Q_throughput = C*(P_1 - P_2)
         result.append(Q_throughput)
+        return result
+    @kwasak_static
+    def eqn_2_26(self, D=None, L=None, P_downstream=None, P_p=None, P_upstream=None, mu=None, q=None):
+        return
+
+    def eqn_2_26__D(self, L: float, P_downstream: float, P_p: float, P_upstream: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        D = -14953.4878122122*I*(-L*mu*q/(1.22718463030851e+15*P_downstream - 1.22718463030851e+15*P_upstream))**(1/4)
+        result.append(D)
+        D = 14953.4878122122*I*(-L*mu*q/(1.22718463030851e+15*P_downstream - 1.22718463030851e+15*P_upstream))**(1/4)
+        result.append(D)
+        D = -14953.4878122122*(-L*mu*q/(1.22718463030851e+15*P_downstream - 1.22718463030851e+15*P_upstream))**(1/4)
+        result.append(D)
+        D = 14953.4878122122*(-L*mu*q/(1.22718463030851e+15*P_downstream - 1.22718463030851e+15*P_upstream))**(1/4)
+        result.append(D)
+        return result
+    def eqn_2_26__L(self, D: float, P_downstream: float, P_p: float, P_upstream: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        L = 0.0245436926061703*D**4*(-P_downstream + P_upstream)/(mu*q)
+        result.append(L)
+        return result
+    def eqn_2_26__P_downstream(self, D: float, L: float, P_p: float, P_upstream: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        P_downstream = P_upstream - 40.7436654315252*L*mu*q/D**4
+        result.append(P_downstream)
+        return result
+    def eqn_2_26__P_p(self, D: float, L: float, P_downstream: float, P_upstream: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        P_p = 0.0
+        result.append(P_p)
+        return result
+    def eqn_2_26__P_upstream(self, D: float, L: float, P_downstream: float, P_p: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        P_upstream = P_downstream + 40.7436654315252*L*mu*q/D**4
+        result.append(P_upstream)
+        return result
+    def eqn_2_26__mu(self, D: float, L: float, P_downstream: float, P_p: float, P_upstream: float, q: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        mu = 0.0245436926061703*D**4*(-P_downstream + P_upstream)/(L*q)
+        result.append(mu)
+        return result
+    def eqn_2_26__q(self, D: float, L: float, P_downstream: float, P_p: float, P_upstream: float, mu: float, **kwargs):
+        # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
+        result = []
+        q = 0.0245436926061703*D**4*(-P_downstream + P_upstream)/(L*mu)
+        result.append(q)
+        return result
+    @kwasak_static
+    def eqn_2_28(self, C=None, D=None, L=None, P_p=None, mu=None):
+        return
+
+    def eqn_2_28__C(self, D: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        C = 0.0245436926061703*D**4*P_p/(L*mu)
+        result.append(C)
+        return result
+    def eqn_2_28__D(self, C: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        D = -2.52647511098426*I*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*I*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = -2.52647511098426*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*(C*L*mu/P_p)**(1/4)
+        result.append(D)
+        return result
+    def eqn_2_28__L(self, C: float, D: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        L = 0.0245436926061703*D**4*P_p/(C*mu)
+        result.append(L)
+        return result
+    def eqn_2_28__P_p(self, C: float, D: float, L: float, mu: float, **kwargs):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        P_p = 40.7436654315252*C*L*mu/D**4
+        result.append(P_p)
+        return result
+    def eqn_2_28__mu(self, C: float, D: float, L: float, P_p: float, **kwargs):
+        # [.pyeqn] C = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p
+        result = []
+        mu = 0.0245436926061703*D**4*P_p/(C*L)
+        result.append(mu)
         return result
     @kwasak_static
     def eqn_2_29(self, C=None, S_1=None, S_2=None):
@@ -474,6 +772,28 @@ class FluidFlowVacuumLines:
         result.append(arithmetic_sum_C)
         return result
     @kwasak_static
+    def eqn_2_35(self, C_L=None, C_T=None, F_p=None):
+        return
+
+    def eqn_2_35__C_L(self, C_T: float, F_p: float, **kwargs):
+        # [.pyeqn] C_T = C_L * F_p
+        result = []
+        C_L = C_T/F_p
+        result.append(C_L)
+        return result
+    def eqn_2_35__C_T(self, C_L: float, F_p: float, **kwargs):
+        # [.pyeqn] C_T = C_L * F_p
+        result = []
+        C_T = C_L*F_p
+        result.append(C_T)
+        return result
+    def eqn_2_35__F_p(self, C_L: float, C_T: float, **kwargs):
+        # [.pyeqn] C_T = C_L * F_p
+        result = []
+        F_p = C_T/C_L
+        result.append(F_p)
+        return result
+    @kwasak_static
     def eqn_2_36(self, C=None, C_0=None, F_t=None):
         return
 
@@ -552,6 +872,46 @@ class FluidFlowVacuumLines:
         result.append(vel_grad)
         return result
     @kwasak_static
+    def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
+        return
+
+    def eqn_2_5__D(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
+        result = []
+        D = -2.52647511098426*I*(L*mu*q/delta_P)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*I*(L*mu*q/delta_P)**(1/4)
+        result.append(D)
+        D = -2.52647511098426*(L*mu*q/delta_P)**(1/4)
+        result.append(D)
+        D = 2.52647511098426*(L*mu*q/delta_P)**(1/4)
+        result.append(D)
+        return result
+    def eqn_2_5__L(self, D: float, delta_P: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
+        result = []
+        L = 0.0245436926061703*D**4*delta_P/(mu*q)
+        result.append(L)
+        return result
+    def eqn_2_5__delta_P(self, D: float, L: float, mu: float, q: float, **kwargs):
+        # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
+        result = []
+        delta_P = 40.7436654315252*L*mu*q/D**4
+        result.append(delta_P)
+        return result
+    def eqn_2_5__mu(self, D: float, L: float, delta_P: float, q: float, **kwargs):
+        # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
+        result = []
+        mu = 0.0245436926061703*D**4*delta_P/(L*q)
+        result.append(mu)
+        return result
+    def eqn_2_5__q(self, D: float, L: float, delta_P: float, mu: float, **kwargs):
+        # [.pyeqn] q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
+        result = []
+        q = 0.0245436926061703*D**4*delta_P/(L*mu)
+        result.append(q)
+        return result
+    @kwasak_static
     def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
         return
 
@@ -606,6 +966,36 @@ class FluidFlowVacuumLines:
         result = []
         v_a = 1.59576912160573*sqrt(T*k/m)
         result.append(v_a)
+        return result
+    @kwasak_static
+    def eqn_2_8(self, M=None, P_c=None, T_c=None, mu_c=None):
+        return
+
+    def eqn_2_8__M(self, P_c: float, T_c: float, mu_c: float, **kwargs):
+        # [.pyeqn] mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
+        result = []
+        M = 0.0168662506324844*T_c**(1/3)*mu_c**2/P_c**(4/3)
+        result.append(M)
+        return result
+    def eqn_2_8__P_c(self, M: float, T_c: float, mu_c: float, **kwargs):
+        # [.pyeqn] mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
+        result = []
+        P_c = -0.046801946114055*(T_c**0.166666666666667*mu_c/M**0.5)**(3/2)
+        result.append(P_c)
+        P_c = 0.046801946114055*(T_c**0.166666666666667*mu_c/M**0.5)**(3/2)
+        result.append(P_c)
+        return result
+    def eqn_2_8__T_c(self, M: float, P_c: float, mu_c: float, **kwargs):
+        # [.pyeqn] mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
+        result = []
+        T_c = 208422.380089*M**3*P_c**4/mu_c**6
+        result.append(T_c)
+        return result
+    def eqn_2_8__mu_c(self, M: float, P_c: float, T_c: float, **kwargs):
+        # [.pyeqn] mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
+        result = []
+        mu_c = 7.7*sqrt(M)*P_c**(2/3)/T_c**(1/6)
+        result.append(mu_c)
         return result
 class LiquidRing:
     @kwasak_static
@@ -1540,6 +1930,34 @@ class Precondensors:
         result.append(p_nc)
         return result
     @kwasak_static
+    def eqn_7_4ab(self, P_c=None, p=None, p_i=None, p_nc=None):
+        return
+
+    def eqn_7_4ab__P_c(self, p: float, p_i: float, p_nc: float, **kwargs):
+        # [.pyeqn] p_i / p_nc = p_i / (p - P_c)
+        result = []
+        P_c = p - p_nc
+        result.append(P_c)
+        return result
+    def eqn_7_4ab__p(self, P_c: float, p_i: float, p_nc: float, **kwargs):
+        # [.pyeqn] p_i / p_nc = p_i / (p - P_c)
+        result = []
+        p = P_c + p_nc
+        result.append(p)
+        return result
+    def eqn_7_4ab__p_i(self, P_c: float, p: float, p_nc: float, **kwargs):
+        # [.pyeqn] p_i / p_nc = p_i / (p - P_c)
+        result = []
+        p_i = 0
+        result.append(p_i)
+        return result
+    def eqn_7_4ab__p_nc(self, P_c: float, p: float, p_i: float, **kwargs):
+        # [.pyeqn] p_i / p_nc = p_i / (p - P_c)
+        result = []
+        p_nc = -P_c + p
+        result.append(p_nc)
+        return result
+    @kwasak_static
     def eqn_7_4ac(self, P_c=None, n_i=None, n_nc=None, p=None, p_i=None):
         return
 
@@ -1791,6 +2209,60 @@ class PressMgmt:
         result.append(Vacuum)
         return result
     @kwasak_static
+    def eqn_3_11(self, A_C=None, H_2=None, P=None, V=None):
+        return
+
+    def eqn_3_11__A_C(self, H_2: float, P: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C / V * (H_2) ** 2
+        result = []
+        A_C = P*V/H_2**2
+        result.append(A_C)
+        return result
+    def eqn_3_11__H_2(self, A_C: float, P: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C / V * (H_2) ** 2
+        result = []
+        H_2 = -sqrt(P*V/A_C)
+        result.append(H_2)
+        H_2 = sqrt(P*V/A_C)
+        result.append(H_2)
+        return result
+    def eqn_3_11__P(self, A_C: float, H_2: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C / V * (H_2) ** 2
+        result = []
+        P = A_C*H_2**2/V
+        result.append(P)
+        return result
+    def eqn_3_11__V(self, A_C: float, H_2: float, P: float, **kwargs):
+        # [.pyeqn] P = A_C / V * (H_2) ** 2
+        result = []
+        V = A_C*H_2**2/P
+        result.append(V)
+        return result
+    @kwasak_static
+    def eqn_3_12(self, H_2=None, KAPPA_1=None, P=None):
+        return
+
+    def eqn_3_12__H_2(self, KAPPA_1: float, P: float, **kwargs):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        H_2 = -sqrt(P/KAPPA_1)
+        result.append(H_2)
+        H_2 = sqrt(P/KAPPA_1)
+        result.append(H_2)
+        return result
+    def eqn_3_12__KAPPA_1(self, H_2: float, P: float, **kwargs):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        KAPPA_1 = P/H_2**2
+        result.append(KAPPA_1)
+        return result
+    def eqn_3_12__P(self, H_2: float, KAPPA_1: float, **kwargs):
+        # [.pyeqn] P = KAPPA_1 * H_2 ** 2
+        result = []
+        P = H_2**2*KAPPA_1
+        result.append(P)
+        return result
+    @kwasak_static
     def eqn_3_13(self, H_1=None, H_2=None, KAPPA_2=None, P=None):
         return
 
@@ -2016,6 +2488,42 @@ class PressMgmt:
         V_P = A_C*H_2
         result.append(V_P)
         return result
+    @kwasak_static
+    def eqn_3_9(self, A_C=None, H_1=None, H_2=None, P=None, V=None):
+        return
+
+    def eqn_3_9__A_C(self, H_1: float, H_2: float, P: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C * H_2 * (H_2 - H_1) / (V - A_C * H_2)
+        result = []
+        A_C = P*V/(H_2*(-H_1 + H_2 + P))
+        result.append(A_C)
+        return result
+    def eqn_3_9__H_1(self, A_C: float, H_2: float, P: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C * H_2 * (H_2 - H_1) / (V - A_C * H_2)
+        result = []
+        H_1 = H_2 + P - P*V/(A_C*H_2)
+        result.append(H_1)
+        return result
+    def eqn_3_9__H_2(self, A_C: float, H_1: float, P: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C * H_2 * (H_2 - H_1) / (V - A_C * H_2)
+        result = []
+        H_2 = (A_C*(H_1 - P) - sqrt(A_C*(A_C*H_1**2 - 2*A_C*H_1*P + A_C*P**2 + 4*P*V)))/(2*A_C)
+        result.append(H_2)
+        H_2 = (A_C*(H_1 - P) + sqrt(A_C*(A_C*H_1**2 - 2*A_C*H_1*P + A_C*P**2 + 4*P*V)))/(2*A_C)
+        result.append(H_2)
+        return result
+    def eqn_3_9__P(self, A_C: float, H_1: float, H_2: float, V: float, **kwargs):
+        # [.pyeqn] P = A_C * H_2 * (H_2 - H_1) / (V - A_C * H_2)
+        result = []
+        P = A_C*H_2*(H_1 - H_2)/(A_C*H_2 - V)
+        result.append(P)
+        return result
+    def eqn_3_9__V(self, A_C: float, H_1: float, H_2: float, P: float, **kwargs):
+        # [.pyeqn] P = A_C * H_2 * (H_2 - H_1) / (V - A_C * H_2)
+        result = []
+        V = A_C*H_2*(-H_1 + H_2 + P)/P
+        result.append(V)
+        return result
 class ProcessApp1:
     @kwasak_static
     def eqn_5_1(self, K_i=None, x_i=None, y_i=None):
@@ -2038,6 +2546,30 @@ class ProcessApp1:
         result = []
         y_i = K_i*x_i
         result.append(y_i)
+        return result
+    @kwasak_static
+    def eqn_5_10a(self, D=None, L_0=None, V_1=None):
+        return
+
+    def eqn_5_10a__D(self, L_0: float, V_1: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
+        result = []
+        D = -L_0 + V_1
+        result.append(D)
+        return result
+    def eqn_5_10a__L_0(self, D: float, V_1: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
+        result = []
+        L_0 = 0
+        result.append(L_0)
+        L_0 = -D + V_1
+        result.append(L_0)
+        return result
+    def eqn_5_10a__V_1(self, D: float, L_0: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
+        result = []
+        V_1 = D + L_0
+        result.append(V_1)
         return result
     @kwasak_static
     def eqn_5_10b(self, L_0=None, R=None, V_1=None):
@@ -2182,6 +2714,44 @@ class ProcessApp1:
         result = []
         W_E = 0.0583*P_0*sqrt(M/T)
         result.append(W_E)
+        return result
+    @kwasak_static
+    def eqn_5_15(self, M_1=None, M_2=None, P_0_1=None, P_0_2=None, a_M_12=None):
+        return
+
+    def eqn_5_15__M_1(self, M_2: float, P_0_1: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
+        result = []
+        M_1 = -M_2/(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_1)
+        M_1 = M_2/(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_1)
+        return result
+    def eqn_5_15__M_2(self, M_1: float, P_0_1: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
+        result = []
+        M_2 = -M_1*(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_2)
+        M_2 = M_1*(P_0_2*a_M_12/P_0_1)**(5/2)
+        result.append(M_2)
+        return result
+    def eqn_5_15__P_0_1(self, M_1: float, M_2: float, P_0_2: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
+        result = []
+        P_0_1 = P_0_2*a_M_12/(M_2/M_1)**(2/5)
+        result.append(P_0_1)
+        return result
+    def eqn_5_15__P_0_2(self, M_1: float, M_2: float, P_0_1: float, a_M_12: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
+        result = []
+        P_0_2 = P_0_1*(M_2/M_1)**(2/5)/a_M_12
+        result.append(P_0_2)
+        return result
+    def eqn_5_15__a_M_12(self, M_1: float, M_2: float, P_0_1: float, P_0_2: float, **kwargs):
+        # [.pyeqn] a_M_12 = (P_0_1) / (P_0_2) * (M_2 / M_1) ** 0.4
+        result = []
+        a_M_12 = P_0_1*(M_2/M_1)**(2/5)/P_0_2
+        result.append(a_M_12)
         return result
     @kwasak_static
     def eqn_5_16(self, H_i=None, p_i=None, x_i=None):
@@ -2468,6 +3038,30 @@ class ProcessApp1:
         result = []
         gamma_2 = P_0_1*gamma_1/(P_0_2*alpha_12)
         result.append(gamma_2)
+        return result
+    @kwasak_static
+    def eqn_5_9(self, D=None, L_0=None, V_1=None):
+        return
+
+    def eqn_5_9__D(self, L_0: float, V_1: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
+        result = []
+        D = -L_0 + V_1
+        result.append(D)
+        return result
+    def eqn_5_9__L_0(self, D: float, V_1: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
+        result = []
+        L_0 = 0
+        result.append(L_0)
+        L_0 = -D + V_1
+        result.append(L_0)
+        return result
+    def eqn_5_9__V_1(self, D: float, L_0: float, **kwargs):
+        # [.pyeqn] L_0 / V_1 = L_0 / (L_0 + D)
+        result = []
+        V_1 = D + L_0
+        result.append(V_1)
         return result
 class ProcessApp2:
     @kwasak_static
@@ -2804,6 +3398,54 @@ class ProcessApp2:
         w_v = m_b*(C_1*delta_h_c - C_2*delta_h_c + T_1*c_p - T_2*c_p)/(delta_h_v*delta_t)
         result.append(w_v)
         return result
+    @kwasak_static
+    def eqn_6_9(self, A=None, dV_dt=None, delta_P=None, m=None, mu=None, r=None, r_M=None):
+        return
+
+    def eqn_6_9__A(self, dV_dt: float, delta_P: float, m: float, mu: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        A = (dV_dt*r_M - sqrt(dV_dt*(dV_dt*r_M**2 + 4*delta_P**2*m*mu*r)))/(2*delta_P)
+        result.append(A)
+        A = (dV_dt*r_M + sqrt(dV_dt*(dV_dt*r_M**2 + 4*delta_P**2*m*mu*r)))/(2*delta_P)
+        result.append(A)
+        return result
+    def eqn_6_9__dV_dt(self, A: float, delta_P: float, m: float, mu: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        dV_dt = A**2*delta_P/(A*r_M + delta_P*m*mu*r)
+        result.append(dV_dt)
+        return result
+    def eqn_6_9__delta_P(self, A: float, dV_dt: float, m: float, mu: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        delta_P = A*dV_dt*r_M/(A**2 - dV_dt*m*mu*r)
+        result.append(delta_P)
+        return result
+    def eqn_6_9__m(self, A: float, dV_dt: float, delta_P: float, mu: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        m = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*mu*r)
+        result.append(m)
+        return result
+    def eqn_6_9__mu(self, A: float, dV_dt: float, delta_P: float, m: float, r: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        mu = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*m*r)
+        result.append(mu)
+        return result
+    def eqn_6_9__r(self, A: float, dV_dt: float, delta_P: float, m: float, mu: float, r_M: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        r = A*(A*delta_P - dV_dt*r_M)/(dV_dt*delta_P*m*mu)
+        result.append(r)
+        return result
+    def eqn_6_9__r_M(self, A: float, dV_dt: float, delta_P: float, m: float, mu: float, r: float, **kwargs):
+        # [.pyeqn] dV_dt = (A * delta_P) / (mu * (m / A) * r * delta_P + r_M)
+        result = []
+        r_M = A*delta_P/dV_dt - delta_P*m*mu*r/A
+        result.append(r_M)
+        return result
 class RotaryPistonVane:
     @kwasak_static
     def eqn_11_1(self, PS=None, Q_0=None, Q_external_gas_throughput=None, V=None, dP=None, dT=None):
@@ -2920,6 +3562,30 @@ class RotaryPistonVane:
         result.append(t_c)
         return result
     @kwasak_static
+    def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
+        return
+
+    def eqn_11_4__p_g(self, p_s: float, p_v: float, **kwargs):
+        # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
+        result = []
+        p_g = p_s - p_v
+        result.append(p_g)
+        return result
+    def eqn_11_4__p_s(self, p_g: float, p_v: float, **kwargs):
+        # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
+        result = []
+        p_s = p_g + p_v
+        result.append(p_s)
+        return result
+    def eqn_11_4__p_v(self, p_g: float, p_s: float, **kwargs):
+        # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
+        result = []
+        p_v = 0
+        result.append(p_v)
+        p_v = -p_g + p_s
+        result.append(p_v)
+        return result
+    @kwasak_static
     def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
         return
 
@@ -3017,6 +3683,24 @@ class SelectingPump:
         result.append(installed_costs)
         return result
     @kwasak_static
+    def eqn_8_4(self, hp=None, installed_costs=None):
+        return
+
+    def eqn_8_4__hp(self, installed_costs: float, **kwargs):
+        # [.pyeqn] installed_costs = 26000 * (hp / 10) ** 0.4
+        result = []
+        hp = -9.1741667595569e-11*installed_costs**(5/2)
+        result.append(hp)
+        hp = 9.1741667595569e-11*installed_costs**(5/2)
+        result.append(hp)
+        return result
+    def eqn_8_4__installed_costs(self, hp: float, **kwargs):
+        # [.pyeqn] installed_costs = 26000 * (hp / 10) ** 0.4
+        result = []
+        installed_costs = 10350.7864343909*hp**(2/5)
+        result.append(installed_costs)
+        return result
+    @kwasak_static
     def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
         return
 
@@ -3065,6 +3749,36 @@ class SteamJetInjectors:
         # [.pyeqn] w_s = v * A * rho_s
         result = []
         w_s = A*rho_s*v
+        result.append(w_s)
+        return result
+    @kwasak_static
+    def eqn_9_2(self, P_m=None, d_n=None, rho_s=None, w_s=None):
+        return
+
+    def eqn_9_2__P_m(self, d_n: float, rho_s: float, w_s: float, **kwargs):
+        # [.pyeqn] w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
+        result = []
+        P_m = 1.334027668054e-6*w_s**2/(d_n**4*rho_s)
+        result.append(P_m)
+        return result
+    def eqn_9_2__d_n(self, P_m: float, rho_s: float, w_s: float, **kwargs):
+        # [.pyeqn] w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
+        result = []
+        d_n = -0.0339853079285911*sqrt(w_s/(P_m*rho_s)**0.5)
+        result.append(d_n)
+        d_n = 0.0339853079285911*sqrt(w_s/(P_m*rho_s)**0.5)
+        result.append(d_n)
+        return result
+    def eqn_9_2__rho_s(self, P_m: float, d_n: float, w_s: float, **kwargs):
+        # [.pyeqn] w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
+        result = []
+        rho_s = 1.334027668054e-6*w_s**2/(P_m*d_n**4)
+        result.append(rho_s)
+        return result
+    def eqn_9_2__w_s(self, P_m: float, d_n: float, rho_s: float, **kwargs):
+        # [.pyeqn] w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
+        result = []
+        w_s = 865.8*d_n**2*sqrt(P_m*rho_s)
         result.append(w_s)
         return result
     @kwasak_static
@@ -3285,6 +3999,36 @@ class VacuumTheory:
         result = []
         y_a = p_a/P
         result.append(y_a)
+        return result
+    @kwasak_static
+    def eqn_1_3(self, T=None, k=None, m=None, v=None):
+        return
+
+    def eqn_1_3__T(self, k: float, m: float, v: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
+        result = []
+        T = 0.333333333333333*m*v**2/k
+        result.append(T)
+        return result
+    def eqn_1_3__k(self, T: float, m: float, v: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
+        result = []
+        k = 0.333333333333333*m*v**2/T
+        result.append(k)
+        return result
+    def eqn_1_3__m(self, T: float, k: float, v: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
+        result = []
+        m = 3.0*T*k/v**2
+        result.append(m)
+        return result
+    def eqn_1_3__v(self, T: float, k: float, m: float, **kwargs):
+        # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
+        result = []
+        v = -1.73205080756888*sqrt(T*k/m)
+        result.append(v)
+        v = 1.73205080756888*sqrt(T*k/m)
+        result.append(v)
         return result
     @kwasak_static
     def eqn_1_7(self, R=None, T=None, V=None, n=None, p=None):

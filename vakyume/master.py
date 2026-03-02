@@ -507,7 +507,7 @@ def attempt_repair_shard(
     pyeqn = pyeqn_match.group(1).strip() if pyeqn_match else ""
 
     print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
-    raw_iterator = repair_codigo(
+    raw = repair_codigo(
         shard_file=shard_file,
         shard_code=shard_code,
         error=error,
@@ -516,24 +516,12 @@ def attempt_repair_shard(
         scores=scores,
         mismatches=mismatches,
         pyeqn=pyeqn,
-        stream=True,
+        stream=False,
         is_subshard=True,
     )
 
-    if raw_iterator is None:
+    if not raw:
         return {"updated": False}
-
-    raw = ""
-    for chunk in raw_iterator:
-        msg = (
-            chunk.get("message")
-            if isinstance(chunk, dict)
-            else getattr(chunk, "message", None)
-        )
-        content = (
-            msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
-        )
-        raw += str(content or "")
 
     method_name = f"eqn_{family_name.split('_eqn_')[1]}__{broken_variant}"
     code_text = extract_code(raw, target_name=method_name)

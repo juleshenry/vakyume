@@ -1,7 +1,10 @@
 import ollama
 import re
+import time
 
 n = "\n"
+
+LLM_COOLDOWN_SECONDS = 5
 
 
 def ask_llm(
@@ -31,6 +34,7 @@ def ask_llm(
         content = response["message"]["content"]
 
     print(f"[OUTPUT] ask_llm: content_len={len(content)}")
+    time.sleep(LLM_COOLDOWN_SECONDS)
     return content
 
 
@@ -192,27 +196,29 @@ def extract_code(text, target_name=None):
     # 1. Try to find a markdown code block
     pattern = re.compile(r"```(?:python)?\n(.*?)\n```", re.DOTALL)
     matches = pattern.findall(text)
-    
+
     # If we have a target_name, look through matches or text for it
     if target_name:
         search_text = "\n\n".join(matches) if matches else text
         lines = search_text.splitlines()
         code_lines = []
         found_target = False
-        
+
         # Look for 'def target_name' or 'class target_name'
         target_pattern = re.compile(rf"^\s*(def|class)\s+{re.escape(target_name)}\b")
-        
+
         for line in lines:
             if target_pattern.match(line):
                 found_target = True
-            elif found_target and (line.strip().startswith("def ") or line.strip().startswith("class ")):
+            elif found_target and (
+                line.strip().startswith("def ") or line.strip().startswith("class ")
+            ):
                 # Found the start of another definition, stop here
                 break
-            
+
             if found_target:
                 code_lines.append(line)
-        
+
         if code_lines:
             return "\n".join(code_lines).strip()
 
@@ -227,11 +233,11 @@ def extract_code(text, target_name=None):
     for line in lines:
         if line.strip().startswith("def ") or line.strip().startswith("class "):
             if found_def:
-                break # Stop at second definition
+                break  # Stop at second definition
             found_def = True
         if found_def:
             code_lines.append(line)
-    
+
     if code_lines:
         return "\n".join(code_lines).strip()
 
