@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_11__v(D: float, L: float, f: float, g_c: float, h_r: float, **kwargs):
+def eqn_2_11__v(self, D: float, L: float, f: float, g_c: float, h_r: float, **kwargs):
     # [.pyeqn] h_r = f * L * v ** 2 / (D * 2 * g_c)
     result = []
     v = -sqrt(2)*sqrt(D*g_c*h_r/(L*f))

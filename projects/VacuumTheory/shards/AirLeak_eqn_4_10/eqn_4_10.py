@@ -12,12 +12,12 @@ from .eqn_4_10__leakage import eqn_4_10__leakage
 from .eqn_4_10__t import eqn_4_10__t
 
 class AirLeak:
-    eqn_4_10__T = staticmethod(eqn_4_10__T)
-    eqn_4_10__V = staticmethod(eqn_4_10__V)
-    eqn_4_10__del_P = staticmethod(eqn_4_10__del_P)
-    eqn_4_10__leakage = staticmethod(eqn_4_10__leakage)
-    eqn_4_10__t = staticmethod(eqn_4_10__t)
+    eqn_4_10__T = eqn_4_10__T
+    eqn_4_10__V = eqn_4_10__V
+    eqn_4_10__del_P = eqn_4_10__del_P
+    eqn_4_10__leakage = eqn_4_10__leakage
+    eqn_4_10__t = eqn_4_10__t
 
     @kwasak_static
-    def eqn_4_10(T=None, V=None, del_P=None, leakage=None, t=None, **kwargs):
+    def eqn_4_10(self, T=None, V=None, del_P=None, leakage=None, t=None):
         return

@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_9_4__AEL(SC: float, r: float, w_s: float, **kwargs):
+def eqn_9_4__AEL(self, SC: float, r: float, w_s: float, **kwargs):
     # [.pyeqn] w_s = AEL * r * SC
     result = []
     AEL = w_s/(SC*r)

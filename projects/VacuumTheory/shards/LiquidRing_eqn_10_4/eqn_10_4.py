@@ -13,13 +13,13 @@ from .eqn_10_4__V_cap import eqn_10_4__V
 from .eqn_10_4__t import eqn_10_4__t
 
 class LiquidRing:
-    eqn_10_4__Q_gas = staticmethod(eqn_10_4__Q_gas)
-    eqn_10_4__SP_1 = staticmethod(eqn_10_4__SP_1)
-    eqn_10_4__SP_2 = staticmethod(eqn_10_4__SP_2)
-    eqn_10_4__S_p = staticmethod(eqn_10_4__S_p)
-    eqn_10_4__V = staticmethod(eqn_10_4__V)
-    eqn_10_4__t = staticmethod(eqn_10_4__t)
+    eqn_10_4__Q_gas = eqn_10_4__Q_gas
+    eqn_10_4__SP_1 = eqn_10_4__SP_1
+    eqn_10_4__SP_2 = eqn_10_4__SP_2
+    eqn_10_4__S_p = eqn_10_4__S_p
+    eqn_10_4__V = eqn_10_4__V
+    eqn_10_4__t = eqn_10_4__t
 
     @kwasak_static
-    def eqn_10_4(Q_gas=None, SP_1=None, SP_2=None, S_p=None, V=None, t=None, **kwargs):
+    def eqn_10_4(self, Q_gas=None, SP_1=None, SP_2=None, S_p=None, V=None, t=None):
         return

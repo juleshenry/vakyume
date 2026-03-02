@@ -12,12 +12,12 @@ from .eqn_10_6__V_cap import eqn_10_6__V
 from .eqn_10_6__t import eqn_10_6__t
 
 class LiquidRing:
-    eqn_10_6__P_1 = staticmethod(eqn_10_6__P_1)
-    eqn_10_6__P_2 = staticmethod(eqn_10_6__P_2)
-    eqn_10_6__S_a = staticmethod(eqn_10_6__S_a)
-    eqn_10_6__V = staticmethod(eqn_10_6__V)
-    eqn_10_6__t = staticmethod(eqn_10_6__t)
+    eqn_10_6__P_1 = eqn_10_6__P_1
+    eqn_10_6__P_2 = eqn_10_6__P_2
+    eqn_10_6__S_a = eqn_10_6__S_a
+    eqn_10_6__V = eqn_10_6__V
+    eqn_10_6__t = eqn_10_6__t
 
     @kwasak_static
-    def eqn_10_6(P_1=None, P_2=None, S_a=None, V=None, t=None, **kwargs):
+    def eqn_10_6(self, P_1=None, P_2=None, S_a=None, V=None, t=None):
         return

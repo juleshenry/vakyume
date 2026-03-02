@@ -10,10 +10,10 @@ from .eqn_2_29__S_1_cap import eqn_2_29__S_1
 from .eqn_2_29__S_2_cap import eqn_2_29__S_2
 
 class FluidFlowVacuumLines:
-    eqn_2_29__C = staticmethod(eqn_2_29__C)
-    eqn_2_29__S_1 = staticmethod(eqn_2_29__S_1)
-    eqn_2_29__S_2 = staticmethod(eqn_2_29__S_2)
+    eqn_2_29__C = eqn_2_29__C
+    eqn_2_29__S_1 = eqn_2_29__S_1
+    eqn_2_29__S_2 = eqn_2_29__S_2
 
     @kwasak_static
-    def eqn_2_29(C=None, S_1=None, S_2=None, **kwargs):
+    def eqn_2_29(self, C=None, S_1=None, S_2=None):
         return

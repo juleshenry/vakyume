@@ -10,10 +10,10 @@ from .eqn_5_13__H_p_cap import eqn_5_13__H_p
 from .eqn_5_13__N_ES_cap import eqn_5_13__N_ES
 
 class ProcessApp1:
-    eqn_5_13__HETP = staticmethod(eqn_5_13__HETP)
-    eqn_5_13__H_p = staticmethod(eqn_5_13__H_p)
-    eqn_5_13__N_ES = staticmethod(eqn_5_13__N_ES)
+    eqn_5_13__HETP = eqn_5_13__HETP
+    eqn_5_13__H_p = eqn_5_13__H_p
+    eqn_5_13__N_ES = eqn_5_13__N_ES
 
     @kwasak_static
-    def eqn_5_13(HETP=None, H_p=None, N_ES=None, **kwargs):
+    def eqn_5_13(self, HETP=None, H_p=None, N_ES=None):
         return

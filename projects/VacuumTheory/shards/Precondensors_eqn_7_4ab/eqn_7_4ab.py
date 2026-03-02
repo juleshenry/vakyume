@@ -11,11 +11,11 @@ from .eqn_7_4ab__p_i import eqn_7_4ab__p_i
 from .eqn_7_4ab__p_nc import eqn_7_4ab__p_nc
 
 class Precondensors:
-    eqn_7_4ab__P_c = staticmethod(eqn_7_4ab__P_c)
-    eqn_7_4ab__p = staticmethod(eqn_7_4ab__p)
-    eqn_7_4ab__p_i = staticmethod(eqn_7_4ab__p_i)
-    eqn_7_4ab__p_nc = staticmethod(eqn_7_4ab__p_nc)
+    eqn_7_4ab__P_c = eqn_7_4ab__P_c
+    eqn_7_4ab__p = eqn_7_4ab__p
+    eqn_7_4ab__p_i = eqn_7_4ab__p_i
+    eqn_7_4ab__p_nc = eqn_7_4ab__p_nc
 
     @kwasak_static
-    def eqn_7_4ab(P_c=None, p=None, p_i=None, p_nc=None, **kwargs):
+    def eqn_7_4ab(self, P_c=None, p=None, p_i=None, p_nc=None):
         return

@@ -11,11 +11,11 @@ from .eqn_9_4__r import eqn_9_4__r
 from .eqn_9_4__w_s import eqn_9_4__w_s
 
 class SteamJetInjectors:
-    eqn_9_4__AEL = staticmethod(eqn_9_4__AEL)
-    eqn_9_4__SC = staticmethod(eqn_9_4__SC)
-    eqn_9_4__r = staticmethod(eqn_9_4__r)
-    eqn_9_4__w_s = staticmethod(eqn_9_4__w_s)
+    eqn_9_4__AEL = eqn_9_4__AEL
+    eqn_9_4__SC = eqn_9_4__SC
+    eqn_9_4__r = eqn_9_4__r
+    eqn_9_4__w_s = eqn_9_4__w_s
 
     @kwasak_static
-    def eqn_9_4(AEL=None, SC=None, r=None, w_s=None, **kwargs):
+    def eqn_9_4(self, AEL=None, SC=None, r=None, w_s=None):
         return

@@ -12,12 +12,12 @@ from .eqn_10_5__V_cap import eqn_10_5__V
 from .eqn_10_5__t import eqn_10_5__t
 
 class LiquidRing:
-    eqn_10_5__P_1 = staticmethod(eqn_10_5__P_1)
-    eqn_10_5__P_2 = staticmethod(eqn_10_5__P_2)
-    eqn_10_5__S_p = staticmethod(eqn_10_5__S_p)
-    eqn_10_5__V = staticmethod(eqn_10_5__V)
-    eqn_10_5__t = staticmethod(eqn_10_5__t)
+    eqn_10_5__P_1 = eqn_10_5__P_1
+    eqn_10_5__P_2 = eqn_10_5__P_2
+    eqn_10_5__S_p = eqn_10_5__S_p
+    eqn_10_5__V = eqn_10_5__V
+    eqn_10_5__t = eqn_10_5__t
 
     @kwasak_static
-    def eqn_10_5(P_1=None, P_2=None, S_p=None, V=None, t=None, **kwargs):
+    def eqn_10_5(self, P_1=None, P_2=None, S_p=None, V=None, t=None):
         return

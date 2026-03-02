@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_13a__y_a(n: float, n_a: float, **kwargs):
+def eqn_1_13a__y_a(self, n: float, n_a: float, **kwargs):
     # [.pyeqn] y_a = n_a / n
     result = []
     y_a = n_a/n

@@ -10,10 +10,10 @@ from .eqn_7_1__p_i import eqn_7_1__p_i
 from .eqn_7_1__y_i import eqn_7_1__y_i
 
 class Precondensors:
-    eqn_7_1__P = staticmethod(eqn_7_1__P)
-    eqn_7_1__p_i = staticmethod(eqn_7_1__p_i)
-    eqn_7_1__y_i = staticmethod(eqn_7_1__y_i)
+    eqn_7_1__P = eqn_7_1__P
+    eqn_7_1__p_i = eqn_7_1__p_i
+    eqn_7_1__y_i = eqn_7_1__y_i
 
     @kwasak_static
-    def eqn_7_1(P=None, p_i=None, y_i=None, **kwargs):
+    def eqn_7_1(self, P=None, p_i=None, y_i=None):
         return

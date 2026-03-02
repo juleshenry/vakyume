@@ -12,12 +12,12 @@ from .eqn_5_17__x_1 import eqn_5_17__x_1
 from .eqn_5_17__x_3 import eqn_5_17__x_3
 
 class ProcessApp1:
-    eqn_5_17__H_2_1 = staticmethod(eqn_5_17__H_2_1)
-    eqn_5_17__H_2_3 = staticmethod(eqn_5_17__H_2_3)
-    eqn_5_17__H_2_mi = staticmethod(eqn_5_17__H_2_mi)
-    eqn_5_17__x_1 = staticmethod(eqn_5_17__x_1)
-    eqn_5_17__x_3 = staticmethod(eqn_5_17__x_3)
+    eqn_5_17__H_2_1 = eqn_5_17__H_2_1
+    eqn_5_17__H_2_3 = eqn_5_17__H_2_3
+    eqn_5_17__H_2_mi = eqn_5_17__H_2_mi
+    eqn_5_17__x_1 = eqn_5_17__x_1
+    eqn_5_17__x_3 = eqn_5_17__x_3
 
     @kwasak_static
-    def eqn_5_17(H_2_1=None, H_2_3=None, H_2_mi=None, x_1=None, x_3=None, **kwargs):
+    def eqn_5_17(self, H_2_1=None, H_2_3=None, H_2_mi=None, x_1=None, x_3=None):
         return

@@ -10,10 +10,10 @@ from .eqn_11_4__p_s import eqn_11_4__p_s
 from .eqn_11_4__p_v import eqn_11_4__p_v
 
 class RotaryPistonVane:
-    eqn_11_4__p_g = staticmethod(eqn_11_4__p_g)
-    eqn_11_4__p_s = staticmethod(eqn_11_4__p_s)
-    eqn_11_4__p_v = staticmethod(eqn_11_4__p_v)
+    eqn_11_4__p_g = eqn_11_4__p_g
+    eqn_11_4__p_s = eqn_11_4__p_s
+    eqn_11_4__p_v = eqn_11_4__p_v
 
     @kwasak_static
-    def eqn_11_4(p_g=None, p_s=None, p_v=None, **kwargs):
+    def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
         return

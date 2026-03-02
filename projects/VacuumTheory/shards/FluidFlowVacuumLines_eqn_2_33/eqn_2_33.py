@@ -9,9 +9,9 @@ from .eqn_2_33__C_paralell_cap import eqn_2_33__C_paralell
 from .eqn_2_33__arithmetic_sum_C_cap import eqn_2_33__arithmetic_sum_C
 
 class FluidFlowVacuumLines:
-    eqn_2_33__C_paralell = staticmethod(eqn_2_33__C_paralell)
-    eqn_2_33__arithmetic_sum_C = staticmethod(eqn_2_33__arithmetic_sum_C)
+    eqn_2_33__C_paralell = eqn_2_33__C_paralell
+    eqn_2_33__arithmetic_sum_C = eqn_2_33__arithmetic_sum_C
 
     @kwasak_static
-    def eqn_2_33(C_paralell=None, arithmetic_sum_C=None, **kwargs):
+    def eqn_2_33(self, C_paralell=None, arithmetic_sum_C=None):
         return

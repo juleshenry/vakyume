@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_8_8__f(P_1: float, P_2: float, adiabatic_power_watts: float, **kwargs):
+def eqn_8_8__f(self, P_1: float, P_2: float, adiabatic_power_watts: float, **kwargs):
     # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
     result = []
     f = 12.0*adiabatic_power_watts/((P_2/P_1)**0.286 - 1.0)

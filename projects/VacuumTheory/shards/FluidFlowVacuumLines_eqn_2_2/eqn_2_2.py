@@ -10,10 +10,10 @@ from .eqn_2_2__lambd import eqn_2_2__lambd
 from .eqn_2_2__psi import eqn_2_2__psi
 
 class FluidFlowVacuumLines:
-    eqn_2_2__delta = staticmethod(eqn_2_2__delta)
-    eqn_2_2__lambd = staticmethod(eqn_2_2__lambd)
-    eqn_2_2__psi = staticmethod(eqn_2_2__psi)
+    eqn_2_2__delta = eqn_2_2__delta
+    eqn_2_2__lambd = eqn_2_2__lambd
+    eqn_2_2__psi = eqn_2_2__psi
 
     @kwasak_static
-    def eqn_2_2(delta=None, lambd=None, psi=None, **kwargs):
+    def eqn_2_2(self, delta=None, lambd=None, psi=None):
         return

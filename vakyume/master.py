@@ -233,7 +233,10 @@ def shard_from_chapters(ctx: PipelineContext):
                     created_count += 1
                     shard_content = import_header
                     other_args = [t for t in tokes if t != token]
-                    header = f"def {method_name}({', '.join(f'{t}: float' for t in other_args)}, **kwargs):"
+                    args_str = ", ".join(f"{t}: float" for t in other_args)
+                    if args_str:
+                        args_str = f", {args_str}"
+                    header = f"def {method_name}(self{args_str}, **kwargs):"
                     shard_content += header + "\n"
                     shard_content += f"{TAB}# [.pyeqn] {line.strip()}\n"
 
@@ -273,10 +276,11 @@ def shard_from_chapters(ctx: PipelineContext):
                         sf.write(f"\nclass {class_name}:\n")
                         for token in tokes:
                             method_name = f"eqn_{eqn_number}__{token}"
-                            sf.write(f"{TAB}{method_name} = staticmethod({method_name})\n")
+                            sf.write(f"{TAB}{method_name} = {method_name}\n")
                         sf.write(f"\n{TAB}@kwasak_static\n")
+                        tokes_str = ", ".join(f"{t}=None" for t in tokes)
                         sf.write(
-                            f"{TAB}def eqn_{eqn_number}({', '.join(f'{t}=None' for t in tokes)}, **kwargs):\n"
+                            f"{TAB}def eqn_{eqn_number}(self, {tokes_str}):\n"
                         )
                         sf.write(f"{TAB * 2}return\n")
 
@@ -500,6 +504,14 @@ def attempt_repair_shard(
     code_text = extract_code(raw, target_name=method_name)
     if not code_text.strip():
         return {"updated": False}
+
+    # Ensure 'self' is in the header
+    header_match = re.search(rf"def\s+{method_name}\s*\((.*?)\):", code_text)
+    if header_match:
+        params = header_match.group(1).strip()
+        if not params.startswith("self"):
+            new_params = "self, " + params if params else "self"
+            code_text = code_text.replace(header_match.group(0), f"def {method_name}({new_params}):")
 
     try:
         ast.parse(code_text)
@@ -777,6 +789,3 @@ def extract_code_block(text):
                 break
             in_code = True
             continue
-        if in_code:
-            code_lines.append(line)
-    return "\n".join(code_lines).strip()

@@ -11,11 +11,11 @@ from .eqn_10_16__S_Th_cap import eqn_10_16__S_Th
 from .eqn_10_16__p_0 import eqn_10_16__p_0
 
 class LiquidRing:
-    eqn_10_16__P = staticmethod(eqn_10_16__P)
-    eqn_10_16__S_0 = staticmethod(eqn_10_16__S_0)
-    eqn_10_16__S_Th = staticmethod(eqn_10_16__S_Th)
-    eqn_10_16__p_0 = staticmethod(eqn_10_16__p_0)
+    eqn_10_16__P = eqn_10_16__P
+    eqn_10_16__S_0 = eqn_10_16__S_0
+    eqn_10_16__S_Th = eqn_10_16__S_Th
+    eqn_10_16__p_0 = eqn_10_16__p_0
 
     @kwasak_static
-    def eqn_10_16(P=None, S_0=None, S_Th=None, p_0=None, **kwargs):
+    def eqn_10_16(self, P=None, S_0=None, S_Th=None, p_0=None):
         return

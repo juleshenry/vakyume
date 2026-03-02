@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_18a__D_eq(R_ll: float, **kwargs):
+def eqn_2_18a__D_eq(self, R_ll: float, **kwargs):
     # [.pyeqn] D_eq = 4 * R_ll
     result = []
     D_eq = 4*R_ll

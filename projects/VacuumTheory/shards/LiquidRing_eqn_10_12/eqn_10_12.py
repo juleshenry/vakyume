@@ -9,9 +9,9 @@ from .eqn_10_12__T_c_cap import eqn_10_12__T_c
 from .eqn_10_12__T_s_cap import eqn_10_12__T_s
 
 class LiquidRing:
-    eqn_10_12__T_c = staticmethod(eqn_10_12__T_c)
-    eqn_10_12__T_s = staticmethod(eqn_10_12__T_s)
+    eqn_10_12__T_c = eqn_10_12__T_c
+    eqn_10_12__T_s = eqn_10_12__T_s
 
     @kwasak_static
-    def eqn_10_12(T_c=None, T_s=None, **kwargs):
+    def eqn_10_12(self, T_c=None, T_s=None):
         return

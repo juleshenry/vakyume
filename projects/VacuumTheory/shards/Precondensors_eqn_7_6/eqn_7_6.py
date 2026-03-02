@@ -14,14 +14,14 @@ from .eqn_7_6__p_c import eqn_7_6__p_c
 from .eqn_7_6__x_i import eqn_7_6__x_i
 
 class Precondensors:
-    eqn_7_6__M = staticmethod(eqn_7_6__M)
-    eqn_7_6__P = staticmethod(eqn_7_6__P)
-    eqn_7_6__P_i_0 = staticmethod(eqn_7_6__P_i_0)
-    eqn_7_6__W_air = staticmethod(eqn_7_6__W_air)
-    eqn_7_6__W_i = staticmethod(eqn_7_6__W_i)
-    eqn_7_6__p_c = staticmethod(eqn_7_6__p_c)
-    eqn_7_6__x_i = staticmethod(eqn_7_6__x_i)
+    eqn_7_6__M = eqn_7_6__M
+    eqn_7_6__P = eqn_7_6__P
+    eqn_7_6__P_i_0 = eqn_7_6__P_i_0
+    eqn_7_6__W_air = eqn_7_6__W_air
+    eqn_7_6__W_i = eqn_7_6__W_i
+    eqn_7_6__p_c = eqn_7_6__p_c
+    eqn_7_6__x_i = eqn_7_6__x_i
 
     @kwasak_static
-    def eqn_7_6(M=None, P=None, P_i_0=None, W_air=None, W_i=None, p_c=None, x_i=None, **kwargs):
+    def eqn_7_6(self, M=None, P=None, P_i_0=None, W_air=None, W_i=None, p_c=None, x_i=None):
         return

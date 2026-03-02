@@ -11,11 +11,11 @@ from .eqn_2_6__rho import eqn_2_6__rho
 from .eqn_2_6__v_a import eqn_2_6__v_a
 
 class FluidFlowVacuumLines:
-    eqn_2_6__lambd = staticmethod(eqn_2_6__lambd)
-    eqn_2_6__mu = staticmethod(eqn_2_6__mu)
-    eqn_2_6__rho = staticmethod(eqn_2_6__rho)
-    eqn_2_6__v_a = staticmethod(eqn_2_6__v_a)
+    eqn_2_6__lambd = eqn_2_6__lambd
+    eqn_2_6__mu = eqn_2_6__mu
+    eqn_2_6__rho = eqn_2_6__rho
+    eqn_2_6__v_a = eqn_2_6__v_a
 
     @kwasak_static
-    def eqn_2_6(lambd=None, mu=None, rho=None, v_a=None, **kwargs):
+    def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
         return

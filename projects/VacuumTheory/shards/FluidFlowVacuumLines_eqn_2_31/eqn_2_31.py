@@ -10,10 +10,10 @@ from .eqn_2_31__S_p_cap import eqn_2_31__S_p
 from .eqn_2_31__S_pump_speed_cap import eqn_2_31__S_pump_speed
 
 class FluidFlowVacuumLines:
-    eqn_2_31__C = staticmethod(eqn_2_31__C)
-    eqn_2_31__S_p = staticmethod(eqn_2_31__S_p)
-    eqn_2_31__S_pump_speed = staticmethod(eqn_2_31__S_pump_speed)
+    eqn_2_31__C = eqn_2_31__C
+    eqn_2_31__S_p = eqn_2_31__S_p
+    eqn_2_31__S_pump_speed = eqn_2_31__S_pump_speed
 
     @kwasak_static
-    def eqn_2_31(C=None, S_p=None, S_pump_speed=None, **kwargs):
+    def eqn_2_31(self, C=None, S_p=None, S_pump_speed=None):
         return

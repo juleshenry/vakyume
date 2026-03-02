@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_31__C(S_p: float, S_pump_speed: float, **kwargs):
+def eqn_2_31__C(self, S_p: float, S_pump_speed: float, **kwargs):
     # [.pyeqn] S_pump_speed = (S_p * C) / (S_p + C)
     result = []
     C = S_p*S_pump_speed/(S_p - S_pump_speed)

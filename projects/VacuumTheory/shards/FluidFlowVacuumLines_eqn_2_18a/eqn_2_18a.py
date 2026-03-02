@@ -9,9 +9,9 @@ from .eqn_2_18a__D_eq_cap import eqn_2_18a__D_eq
 from .eqn_2_18a__R_ll_cap import eqn_2_18a__R_ll
 
 class FluidFlowVacuumLines:
-    eqn_2_18a__D_eq = staticmethod(eqn_2_18a__D_eq)
-    eqn_2_18a__R_ll = staticmethod(eqn_2_18a__R_ll)
+    eqn_2_18a__D_eq = eqn_2_18a__D_eq
+    eqn_2_18a__R_ll = eqn_2_18a__R_ll
 
     @kwasak_static
-    def eqn_2_18a(D_eq=None, R_ll=None, **kwargs):
+    def eqn_2_18a(self, D_eq=None, R_ll=None):
         return

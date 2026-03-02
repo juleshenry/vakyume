@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_10_15__P(S_Th: float, S_p: float, p_s: float, **kwargs):
+def eqn_10_15__P(self, S_Th: float, S_p: float, p_s: float, **kwargs):
     # [.pyeqn] S_p = S_Th * (P - p_s) / P
     result = []
     P = S_Th*p_s/(S_Th - S_p)

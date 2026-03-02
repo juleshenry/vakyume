@@ -18,18 +18,18 @@ from .eqn_7_18__k_w import eqn_7_18__k_w
 from .eqn_7_18__x_w import eqn_7_18__x_w
 
 class Precondensors:
-    eqn_7_18__D_0 = staticmethod(eqn_7_18__D_0)
-    eqn_7_18__D_LM = staticmethod(eqn_7_18__D_LM)
-    eqn_7_18__D_i = staticmethod(eqn_7_18__D_i)
-    eqn_7_18__R_fi = staticmethod(eqn_7_18__R_fi)
-    eqn_7_18__R_fo = staticmethod(eqn_7_18__R_fo)
-    eqn_7_18__R_nc = staticmethod(eqn_7_18__R_nc)
-    eqn_7_18__U_0 = staticmethod(eqn_7_18__U_0)
-    eqn_7_18__h_c = staticmethod(eqn_7_18__h_c)
-    eqn_7_18__h_i = staticmethod(eqn_7_18__h_i)
-    eqn_7_18__k_w = staticmethod(eqn_7_18__k_w)
-    eqn_7_18__x_w = staticmethod(eqn_7_18__x_w)
+    eqn_7_18__D_0 = eqn_7_18__D_0
+    eqn_7_18__D_LM = eqn_7_18__D_LM
+    eqn_7_18__D_i = eqn_7_18__D_i
+    eqn_7_18__R_fi = eqn_7_18__R_fi
+    eqn_7_18__R_fo = eqn_7_18__R_fo
+    eqn_7_18__R_nc = eqn_7_18__R_nc
+    eqn_7_18__U_0 = eqn_7_18__U_0
+    eqn_7_18__h_c = eqn_7_18__h_c
+    eqn_7_18__h_i = eqn_7_18__h_i
+    eqn_7_18__k_w = eqn_7_18__k_w
+    eqn_7_18__x_w = eqn_7_18__x_w
 
     @kwasak_static
-    def eqn_7_18(D_0=None, D_LM=None, D_i=None, R_fi=None, R_fo=None, R_nc=None, U_0=None, h_c=None, h_i=None, k_w=None, x_w=None, **kwargs):
+    def eqn_7_18(self, D_0=None, D_LM=None, D_i=None, R_fi=None, R_fo=None, R_nc=None, U_0=None, h_c=None, h_i=None, k_w=None, x_w=None):
         return

@@ -11,11 +11,11 @@ from .eqn_1_3__m import eqn_1_3__m
 from .eqn_1_3__v import eqn_1_3__v
 
 class VacuumTheory:
-    eqn_1_3__T = staticmethod(eqn_1_3__T)
-    eqn_1_3__k = staticmethod(eqn_1_3__k)
-    eqn_1_3__m = staticmethod(eqn_1_3__m)
-    eqn_1_3__v = staticmethod(eqn_1_3__v)
+    eqn_1_3__T = eqn_1_3__T
+    eqn_1_3__k = eqn_1_3__k
+    eqn_1_3__m = eqn_1_3__m
+    eqn_1_3__v = eqn_1_3__v
 
     @kwasak_static
-    def eqn_1_3(T=None, k=None, m=None, v=None, **kwargs):
+    def eqn_1_3(self, T=None, k=None, m=None, v=None):
         return

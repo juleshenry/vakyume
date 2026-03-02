@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_1__Re(D: float, mu: float, rho: float, v: float, **kwargs):
+def eqn_2_1__Re(self, D: float, mu: float, rho: float, v: float, **kwargs):
     # [.pyeqn] Re = rho * D * v / mu
     result = []
     Re = D*rho*v/mu

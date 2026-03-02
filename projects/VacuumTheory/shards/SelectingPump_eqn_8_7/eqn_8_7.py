@@ -11,11 +11,11 @@ from .eqn_8_7__adiabatic_hp import eqn_8_7__adiabatic_hp
 from .eqn_8_7__w import eqn_8_7__w
 
 class SelectingPump:
-    eqn_8_7__P_1 = staticmethod(eqn_8_7__P_1)
-    eqn_8_7__P_2 = staticmethod(eqn_8_7__P_2)
-    eqn_8_7__adiabatic_hp = staticmethod(eqn_8_7__adiabatic_hp)
-    eqn_8_7__w = staticmethod(eqn_8_7__w)
+    eqn_8_7__P_1 = eqn_8_7__P_1
+    eqn_8_7__P_2 = eqn_8_7__P_2
+    eqn_8_7__adiabatic_hp = eqn_8_7__adiabatic_hp
+    eqn_8_7__w = eqn_8_7__w
 
     @kwasak_static
-    def eqn_8_7(P_1=None, P_2=None, adiabatic_hp=None, w=None, **kwargs):
+    def eqn_8_7(self, P_1=None, P_2=None, adiabatic_hp=None, w=None):
         return

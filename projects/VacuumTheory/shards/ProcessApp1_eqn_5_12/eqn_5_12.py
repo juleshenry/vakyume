@@ -11,11 +11,11 @@ from .eqn_5_12__N_t_cap import eqn_5_12__N_t
 from .eqn_5_12__T_cap import eqn_5_12__T
 
 class ProcessApp1:
-    eqn_5_12__Eff = staticmethod(eqn_5_12__Eff)
-    eqn_5_12__N_ES = staticmethod(eqn_5_12__N_ES)
-    eqn_5_12__N_t = staticmethod(eqn_5_12__N_t)
-    eqn_5_12__T = staticmethod(eqn_5_12__T)
+    eqn_5_12__Eff = eqn_5_12__Eff
+    eqn_5_12__N_ES = eqn_5_12__N_ES
+    eqn_5_12__N_t = eqn_5_12__N_t
+    eqn_5_12__T = eqn_5_12__T
 
     @kwasak_static
-    def eqn_5_12(Eff=None, N_ES=None, N_t=None, T=None, **kwargs):
+    def eqn_5_12(self, Eff=None, N_ES=None, N_t=None, T=None):
         return

@@ -11,11 +11,11 @@ from .eqn_7_14a__U_cap import eqn_7_14a__U
 from .eqn_7_14a__del_T_LM_cap import eqn_7_14a__del_T_LM
 
 class Precondensors:
-    eqn_7_14a__A = staticmethod(eqn_7_14a__A)
-    eqn_7_14a__Q_condensor_heat_duty = staticmethod(eqn_7_14a__Q_condensor_heat_duty)
-    eqn_7_14a__U = staticmethod(eqn_7_14a__U)
-    eqn_7_14a__del_T_LM = staticmethod(eqn_7_14a__del_T_LM)
+    eqn_7_14a__A = eqn_7_14a__A
+    eqn_7_14a__Q_condensor_heat_duty = eqn_7_14a__Q_condensor_heat_duty
+    eqn_7_14a__U = eqn_7_14a__U
+    eqn_7_14a__del_T_LM = eqn_7_14a__del_T_LM
 
     @kwasak_static
-    def eqn_7_14a(A=None, Q_condensor_heat_duty=None, U=None, del_T_LM=None, **kwargs):
+    def eqn_7_14a(self, A=None, Q_condensor_heat_duty=None, U=None, del_T_LM=None):
         return

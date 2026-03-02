@@ -12,12 +12,12 @@ from .eqn_8_9__r import eqn_8_9__r
 from .eqn_8_9__s import eqn_8_9__s
 
 class SelectingPump:
-    eqn_8_9__E_j = staticmethod(eqn_8_9__E_j)
-    eqn_8_9__E_m = staticmethod(eqn_8_9__E_m)
-    eqn_8_9__e = staticmethod(eqn_8_9__e)
-    eqn_8_9__r = staticmethod(eqn_8_9__r)
-    eqn_8_9__s = staticmethod(eqn_8_9__s)
+    eqn_8_9__E_j = eqn_8_9__E_j
+    eqn_8_9__E_m = eqn_8_9__E_m
+    eqn_8_9__e = eqn_8_9__e
+    eqn_8_9__r = eqn_8_9__r
+    eqn_8_9__s = eqn_8_9__s
 
     @kwasak_static
-    def eqn_8_9(E_j=None, E_m=None, e=None, r=None, s=None, **kwargs):
+    def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
         return

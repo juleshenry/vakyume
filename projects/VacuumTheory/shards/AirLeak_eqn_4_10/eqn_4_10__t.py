@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_4_10__t(T: float, V: float, del_P: float, leakage: float, **kwargs):
+def eqn_4_10__t(self, T: float, V: float, del_P: float, leakage: float, **kwargs):
     # [.pyeqn] leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
     result = []
     t = 3.127*V*del_P/(T*leakage)

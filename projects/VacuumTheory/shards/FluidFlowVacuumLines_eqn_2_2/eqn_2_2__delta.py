@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_2__delta(lambd: float, psi: float, **kwargs):
+def eqn_2_2__delta(self, lambd: float, psi: float, **kwargs):
     # [.pyeqn] lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
     result = []
     delta = -0.474424998328794*sqrt(lambd/psi)

@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_9_5__V(r_h: float, t_h: float, w_h: float, **kwargs):
+def eqn_9_5__V(self, r_h: float, t_h: float, w_h: float, **kwargs):
     # [.pyeqn] w_h = r_h * V / t_h
     result = []
     V = t_h*w_h/r_h

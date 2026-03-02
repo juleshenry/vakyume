@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_4___beta(mu: float, vel_grad: float, **kwargs):
+def eqn_2_4___beta(self, mu: float, vel_grad: float, **kwargs):
     # [.pyeqn] _beta = mu * vel_grad
     result = []
     _beta = mu*vel_grad

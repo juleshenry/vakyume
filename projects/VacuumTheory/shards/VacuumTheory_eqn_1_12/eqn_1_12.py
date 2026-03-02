@@ -9,9 +9,9 @@ from .eqn_1_12__Total_P_cap import eqn_1_12__Total_P
 from .eqn_1_12__sum_partial_pressures import eqn_1_12__sum_partial_pressures
 
 class VacuumTheory:
-    eqn_1_12__Total_P = staticmethod(eqn_1_12__Total_P)
-    eqn_1_12__sum_partial_pressures = staticmethod(eqn_1_12__sum_partial_pressures)
+    eqn_1_12__Total_P = eqn_1_12__Total_P
+    eqn_1_12__sum_partial_pressures = eqn_1_12__sum_partial_pressures
 
     @kwasak_static
-    def eqn_1_12(Total_P=None, sum_partial_pressures=None, **kwargs):
+    def eqn_1_12(self, Total_P=None, sum_partial_pressures=None):
         return

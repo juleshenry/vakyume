@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_3_12__H_2(KAPPA_1: float, P: float, **kwargs):
+def eqn_3_12__H_2(self, KAPPA_1: float, P: float, **kwargs):
     # [.pyeqn] P = KAPPA_1 * H_2 ** 2
     result = []
     H_2 = -sqrt(P/KAPPA_1)

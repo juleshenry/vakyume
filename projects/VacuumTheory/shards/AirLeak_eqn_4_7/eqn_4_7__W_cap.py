@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_4_7__W(W_T: float, sum_individual_leak_rates: float, **kwargs):
+def eqn_4_7__W(self, W_T: float, sum_individual_leak_rates: float, **kwargs):
     # [.pyeqn] W_T = W + sum_individual_leak_rates
     result = []
     W = W_T - sum_individual_leak_rates

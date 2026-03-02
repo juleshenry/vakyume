@@ -11,11 +11,11 @@ from .eqn_11_5__p_g import eqn_11_5__p_g
 from .eqn_11_5__p_v_max import eqn_11_5__p_v_max
 
 class RotaryPistonVane:
-    eqn_11_5__P_0_v = staticmethod(eqn_11_5__P_0_v)
-    eqn_11_5__P_D = staticmethod(eqn_11_5__P_D)
-    eqn_11_5__p_g = staticmethod(eqn_11_5__p_g)
-    eqn_11_5__p_v_max = staticmethod(eqn_11_5__p_v_max)
+    eqn_11_5__P_0_v = eqn_11_5__P_0_v
+    eqn_11_5__P_D = eqn_11_5__P_D
+    eqn_11_5__p_g = eqn_11_5__p_g
+    eqn_11_5__p_v_max = eqn_11_5__p_v_max
 
     @kwasak_static
-    def eqn_11_5(P_0_v=None, P_D=None, p_g=None, p_v_max=None, **kwargs):
+    def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
         return

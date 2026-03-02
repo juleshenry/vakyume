@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_8__T(M: float, P: float, R: float, V: float, m: float, **kwargs):
+def eqn_1_8__T(self, M: float, P: float, R: float, V: float, m: float, **kwargs):
     # [.pyeqn] P * V = m / M * R * T
     result = []
     T = M*P*V/(R*m)

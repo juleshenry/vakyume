@@ -14,14 +14,14 @@ from .eqn_6_9__r import eqn_6_9__r
 from .eqn_6_9__r_M_cap import eqn_6_9__r_M
 
 class ProcessApp2:
-    eqn_6_9__A = staticmethod(eqn_6_9__A)
-    eqn_6_9__dV_dt = staticmethod(eqn_6_9__dV_dt)
-    eqn_6_9__delta_P = staticmethod(eqn_6_9__delta_P)
-    eqn_6_9__m = staticmethod(eqn_6_9__m)
-    eqn_6_9__mu = staticmethod(eqn_6_9__mu)
-    eqn_6_9__r = staticmethod(eqn_6_9__r)
-    eqn_6_9__r_M = staticmethod(eqn_6_9__r_M)
+    eqn_6_9__A = eqn_6_9__A
+    eqn_6_9__dV_dt = eqn_6_9__dV_dt
+    eqn_6_9__delta_P = eqn_6_9__delta_P
+    eqn_6_9__m = eqn_6_9__m
+    eqn_6_9__mu = eqn_6_9__mu
+    eqn_6_9__r = eqn_6_9__r
+    eqn_6_9__r_M = eqn_6_9__r_M
 
     @kwasak_static
-    def eqn_6_9(A=None, dV_dt=None, delta_P=None, m=None, mu=None, r=None, r_M=None, **kwargs):
+    def eqn_6_9(self, A=None, dV_dt=None, delta_P=None, m=None, mu=None, r=None, r_M=None):
         return

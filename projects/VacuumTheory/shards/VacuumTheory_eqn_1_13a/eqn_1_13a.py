@@ -10,10 +10,10 @@ from .eqn_1_13a__n_a import eqn_1_13a__n_a
 from .eqn_1_13a__y_a import eqn_1_13a__y_a
 
 class VacuumTheory:
-    eqn_1_13a__n = staticmethod(eqn_1_13a__n)
-    eqn_1_13a__n_a = staticmethod(eqn_1_13a__n_a)
-    eqn_1_13a__y_a = staticmethod(eqn_1_13a__y_a)
+    eqn_1_13a__n = eqn_1_13a__n
+    eqn_1_13a__n_a = eqn_1_13a__n_a
+    eqn_1_13a__y_a = eqn_1_13a__y_a
 
     @kwasak_static
-    def eqn_1_13a(n=None, n_a=None, y_a=None, **kwargs):
+    def eqn_1_13a(self, n=None, n_a=None, y_a=None):
         return

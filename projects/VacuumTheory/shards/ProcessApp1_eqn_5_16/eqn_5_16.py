@@ -10,10 +10,10 @@ from .eqn_5_16__p_i import eqn_5_16__p_i
 from .eqn_5_16__x_i import eqn_5_16__x_i
 
 class ProcessApp1:
-    eqn_5_16__H_i = staticmethod(eqn_5_16__H_i)
-    eqn_5_16__p_i = staticmethod(eqn_5_16__p_i)
-    eqn_5_16__x_i = staticmethod(eqn_5_16__x_i)
+    eqn_5_16__H_i = eqn_5_16__H_i
+    eqn_5_16__p_i = eqn_5_16__p_i
+    eqn_5_16__x_i = eqn_5_16__x_i
 
     @kwasak_static
-    def eqn_5_16(H_i=None, p_i=None, x_i=None, **kwargs):
+    def eqn_5_16(self, H_i=None, p_i=None, x_i=None):
         return

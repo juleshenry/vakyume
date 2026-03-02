@@ -10,10 +10,10 @@ from .eqn_10_3__Q_gas_cap import eqn_10_3__Q_gas
 from .eqn_10_3__T_cap import eqn_10_3__T
 
 class LiquidRing:
-    eqn_10_3__N_mfw = staticmethod(eqn_10_3__N_mfw)
-    eqn_10_3__Q_gas = staticmethod(eqn_10_3__Q_gas)
-    eqn_10_3__T = staticmethod(eqn_10_3__T)
+    eqn_10_3__N_mfw = eqn_10_3__N_mfw
+    eqn_10_3__Q_gas = eqn_10_3__Q_gas
+    eqn_10_3__T = eqn_10_3__T
 
     @kwasak_static
-    def eqn_10_3(N_mfw=None, Q_gas=None, T=None, **kwargs):
+    def eqn_10_3(self, N_mfw=None, Q_gas=None, T=None):
         return

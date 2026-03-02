@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_26__q(D: float, L: float, P_downstream: float, P_p: float, P_upstream: float, mu: float, **kwargs):
+def eqn_2_26__q(self, D: float, L: float, P_downstream: float, P_p: float, P_upstream: float, mu: float, **kwargs):
     # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
     result = []
     q = 0.0245436926061703*D**4*(-P_downstream + P_upstream)/(L*mu)

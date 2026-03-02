@@ -11,11 +11,11 @@ from .eqn_10_10__mu import eqn_10_10__mu
 from .eqn_10_10__rho import eqn_10_10__rho
 
 class LiquidRing:
-    eqn_10_10__bhp = staticmethod(eqn_10_10__bhp)
-    eqn_10_10__bhp_0 = staticmethod(eqn_10_10__bhp_0)
-    eqn_10_10__mu = staticmethod(eqn_10_10__mu)
-    eqn_10_10__rho = staticmethod(eqn_10_10__rho)
+    eqn_10_10__bhp = eqn_10_10__bhp
+    eqn_10_10__bhp_0 = eqn_10_10__bhp_0
+    eqn_10_10__mu = eqn_10_10__mu
+    eqn_10_10__rho = eqn_10_10__rho
 
     @kwasak_static
-    def eqn_10_10(bhp=None, bhp_0=None, mu=None, rho=None, **kwargs):
+    def eqn_10_10(self, bhp=None, bhp_0=None, mu=None, rho=None):
         return

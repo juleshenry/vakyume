@@ -11,11 +11,11 @@ from .eqn_5_14__T_cap import eqn_5_14__T
 from .eqn_5_14__W_E_cap import eqn_5_14__W_E
 
 class ProcessApp1:
-    eqn_5_14__M = staticmethod(eqn_5_14__M)
-    eqn_5_14__P_0 = staticmethod(eqn_5_14__P_0)
-    eqn_5_14__T = staticmethod(eqn_5_14__T)
-    eqn_5_14__W_E = staticmethod(eqn_5_14__W_E)
+    eqn_5_14__M = eqn_5_14__M
+    eqn_5_14__P_0 = eqn_5_14__P_0
+    eqn_5_14__T = eqn_5_14__T
+    eqn_5_14__W_E = eqn_5_14__W_E
 
     @kwasak_static
-    def eqn_5_14(M=None, P_0=None, T=None, W_E=None, **kwargs):
+    def eqn_5_14(self, M=None, P_0=None, T=None, W_E=None):
         return

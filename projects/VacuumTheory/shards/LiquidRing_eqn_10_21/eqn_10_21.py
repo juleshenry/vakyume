@@ -10,10 +10,10 @@ from .eqn_10_21__P_d_cap import eqn_10_21__P_d
 from .eqn_10_21__P_prime_cap import eqn_10_21__P_prime
 
 class LiquidRing:
-    eqn_10_21__P = staticmethod(eqn_10_21__P)
-    eqn_10_21__P_d = staticmethod(eqn_10_21__P_d)
-    eqn_10_21__P_prime = staticmethod(eqn_10_21__P_prime)
+    eqn_10_21__P = eqn_10_21__P
+    eqn_10_21__P_d = eqn_10_21__P_d
+    eqn_10_21__P_prime = eqn_10_21__P_prime
 
     @kwasak_static
-    def eqn_10_21(P=None, P_d=None, P_prime=None, **kwargs):
+    def eqn_10_21(self, P=None, P_d=None, P_prime=None):
         return

@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_3_4__KAPPA(P: float, V: float, **kwargs):
+def eqn_3_4__KAPPA(self, P: float, V: float, **kwargs):
     # [.pyeqn] P * V = KAPPA
     result = []
     KAPPA = P*V

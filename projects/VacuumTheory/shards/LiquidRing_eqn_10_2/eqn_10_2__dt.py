@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_10_2__dt(PS: float, Q_gas: float, V: float, dP: float, **kwargs):
+def eqn_10_2__dt(self, PS: float, Q_gas: float, V: float, dP: float, **kwargs):
     # [.pyeqn] PS = - V * dP / dt + Q_gas
     result = []
     dt = -V*dP/(PS - Q_gas)

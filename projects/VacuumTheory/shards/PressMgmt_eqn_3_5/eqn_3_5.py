@@ -11,11 +11,11 @@ from .eqn_3_5__V_cap import eqn_3_5__V
 from .eqn_3_5__V_P_cap import eqn_3_5__V_P
 
 class PressMgmt:
-    eqn_3_5__P = staticmethod(eqn_3_5__P)
-    eqn_3_5__P_P = staticmethod(eqn_3_5__P_P)
-    eqn_3_5__V = staticmethod(eqn_3_5__V)
-    eqn_3_5__V_P = staticmethod(eqn_3_5__V_P)
+    eqn_3_5__P = eqn_3_5__P
+    eqn_3_5__P_P = eqn_3_5__P_P
+    eqn_3_5__V = eqn_3_5__V
+    eqn_3_5__V_P = eqn_3_5__V_P
 
     @kwasak_static
-    def eqn_3_5(P=None, P_P=None, V=None, V_P=None, **kwargs):
+    def eqn_3_5(self, P=None, P_P=None, V=None, V_P=None):
         return

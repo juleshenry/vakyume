@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_3__v(T: float, k: float, m: float, **kwargs):
+def eqn_1_3__v(self, T: float, k: float, m: float, **kwargs):
     # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
     result = []
     v = -1.73205080756888*sqrt(T*k/m)

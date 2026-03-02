@@ -12,12 +12,12 @@ from .eqn_1_11__W_cap import eqn_1_11__W
 from .eqn_1_11__q import eqn_1_11__q
 
 class VacuumTheory:
-    eqn_1_11__M = staticmethod(eqn_1_11__M)
-    eqn_1_11__P = staticmethod(eqn_1_11__P)
-    eqn_1_11__T = staticmethod(eqn_1_11__T)
-    eqn_1_11__W = staticmethod(eqn_1_11__W)
-    eqn_1_11__q = staticmethod(eqn_1_11__q)
+    eqn_1_11__M = eqn_1_11__M
+    eqn_1_11__P = eqn_1_11__P
+    eqn_1_11__T = eqn_1_11__T
+    eqn_1_11__W = eqn_1_11__W
+    eqn_1_11__q = eqn_1_11__q
 
     @kwasak_static
-    def eqn_1_11(M=None, P=None, T=None, W=None, q=None, **kwargs):
+    def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
         return

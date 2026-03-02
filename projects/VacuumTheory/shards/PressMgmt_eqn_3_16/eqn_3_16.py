@@ -8,8 +8,8 @@ from vakyume.kwasak import kwasak_static
 from .eqn_3_16__V_div_V_P_MAX_cap import eqn_3_16__V_div_V_P_MAX
 
 class PressMgmt:
-    eqn_3_16__V_div_V_P_MAX = staticmethod(eqn_3_16__V_div_V_P_MAX)
+    eqn_3_16__V_div_V_P_MAX = eqn_3_16__V_div_V_P_MAX
 
     @kwasak_static
-    def eqn_3_16(V_div_V_P_MAX=None, **kwargs):
+    def eqn_3_16(self, V_div_V_P_MAX=None):
         return

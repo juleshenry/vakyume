@@ -10,10 +10,10 @@ from .eqn_8_5__actual_brake_horsepower import eqn_8_5__actual_brake_horsepower
 from .eqn_8_5__theoretical_adiabatic_horsepower import eqn_8_5__theoretical_adiabatic_horsepower
 
 class SelectingPump:
-    eqn_8_5__Eff = staticmethod(eqn_8_5__Eff)
-    eqn_8_5__actual_brake_horsepower = staticmethod(eqn_8_5__actual_brake_horsepower)
-    eqn_8_5__theoretical_adiabatic_horsepower = staticmethod(eqn_8_5__theoretical_adiabatic_horsepower)
+    eqn_8_5__Eff = eqn_8_5__Eff
+    eqn_8_5__actual_brake_horsepower = eqn_8_5__actual_brake_horsepower
+    eqn_8_5__theoretical_adiabatic_horsepower = eqn_8_5__theoretical_adiabatic_horsepower
 
     @kwasak_static
-    def eqn_8_5(Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None, **kwargs):
+    def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
         return

@@ -10,10 +10,10 @@ from .eqn_2_10__delta_P_cap import eqn_2_10__delta_P
 from .eqn_2_10__oper_press import eqn_2_10__oper_press
 
 class FluidFlowVacuumLines:
-    eqn_2_10__Suc_Pres = staticmethod(eqn_2_10__Suc_Pres)
-    eqn_2_10__delta_P = staticmethod(eqn_2_10__delta_P)
-    eqn_2_10__oper_press = staticmethod(eqn_2_10__oper_press)
+    eqn_2_10__Suc_Pres = eqn_2_10__Suc_Pres
+    eqn_2_10__delta_P = eqn_2_10__delta_P
+    eqn_2_10__oper_press = eqn_2_10__oper_press
 
     @kwasak_static
-    def eqn_2_10(Suc_Pres=None, delta_P=None, oper_press=None, **kwargs):
+    def eqn_2_10(self, Suc_Pres=None, delta_P=None, oper_press=None):
         return

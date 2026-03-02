@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_6__v_a(lambd: float, mu: float, rho: float, **kwargs):
+def eqn_2_6__v_a(self, lambd: float, mu: float, rho: float, **kwargs):
     # [.pyeqn] mu = 0.35 * rho * lambd * v_a
     result = []
     v_a = 2.85714285714286*mu/(lambd*rho)

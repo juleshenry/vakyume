@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_19b__h(Re: float, mu: float, rho: float, v: float, w: float, **kwargs):
+def eqn_2_19b__h(self, Re: float, mu: float, rho: float, v: float, w: float, **kwargs):
     # [.pyeqn] Re = (2 * w * h * rho * v) / ((w + h) * mu)
     result = []
     h = Re*mu*w/(-Re*mu + 2*rho*v*w)

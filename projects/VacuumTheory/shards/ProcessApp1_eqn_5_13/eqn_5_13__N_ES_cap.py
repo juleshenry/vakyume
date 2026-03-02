@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_5_13__N_ES(HETP: float, H_p: float, **kwargs):
+def eqn_5_13__N_ES(self, HETP: float, H_p: float, **kwargs):
     # [.pyeqn] H_p = N_ES * HETP
     result = []
     N_ES = H_p/HETP

@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_3_11__P(A_C: float, H_2: float, V: float, **kwargs):
+def eqn_3_11__P(self, A_C: float, H_2: float, V: float, **kwargs):
     # [.pyeqn] P = A_C / V * (H_2) ** 2
     result = []
     P = A_C*H_2**2/V

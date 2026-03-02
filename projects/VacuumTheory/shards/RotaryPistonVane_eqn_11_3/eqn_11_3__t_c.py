@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_11_3__t_c(F_s: float, t: float, **kwargs):
+def eqn_11_3__t_c(self, F_s: float, t: float, **kwargs):
     # [.pyeqn] t = t_c * F_s
     result = []
     t_c = t/F_s

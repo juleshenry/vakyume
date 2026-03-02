@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_11__M(P: float, T: float, W: float, q: float, **kwargs):
+def eqn_1_11__M(self, P: float, T: float, W: float, q: float, **kwargs):
     # [.pyeqn] q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
     result = []
     M = 6821*T*W/(738*P*q)

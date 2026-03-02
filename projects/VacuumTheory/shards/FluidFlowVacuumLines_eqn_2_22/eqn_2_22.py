@@ -10,10 +10,10 @@ from .eqn_2_22__Q_throughput_cap import eqn_2_22__Q_throughput
 from .eqn_2_22__S_p_cap import eqn_2_22__S_p
 
 class FluidFlowVacuumLines:
-    eqn_2_22__P_s = staticmethod(eqn_2_22__P_s)
-    eqn_2_22__Q_throughput = staticmethod(eqn_2_22__Q_throughput)
-    eqn_2_22__S_p = staticmethod(eqn_2_22__S_p)
+    eqn_2_22__P_s = eqn_2_22__P_s
+    eqn_2_22__Q_throughput = eqn_2_22__Q_throughput
+    eqn_2_22__S_p = eqn_2_22__S_p
 
     @kwasak_static
-    def eqn_2_22(P_s=None, Q_throughput=None, S_p=None, **kwargs):
+    def eqn_2_22(self, P_s=None, Q_throughput=None, S_p=None):
         return

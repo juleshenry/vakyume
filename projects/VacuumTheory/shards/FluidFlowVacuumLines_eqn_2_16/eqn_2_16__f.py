@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_16__f(Re: float, **kwargs):
+def eqn_2_16__f(self, Re: float, **kwargs):
     # [.pyeqn] f = 64 / Re
     result = []
     f = 64/Re

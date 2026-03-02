@@ -10,10 +10,10 @@ from .eqn_3_4__P_cap import eqn_3_4__P
 from .eqn_3_4__V_cap import eqn_3_4__V
 
 class PressMgmt:
-    eqn_3_4__KAPPA = staticmethod(eqn_3_4__KAPPA)
-    eqn_3_4__P = staticmethod(eqn_3_4__P)
-    eqn_3_4__V = staticmethod(eqn_3_4__V)
+    eqn_3_4__KAPPA = eqn_3_4__KAPPA
+    eqn_3_4__P = eqn_3_4__P
+    eqn_3_4__V = eqn_3_4__V
 
     @kwasak_static
-    def eqn_3_4(KAPPA=None, P=None, V=None, **kwargs):
+    def eqn_3_4(self, KAPPA=None, P=None, V=None):
         return

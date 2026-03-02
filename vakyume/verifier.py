@@ -22,6 +22,13 @@ import sys
 class Verify:
     def __init__(self, lib_class, pyeqn=None, subshards_dir=None):
         self.lib_class = lib_class
+        # Instantiate the class since methods are now instance methods
+        try:
+            self.lib_instance = lib_class()
+        except Exception as e:
+            print(f"  [Verify] WARNING: Could not instantiate {lib_class.__name__}: {e}. Falling back to class-level calls.")
+            self.lib_instance = lib_class
+
         self.pyeqn = pyeqn
         self.subshards_dir = subshards_dir
         self.harmony_func = None
@@ -193,7 +200,7 @@ class Verify:
         num_trials = 3
 
         for source_var in variants:
-            variant_method = getattr(self.lib_class, f"{base_eq}__{source_var}")
+            variant_method = getattr(self.lib_instance, f"{base_eq}__{source_var}")
             print(f" |- Testing source variant: {source_var}")
 
             trial_matches = []
@@ -254,7 +261,7 @@ class Verify:
                                 continue
 
                             target_method = getattr(
-                                self.lib_class, f"{base_eq}__{target_var}"
+                                self.lib_instance, f"{base_eq}__{target_var}"
                             )
                             target_inputs = {
                                 p: v for p, v in full_set.items() if p != target_var

@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_22__P_s(Q_throughput: float, S_p: float, **kwargs):
+def eqn_2_22__P_s(self, Q_throughput: float, S_p: float, **kwargs):
     # [.pyeqn] Q_throughput = S_p * P_s
     result = []
     P_s = Q_throughput/S_p

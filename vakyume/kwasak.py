@@ -59,7 +59,10 @@ import inspect
 def kwasak_static(func):
     # fmt:off
     def wrapper(self, **kw):
-        if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:
+        params = list(inspect.signature(func).parameters)
+        if params and params[-1] == 'kwargs':
+            params = params[:-1]
+        if len(m:=[w for w in params if w not in kw])-1:
             # Apparently, there is a bug in inspect.siganature mro() causing `X_1` to be preferred to match `X_10` when calling func
             # print(kw)
             # print(str(func))

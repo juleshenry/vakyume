@@ -12,12 +12,12 @@ from .eqn_1_9__T_cap import eqn_1_9__T
 from .eqn_1_9__rho import eqn_1_9__rho
 
 class VacuumTheory:
-    eqn_1_9__M = staticmethod(eqn_1_9__M)
-    eqn_1_9__P = staticmethod(eqn_1_9__P)
-    eqn_1_9__R = staticmethod(eqn_1_9__R)
-    eqn_1_9__T = staticmethod(eqn_1_9__T)
-    eqn_1_9__rho = staticmethod(eqn_1_9__rho)
+    eqn_1_9__M = eqn_1_9__M
+    eqn_1_9__P = eqn_1_9__P
+    eqn_1_9__R = eqn_1_9__R
+    eqn_1_9__T = eqn_1_9__T
+    eqn_1_9__rho = eqn_1_9__rho
 
     @kwasak_static
-    def eqn_1_9(M=None, P=None, R=None, T=None, rho=None, **kwargs):
+    def eqn_1_9(self, M=None, P=None, R=None, T=None, rho=None):
         return

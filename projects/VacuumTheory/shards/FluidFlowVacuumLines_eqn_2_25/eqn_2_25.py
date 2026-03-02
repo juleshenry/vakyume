@@ -11,11 +11,11 @@ from .eqn_2_25__P_2_cap import eqn_2_25__P_2
 from .eqn_2_25__Q_throughput_cap import eqn_2_25__Q_throughput
 
 class FluidFlowVacuumLines:
-    eqn_2_25__C = staticmethod(eqn_2_25__C)
-    eqn_2_25__P_1 = staticmethod(eqn_2_25__P_1)
-    eqn_2_25__P_2 = staticmethod(eqn_2_25__P_2)
-    eqn_2_25__Q_throughput = staticmethod(eqn_2_25__Q_throughput)
+    eqn_2_25__C = eqn_2_25__C
+    eqn_2_25__P_1 = eqn_2_25__P_1
+    eqn_2_25__P_2 = eqn_2_25__P_2
+    eqn_2_25__Q_throughput = eqn_2_25__Q_throughput
 
     @kwasak_static
-    def eqn_2_25(C=None, P_1=None, P_2=None, Q_throughput=None, **kwargs):
+    def eqn_2_25(self, C=None, P_1=None, P_2=None, Q_throughput=None):
         return

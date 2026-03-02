@@ -12,12 +12,12 @@ from .eqn_3_2__P_cap import eqn_3_2__P
 from .eqn_3_2__rho import eqn_3_2__rho
 
 class PressMgmt:
-    eqn_3_2__G = staticmethod(eqn_3_2__G)
-    eqn_3_2__G_C = staticmethod(eqn_3_2__G_C)
-    eqn_3_2__H = staticmethod(eqn_3_2__H)
-    eqn_3_2__P = staticmethod(eqn_3_2__P)
-    eqn_3_2__rho = staticmethod(eqn_3_2__rho)
+    eqn_3_2__G = eqn_3_2__G
+    eqn_3_2__G_C = eqn_3_2__G_C
+    eqn_3_2__H = eqn_3_2__H
+    eqn_3_2__P = eqn_3_2__P
+    eqn_3_2__rho = eqn_3_2__rho
 
     @kwasak_static
-    def eqn_3_2(G=None, G_C=None, H=None, P=None, rho=None, **kwargs):
+    def eqn_3_2(self, G=None, G_C=None, H=None, P=None, rho=None):
         return

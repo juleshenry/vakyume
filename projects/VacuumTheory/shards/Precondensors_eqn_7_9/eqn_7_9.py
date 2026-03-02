@@ -12,12 +12,12 @@ from .eqn_7_9__del_T_cap import eqn_7_9__del_T
 from .eqn_7_9__rho import eqn_7_9__rho
 
 class Precondensors:
-    eqn_7_9__L_c = staticmethod(eqn_7_9__L_c)
-    eqn_7_9__Q_condensor_heat_duty = staticmethod(eqn_7_9__Q_condensor_heat_duty)
-    eqn_7_9__c_p = staticmethod(eqn_7_9__c_p)
-    eqn_7_9__del_T = staticmethod(eqn_7_9__del_T)
-    eqn_7_9__rho = staticmethod(eqn_7_9__rho)
+    eqn_7_9__L_c = eqn_7_9__L_c
+    eqn_7_9__Q_condensor_heat_duty = eqn_7_9__Q_condensor_heat_duty
+    eqn_7_9__c_p = eqn_7_9__c_p
+    eqn_7_9__del_T = eqn_7_9__del_T
+    eqn_7_9__rho = eqn_7_9__rho
 
     @kwasak_static
-    def eqn_7_9(L_c=None, Q_condensor_heat_duty=None, c_p=None, del_T=None, rho=None, **kwargs):
+    def eqn_7_9(self, L_c=None, Q_condensor_heat_duty=None, c_p=None, del_T=None, rho=None):
         return

@@ -15,15 +15,15 @@ from .eqn_10_20__p_c import eqn_10_20__p_c
 from .eqn_10_20__p_s import eqn_10_20__p_s
 
 class LiquidRing:
-    eqn_10_20__P = staticmethod(eqn_10_20__P)
-    eqn_10_20__S_0 = staticmethod(eqn_10_20__S_0)
-    eqn_10_20__S_p = staticmethod(eqn_10_20__S_p)
-    eqn_10_20__T_e = staticmethod(eqn_10_20__T_e)
-    eqn_10_20__T_i = staticmethod(eqn_10_20__T_i)
-    eqn_10_20__p_0 = staticmethod(eqn_10_20__p_0)
-    eqn_10_20__p_c = staticmethod(eqn_10_20__p_c)
-    eqn_10_20__p_s = staticmethod(eqn_10_20__p_s)
+    eqn_10_20__P = eqn_10_20__P
+    eqn_10_20__S_0 = eqn_10_20__S_0
+    eqn_10_20__S_p = eqn_10_20__S_p
+    eqn_10_20__T_e = eqn_10_20__T_e
+    eqn_10_20__T_i = eqn_10_20__T_i
+    eqn_10_20__p_0 = eqn_10_20__p_0
+    eqn_10_20__p_c = eqn_10_20__p_c
+    eqn_10_20__p_s = eqn_10_20__p_s
 
     @kwasak_static
-    def eqn_10_20(P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None, **kwargs):
+    def eqn_10_20(self, P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None):
         return

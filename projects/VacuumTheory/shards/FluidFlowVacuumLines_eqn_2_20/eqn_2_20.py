@@ -10,10 +10,10 @@ from .eqn_2_20__sum_equivalent_length import eqn_2_20__sum_equivalent_length
 from .eqn_2_20__sum_pipe import eqn_2_20__sum_pipe
 
 class FluidFlowVacuumLines:
-    eqn_2_20__L = staticmethod(eqn_2_20__L)
-    eqn_2_20__sum_equivalent_length = staticmethod(eqn_2_20__sum_equivalent_length)
-    eqn_2_20__sum_pipe = staticmethod(eqn_2_20__sum_pipe)
+    eqn_2_20__L = eqn_2_20__L
+    eqn_2_20__sum_equivalent_length = eqn_2_20__sum_equivalent_length
+    eqn_2_20__sum_pipe = eqn_2_20__sum_pipe
 
     @kwasak_static
-    def eqn_2_20(L=None, sum_equivalent_length=None, sum_pipe=None, **kwargs):
+    def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
         return

@@ -9,9 +9,9 @@ from .eqn_2_32__C_series_cap import eqn_2_32__C_series
 from .eqn_2_32__geometric_sum_C_cap import eqn_2_32__geometric_sum_C
 
 class FluidFlowVacuumLines:
-    eqn_2_32__C_series = staticmethod(eqn_2_32__C_series)
-    eqn_2_32__geometric_sum_C = staticmethod(eqn_2_32__geometric_sum_C)
+    eqn_2_32__C_series = eqn_2_32__C_series
+    eqn_2_32__geometric_sum_C = eqn_2_32__geometric_sum_C
 
     @kwasak_static
-    def eqn_2_32(C_series=None, geometric_sum_C=None, **kwargs):
+    def eqn_2_32(self, C_series=None, geometric_sum_C=None):
         return

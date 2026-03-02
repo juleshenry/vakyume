@@ -4,7 +4,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_12__Total_P(sum_partial_pressures: float, **kwargs):
+def eqn_1_12__Total_P(self, sum_partial_pressures: float, **kwargs):
     # [.pyeqn] Total_P = sum_partial_pressures
     result = []
     Total_P = sum_partial_pressures

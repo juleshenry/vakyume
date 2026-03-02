@@ -11,11 +11,11 @@ from .eqn_2_7__m import eqn_2_7__m
 from .eqn_2_7__v_a import eqn_2_7__v_a
 
 class FluidFlowVacuumLines:
-    eqn_2_7__T = staticmethod(eqn_2_7__T)
-    eqn_2_7__k = staticmethod(eqn_2_7__k)
-    eqn_2_7__m = staticmethod(eqn_2_7__m)
-    eqn_2_7__v_a = staticmethod(eqn_2_7__v_a)
+    eqn_2_7__T = eqn_2_7__T
+    eqn_2_7__k = eqn_2_7__k
+    eqn_2_7__m = eqn_2_7__m
+    eqn_2_7__v_a = eqn_2_7__v_a
 
     @kwasak_static
-    def eqn_2_7(T=None, k=None, m=None, v_a=None, **kwargs):
+    def eqn_2_7(self, T=None, k=None, m=None, v_a=None):
         return

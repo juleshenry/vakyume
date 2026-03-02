@@ -9,9 +9,9 @@ from .eqn_7_15__U_cap import eqn_7_15__U
 from .eqn_7_15__sum_R_cap import eqn_7_15__sum_R
 
 class Precondensors:
-    eqn_7_15__U = staticmethod(eqn_7_15__U)
-    eqn_7_15__sum_R = staticmethod(eqn_7_15__sum_R)
+    eqn_7_15__U = eqn_7_15__U
+    eqn_7_15__sum_R = eqn_7_15__sum_R
 
     @kwasak_static
-    def eqn_7_15(U=None, sum_R=None, **kwargs):
+    def eqn_7_15(self, U=None, sum_R=None):
         return

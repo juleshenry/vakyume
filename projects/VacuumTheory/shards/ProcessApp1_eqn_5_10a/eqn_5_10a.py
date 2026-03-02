@@ -10,10 +10,10 @@ from .eqn_5_10a__L_0_cap import eqn_5_10a__L_0
 from .eqn_5_10a__V_1_cap import eqn_5_10a__V_1
 
 class ProcessApp1:
-    eqn_5_10a__D = staticmethod(eqn_5_10a__D)
-    eqn_5_10a__L_0 = staticmethod(eqn_5_10a__L_0)
-    eqn_5_10a__V_1 = staticmethod(eqn_5_10a__V_1)
+    eqn_5_10a__D = eqn_5_10a__D
+    eqn_5_10a__L_0 = eqn_5_10a__L_0
+    eqn_5_10a__V_1 = eqn_5_10a__V_1
 
     @kwasak_static
-    def eqn_5_10a(D=None, L_0=None, V_1=None, **kwargs):
+    def eqn_5_10a(self, D=None, L_0=None, V_1=None):
         return

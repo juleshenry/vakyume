@@ -13,13 +13,13 @@ from .eqn_2_13__q import eqn_2_13__q
 from .eqn_2_13__rho import eqn_2_13__rho
 
 class FluidFlowVacuumLines:
-    eqn_2_13__L = staticmethod(eqn_2_13__L)
-    eqn_2_13__d = staticmethod(eqn_2_13__d)
-    eqn_2_13__delta_P = staticmethod(eqn_2_13__delta_P)
-    eqn_2_13__f = staticmethod(eqn_2_13__f)
-    eqn_2_13__q = staticmethod(eqn_2_13__q)
-    eqn_2_13__rho = staticmethod(eqn_2_13__rho)
+    eqn_2_13__L = eqn_2_13__L
+    eqn_2_13__d = eqn_2_13__d
+    eqn_2_13__delta_P = eqn_2_13__delta_P
+    eqn_2_13__f = eqn_2_13__f
+    eqn_2_13__q = eqn_2_13__q
+    eqn_2_13__rho = eqn_2_13__rho
 
     @kwasak_static
-    def eqn_2_13(L=None, d=None, delta_P=None, f=None, q=None, rho=None, **kwargs):
+    def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
         return

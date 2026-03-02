@@ -16,16 +16,16 @@ from .eqn_6_7__m_b import eqn_6_7__m_b
 from .eqn_6_7__m_v import eqn_6_7__m_v
 
 class ProcessApp2:
-    eqn_6_7__C_1 = staticmethod(eqn_6_7__C_1)
-    eqn_6_7__C_2 = staticmethod(eqn_6_7__C_2)
-    eqn_6_7__T_1 = staticmethod(eqn_6_7__T_1)
-    eqn_6_7__T_2 = staticmethod(eqn_6_7__T_2)
-    eqn_6_7__c_p = staticmethod(eqn_6_7__c_p)
-    eqn_6_7__delta_h_c = staticmethod(eqn_6_7__delta_h_c)
-    eqn_6_7__delta_h_v = staticmethod(eqn_6_7__delta_h_v)
-    eqn_6_7__m_b = staticmethod(eqn_6_7__m_b)
-    eqn_6_7__m_v = staticmethod(eqn_6_7__m_v)
+    eqn_6_7__C_1 = eqn_6_7__C_1
+    eqn_6_7__C_2 = eqn_6_7__C_2
+    eqn_6_7__T_1 = eqn_6_7__T_1
+    eqn_6_7__T_2 = eqn_6_7__T_2
+    eqn_6_7__c_p = eqn_6_7__c_p
+    eqn_6_7__delta_h_c = eqn_6_7__delta_h_c
+    eqn_6_7__delta_h_v = eqn_6_7__delta_h_v
+    eqn_6_7__m_b = eqn_6_7__m_b
+    eqn_6_7__m_v = eqn_6_7__m_v
 
     @kwasak_static
-    def eqn_6_7(C_1=None, C_2=None, T_1=None, T_2=None, c_p=None, delta_h_c=None, delta_h_v=None, m_b=None, m_v=None, **kwargs):
+    def eqn_6_7(self, C_1=None, C_2=None, T_1=None, T_2=None, c_p=None, delta_h_c=None, delta_h_v=None, m_b=None, m_v=None):
         return

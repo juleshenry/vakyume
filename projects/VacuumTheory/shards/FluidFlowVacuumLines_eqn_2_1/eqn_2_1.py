@@ -12,12 +12,12 @@ from .eqn_2_1__rho import eqn_2_1__rho
 from .eqn_2_1__v import eqn_2_1__v
 
 class FluidFlowVacuumLines:
-    eqn_2_1__D = staticmethod(eqn_2_1__D)
-    eqn_2_1__Re = staticmethod(eqn_2_1__Re)
-    eqn_2_1__mu = staticmethod(eqn_2_1__mu)
-    eqn_2_1__rho = staticmethod(eqn_2_1__rho)
-    eqn_2_1__v = staticmethod(eqn_2_1__v)
+    eqn_2_1__D = eqn_2_1__D
+    eqn_2_1__Re = eqn_2_1__Re
+    eqn_2_1__mu = eqn_2_1__mu
+    eqn_2_1__rho = eqn_2_1__rho
+    eqn_2_1__v = eqn_2_1__v
 
     @kwasak_static
-    def eqn_2_1(D=None, Re=None, mu=None, rho=None, v=None, **kwargs):
+    def eqn_2_1(self, D=None, Re=None, mu=None, rho=None, v=None):
         return

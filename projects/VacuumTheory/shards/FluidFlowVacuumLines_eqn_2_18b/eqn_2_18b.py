@@ -10,10 +10,10 @@ from .eqn_2_18b__h import eqn_2_18b__h
 from .eqn_2_18b__w import eqn_2_18b__w
 
 class FluidFlowVacuumLines:
-    eqn_2_18b__R_ll = staticmethod(eqn_2_18b__R_ll)
-    eqn_2_18b__h = staticmethod(eqn_2_18b__h)
-    eqn_2_18b__w = staticmethod(eqn_2_18b__w)
+    eqn_2_18b__R_ll = eqn_2_18b__R_ll
+    eqn_2_18b__h = eqn_2_18b__h
+    eqn_2_18b__w = eqn_2_18b__w
 
     @kwasak_static
-    def eqn_2_18b(R_ll=None, h=None, w=None, **kwargs):
+    def eqn_2_18b(self, R_ll=None, h=None, w=None):
         return

@@ -12,12 +12,12 @@ from .eqn_2_17__mu import eqn_2_17__mu
 from .eqn_2_17__v import eqn_2_17__v
 
 class FluidFlowVacuumLines:
-    eqn_2_17__L = staticmethod(eqn_2_17__L)
-    eqn_2_17__d = staticmethod(eqn_2_17__d)
-    eqn_2_17__delta_P = staticmethod(eqn_2_17__delta_P)
-    eqn_2_17__mu = staticmethod(eqn_2_17__mu)
-    eqn_2_17__v = staticmethod(eqn_2_17__v)
+    eqn_2_17__L = eqn_2_17__L
+    eqn_2_17__d = eqn_2_17__d
+    eqn_2_17__delta_P = eqn_2_17__delta_P
+    eqn_2_17__mu = eqn_2_17__mu
+    eqn_2_17__v = eqn_2_17__v
 
     @kwasak_static
-    def eqn_2_17(L=None, d=None, delta_P=None, mu=None, v=None, **kwargs):
+    def eqn_2_17(self, L=None, d=None, delta_P=None, mu=None, v=None):
         return

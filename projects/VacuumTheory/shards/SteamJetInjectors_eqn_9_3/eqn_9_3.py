@@ -11,11 +11,11 @@ from .eqn_9_3__t_e import eqn_9_3__t_e
 from .eqn_9_3__w_j import eqn_9_3__w_j
 
 class SteamJetInjectors:
-    eqn_9_3__P_s = staticmethod(eqn_9_3__P_s)
-    eqn_9_3__V = staticmethod(eqn_9_3__V)
-    eqn_9_3__t_e = staticmethod(eqn_9_3__t_e)
-    eqn_9_3__w_j = staticmethod(eqn_9_3__w_j)
+    eqn_9_3__P_s = eqn_9_3__P_s
+    eqn_9_3__V = eqn_9_3__V
+    eqn_9_3__t_e = eqn_9_3__t_e
+    eqn_9_3__w_j = eqn_9_3__w_j
 
     @kwasak_static
-    def eqn_9_3(P_s=None, V=None, t_e=None, w_j=None, **kwargs):
+    def eqn_9_3(self, P_s=None, V=None, t_e=None, w_j=None):
         return

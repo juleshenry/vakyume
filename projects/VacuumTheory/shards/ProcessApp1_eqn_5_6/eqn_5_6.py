@@ -11,11 +11,11 @@ from .eqn_5_6__p_i import eqn_5_6__p_i
 from .eqn_5_6__x_i import eqn_5_6__x_i
 
 class ProcessApp1:
-    eqn_5_6__P_0_i = staticmethod(eqn_5_6__P_0_i)
-    eqn_5_6__gamma_i = staticmethod(eqn_5_6__gamma_i)
-    eqn_5_6__p_i = staticmethod(eqn_5_6__p_i)
-    eqn_5_6__x_i = staticmethod(eqn_5_6__x_i)
+    eqn_5_6__P_0_i = eqn_5_6__P_0_i
+    eqn_5_6__gamma_i = eqn_5_6__gamma_i
+    eqn_5_6__p_i = eqn_5_6__p_i
+    eqn_5_6__x_i = eqn_5_6__x_i
 
     @kwasak_static
-    def eqn_5_6(P_0_i=None, gamma_i=None, p_i=None, x_i=None, **kwargs):
+    def eqn_5_6(self, P_0_i=None, gamma_i=None, p_i=None, x_i=None):
         return
