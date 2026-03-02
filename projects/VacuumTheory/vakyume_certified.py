@@ -723,6 +723,42 @@ class LiquidRing:
         result.append(p_s)
         return result
     @kwasak_static
+    def eqn_10_16(self, P=None, S_0=None, S_Th=None, p_0=None):
+        return
+
+    def eqn_10_16__P(self, S_0: float, S_Th: float, p_0: float, **kwargs):
+        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
+        result = []
+        P = p_0*(S_Th/S_0)**(5/3)/((S_Th/S_0)**1.66666666666667 - 1.0)
+        result.append(P)
+        P = p_0*(-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5/((-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5 - 1.0)
+        result.append(P)
+        P = p_0*(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5/((-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5 - 1.0)
+        result.append(P)
+        return result
+    def eqn_10_16__S_0(self, P: float, S_Th: float, p_0: float, **kwargs):
+        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
+        result = []
+        S_0 = S_Th/(P/(P - p_0))**(3/5)
+        result.append(S_0)
+        return result
+    def eqn_10_16__S_Th(self, P: float, S_0: float, p_0: float, **kwargs):
+        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
+        result = []
+        S_Th = S_0*(P/(P - p_0))**(3/5)
+        result.append(S_Th)
+        return result
+    def eqn_10_16__p_0(self, P: float, S_0: float, S_Th: float, **kwargs):
+        # [.pyeqn] S_Th = S_0 * (P / (P - p_0)) ** 0.6
+        result = []
+        p_0 = P - P/(S_Th/S_0)**(5/3)
+        result.append(p_0)
+        p_0 = P - P/(-0.5*(S_Th/S_0)**0.333333333333333 - 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
+        result.append(p_0)
+        p_0 = P - P/(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
+        result.append(p_0)
+        return result
+    @kwasak_static
     def eqn_10_17(self, P=None, S_0=None, S_Th=None, p_0=None, p_s=None):
         return
 

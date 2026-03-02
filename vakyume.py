@@ -69,6 +69,16 @@ def main():
     parser.add_argument(
         "--overwrite", action="store_true", help="Overwrite existing shards"
     )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Show detailed verification output for all families",
+    )
+    parser.add_argument(
+        "--repair-only",
+        action="store_true",
+        help="Skip shard generation and re-verification of passing families; only repair broken ones",
+    )
 
     args = parser.parse_args()
 
@@ -92,7 +102,11 @@ def main():
     # Step 3: Run Python Pipeline
     print(f"Starting Vakyume pipeline for project '{project_dir}'...")
     analysis = run_pipeline(
-        project_dir=project_dir, max_rounds=args.max_rounds, overwrite=args.overwrite
+        project_dir=project_dir,
+        max_rounds=args.max_rounds,
+        overwrite=args.overwrite,
+        verbose=args.verbose,
+        repair_only=args.repair_only,
     )
 
     print("\nPipeline Stage: Verification & Certification Complete.")

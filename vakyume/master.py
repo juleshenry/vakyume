@@ -38,7 +38,11 @@ class VakyumeEncoder(json.JSONEncoder):
         if hasattr(obj, "evalf"):
             try:
                 if hasattr(obj, "is_number") and obj.is_number:
-                    if hasattr(obj, "is_complex") and obj.is_complex and not obj.is_real:
+                    if (
+                        hasattr(obj, "is_complex")
+                        and obj.is_complex
+                        and not obj.is_real
+                    ):
                         return str(obj)
                     return float(obj.evalf())
                 return str(obj)
@@ -241,7 +245,9 @@ def shard_from_chapters(ctx: PipelineContext):
                     shard_content += f"{TAB}# [.pyeqn] {line.strip()}\n"
 
                     try:
-                        solns = solver.get_solns_vanilla_nf(nf, Symbol(token), tokens=tokes)
+                        solns = solver.get_solns_vanilla_nf(
+                            nf, Symbol(token), tokens=tokes
+                        )
                         if solns:
                             shard_content += f"{TAB}result = []\n"
                             for soln in solns:
@@ -279,15 +285,13 @@ def shard_from_chapters(ctx: PipelineContext):
                             sf.write(f"{TAB}{method_name} = {method_name}\n")
                         sf.write(f"\n{TAB}@kwasak_static\n")
                         tokes_str = ", ".join(f"{t}=None" for t in tokes)
-                        sf.write(
-                            f"{TAB}def eqn_{eqn_number}(self, {tokes_str}):\n"
-                        )
+                        sf.write(f"{TAB}def eqn_{eqn_number}(self, {tokes_str}):\n")
                         sf.write(f"{TAB * 2}return\n")
 
     print(f"Scraped {created_count} new shards.")
 
 
-def verify_family(ctx: PipelineContext, family_name: str):
+def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
     """Verifies all shards in an equation family using cross-verification (golden tuple)."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
     if not os.path.exists(family_dir):
@@ -299,7 +303,7 @@ def verify_family(ctx: PipelineContext, family_name: str):
     if not eqn_num_match:
         return {"error": f"Invalid family name {family_name}"}
     eqn_number = eqn_num_match.group(1)
-    
+
     main_shard_path = os.path.join(family_dir, f"eqn_{eqn_number}.py")
     if not os.path.exists(main_shard_path):
         return {"error": f"Main shard {main_shard_path} not found"}
@@ -307,14 +311,14 @@ def verify_family(ctx: PipelineContext, family_name: str):
     # Ensure shards_dir is in sys.path
     if ctx.shards_dir not in sys.path:
         sys.path.append(ctx.shards_dir)
-    
+
     # We need the parent directory of family_dir in sys.path to import it as a package
     parent_dir = os.path.dirname(family_dir)
     if parent_dir not in sys.path:
         sys.path.append(parent_dir)
 
     module_name = f"{family_name}.eqn_{eqn_number}"
-    
+
     try:
         # Import the main shard
         # Because we use relative imports in the main shard (from .eqn_... import ...),
@@ -341,7 +345,7 @@ def verify_family(ctx: PipelineContext, family_name: str):
         if not os.path.exists(subshards_dir):
             os.makedirs(subshards_dir)
 
-        v = Verify(cls, pyeqn=pyeqn, subshards_dir=subshards_dir)
+        v = Verify(cls, pyeqn=pyeqn, subshards_dir=subshards_dir, verbose=verbose)
         raw_results = v.verify()
 
         verification_results = {}
@@ -359,11 +363,17 @@ def verify_family(ctx: PipelineContext, family_name: str):
         }
     except Exception as e:
         import traceback
+
         return {"error": f"Verification failed: {e}\n{traceback.format_exc()}"}
 
 
-def verify_all_shards(ctx: PipelineContext):
-    print("Verifying families...")
+def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
+    if skip_families:
+        print(
+            f"Verifying families... (skipping {len(skip_families)} previously solved)"
+        )
+    else:
+        print("Verifying families...")
     all_results = {}
     family_names = sorted(
         [
@@ -373,11 +383,42 @@ def verify_all_shards(ctx: PipelineContext):
         ]
     )
 
-    iterator = (
-        tqdm(family_names, desc="Verifying", unit="family") if tqdm else family_names
-    )
+    to_verify = [f for f in family_names if not skip_families or f not in skip_families]
+
+    iterator = tqdm(to_verify, desc="Verifying", unit="family") if tqdm else to_verify
     for family_name in iterator:
-        all_results[family_name] = verify_family(ctx, family_name)
+        all_results[family_name] = verify_family(ctx, family_name, verbose=verbose)
+
+    # For skipped families, insert a synthetic passing result so analyze_results
+    # categorizes them as solved without re-running verification.
+    if skip_families:
+        for family_name in family_names:
+            if family_name in skip_families and family_name not in all_results:
+                eqn_num_match = re.search(r"_eqn_(.*)", family_name)
+                if eqn_num_match:
+                    eqn_number = eqn_num_match.group(1)
+                    # Build a synthetic result where every variant has a perfect score.
+                    # We discover variants from the shard files on disk.
+                    family_dir = os.path.join(ctx.shards_dir, family_name)
+                    variant_files = [
+                        f
+                        for f in os.listdir(family_dir)
+                        if f.endswith(".py") and "__" in f
+                    ]
+                    variant_names = []
+                    for vf in variant_files:
+                        # e.g. eqn_1_1__x.py -> x (strip _cap suffix if present)
+                        raw = vf.replace(".py", "").split("__")[-1]
+                        if raw.endswith("_cap"):
+                            raw = raw[:-4]
+                        variant_names.append(raw)
+                    num_v = len(variant_names)
+                    scores = {v: num_v for v in variant_names}
+                    all_results[family_name] = {
+                        "results": {f"eqn_{eqn_number}": scores},
+                        "mismatches": {},
+                        "shard_errors": {},
+                    }
 
     with open(os.path.join(ctx.reports_dir, "verification_results.json"), "w") as rf:
         json.dump(all_results, rf, indent=4, cls=VakyumeEncoder)
@@ -416,11 +457,7 @@ def analyze_results(ctx: PipelineContext, all_results):
                 for v, score in variants_inner.items()
                 if score == best_score and score >= num_v
             ]
-            broken = [
-                v
-                for v, score in variants_inner.items()
-                if score < num_v
-            ]
+            broken = [v for v, score in variants_inner.items() if score < num_v]
 
             if broken:
                 all_solved = False
@@ -451,7 +488,7 @@ def attempt_repair_shard(
     trusted_variants: list,
     scores: dict,
     mismatches: dict,
-    error: str = None
+    error: str = None,
 ):
     """Repairs a single shard file."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
@@ -494,9 +531,7 @@ def attempt_repair_shard(
             else getattr(chunk, "message", None)
         )
         content = (
-            msg.get("content")
-            if isinstance(msg, dict)
-            else getattr(msg, "content", "")
+            msg.get("content") if isinstance(msg, dict) else getattr(msg, "content", "")
         )
         raw += str(content or "")
 
@@ -511,7 +546,9 @@ def attempt_repair_shard(
         params = header_match.group(1).strip()
         if not params.startswith("self"):
             new_params = "self, " + params if params else "self"
-            code_text = code_text.replace(header_match.group(0), f"def {method_name}({new_params}):")
+            code_text = code_text.replace(
+                header_match.group(0), f"def {method_name}({new_params}):"
+            )
 
     try:
         ast.parse(code_text)
@@ -525,7 +562,7 @@ def attempt_repair_shard(
         )
         if "import " not in code_text:
             code_text = import_header + code_text
-            
+
         with open(shard_path, "w") as f:
             f.write(code_text)
         return {"updated": True}
@@ -535,19 +572,53 @@ def attempt_repair_shard(
 
 
 def run_pipeline(
-    project_dir=".", max_rounds=DEFAULT_MAX_ROUNDS, auto_repair=True, overwrite=False
+    project_dir=".",
+    max_rounds=DEFAULT_MAX_ROUNDS,
+    auto_repair=True,
+    overwrite=False,
+    verbose=False,
+    repair_only=False,
 ):
     ctx = PipelineContext(project_dir)
-    if overwrite:
-        ctx.clear_shards()
-    elif not os.path.exists(ctx.shards_dir) or not os.listdir(ctx.shards_dir):
-        ctx.clear_shards()
 
-    shard_from_chapters(ctx)
+    # --repair-only and --overwrite are mutually exclusive in practice
+    if repair_only and overwrite:
+        print(
+            "Warning: --repair-only is ignored when --overwrite is used (shards are being wiped)."
+        )
+        repair_only = False
+
+    # Load previously solved families when in repair-only mode
+    previously_solved = set()
+    if repair_only:
+        analysis_path = os.path.join(ctx.reports_dir, "analysis.json")
+        if os.path.exists(analysis_path):
+            with open(analysis_path, "r") as af:
+                prior_analysis = json.load(af)
+            previously_solved = set(prior_analysis.get("solved", []))
+            num_broken = len(prior_analysis.get("inconsistent", {})) + len(
+                prior_analysis.get("failed", [])
+            )
+            print(
+                f"Repair-only mode: {len(previously_solved)} families previously solved, {num_broken} to repair."
+            )
+        else:
+            print(
+                "Warning: No prior analysis.json found. Falling back to full pipeline."
+            )
+            repair_only = False
+
+    if not repair_only:
+        if overwrite:
+            ctx.clear_shards()
+        elif not os.path.exists(ctx.shards_dir) or not os.listdir(ctx.shards_dir):
+            ctx.clear_shards()
+        shard_from_chapters(ctx)
 
     for round_idx in range(1, max_rounds + 1):
         print(f"\n--- Round {round_idx}/{max_rounds} ---")
-        results = verify_all_shards(ctx)
+        skip = previously_solved if repair_only else None
+        results = verify_all_shards(ctx, verbose=verbose, skip_families=skip)
         analysis = analyze_results(ctx, results)
 
         print(
@@ -571,16 +642,20 @@ def run_pipeline(
         elif analysis["failed"]:
             target_family = analysis["failed"][0]["file"]
             repair_info = {
-                "broken": [], # Will be populated
+                "broken": [],  # Will be populated
                 "trusted": [],
                 "scores": {},
                 "mismatches": {},
-                "error": analysis["failed"][0].get("error")
+                "error": analysis["failed"][0].get("error"),
             }
             # Populate variants for failed family
             family_dir = os.path.join(ctx.shards_dir, target_family)
             if os.path.exists(family_dir):
-                repair_info["broken"] = [f.split("__")[1].replace(".py", "") for f in os.listdir(family_dir) if "__" in f]
+                repair_info["broken"] = [
+                    f.split("__")[1].replace(".py", "")
+                    for f in os.listdir(family_dir)
+                    if "__" in f
+                ]
             repair_type = "failed"
 
         if not target_family:
@@ -589,8 +664,10 @@ def run_pipeline(
         attempt = 1
         max_attempts = 3
         while attempt <= max_attempts:
-            print(f" |- [Repair] Family: {target_family} | Attempt: {attempt}/{max_attempts}")
-            
+            print(
+                f" |- [Repair] Family: {target_family} | Attempt: {attempt}/{max_attempts}"
+            )
+
             for broken_variant in repair_info["broken"]:
                 attempt_repair_shard(
                     ctx,
@@ -599,26 +676,31 @@ def run_pipeline(
                     repair_info.get("trusted", []),
                     repair_info.get("scores", {}),
                     repair_info.get("mismatches", {}),
-                    error=repair_info.get("error")
+                    error=repair_info.get("error"),
                 )
-            
+
             # Re-verify immediately
             print(f" |- Re-verifying family {target_family}...")
-            new_res = verify_family(ctx, target_family)
-            
+            new_res = verify_family(ctx, target_family, verbose=verbose)
+
             if not new_res.get("error"):
                 eqn_name = f"eqn_{target_family.split('_eqn_')[1]}"
                 scores = new_res["results"].get(eqn_name, {})
                 num_v = len(scores)
                 if num_v > 0 and all(s == num_v for s in scores.values()):
                     print(f" |- SUCCESS: Family {target_family} is now certified.")
+                    # Track newly solved family so it's skipped in subsequent rounds
+                    if repair_only:
+                        previously_solved.add(target_family)
                     break
                 else:
                     print(f" |- Still inconsistent: {scores}")
                     # Update repair_info for next attempt
                     repair_info["scores"] = scores
                     repair_info["broken"] = [v for v, s in scores.items() if s < num_v]
-                    repair_info["trusted"] = [v for v, s in scores.items() if s == num_v]
+                    repair_info["trusted"] = [
+                        v for v, s in scores.items() if s == num_v
+                    ]
                     repair_info["mismatches"] = new_res.get("mismatches", {})
             else:
                 print(f" |- Still failing: {new_res.get('error')}")
@@ -658,22 +740,29 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
                 if not sf.endswith(".py"):
                     continue
                 shard_path = os.path.join(family_dir, sf)
-                
+
                 with open(shard_path, "r") as f:
                     content = f.read()
                     try:
                         tree = ast.parse(content)
                     except:
                         continue
-                    
+
                     for node in tree.body:
                         if isinstance(node, ast.FunctionDef):
                             if node.name not in seen_methods:
                                 seen_methods.add(node.name)
-                                method_source = get_standalone_method_source(shard_path, node.name)
+                                method_source = get_standalone_method_source(
+                                    shard_path, node.name
+                                )
                                 if method_source:
                                     # Indent it for the class
-                                    indented = "\n".join([f"{TAB}{line}" for line in method_source.splitlines()])
+                                    indented = "\n".join(
+                                        [
+                                            f"{TAB}{line}"
+                                            for line in method_source.splitlines()
+                                        ]
+                                    )
                                     class_groups[class_name].append(indented)
                         elif isinstance(node, ast.ClassDef):
                             # This is the main shard's class
@@ -681,9 +770,13 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
                                 if isinstance(item, ast.FunctionDef):
                                     if item.name not in seen_methods:
                                         seen_methods.add(item.name)
-                                        method_source = get_method_source_from_class(shard_path, class_name, item.name)
+                                        method_source = get_method_source_from_class(
+                                            shard_path, class_name, item.name
+                                        )
                                         if method_source:
-                                            class_groups[class_name].append(method_source)
+                                            class_groups[class_name].append(
+                                                method_source
+                                            )
 
         for class_name, bodies in class_groups.items():
             out.write(f"class {class_name}:\n")
@@ -696,28 +789,28 @@ def get_standalone_method_source(file_path, method_name):
     """Extracts a top-level function source."""
     with open(file_path, "r") as f:
         lines = f.readlines()
-    
+
     target_idx = -1
     for idx, line in enumerate(lines):
         if line.startswith(f"def {method_name}("):
             target_idx = idx
             break
-    
+
     if target_idx == -1:
         return ""
-    
+
     start_idx = target_idx
     while start_idx > 0 and lines[start_idx - 1].strip().startswith("@"):
         start_idx -= 1
-        
+
     end_idx = target_idx + 1
     while end_idx < len(lines):
         if lines[end_idx].strip():
-             if not lines[end_idx].startswith(" "):
-                 # Check if it's a new top level thing
-                 stripped = lines[end_idx].lstrip()
-                 if stripped.startswith(("def ", "class ", "@")):
-                     break
+            if not lines[end_idx].startswith(" "):
+                # Check if it's a new top level thing
+                stripped = lines[end_idx].lstrip()
+                if stripped.startswith(("def ", "class ", "@")):
+                    break
         end_idx += 1
     return "".join(lines[start_idx:end_idx])
 
@@ -726,14 +819,16 @@ def get_method_source_from_class(file_path, class_name, method_name):
     """Helper to extract method source from class in file."""
     with open(file_path, "r") as f:
         lines = f.readlines()
-    
+
     # Find the class first
     class_idx = -1
     for idx, line in enumerate(lines):
-        if line.startswith(f"class {class_name}:") or line.startswith(f"class {class_name}("):
+        if line.startswith(f"class {class_name}:") or line.startswith(
+            f"class {class_name}("
+        ):
             class_idx = idx
             break
-    
+
     if class_idx == -1:
         return ""
 
@@ -746,19 +841,19 @@ def get_method_source_from_class(file_path, class_name, method_name):
         # If we hit another top-level class or def, we're done with this class
         if line.strip() and not line.startswith(" "):
             break
-    
+
     if target_idx == -1:
         return ""
-    
+
     # Go up to find decorators
     start_idx = target_idx
     while start_idx > class_idx + 1 and lines[start_idx - 1].strip().startswith("@"):
         start_idx -= 1
-    
+
     # Find end of method by indentation
     line_with_indent = lines[target_idx]
     indent_len = len(line_with_indent) - len(line_with_indent.lstrip())
-    
+
     end_idx = target_idx + 1
     while end_idx < len(lines):
         line = lines[end_idx]
@@ -773,7 +868,7 @@ def get_method_source_from_class(file_path, class_name, method_name):
                 if curr_indent == 0:
                     break
         end_idx += 1
-    
+
     return "".join(lines[start_idx:end_idx])
 
 

@@ -20,13 +20,17 @@ import sys
 
 
 class Verify:
-    def __init__(self, lib_class, pyeqn=None, subshards_dir=None):
+    def __init__(self, lib_class, pyeqn=None, subshards_dir=None, verbose=False):
         self.lib_class = lib_class
+        self.verbose = verbose
+        self._log_buffer = []
         # Instantiate the class since methods are now instance methods
         try:
             self.lib_instance = lib_class()
         except Exception as e:
-            print(f"  [Verify] WARNING: Could not instantiate {lib_class.__name__}: {e}. Falling back to class-level calls.")
+            self._log_buffer.append(
+                f"  [Verify] WARNING: Could not instantiate {lib_class.__name__}: {e}. Falling back to class-level calls."
+            )
             self.lib_instance = lib_class
 
         self.pyeqn = pyeqn
@@ -96,7 +100,7 @@ class Verify:
 
             self.harmony_func = module.check_harmony
         except Exception as err:
-            print(f"  [Harmony Prep] ERROR: {err}")
+            self._log_buffer.append(f"  [Harmony Prep] ERROR: {err}")
 
     def _get_params(self, base_eq):
         variants = [v for v in self.equation_variants if v.startswith(base_eq + "__")]
@@ -112,7 +116,7 @@ class Verify:
             params.add(v.split("__")[-1])
         return sorted(list(params))
 
-    def _check_pyeqn_harmony(self, pyeqn, params_dict):
+    def _check_pyeqn_harmony(self, pyeqn, params_dict, log_lines=None):
         """Checks if the values satisfy the original equation string."""
         if not pyeqn or "=" not in pyeqn:
             return True
@@ -124,7 +128,11 @@ class Verify:
                     res_val = res_val[0]
                 res = abs(float(res_val)) < 1e-4
                 if not res:
-                    print(f"  [Harmony Check] FAIL: residual {res_val} for {pyeqn}")
+                    msg = f"  [Harmony Check] FAIL: residual {res_val} for {pyeqn}"
+                    if log_lines is not None:
+                        log_lines.append(msg)
+                    else:
+                        print(msg)
                 return res
             except Exception as err:
                 # If it's a domain error (like log of negative), return None to indicate inconclusive
@@ -133,7 +141,11 @@ class Verify:
                     or "math domain error" in str(err).lower()
                 ):
                     return None
-                print(f"  [Harmony Check] ERROR during subshard call: {err}")
+                msg = f"  [Harmony Check] ERROR during subshard call: {err}"
+                if log_lines is not None:
+                    log_lines.append(msg)
+                else:
+                    print(msg)
                 return False
 
         # No fallback to eval anymore as per user request
@@ -189,7 +201,9 @@ class Verify:
         return False
 
     def verify_equation(self, base_eq):
-        print(f"[INPUT] verify_equation: base_eq={base_eq}")
+        # Collect all log output in a buffer; flush only for failures (or if verbose)
+        log_lines = list(self._log_buffer)  # inherit any init/harmony-prep messages
+        log_lines.append(f"[INPUT] verify_equation: base_eq={base_eq}")
         params = self._get_params(base_eq)
         variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
 
@@ -201,22 +215,22 @@ class Verify:
 
         for source_var in variants:
             variant_method = getattr(self.lib_instance, f"{base_eq}__{source_var}")
-            print(f" |- Testing source variant: {source_var}")
+            log_lines.append(f" |- Testing source variant: {source_var}")
 
             trial_matches = []
             source_mismatches = []
 
             for trial_idx in range(num_trials):
                 test_inputs = {p: self.make_rand() for p in params if p != source_var}
-                print(f"    [Trial {trial_idx + 1}] Inputs: {test_inputs}")
+                log_lines.append(f"    [Trial {trial_idx + 1}] Inputs: {test_inputs}")
 
                 try:
                     source_values = variant_method(**test_inputs.copy())
-                    print(
+                    log_lines.append(
                         f"    [Trial {trial_idx + 1}] {source_var} variant output: {source_values}"
                     )
                     if not source_values:
-                        print(
+                        log_lines.append(
                             f"    [Trial {trial_idx + 1}] {source_var} variant returned NOTHING"
                         )
                         trial_matches.append(0)
@@ -228,7 +242,7 @@ class Verify:
 
                     for val in source_values:
                         if isinstance(val, complex) and abs(val.imag) > 1e-5:
-                            print(
+                            log_lines.append(
                                 f"    [Trial {trial_idx + 1}] Skipping complex result: {val}"
                             )
                             continue
@@ -239,10 +253,10 @@ class Verify:
                         # Harmony check with original equation string
                         if self.pyeqn:
                             harmony_res = self._check_pyeqn_harmony(
-                                self.pyeqn, full_set
+                                self.pyeqn, full_set, log_lines=log_lines
                             )
                             if harmony_res is False:
-                                print(
+                                log_lines.append(
                                     f"    [Trial {trial_idx + 1}] Disharmony with pyeqn for {source_var}={val}"
                                 )
                                 continue
@@ -252,7 +266,7 @@ class Verify:
 
                         matches = 0
                         current_trial_mismatches = []
-                        print(
+                        log_lines.append(
                             f"    [Trial {trial_idx + 1}] Checking targets against source_var={source_var}, val={val}"
                         )
                         for target_var in variants:
@@ -272,7 +286,7 @@ class Verify:
                                 is_sim = self.are_similar(
                                     full_set[target_var], target_values
                                 )
-                                print(
+                                log_lines.append(
                                     f"      -> Target {target_var}: expected {full_set[target_var]}, got {target_values} | Match: {is_sim}"
                                 )
                                 if is_sim:
@@ -286,7 +300,9 @@ class Verify:
                                         }
                                     )
                             except Exception as err:
-                                print(f"      -> Target {target_var}: ERROR: {err}")
+                                log_lines.append(
+                                    f"      -> Target {target_var}: ERROR: {err}"
+                                )
                                 current_trial_mismatches.append(
                                     {"target": target_var, "error": str(err)}
                                 )
@@ -304,7 +320,7 @@ class Verify:
                         source_mismatches.append(trial_detail)
 
                 except Exception as err:
-                    print(
+                    log_lines.append(
                         f"    [Trial {trial_idx + 1}] {source_var} variant crashed: {err}"
                     )
                     trial_matches.append(0)
@@ -315,7 +331,16 @@ class Verify:
                 # Only keep mismatches for broken variants
                 mismatches[source_var] = source_mismatches
 
-        print(f"[OUTPUT] verify_equation: scores={results}")
+        log_lines.append(f"[OUTPUT] verify_equation: scores={results}")
+
+        # Decide whether to flush the log buffer
+        num_v = len(variants)
+        is_clean = num_v > 0 and all(s >= num_v for s in results.values())
+
+        if self.verbose or not is_clean:
+            for line in log_lines:
+                print(line)
+
         return {"scores": results, "mismatches": mismatches}
 
     def verify(self):
