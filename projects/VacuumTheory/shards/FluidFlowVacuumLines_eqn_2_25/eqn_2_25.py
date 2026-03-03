@@ -7,9 +7,10 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_2_25__C_cap import eqn_2_25__C
-from .eqn_2_25__P_1_cap import eqn_2_25__P_1
-from .eqn_2_25__P_2_cap import eqn_2_25__P_2
-from .eqn_2_25__Q_throughput_cap import eqn_2_25__Q_throughput
+from .eqn_2_25__P_cap_1 import eqn_2_25__P_1
+from .eqn_2_25__P_cap_2 import eqn_2_25__P_2
+from .eqn_2_25__Q_cap_throughput import eqn_2_25__Q_throughput
+
 
 class FluidFlowVacuumLines:
     eqn_2_25__C = eqn_2_25__C

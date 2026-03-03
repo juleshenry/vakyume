@@ -5,7 +5,8 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_1_1__x(y: float, z: float, **kwargs):
+
+def eqn_1_1__x(self, y: float, z: float, **kwargs):
     # [.pyeqn] z = x + y
     result = []
     x = -y + z

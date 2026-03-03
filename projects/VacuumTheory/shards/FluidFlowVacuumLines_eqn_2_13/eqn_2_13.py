@@ -13,6 +13,7 @@ from .eqn_2_13__f import eqn_2_13__f
 from .eqn_2_13__q import eqn_2_13__q
 from .eqn_2_13__rho import eqn_2_13__rho
 
+
 class FluidFlowVacuumLines:
     eqn_2_13__L = eqn_2_13__L
     eqn_2_13__d = eqn_2_13__d
@@ -23,4 +24,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
+        """
+        rho:= density, lb/ft^3
+        d:= pipe inside diameter, in
+        q:= vol. flow rate, ft^3/min
+        """
         return

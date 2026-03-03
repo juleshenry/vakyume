@@ -7,12 +7,13 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_10_19__P_cap import eqn_10_19__P
-from .eqn_10_19__S_Th_cap import eqn_10_19__S_Th
-from .eqn_10_19__S_p_cap import eqn_10_19__S_p
-from .eqn_10_19__T_e_cap import eqn_10_19__T_e
-from .eqn_10_19__T_i_cap import eqn_10_19__T_i
+from .eqn_10_19__S_cap_T_caph import eqn_10_19__S_Th
+from .eqn_10_19__S_cap_p import eqn_10_19__S_p
+from .eqn_10_19__T_cap_e import eqn_10_19__T_e
+from .eqn_10_19__T_cap_i import eqn_10_19__T_i
 from .eqn_10_19__p_c import eqn_10_19__p_c
 from .eqn_10_19__p_s import eqn_10_19__p_s
+
 
 class LiquidRing:
     eqn_10_19__P = eqn_10_19__P
@@ -24,5 +25,7 @@ class LiquidRing:
     eqn_10_19__p_s = eqn_10_19__p_s
 
     @kwasak
-    def eqn_10_19(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
+    def eqn_10_19(
+        self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None
+    ):
         return

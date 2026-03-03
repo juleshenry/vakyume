@@ -1,0 +1,16 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+
+def eqn_7_6__W_air(
+    self, M: float, P: float, P_i_0: float, W_i: float, p_c: float, x_i: float, **kwargs
+):
+    # [.pyeqn] W_i = W_air * (M * x_i * P_i_0) / (29 * (P - p_c))
+    result = []
+    W_air = 29 * W_i * (P - p_c) / (M * P_i_0 * x_i)
+    result.append(W_air)
+    return result

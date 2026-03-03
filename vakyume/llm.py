@@ -1,37 +1,128 @@
-import ollama
+"""
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
+"""
+
 import re
 import time
-
-n = "\n"
+from .config import llm_config
+from .openrouter import openrouter_chat
 
 LLM_COOLDOWN_SECONDS = 5
 
 
-def ask_llm(
-    system_prompt: str, user_prompt: str, model: str = "phi3:latest", stream=False
-):
-    """Base call to Ollama."""
+def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=False):
+    """Unified LLM call dispatcher."""
+    provider = llm_config.get("provider", "ollama")
+    # Use config model if none provided
+    if model is None:
+        model = llm_config.get("model", "phi3:latest")
+
     print(
-        f"[INPUT] ask_llm: model={model}, system_prompt_len={len(system_prompt)}, user_prompt_len={len(user_prompt)}"
+        f"[INPUT] ask_llm: provider={provider}, model={model}, system_prompt_len={len(system_prompt)}, user_prompt_len={len(user_prompt)}"
     )
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt},
-    ]
-    response = ollama.chat(
-        model=model,
-        messages=messages,
-        stream=stream,
-        options={"num_ctx": 8192, "temperature": 0},
-    )
-    if stream:
-        return response
-    # The response object can be a dict or a ChatResponse object depending on the version
-    content = ""
-    if hasattr(response, "message"):
-        content = response.message.content
+
+    if provider == "ollama":
+        import ollama
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+        response = ollama.chat(
+            model=model,
+            messages=messages,
+            stream=stream,
+            options={
+                "num_ctx": llm_config.get("num_ctx", 8192),
+                "temperature": llm_config.get("temperature", 0),
+            },
+        )
+        if stream:
+            return response
+        # The response object can be a dict or a ChatResponse object depending on the version
+        content = ""
+        if hasattr(response, "message"):
+            content = response.message.content
+        else:
+            content = response["message"]["content"]
     else:
-        content = response["message"]["content"]
+        # Cloud providers via OpenRouter
+        content = openrouter_chat(
+            provider=provider,
+            model=model,
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            api_key=llm_config.get("api_key"),
+            temperature=llm_config.get("temperature", 0),
+        )
 
     print(f"[OUTPUT] ask_llm: content_len={len(content)}")
     time.sleep(LLM_COOLDOWN_SECONDS)

@@ -13,6 +13,7 @@ from .eqn_2_14__g_c import eqn_2_14__g_c
 from .eqn_2_14__k import eqn_2_14__k
 from .eqn_2_14__v_s import eqn_2_14__v_s
 
+
 class FluidFlowVacuumLines:
     eqn_2_14__M = eqn_2_14__M
     eqn_2_14__R = eqn_2_14__R
@@ -23,4 +24,8 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
+        """
+        v_s := sonic_velocity
+        k:=ratio of specific heat at constant temp to the specific heat at constant volume
+        """
         return

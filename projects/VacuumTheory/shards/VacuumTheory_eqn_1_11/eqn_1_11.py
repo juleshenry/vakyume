@@ -12,6 +12,7 @@ from .eqn_1_11__T_cap import eqn_1_11__T
 from .eqn_1_11__W_cap import eqn_1_11__W
 from .eqn_1_11__q import eqn_1_11__q
 
+
 class VacuumTheory:
     eqn_1_11__M = eqn_1_11__M
     eqn_1_11__P = eqn_1_11__P
@@ -21,4 +22,10 @@ class VacuumTheory:
 
     @kwasak
     def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
+        """
+        W := lb/hr flow
+        M := molecular weight
+        P := Torr
+        T := R degrees temp
+        """
         return

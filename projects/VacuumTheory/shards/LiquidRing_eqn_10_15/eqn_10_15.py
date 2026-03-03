@@ -7,9 +7,10 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_10_15__P_cap import eqn_10_15__P
-from .eqn_10_15__S_Th_cap import eqn_10_15__S_Th
-from .eqn_10_15__S_p_cap import eqn_10_15__S_p
+from .eqn_10_15__S_cap_T_caph import eqn_10_15__S_Th
+from .eqn_10_15__S_cap_p import eqn_10_15__S_p
 from .eqn_10_15__p_s import eqn_10_15__p_s
+
 
 class LiquidRing:
     eqn_10_15__P = eqn_10_15__P

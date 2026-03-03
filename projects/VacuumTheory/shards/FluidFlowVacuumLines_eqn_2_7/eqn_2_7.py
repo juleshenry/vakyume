@@ -11,6 +11,7 @@ from .eqn_2_7__k import eqn_2_7__k
 from .eqn_2_7__m import eqn_2_7__m
 from .eqn_2_7__v_a import eqn_2_7__v_a
 
+
 class FluidFlowVacuumLines:
     eqn_2_7__T = eqn_2_7__T
     eqn_2_7__k = eqn_2_7__k
@@ -19,4 +20,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_7(self, T=None, k=None, m=None, v_a=None):
+        """
+        k:=boltz
+        T:= abs temp
+        m:= mass of a molecule
+        """
         return

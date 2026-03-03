@@ -13,6 +13,7 @@ from .eqn_2_11__g_c import eqn_2_11__g_c
 from .eqn_2_11__h_r import eqn_2_11__h_r
 from .eqn_2_11__v import eqn_2_11__v
 
+
 class FluidFlowVacuumLines:
     eqn_2_11__D = eqn_2_11__D
     eqn_2_11__L = eqn_2_11__L
@@ -23,4 +24,11 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
+        """
+        f:= Moody friction
+        L:=length_pipe, ft
+        v:= velocity, ft/s
+        D:= inside diameter, ft
+        g_c:= dimensional constant, 32.2 lb * ft / lb * s
+        """
         return

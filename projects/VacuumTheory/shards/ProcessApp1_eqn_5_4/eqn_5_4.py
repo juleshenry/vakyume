@@ -7,9 +7,10 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_5_4__P_cap import eqn_5_4__P
-from .eqn_5_4__P_0_i_cap import eqn_5_4__P_0_i
+from .eqn_5_4__P_cap_0_i import eqn_5_4__P_0_i
 from .eqn_5_4__x_i import eqn_5_4__x_i
 from .eqn_5_4__y_i import eqn_5_4__y_i
+
 
 class ProcessApp1:
     eqn_5_4__P = eqn_5_4__P

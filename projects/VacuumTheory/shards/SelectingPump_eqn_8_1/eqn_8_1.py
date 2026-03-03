@@ -6,10 +6,11 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_8_1__NC_cap import eqn_8_1__NC
-from .eqn_8_1__NS_cap import eqn_8_1__NS
-from .eqn_8_1__SCON_cap import eqn_8_1__SCON
+from .eqn_8_1__N_capC_cap import eqn_8_1__NC
+from .eqn_8_1__N_capS_cap import eqn_8_1__NS
+from .eqn_8_1__S_capC_capO_capN_cap import eqn_8_1__SCON
 from .eqn_8_1__installation_cost import eqn_8_1__installation_cost
+
 
 class SelectingPump:
     eqn_8_1__NC = eqn_8_1__NC
@@ -19,4 +20,9 @@ class SelectingPump:
 
     @kwasak
     def eqn_8_1(self, NC=None, NS=None, SCON=None, installation_cost=None):
+        """
+        NS:= number ejector stages
+        NC:= number of condensors
+        SCON:=steam consumption based on 100-psig motive steam, lb/hr
+        """
         return

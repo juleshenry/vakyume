@@ -7,9 +7,10 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_3_5__P_cap import eqn_3_5__P
-from .eqn_3_5__P_P_cap import eqn_3_5__P_P
+from .eqn_3_5__P_cap_P_cap import eqn_3_5__P_P
 from .eqn_3_5__V_cap import eqn_3_5__V
-from .eqn_3_5__V_P_cap import eqn_3_5__V_P
+from .eqn_3_5__V_cap_P_cap import eqn_3_5__V_P
+
 
 class PressMgmt:
     eqn_3_5__P = eqn_3_5__P

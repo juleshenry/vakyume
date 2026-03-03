@@ -7,10 +7,11 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_2_1__D_cap import eqn_2_1__D
-from .eqn_2_1__Re_cap import eqn_2_1__Re
+from .eqn_2_1__R_cape import eqn_2_1__Re
 from .eqn_2_1__mu import eqn_2_1__mu
 from .eqn_2_1__rho import eqn_2_1__rho
 from .eqn_2_1__v import eqn_2_1__v
+
 
 class FluidFlowVacuumLines:
     eqn_2_1__D = eqn_2_1__D
@@ -21,4 +22,10 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_1(self, D=None, Re=None, mu=None, rho=None, v=None):
+        """
+        rho := density, lb/ft^3
+        D := pipe inside diam, ft
+        v := vel. ft/s
+        mu := viscosity, lb/ft*s
+        """
         return
