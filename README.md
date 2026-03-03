@@ -10,7 +10,9 @@ We utilize a "One-Odd-Out" (OOO) verification methodology: for any equation fami
 ## Table of Contents
 
 - [Quick Start](#quick-start)
+- [PDF to C++ Pipeline](#pdf-to-c-pipeline)
 - [CLI Reference](#cli-reference)
+- [PDF Scraper Tips](#pdf-scraper-tips)
 - [Project Structure](#project-structure)
 - [Setting Up a New Project](#setting-up-a-new-project)
 - [Architecture](#architecture)
@@ -51,123 +53,141 @@ We utilize a "One-Odd-Out" (OOO) verification methodology: for any equation fami
 
 ### 1. Install Dependencies
 ```bash
-python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama
+python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama pymupdf
 ```
 
 ### 2. Run the Orchestrator
-The main entry point is `vakyume.py`. It uses a project-centric directory structure:
+The main entry point is `vakyume.py`. It uses a project-centric directory structure.
+
+#### Example: Building Models (Physics Kinematics)
+To scrape a PDF, verify equations, and generate C++ code in one command:
 ```bash
-python3 vakyume.py projects/VacuumTheory
+python3 vakyume.py build projects/BuildingModels \
+    --pdf projects/BuildingModels/BuildingModelsToDescribeOurWorld.pdf \
+    --max-rounds 5 \
+    --verbose
 ```
 
-## CLI Reference
+This runs the full pipeline:
+1. **Scrape**: Extracts formulas from the PDF into `projects/BuildingModels/notes/`.
+2. **Verify**: Shards the formulas and runs One-Odd-Out algebraic consistency checks.
+3. **Repair**: Uses LLM-assisted repair for any inconsistent or broken solvers.
+4. **Reconstruct**: Merges verified shards into `projects/BuildingModels/certified.py`.
+5. **C++**: Transpiles the Python library into `projects/BuildingModels/vakyume.cpp`.
 
-Vakyume exposes four subcommands.  Run `python3 vakyume.py --help` for an overview.
+For more granular control, see the [PDF to C++ Pipeline](#pdf-to-c-pipeline) section.
 
-### `run` -- Shard, Verify & Repair
+## PDF to C++ Pipeline
 
-Run the core pipeline: generate solver shards from equation notes, verify them
-with One-Odd-Out, and auto-repair broken solvers via LLM.
+End-to-end: take a textbook PDF, extract equations, generate verified solvers,
+assemble a Python library, and compile to a C++ binary.
 
-```
-python3 vakyume.py run <project> [options]
-```
-
-| Flag | Description |
-|------|-------------|
-| `--pdf PATH` | Extract equations from a textbook PDF (OCR stage) |
-| `--cpp` | Generate C++ library after certification |
-| `--max-rounds N` | Maximum repair rounds (default 10) |
-| `--overwrite` | Wipe and regenerate all shards |
-| `--verbose` | Show detailed verification output |
-| `--repair-only` | Skip shard generation; only repair broken families |
-
+### 1. Create a Project and Extract Equations
 ```bash
-# Basic run
-python3 vakyume.py run projects/VacuumTheory
+mkdir -p projects/MyTextbook/notes
 
-# With C++ generation and verbose output
-python3 vakyume.py run projects/VacuumTheory --cpp --verbose
+# Scrape all chapters from the PDF into notes files
+python3 vakyume.py scrape textbook.pdf -o projects/MyTextbook/notes
 
-# Resume and only repair broken equations
-python3 vakyume.py run projects/VacuumTheory --repair-only --max-rounds 5
+# Or use the interactive wizard for guided extraction
+python -m vakyume.pdf_scraper textbook.pdf --wizard
 ```
 
-### `reconstruct` -- Rebuild Importable Python Library
-
-Reassemble individual solver shards into a single, importable Python module
-(`vakyume_lib.py`).
-
-```
-python3 vakyume.py reconstruct <project> [options]
-```
-
-| Flag | Description |
-|------|-------------|
-| `-o, --output PATH` | Custom output file (default `<project>/vakyume_lib.py`) |
-| `--stdout` | Print to stdout instead of writing a file |
-
+### 2. Generate Solvers, Verify, and Repair
 ```bash
-python3 vakyume.py reconstruct projects/VacuumTheory
-python3 vakyume.py reconstruct projects/VacuumTheory -o mylib.py
-python3 vakyume.py reconstruct projects/VacuumTheory --stdout | head
+python3 vakyume.py run projects/MyTextbook
 ```
 
-### `make-cpp` -- Generate & Compile C++ Library
+This parses the notes, generates SymPy solvers for every variable, runs
+One-Odd-Out cross-validation, and auto-repairs broken solvers via LLM.
 
-Convert the reconstructed Python library (or any certified file) to C++,
-compile it with `g++`, and run the built-in test suite.
-
-The converter uses a **deterministic AST transpiler** for standard arithmetic
-and math functions (`log`, `sqrt`, `exp`, `pow`), falling back to a local LLM
-(Phi-3 via Ollama) only for constructs the transpiler cannot handle.
-
-```
-python3 vakyume.py make-cpp <project> [options]
-```
-
-| Flag | Description |
-|------|-------------|
-| `-i, --input FILE` | Python source to convert (default: `vakyume_lib.py`, then `vakyume_certified.py`) |
-
+### 3. Reconstruct the Python Library
 ```bash
-# Convert the reconstructed library (default)
-python3 vakyume.py make-cpp projects/VacuumTheory
-
-# Convert a specific file
-python3 vakyume.py make-cpp projects/VacuumTheory -i vakyume_certified.py
+python3 vakyume.py reconstruct projects/MyTextbook
 ```
 
-Output:
-- `<project>/vakyume.cpp` -- generated C++ source
-- `<project>/vakyume_test` -- compiled test binary
+Produces `certified.py` (flat single-file) and `py/` (modular package).
 
-### `build` -- Full Pipeline (All-in-One)
-
-Run the complete pipeline in a single command: scrape equations, verify &
-repair, reconstruct the Python library, and generate the C++ library.
-
-```
-python3 vakyume.py build <project> [options]
-```
-
-| Flag | Description |
-|------|-------------|
-| `--pdf PATH` | Extract equations from a textbook PDF |
-| `--max-rounds N` | Maximum repair rounds (default 10) |
-| `--overwrite` | Wipe and regenerate all shards |
-| `--verbose` | Show detailed verification output |
-
+### 4. Transpile to C++ and Compile
 ```bash
-# Full build from scratch
-python3 vakyume.py build projects/MyProject --overwrite
+python3 vakyume.py make-cpp projects/MyTextbook
+```
 
-# Build from a PDF
-python3 vakyume.py build projects/MyProject --pdf textbook.pdf
+Produces `cpp/` (headers + main) and `bin/` (compiled binary).
 
+### All-in-One
+```bash
 # Resume an existing project through to C++
 python3 vakyume.py build projects/VacuumTheory
 ```
+
+## PDF Scraper Tips
+
+The PDF scraper (`vakyume/pdf_scraper.py`) uses PyMuPDF for text extraction
+and a local LLM for equation identification.  Here are tips for getting the
+best results.
+
+### Model Selection
+
+- **phi3:latest** (3.8B) is the default.  Fast and usually sufficient for
+  well-formatted textbooks.  Occasionally produces minor formatting artifacts.
+- **llama3** (8B) tends to produce cleaner structured output with fewer
+  artifacts, at the cost of slower extraction.  Recommended for difficult PDFs.
+- Use `--wizard` or `-m MODEL` to switch models.
+
+### What Gets Extracted (and What Doesn't)
+
+The scraper targets **explicitly numbered equations** -- those marked with
+labels like (3.1), (9.2), etc.  It deliberately ignores:
+- Checkpoint questions and worked examples
+- Unnumbered inline equations
+- Derivative/integral notation (not algebraic -- vakyume cannot solve these)
+- Vector equations (scalar/magnitude forms are extracted instead)
+
+### Common LLM Artifacts and How They're Handled
+
+| Artifact | Scraper Fix |
+|----------|-------------|
+| `^` instead of `**` | Regex replacement (`^2` → `**2`) |
+| Unicode superscripts (`²`, `³`) | Replaced with `**2`, `**3` |
+| Function notation (`x(t) =`) | Stripped to `x =` |
+| `* *` spacing from PDF text | Collapsed to `**` |
+| Trailing equation numbers `(3.1)` | Stripped from equation text |
+| Derivative/integral notation | Rejected by validity filter |
+
+### Improving Extraction Quality
+
+1. **Run chapter-by-chapter first** (`-c 3`) to spot-check output before
+   running the full book.
+2. **Inspect the output notes files** -- the scraper writes one `.py` per
+   chapter under the output directory, plus a `_extraction_summary.json`.
+3. **Edit notes by hand** if the LLM gets an equation wrong.  The notes
+   format is simple enough to fix manually.
+4. **Re-run individual chapters** without affecting the rest: use `-c N` to
+   overwrite just that chapter's output file.
+5. **Chapters with no equations** (e.g., "Scientific Method", "Vectors",
+   "Calculus") are auto-skipped.  See `SKIP_CHAPTERS` in `pdf_scraper.py`.
+
+### Notes Format Reference
+
+Each notes file contains one or more equation blocks:
+```python
+# 3-3 Position with constant acceleration
+"""
+x := position
+x_0 := initial position
+v_0 := initial velocity
+a := acceleration
+t := time
+"""
+x = x_0 + v_0 * t + 0.5 * a * t**2
+```
+
+Rules:
+- Header: `# <chapter>-<eq_number> <title>`
+- Docstring: triple-quoted, one `var := description` per line
+- Equation: `lhs = rhs` using Python math syntax (`**`, `sqrt()`, `log()`)
+- Variables should be lowercase with underscores for subscripts (`v_0`, `F_g`)
 
 ## Project Structure
 Each project (e.g., `projects/VacuumTheory/`) contains:
@@ -175,10 +195,10 @@ Each project (e.g., `projects/VacuumTheory/`) contains:
 - `shards/`: Individual generated solvers (Intermediate).
 - `reports/`: Verification and analysis logs.
 - `repair_prompts/`: LLM interaction logs.
-- `vakyume_certified.py`: The finalized, verified Python library.
-- `vakyume_lib.py`: Reconstructed single-file Python library.
-- `vakyume.cpp`: The generated C++ library.
-- `vakyume_test`: Compiled C++ test binary.
+- `certified.py`: Flat single-file certified Python library.
+- `py/`: Modular Python package (one file per chapter class + `__init__.py`).
+- `cpp/`: Modular C++ source (`main.cpp` + per-chapter `.hpp` headers).
+- `bin/vacuum_theory_binary`: Compiled C++ test binary.
 
 ## Setting Up a New Project
 
@@ -188,15 +208,23 @@ To start a new project from a textbook PDF:
    ```bash
    mkdir -p projects/MyNewProject/notes
    ```
-2. **Run Vakyume with the PDF**:
+2. **Extract Equations from the PDF**:
    ```bash
-   python3 vakyume.py build projects/MyNewProject --pdf path/to/textbook.pdf
-   ```
-   This will extract formulas, generate solvers, verify, reconstruct, and compile to C++.
-   
-   *Note: For best results, ensure `pdftotext` is installed on your system.*
+   # Quick: scrape all chapters at once
+   python3 vakyume.py scrape path/to/textbook.pdf -o projects/MyNewProject/notes
 
-3. **Manual Notes (Optional)**:
+   # Guided: interactive wizard with model and chapter selection
+   python -m vakyume.pdf_scraper path/to/textbook.pdf --wizard
+   ```
+   See [PDF Scraper Tips](#pdf-scraper-tips) for guidance on getting clean output.
+
+3. **Run the Full Pipeline**:
+   ```bash
+   python3 vakyume.py build projects/MyNewProject
+   ```
+   This will generate solvers, verify, reconstruct, and compile to C++.
+   
+4. **Manual Notes (Optional)**:
    You can also manually add `.py` files to the `notes/` directory. Use the following format:
    ```python
    # 1-1 Ideal Gas Law
@@ -210,7 +238,7 @@ To start a new project from a textbook PDF:
    p * V = n * R * T
    ```
 
-4. **Verify and Generate**:
+5. **Verify and Generate**:
    ```bash
    python3 vakyume.py build projects/MyNewProject
    ```
@@ -238,6 +266,7 @@ component that wires them together.
 | `pipeline.py` | Pipeline orchestrator: wires parse -> verify -> repair -> certify | all of the above |
 | `reconstruct.py` | Scan shard directories, extract functions via AST, assemble single importable module | `utils` |
 | `cpp_gen.py` | Deterministic Python AST to C++ transpiler, LLM fallback, compile + test | `llm` |
+| `pdf_scraper.py` | PyMuPDF text extraction, LLM-based equation identification, notes output, interactive wizard | `llm` |
 
 ### Module Dependency Graph
 
@@ -530,16 +559,18 @@ ensures the pipeline converges efficiently.
 
 **Module:** `reconstruct.py` -- `reconstruct_from_shards()`
 
-After all families are certified, assemble shards into a single importable
-Python module:
+After all families are certified, assemble shards into importable Python
+modules:
 
 1. Scan all family directories in `shards/`
 2. Group methods by class name
 3. Extract function source using AST parsing (handles both standalone functions
    and class methods)
-4. Emit `vakyume_lib.py` with proper class structure, `@kwasak` decorators,
-   and import headers
-5. Clean up `# [.pyeqn]` tags to plain comments
+4. Emit `certified.py` (flat single-file) with proper class structure,
+   `@kwasak` decorators, and import headers
+5. Emit `py/` package: one module per chapter class (e.g., `basic.py`,
+   `rotary.py`) plus an `__init__.py` that re-exports all classes
+6. Clean up `# [.pyeqn]` tags to plain comments
 
 ### Stage 8: C++ Transpile
 
@@ -553,13 +584,19 @@ Optional stage that converts the Python library to C++:
    - `e/pi` to `M_E/M_PI`
    - `I` (imaginary) to `std::complex<double>(0.0, 1.0)`
    - `result.append()` to `result.push_back()`
-   - `LambertW` to a custom Halley-iteration implementation
+   - `LambertW` to a shared Halley-iteration implementation (`lambertw.hpp`)
    - All variables typed as `double`; complex mode if `I` is detected
 
-2. **LLM fallback** for constructs the transpiler cannot handle (shells out
+2. **Modular output**: each chapter class gets its own `.hpp` header under
+   `cpp/`, with a `main.cpp` that `#include`s all headers and runs the test
+   suite. Shared utilities (e.g., `lambertw.hpp`) are extracted to avoid
+   redefinition errors.
+
+3. **LLM fallback** for constructs the transpiler cannot handle (shells out
    to `ollama run phi3`)
 
-3. **Compile and test**: `g++ -std=c++17`, then runs the generated test binary
+4. **Compile and test**: `g++ -std=c++17 -I cpp/`, output binary goes to
+   `bin/vacuum_theory_binary`
 
 ---
 
@@ -1012,5 +1049,6 @@ python3 vakyume.py build projects/BuildingModels
 - **Scaffold-First Architecture**: The majority of "LLM-repaired" shards are actually solved by the scaffold pattern matcher with zero LLM calls. The LLM is a fallback, not the primary solver.
 - **Project-Centric Structure**: Successfully transitioned to a formal Python package (`vakyume/`) with a project-based directory structure (e.g., `projects/VacuumTheory/`).
 - **Resumability**: The pipeline automatically skips existing shards, allowing for long-running verification or repair tasks to be resumed.
-- **C++ Library Generation**: A deterministic AST transpiler converts Python solvers to C++ (`log`, `sqrt`, `exp`, `pow`, arithmetic). Falls back to local LLMs (Phi-3 via Ollama) for constructs the transpiler cannot handle. Enforces `double` precision throughout.
+- **C++ Library Generation**: A deterministic AST transpiler converts Python solvers to C++ (`log`, `sqrt`, `exp`, `pow`, arithmetic). Falls back to local LLMs (Phi-3 via Ollama) for constructs the transpiler cannot handle. Enforces `double` precision throughout. Output is modular: per-chapter `.hpp` headers under `cpp/`, compiled binary under `bin/`.
+- **Modular Output Structure**: Both Python and C++ outputs are organized into modular packages. Python: `certified.py` (flat) + `py/` (per-class modules with `__init__.py`). C++: `cpp/` (per-class `.hpp` headers + `main.cpp`) + `bin/vacuum_theory_binary`.
 - **Parallelization**: Parallelizing Ollama calls (using 2-4 workers) significantly speeds up the verification of large equation sets (~500+ functions).

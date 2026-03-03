@@ -11,10 +11,10 @@ from .eqn_1_1__y import eqn_1_1__y
 from .eqn_1_1__z import eqn_1_1__z
 
 class Basic:
-    eqn_1_1__x = staticmethod(eqn_1_1__x)
-    eqn_1_1__y = staticmethod(eqn_1_1__y)
-    eqn_1_1__z = staticmethod(eqn_1_1__z)
+    eqn_1_1__x = eqn_1_1__x
+    eqn_1_1__y = eqn_1_1__y
+    eqn_1_1__z = eqn_1_1__z
 
     @kwasak
-    def eqn_1_1(x=None, y=None, z=None, **kwargs):
+    def eqn_1_1(self, x=None, y=None, z=None):
         return

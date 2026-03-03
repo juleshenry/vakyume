@@ -13,6 +13,7 @@ dependencies = [
     "numpy",
     "ollama",
     "pandas",
+    "pymupdf",
     "scipy",
     "sympy",
     "timeout-decorator",

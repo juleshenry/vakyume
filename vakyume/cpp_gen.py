@@ -1,4 +1,76 @@
 """
+                                                               :+ .x..                                                                        
+                                                          .:...x$   $+:x  $.                                                                  
+                                                      ..:. XX.  &    X.   xx$....                                                             
+                                                      .:X . .             & . X.                                                              
+                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
+                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
+                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
+                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
+                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
+                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
+                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
+                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
+                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
+                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
+                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
+                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
+                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
+                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
+                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
+                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
+                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
+               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
+               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
+                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
+                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
+                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
+                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
+                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
+                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
+                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
+                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
+                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
+                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
+                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
+                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
+                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
+                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
+                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
+                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
+                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
+                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
+                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
+                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
+                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
+                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
+                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
+                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
+                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
+                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
+                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
+                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
+                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
+                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
+                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
+                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
+                                  .::x+++++++++++++++++++++++$...                                                                             
+                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
+                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
+                                            ........   ...                      
+                                         
+                                                ▐                   
+                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
+                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
+                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
+                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
+                                                     ▞              
+                                                   ▝▘              
+                                        
+                                            by Julian Henry
+"""
+
+"""
 C++ code generator for Vakyume solver libraries.
 
 Two-tier strategy:
@@ -366,8 +438,7 @@ def main(project_dir=".", input_file=None):
     project_dir = os.path.abspath(project_dir)
 
     # Resolve the Python source to convert.  Prefer an explicit *input_file*,
-    # then fall back to vakyume_lib.py (reconstruct output), and finally to the
-    # legacy vakyume_certified.py.
+    # then fall back to certified.py (the flat single-file library).
     if input_file:
         certified_file = (
             input_file
@@ -375,12 +446,24 @@ def main(project_dir=".", input_file=None):
             else os.path.join(project_dir, input_file)
         )
     else:
+        cert_file = os.path.join(project_dir, "certified.py")
+        # Legacy fallback paths
         lib_file = os.path.join(project_dir, "vakyume_lib.py")
-        cert_file = os.path.join(project_dir, "vakyume_certified.py")
-        certified_file = lib_file if os.path.exists(lib_file) else cert_file
+        old_cert = os.path.join(project_dir, "vakyume_certified.py")
+        if os.path.exists(cert_file):
+            certified_file = cert_file
+        elif os.path.exists(lib_file):
+            certified_file = lib_file
+        else:
+            certified_file = old_cert
 
-    cpp_output_path = os.path.join(project_dir, "vakyume.cpp")
-    test_binary_path = os.path.join(project_dir, "vakyume_test")
+    # ── Output directories ───────────────────────────────────────────────
+    cpp_dir = os.path.join(project_dir, "cpp")
+    bin_dir = os.path.join(project_dir, "bin")
+    os.makedirs(cpp_dir, exist_ok=True)
+    os.makedirs(bin_dir, exist_ok=True)
+
+    test_binary_path = os.path.join(bin_dir, "vacuum_theory_binary")
 
     if not os.path.exists(certified_file):
         print(f"Error: {certified_file} not found.")
@@ -427,33 +510,80 @@ def main(project_dir=".", input_file=None):
     else:
         print(f"  All {len(tasks_to_run)} converted deterministically.")
 
-    # Check whether any generated function uses _lambertW or complex types
+    # Check whether any generated function uses _lambertW
     all_code = "\n".join(f for f in cpp_functions if f)
     needs_lambertw = "_lambertW" in all_code
 
-    cpp_output = [
+    # Also check per-class need for lambertW
+    class_needs_lambertw: dict[str, bool] = {}
+
+    # ── Group functions by class for per-header output ────────────────────
+    class_funcs: dict[str, list[str]] = {}
+    for (class_name, method_name, source, args), cpp_func in zip(
+        tasks_to_run, cpp_functions
+    ):
+        if cpp_func:
+            if class_name not in class_funcs:
+                class_funcs[class_name] = []
+            class_funcs[class_name].append(cpp_func)
+
+    for class_name, funcs in class_funcs.items():
+        class_needs_lambertw[class_name] = any("_lambertW" in f for f in funcs)
+
+    # Common header preamble
+    _header_preamble = (
+        "#include <vector>\n"
+        "#include <cmath>\n"
+        "#include <complex>\n"
+        "#include <stdexcept>\n"
+        "\n"
+        "using namespace std::complex_literals;\n"
+    )
+
+    # Write shared lambertw header if needed
+    if needs_lambertw:
+        lambertw_path = os.path.join(cpp_dir, "lambertw.hpp")
+        with open(lambertw_path, "w") as lf:
+            lf.write("#ifndef VAKYUME_LAMBERTW_HPP\n#define VAKYUME_LAMBERTW_HPP\n\n")
+            lf.write("#include <cmath>\n\n")
+            lf.write(_LAMBERTW_IMPL + "\n")
+            lf.write("#endif // VAKYUME_LAMBERTW_HPP\n")
+
+    # Write per-class header files
+    header_filenames = []
+    for class_name in sorted(class_funcs.keys()):
+        header_name = f"{class_name.lower()}.hpp"
+        header_filenames.append(header_name)
+        header_path = os.path.join(cpp_dir, header_name)
+        guard = f"VAKYUME_{class_name.upper()}_HPP"
+        with open(header_path, "w") as hf:
+            hf.write(f"#ifndef {guard}\n#define {guard}\n\n")
+            hf.write(_header_preamble + "\n")
+            if class_needs_lambertw.get(class_name):
+                hf.write('#include "lambertw.hpp"\n\n')
+            for func in class_funcs[class_name]:
+                hf.write(func + "\n\n")
+            hf.write(f"#endif // {guard}\n")
+        print(f"  Header: {header_path}")
+
+    # ── Write main.cpp ───────────────────────────────────────────────────
+    main_cpp_path = os.path.join(cpp_dir, "main.cpp")
+
+    main_lines = [
         "#include <iostream>",
-        "#include <vector>",
-        "#include <cmath>",
-        "#include <complex>",
-        "#include <stdexcept>",
-        "",
-        "using namespace std::complex_literals;",
         "",
     ]
-    if needs_lambertw:
-        cpp_output.append(_LAMBERTW_IMPL)
-    cpp_output.extend(f for f in cpp_functions if f)
+    for hf in sorted(header_filenames):
+        main_lines.append(f'#include "{hf}"')
+    main_lines.append("")
 
     test_suite = [
-        "",
         "int main() {",
         '    std::cout << "Running test suite..." << std::endl;',
         "    int pass = 0, fail = 0;",
     ]
 
     for class_name, method_name, source, args in tasks_to_run:
-        # Filter out self/cls/kwargs from arg count
         real_args = [a for a in args if a not in ("self", "cls")]
         dummy_args = ", ".join(["1.0"] * len(real_args))
         full_name = f"{class_name}_{method_name}"
@@ -472,15 +602,24 @@ def main(project_dir=".", input_file=None):
     test_suite.append("    return fail > 0 ? 1 : 0;")
     test_suite.append("}")
 
-    cpp_output.extend(test_suite)
+    main_lines.extend(test_suite)
 
-    with open(cpp_output_path, "w") as f:
-        f.write("\n".join(cpp_output))
+    with open(main_cpp_path, "w") as f:
+        f.write("\n".join(main_lines))
 
-    print(f"C++ source created: {cpp_output_path}")
+    print(f"C++ main: {main_cpp_path}")
     print("Compiling...")
     compile_res = subprocess.run(
-        ["g++", "-std=c++17", cpp_output_path, "-o", test_binary_path, "-lm"],
+        [
+            "g++",
+            "-std=c++17",
+            main_cpp_path,
+            "-o",
+            test_binary_path,
+            "-lm",
+            "-I",
+            cpp_dir,
+        ],
         capture_output=True,
         text=True,
     )

@@ -5,51 +5,74 @@ from vakyume.pipeline import run_pipeline
 from vakyume.cpp_gen import main as run_cpp_gen
 from vakyume.llm import ask_llm
 from vakyume.reconstruct import reconstruct_cli
+from vakyume.pdf_scraper import scrape_pdf
+from vakyume.config import llm_config
 
 
-def extract_notes_from_pdf(pdf_path, output_dir):
-    print(f"Attempting to extract notes from PDF: {pdf_path}")
-    # In a real scenario, we'd use a PDF library.
-    # Here we'll check for 'pdftotext' utility or just simulate if missing.
+def extract_notes_from_pdf(pdf_path, output_dir, chapters=None):
+    """Extract equations from a PDF textbook using PyMuPDF + LLM scraper.
+
+    Falls back to the legacy pdftotext approach if PyMuPDF is unavailable.
+    """
+    print(f"Extracting notes from PDF: {pdf_path}")
+
     try:
-        import subprocess
+        import fitz  # noqa: F401 — PyMuPDF availability check
 
-        result = subprocess.run(
-            ["pdftotext", pdf_path, "-"], capture_output=True, text=True
+        summary = scrape_pdf(
+            pdf_path=pdf_path,
+            output_dir=output_dir,
+            verbose=True,
+            chapter_filter=chapters,
         )
-        if result.returncode == 0:
-            content = result.stdout
-        else:
-            print("pdftotext failed. Falling back to simple placeholder extraction.")
+        total = sum(v["equations"] for v in summary.values())
+        print(f"Extracted {total} equations into {output_dir}")
+        return summary
+
+    except ImportError:
+        print("PyMuPDF not installed. Falling back to legacy pdftotext extraction.")
+        # Legacy fallback — original behaviour
+        try:
+            import subprocess
+
+            result = subprocess.run(
+                ["pdftotext", pdf_path, "-"], capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                content = result.stdout
+            else:
+                print(
+                    "pdftotext failed. Falling back to simple placeholder extraction."
+                )
+                content = f"Simulated content from {pdf_path}. Equation 1-1: p * V = n * R * T"
+        except Exception:
             content = (
                 f"Simulated content from {pdf_path}. Equation 1-1: p * V = n * R * T"
             )
-    except Exception:
-        content = f"Simulated content from {pdf_path}. Equation 1-1: p * V = n * R * T"
 
-    system_prompt = (
-        "You are a formula extraction tool. You convert textbook text into a specific Python-like format.\n\n"
-        "Input: Chapter 1-7 ideal gas law. p is pressure, V is volume. p * V = nRT\n"
-        "Output:\n"
-        "# 1-7 ideal gas law\n"
-        '"""\n'
-        "p := pressure\n"
-        "V := volume\n"
-        '"""\n'
-        "p * V = n * R * T\n\n"
-        "Input: {content}\n"
-        "Output:"
-    )
+        system_prompt = (
+            "You are a formula extraction tool. You convert textbook text into a specific Python-like format.\n\n"
+            "Input: Chapter 1-7 ideal gas law. p is pressure, V is volume. p * V = nRT\n"
+            "Output:\n"
+            "# 1-7 ideal gas law\n"
+            '"""\n'
+            "p := pressure\n"
+            "V := volume\n"
+            '"""\n'
+            "p * V = n * R * T\n\n"
+            "Input: {content}\n"
+            "Output:"
+        )
 
-    formatted_formulas = ask_llm(system_prompt.format(content=content), "")
+        formatted_formulas = ask_llm(system_prompt.format(content=content), "")
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
-    output_path = os.path.join(output_dir, "extracted_notes.py")
-    with open(output_path, "w") as f:
-        f.write(formatted_formulas)
-    print(f"Saved extracted notes to {output_path}")
+        output_path = os.path.join(output_dir, "extracted_notes.py")
+        with open(output_path, "w") as f:
+            f.write(formatted_formulas)
+        print(f"Saved extracted notes to {output_path}")
 
 
 def _ensure_project(args):
@@ -142,10 +165,56 @@ def cmd_build(args):
     run_cpp_gen(project_dir=project_dir)
 
 
+def cmd_scrape(args):
+    """Extract equations from a PDF into vakyume notes format."""
+    from vakyume.pdf_scraper import _extract_chapter_map, SKIP_CHAPTERS
+
+    if args.list_chapters:
+        chapters = _extract_chapter_map(args.pdf)
+        for ch in chapters:
+            skip = " [SKIP]" if ch["title"] in SKIP_CHAPTERS else ""
+            print(
+                f"  {ch['chapter_num']:2d}. {ch['title']} (p.{ch['start_page'] + 1}){skip}"
+            )
+        return
+
+    output_dir = args.output_dir
+    if output_dir is None:
+        output_dir = os.path.join(os.path.dirname(args.pdf), "notes")
+
+    scrape_pdf(
+        pdf_path=args.pdf,
+        output_dir=output_dir,
+        verbose=True,
+        chapter_filter=args.chapters,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Vakyume: Vacuum Theory Equation Pipeline"
     )
+
+    # ── Global LLM Configuration (applied to all subcommands) ────────────
+    llm_group = parser.add_argument_group("LLM Configuration")
+    llm_group.add_argument(
+        "--llm-provider",
+        choices=["ollama", "openrouter", "openai", "anthropic", "gemini"],
+        help="LLM provider (default: ollama or VAKYUME_LLM_PROVIDER)",
+    )
+    llm_group.add_argument(
+        "--llm-model", help="LLM model name (e.g. gpt-4o, claude-3-opus)"
+    )
+    llm_group.add_argument("--llm-api-key", help="API key for the chosen provider")
+    llm_group.add_argument(
+        "--llm-raw",
+        action="store_true",
+        help="Bypass algebraic scaffolding and send raw equation to LLM",
+    )
+    llm_group.add_argument(
+        "--llm-temp", type=float, help="Temperature for LLM sampling"
+    )
+
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # ── run (default pipeline) ───────────────────────────────────────────
@@ -188,7 +257,7 @@ def main():
     recon_parser.add_argument(
         "-o",
         "--output",
-        help="Output file path (default: <project>/vakyume_lib.py)",
+        help="Output file path for flat library (default: <project>/certified.py)",
     )
     recon_parser.add_argument(
         "--stdout",
@@ -208,7 +277,7 @@ def main():
     cpp_parser.add_argument(
         "-i",
         "--input",
-        help="Python source file to convert (default: <project>/vakyume_lib.py or vakyume_certified.py)",
+        help="Python source file to convert (default: <project>/certified.py)",
     )
     cpp_parser.set_defaults(func=cmd_make_cpp)
 
@@ -234,8 +303,46 @@ def main():
     )
     build_parser.set_defaults(func=cmd_build)
 
+    # ── scrape (PDF equation extraction) ─────────────────────────────────
+    scrape_parser = subparsers.add_parser(
+        "scrape",
+        help="Extract equations from a PDF textbook into vakyume notes format",
+    )
+    scrape_parser.add_argument("pdf", help="Path to the PDF file")
+    scrape_parser.add_argument(
+        "-o",
+        "--output-dir",
+        default=None,
+        help="Output directory for notes files (default: notes/ next to PDF)",
+    )
+    scrape_parser.add_argument(
+        "--chapters",
+        "-c",
+        type=int,
+        nargs="+",
+        help="Only process specific chapter numbers (1-indexed)",
+    )
+    scrape_parser.add_argument(
+        "--list-chapters",
+        action="store_true",
+        help="List available chapters and exit",
+    )
+    scrape_parser.set_defaults(func=cmd_scrape)
+
     # ── Parse & dispatch ─────────────────────────────────────────────────
     args = parser.parse_args()
+
+    # Apply CLI args to global llm_config
+    if args.llm_provider:
+        llm_config["provider"] = args.llm_provider
+    if args.llm_model:
+        llm_config["model"] = args.llm_model
+    if args.llm_api_key:
+        llm_config["api_key"] = args.llm_api_key
+    if args.llm_raw:
+        llm_config["llm_raw"] = True
+    if args.llm_temp is not None:
+        llm_config["temperature"] = args.llm_temp
 
     if not args.command:
         # Backwards compatibility: if no subcommand given, try legacy style
