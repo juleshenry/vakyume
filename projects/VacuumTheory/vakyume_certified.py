@@ -1,4 +1,5 @@
-from math import log, sqrt, exp, pow, e
+from cmath import log, sqrt, exp
+from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
 from vakyume.kwasak import kwasak_static
@@ -772,6 +773,58 @@ class FluidFlowVacuumLines:
         result.append(arithmetic_sum_C)
         return result
     @kwasak_static
+    def eqn_2_34(self, C=None, C_1=None, C_2=None, D=None, L=None, P_p=None, mu=None):
+        return
+
+    def eqn_2_34__C_1(self, C: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        C_1 = mu*(C*L - C_2*D**3)/(D**4*P_p)
+        result.append(C_1)
+        return result
+    def eqn_2_34__C_2(self, C: float, C_1: float, D: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        C_2 = C*L/D**3 - C_1*D*P_p/mu
+        result.append(C_2)
+        return result
+    def eqn_2_34__C(self, C_1: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        C = D**3*(C_1*D*P_p + C_2*mu)/(L*mu)
+        result.append(C)
+        return result
+    def eqn_2_34__D(self, C: float, C_1: float, C_2: float, L: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        D = Piecewise((-sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), Eq(C*L*mu/(C_1*P_p), 0)), (-sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) - 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), True))
+        result.append(D)
+        D = Piecewise((-sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 + sqrt(2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), Eq(C*L*mu/(C_1*P_p), 0)), (-sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 + sqrt(2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) - 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) + C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), True))
+        result.append(D)
+        D = Piecewise((sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) - C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), Eq(C*L*mu/(C_1*P_p), 0)), (sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 - sqrt(2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) - 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) - C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), True))
+        result.append(D)
+        D = Piecewise((sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 + sqrt(2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) - C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*(-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), Eq(C*L*mu/(C_1*P_p), 0)), (sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))/2 + sqrt(2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) - 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(2*C_1**2*P_p**2) - C_2**3*mu**3/(4*C_1**3*P_p**3*sqrt(-2*C*L*mu/(3*C_1*P_p*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3)) + 2*(sqrt(C**3*L**3*mu**3/(27*C_1**3*P_p**3) + (-C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(8*C_1**2*P_p**2) - 3*C_2**6*mu**6/(2048*C_1**6*P_p**6))**2/4) + C_2**2*mu**2*(-C*L*mu/(C_1*P_p) - 3*C_2**4*mu**4/(256*C_1**4*P_p**4))/(16*C_1**2*P_p**2) + 3*C_2**6*mu**6/(4096*C_1**6*P_p**6))**(1/3) + C_2**2*mu**2/(4*C_1**2*P_p**2))))/2 - C_2*mu/(4*C_1*P_p), True))
+        result.append(D)
+        return result
+    def eqn_2_34__L(self, C: float, C_1: float, C_2: float, D: float, P_p: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        L = D**3*(C_1*D*P_p + C_2*mu)/(C*mu)
+        result.append(L)
+        return result
+    def eqn_2_34__P_p(self, C: float, C_1: float, C_2: float, D: float, L: float, mu: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        P_p = mu*(C*L - C_2*D**3)/(C_1*D**4)
+        result.append(P_p)
+        return result
+    def eqn_2_34__mu(self, C: float, C_1: float, C_2: float, D: float, L: float, P_p: float, **kwargs):
+        # [.pyeqn] C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        result = []
+        mu = C_1*D**4*P_p/(C*L - C_2*D**3)
+        result.append(mu)
+        return result
+    @kwasak_static
     def eqn_2_35(self, C_L=None, C_T=None, F_p=None):
         return
 
@@ -1021,6 +1074,40 @@ class LiquidRing:
         result.append(w)
         return result
     @kwasak_static
+    def eqn_10_10(self, bhp=None, bhp_0=None, mu=None, rho=None):
+        return
+
+    def eqn_10_10__bhp(self, bhp_0: float, mu: float, rho: float, **kwargs):
+        # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
+        result = []
+        bhp = 0.0005*bhp_0*(31.0*mu**(4/25)*rho**(21/25) + 1000.0)
+        result.append(bhp)
+        return result
+    def eqn_10_10__bhp_0(self, bhp: float, mu: float, rho: float, **kwargs):
+        # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
+        result = []
+        bhp_0 = 2000.0*bhp/(31.0*mu**0.16*rho**0.84 + 1000.0)
+        result.append(bhp_0)
+        return result
+    def eqn_10_10__mu(self, bhp: float, bhp_0: float, rho: float, **kwargs):
+        # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
+        result = []
+        mu = -4.7751763343393e-10*I*(2000.0*bhp/(bhp_0*rho**0.84) - 1000.0/rho**0.84)**(25/4)
+        result.append(mu)
+        mu = 4.7751763343393e-10*I*(2000.0*bhp/(bhp_0*rho**0.84) - 1000.0/rho**0.84)**(25/4)
+        result.append(mu)
+        mu = -4.7751763343393e-10*(2000.0*bhp/(bhp_0*rho**0.84) - 1000.0/rho**0.84)**(25/4)
+        result.append(mu)
+        mu = 4.7751763343393e-10*(2000.0*bhp/(bhp_0*rho**0.84) - 1000.0/rho**0.84)**(25/4)
+        result.append(mu)
+        return result
+    def eqn_10_10__rho(self, bhp: float, bhp_0: float, mu: float, **kwargs):
+        # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
+        # Algebraic: rho = ((bhp/bhp_0 - 0.5) / (0.0155 * mu**0.16)) ** (1/0.84)
+        inner = (bhp / bhp_0 - 0.5) / (0.0155 * mu**0.16)
+        rho = inner ** (1.0 / 0.84)
+        return [rho]
+    @kwasak_static
     def eqn_10_11(self, T_c=None, T_s=None):
         return
 
@@ -1241,6 +1328,79 @@ class LiquidRing:
         result.append(p_s)
         return result
     @kwasak_static
+    def eqn_10_19(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
+        return
+
+    def eqn_10_19__P(
+        self,
+        S_Th: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        # Raise both sides to 5/3: R = (S_p/S_Th)^(5/3) * (460+T_e)/(460+T_i)
+        # Then R = (P - p_s)/(P - p_c)  =>  R*(P - p_c) = P - p_s  =>  P*(R-1) = R*p_c - p_s
+        # P = (R*p_c - p_s) / (R - 1)
+        R = (S_p / S_Th) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
+        P = (R * p_c - p_s) / (R - 1.0)
+        return [P]
+    def eqn_10_19__S_Th(self, P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        S_Th = S_p/((P*T_i + 460.0*P - T_i*p_s - 460.0*p_s)/(P*T_e + 460.0*P - T_e*p_c - 460.0*p_c))**(3/5)
+        result.append(S_Th)
+        return result
+    def eqn_10_19__S_p(self, P: float, S_Th: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        S_p = S_Th*((P*T_i + 460.0*P - T_i*p_s - 460.0*p_s)/(P*T_e + 460.0*P - T_e*p_c - 460.0*p_c))**(3/5)
+        result.append(S_p)
+        return result
+    def eqn_10_19__T_e(self, P: float, S_Th: float, S_p: float, T_i: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        T_e = (P*T_i - 460.0*P*(S_p/S_Th)**(5/3) + 460.0*P - T_i*p_s + 460.0*p_c*(S_p/S_Th)**(5/3) - 460.0*p_s)/((S_p/S_Th)**(5/3)*(P - p_c))
+        result.append(T_e)
+        T_e = (P*T_i - 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P - T_i*p_s + 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*p_s)/((P - p_c)*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)
+        result.append(T_e)
+        T_e = (P*T_i - 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P - T_i*p_s + 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*p_s)/((P - p_c)*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)
+        result.append(T_e)
+        return result
+    def eqn_10_19__T_i(self, P: float, S_Th: float, S_p: float, T_e: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        T_i = (P*T_e*(S_p/S_Th)**(5/3) + 460.0*P*(S_p/S_Th)**(5/3) - 460.0*P - T_e*p_c*(S_p/S_Th)**(5/3) - 460.0*p_c*(S_p/S_Th)**(5/3) + 460.0*p_s)/(P - p_s)
+        result.append(T_i)
+        T_i = (P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*P - T_e*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*p_s)/(P - p_s)
+        result.append(T_i)
+        T_i = (P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*P - T_e*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*p_s)/(P - p_s)
+        result.append(T_i)
+        return result
+    def eqn_10_19__p_c(self, P: float, S_Th: float, S_p: float, T_e: float, T_i: float, p_s: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        p_c = (P*T_e*(S_p/S_Th)**(5/3) - P*T_i + 460.0*P*(S_p/S_Th)**(5/3) - 460.0*P + T_i*p_s + 460.0*p_s)/((S_p/S_Th)**(5/3)*(T_e + 460.0))
+        result.append(p_c)
+        p_c = (P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - P*T_i + 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*P + T_i*p_s + 460.0*p_s)/((T_e + 460.0)*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)
+        result.append(p_c)
+        p_c = (P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - P*T_i + 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 - 460.0*P + T_i*p_s + 460.0*p_s)/((T_e + 460.0)*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)
+        result.append(p_c)
+        return result
+    def eqn_10_19__p_s(self, P: float, S_Th: float, S_p: float, T_e: float, T_i: float, p_c: float, **kwargs):
+        # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
+        result = []
+        p_s = (-P*T_e*(S_p/S_Th)**(5/3) + P*T_i - 460.0*P*(S_p/S_Th)**(5/3) + 460.0*P + T_e*p_c*(S_p/S_Th)**(5/3) + 460.0*p_c*(S_p/S_Th)**(5/3))/(T_i + 460.0)
+        result.append(p_s)
+        p_s = (-P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + P*T_i - 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P + T_e*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 - 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)/(T_i + 460.0)
+        result.append(p_s)
+        p_s = (-P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + P*T_i - 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P + T_e*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)/(T_i + 460.0)
+        result.append(p_s)
+        return result
+    @kwasak_static
     def eqn_10_2(self, PS=None, Q_gas=None, V=None, dP=None, dt=None):
         return
 
@@ -1274,6 +1434,142 @@ class LiquidRing:
         dt = -V*dP/(PS - Q_gas)
         result.append(dt)
         return result
+    @kwasak_static
+    def eqn_10_20(self, P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None):
+        return
+
+    def eqn_10_20__P(
+        self,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
+        # where K = (S_0/S_p)^(5/3) * (460+T_e)/(460+T_i)
+        # Expand: K*P*(P-p_s) = (P-p_0)*(P-p_c)
+        # K*P^2 - K*p_s*P = P^2 - (p_0+p_c)*P + p_0*p_c
+        # (K-1)*P^2 + (p_0+p_c - K*p_s)*P - p_0*p_c = 0  (note sign: -(K*p_s) - (-(p_0+p_c)) )
+        # Wait, let me redo carefully:
+        # K*P^2 - K*p_s*P = P^2 - p_0*P - p_c*P + p_0*p_c
+        # (K-1)*P^2 + (-K*p_s + p_0 + p_c)*P - p_0*p_c = 0
+        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
+        a = K - 1.0
+        b = -K * p_s + p_0 + p_c
+        c = -p_0 * p_c
+        disc = b**2 - 4.0 * a * c
+        P_1 = (-b + sqrt(disc)) / (2.0 * a)
+        P_2 = (-b - sqrt(disc)) / (2.0 * a)
+        return [P_1, P_2]
+    def eqn_10_20__S_0(self, P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        result = []
+        S_0 = S_p*((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
+        result.append(S_0)
+        return result
+    def eqn_10_20__S_p(self, P: float, S_0: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        result = []
+        S_p = S_0/((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
+        result.append(S_p)
+        return result
+    def eqn_10_20__T_e(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # Raise to 5/3: (S_0/S_p)^(5/3) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(460+T_e))
+        # Solve for (460+T_e):
+        # (460+T_e) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(S_0/S_p)^(5/3))
+        F = (P - p_0) * (P - p_c) / (P * (P - p_s))
+        T_e = F * (460.0 + T_i) / (S_0 / S_p) ** (5.0 / 3.0) - 460.0
+        return [T_e]
+    def eqn_10_20__T_i(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        p_0: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # Raise to 5/3: (S_0/S_p)^(5/3) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(460+T_e))
+        # Solve for (460+T_i):
+        # (460+T_i) = (S_0/S_p)^(5/3) * P*(P-p_s)*(460+T_e) / ((P-p_0)*(P-p_c))
+        F = (P - p_0) * (P - p_c) / (P * (P - p_s))
+        T_i = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / F - 460.0
+        return [T_i]
+    def eqn_10_20__p_0(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
+        # K*P*(P-p_s) = (P-p_0)*(P-p_c)
+        # p_0 is linear: (P-p_0) = K*P*(P-p_s) / (P-p_c)
+        # p_0 = P - K*P*(P-p_s) / (P-p_c)
+        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
+        p_0 = P - K * P * (P - p_s) / (P - p_c)
+        return [p_0]
+    def eqn_10_20__p_c(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_0: float,
+        p_s: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
+        # p_c is linear: (P-p_c) = K*P*(P-p_s) / (P-p_0)
+        # p_c = P - K*P*(P-p_s) / (P-p_0)
+        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
+        p_c = P - K * P * (P - p_s) / (P - p_0)
+        return [p_c]
+    def eqn_10_20__p_s(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        **kwargs,
+    ):
+        # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
+        # p_s is linear: P*(P-p_s) = (P-p_0)*(P-p_c) / K
+        # P-p_s = (P-p_0)*(P-p_c) / (K*P)
+        # p_s = P - (P-p_0)*(P-p_c) / (K*P)
+        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
+        p_s = P - (P - p_0) * (P - p_c) / (K * P)
+        return [p_s]
     @kwasak_static
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
         return
@@ -3667,6 +3963,35 @@ class RotaryPistonVane:
         return result
 class SelectingPump:
     @kwasak_static
+    def eqn_8_1(self, NC=None, NS=None, SCON=None, installation_cost=None):
+        return
+
+    def eqn_8_1__NC(self, NS: float, SCON: float, installation_cost: float, **kwargs):
+        # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
+        result = []
+        NC = -0.5*NS + 0.000350630766969363*installation_cost/SCON**(7/20)
+        result.append(NC)
+        return result
+    def eqn_8_1__NS(self, NC: float, SCON: float, installation_cost: float, **kwargs):
+        # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
+        result = []
+        NS = -2.0*NC + 0.000701261533938727*installation_cost/SCON**(7/20)
+        result.append(NS)
+        return result
+    def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
+        # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
+        # Algebraic: (SCON/1000)^0.35 = installation_cost / (16000*(NS+2*NC))
+        # SCON = 1000 * (installation_cost / (16000*(NS+2*NC))) ^ (1/0.35)
+        inner = installation_cost / (16000.0 * (NS + 2.0 * NC))
+        SCON = 1000.0 * inner ** (1.0 / 0.35)
+        return [SCON]
+    def eqn_8_1__installation_cost(self, NC: float, NS: float, SCON: float, **kwargs):
+        # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
+        result = []
+        installation_cost = 1426.00150101399*SCON**(7/20)*(2.0*NC + NS)
+        result.append(installation_cost)
+        return result
+    @kwasak_static
     def eqn_8_2(self, hp=None, installed_costs=None):
         return
 
@@ -3680,6 +4005,23 @@ class SelectingPump:
         # [.pyeqn] installed_costs = 33000 * (hp / 10) ** 0.5
         result = []
         installed_costs = 10435.5162785557*sqrt(hp)
+        result.append(installed_costs)
+        return result
+    @kwasak_static
+    def eqn_8_3(self, hp=None, installed_costs=None):
+        return
+
+    def eqn_8_3__hp(self, installed_costs: float, **kwargs):
+        # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
+        # Algebraic: (hp/10)^0.45 = installed_costs/38000
+        # hp = 10 * (installed_costs/38000) ^ (1/0.45)
+        inner = installed_costs / 38000.0
+        hp = 10.0 * inner ** (1.0 / 0.45)
+        return [hp]
+    def eqn_8_3__installed_costs(self, hp: float, **kwargs):
+        # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
+        result = []
+        installed_costs = 13482.9087908759*hp**(9/20)
         result.append(installed_costs)
         return result
     @kwasak_static
@@ -3721,6 +4063,100 @@ class SelectingPump:
         result = []
         theoretical_adiabatic_horsepower = Eff*actual_brake_horsepower
         result.append(theoretical_adiabatic_horsepower)
+        return result
+    @kwasak_static
+    def eqn_8_7(self, P_1=None, P_2=None, adiabatic_hp=None, w=None):
+        return
+
+    def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
+        # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
+        # P_2/P_1 = (20*adiabatic_hp/w + 1)^(1/0.286)
+        # P_1 = P_2 / ratio
+        ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
+        P_1 = P_2 / ratio
+        return [P_1]
+    def eqn_8_7__P_2(self, P_1: float, adiabatic_hp: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
+        # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
+        # P_2 = P_1 * ratio
+        ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
+        P_2 = P_1 * ratio
+        return [P_2]
+    def eqn_8_7__adiabatic_hp(self, P_1: float, P_2: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
+        result = []
+        adiabatic_hp = 0.05*w*((P_2/P_1)**(143/500) - 1.0)
+        result.append(adiabatic_hp)
+        return result
+    def eqn_8_7__w(self, P_1: float, P_2: float, adiabatic_hp: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
+        result = []
+        w = 20.0*adiabatic_hp/((P_2/P_1)**0.286 - 1.0)
+        result.append(w)
+        return result
+    @kwasak_static
+    def eqn_8_8(self, P_1=None, P_2=None, adiabatic_power_watts=None, f=None):
+        return
+
+    def eqn_8_8__P_1(self, P_2: float, adiabatic_power_watts: float, f: float, **kwargs):
+        # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
+        # (P_2/P_1)^0.286 = 12*adiabatic_power_watts/f + 1
+        # P_1 = P_2 / ratio
+        ratio = (12.0 * adiabatic_power_watts / f + 1.0) ** (1.0 / 0.286)
+        P_1 = P_2 / ratio
+        return [P_1]
+    def eqn_8_8__P_2(self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs):
+        # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
+        # P_2 = P_1 * ratio
+        ratio = (12.0 * adiabatic_power_watts / f + 1.0) ** (1.0 / 0.286)
+        P_2 = P_1 * ratio
+        return [P_2]
+    def eqn_8_8__adiabatic_power_watts(self, P_1: float, P_2: float, f: float, **kwargs):
+        # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
+        result = []
+        adiabatic_power_watts = 0.0833333333333333*f*((P_2/P_1)**(143/500) - 1.0)
+        result.append(adiabatic_power_watts)
+        return result
+    def eqn_8_8__f(self, P_1: float, P_2: float, adiabatic_power_watts: float, **kwargs):
+        # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
+        result = []
+        f = 12.0*adiabatic_power_watts/((P_2/P_1)**0.286 - 1.0)
+        result.append(f)
+        return result
+    @kwasak_static
+    def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
+        return
+
+    def eqn_8_9__E_j(self, E_m: float, e: float, r: float, s: float, **kwargs):
+        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
+        result = []
+        E_j = 0.341296928327645*E_m*r*s/e
+        result.append(E_j)
+        return result
+    def eqn_8_9__E_m(self, E_j: float, e: float, r: float, s: float, **kwargs):
+        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
+        result = []
+        E_m = 2.93*E_j*e/(r*s)
+        result.append(E_m)
+        return result
+    def eqn_8_9__e(self, E_j: float, E_m: float, r: float, s: float, **kwargs):
+        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
+        result = []
+        e = 0.341296928327645*E_m*r*s/E_j
+        result.append(e)
+        return result
+    def eqn_8_9__r(self, E_j: float, E_m: float, e: float, s: float, **kwargs):
+        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
+        result = []
+        r = 2.93*E_j*e/(E_m*s)
+        result.append(r)
+        return result
+    def eqn_8_9__s(self, E_j: float, E_m: float, e: float, r: float, **kwargs):
+        # [.pyeqn] r = 2.93 * (E_j * e) / (E_m * s)
+        result = []
+        s = 2.93*E_j*e/(E_m*r)
+        result.append(s)
         return result
 class SteamJetInjectors:
     @kwasak_static

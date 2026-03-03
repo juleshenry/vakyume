@@ -1,10 +1,14 @@
-from math import log, sqrt, exp, pow, e
+from cmath import log, sqrt, exp
+from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_10_10__rho(self, bhp: float, bhp_0: float, mu: float, **kwargs):
     # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-    # Placeholder for numerical solver
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    # Algebraic: rho = ((bhp/bhp_0 - 0.5) / (0.0155 * mu**0.16)) ** (1/0.84)
+    inner = (bhp / bhp_0 - 0.5) / (0.0155 * mu**0.16)
+    rho = inner ** (1.0 / 0.84)
+    return [rho]

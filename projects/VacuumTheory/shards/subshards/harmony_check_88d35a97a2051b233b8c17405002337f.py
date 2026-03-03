@@ -1,4 +1,5 @@
-from math import *
+from cmath import *
+from math import e, pi
 import numpy as np
 
 def check_harmony(hp, installed_costs, **kwargs):

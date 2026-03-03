@@ -1,4 +1,5 @@
-from math import *
+from cmath import *
+from math import e, pi
 import numpy as np
 
 def check_harmony(P, S_Th, S_p, T_e, T_i, p_c, p_s, **kwargs):

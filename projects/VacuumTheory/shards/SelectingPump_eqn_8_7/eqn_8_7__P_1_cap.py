@@ -1,10 +1,16 @@
-from math import log, sqrt, exp, pow, e
+from cmath import log, sqrt, exp
+from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
     # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-    # Placeholder for numerical solver
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
+    # P_2/P_1 = (20*adiabatic_hp/w + 1)^(1/0.286)
+    # P_1 = P_2 / ratio
+    ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
+    P_1 = P_2 / ratio
+    return [P_1]

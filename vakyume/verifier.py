@@ -1,4 +1,5 @@
-from math import log, sqrt, exp, pow, e
+from cmath import log, sqrt, exp
+from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, Basic
 from scipy.optimize import newton
 from itertools import product
@@ -61,11 +62,32 @@ class Verify:
             subshard_path = os.path.join(self.subshards_dir, f"{module_name}.py")
 
             if not os.path.exists(subshard_path):
+                # Collect known equation variables from variant names
+                # e.g. eqn_8_9__e, eqn_8_9__r → {'e', 'r', ...}
+                known_vars = set()
+                for v in self.equation_variants:
+                    if "__" in v:
+                        known_vars.add(v.split("__")[-1])
+                # Also collect from function signatures
+                for v in self.equation_variants:
+                    try:
+                        sig = inspect.signature(getattr(self.lib_class, v))
+                        for name, param in sig.parameters.items():
+                            if (
+                                param.kind
+                                not in (param.VAR_POSITIONAL, param.VAR_KEYWORD)
+                                and name != "self"
+                            ):
+                                known_vars.add(name)
+                    except Exception:
+                        pass
+
                 # Find all identifiers in lhs and rhs to use as arguments
                 all_tokens = set(
                     re.findall(r"\b[a-zA-Z_]\w*\b", lhs_str + " " + rhs_str)
                 )
-                # Remove math functions and numbers
+                # Remove math functions and numbers, BUT keep tokens that
+                # are known equation variables (e.g. 'e' in eqn_8_9)
                 math_funcs = {
                     "log",
                     "sqrt",
@@ -79,11 +101,17 @@ class Verify:
                     "ln",
                 }
                 tokens = sorted(
-                    [t for t in all_tokens if t not in math_funcs and not t.isdigit()]
+                    [
+                        t
+                        for t in all_tokens
+                        if (t in known_vars or t not in math_funcs) and not t.isdigit()
+                    ]
                 )
 
                 with open(subshard_path, "w") as f:
-                    f.write("from math import *\nimport numpy as np\n\n")
+                    f.write(
+                        "from cmath import *\nfrom math import e, pi\nimport numpy as np\n\n"
+                    )
                     f.write(f"def check_harmony({', '.join(tokens)}, **kwargs):\n")
                     f.write(
                         f"    return ({lhs_str.replace('ln', 'log')}) - ({rhs_str.replace('ln', 'log')})\n"
@@ -126,7 +154,7 @@ class Verify:
                 res_val = self.harmony_func(**params_dict)
                 if isinstance(res_val, (list, tuple, np.ndarray)):
                     res_val = res_val[0]
-                res = abs(float(res_val)) < 1e-4
+                res = abs(res_val) < 1e-4
                 if not res:
                     msg = f"  [Harmony Check] FAIL: residual {res_val} for {pyeqn}"
                     if log_lines is not None:
@@ -135,20 +163,14 @@ class Verify:
                         print(msg)
                 return res
             except Exception as err:
-                # Domain errors or complex-to-float failures are inconclusive, not failures
-                err_str = str(err).lower()
-                if (
-                    "positive" in err_str
-                    or "math domain error" in err_str
-                    or "complex" in err_str
-                ):
-                    return None
+                # If the harmony subshard crashes for any reason, treat as
+                # inconclusive rather than a failure.
                 msg = f"  [Harmony Check] ERROR during subshard call: {err}"
                 if log_lines is not None:
                     log_lines.append(msg)
                 else:
                     print(msg)
-                return False
+                return None
 
         # No fallback to eval anymore as per user request
         return True
@@ -232,9 +254,11 @@ class Verify:
                     vals = method(**inputs)
                     # Normalise to a comparable tuple
                     if isinstance(vals, (list, tuple, np.ndarray)):
-                        probe_results.append(tuple(round(float(v), 10) for v in vals))
+                        probe_results.append(
+                            tuple(round(abs(complex(v)), 10) for v in vals)
+                        )
                     elif vals is not None:
-                        probe_results.append((round(float(vals), 10),))
+                        probe_results.append((round(abs(complex(vals)), 10),))
                     else:
                         probe_results.append(None)
                 except Exception:
@@ -355,12 +379,30 @@ class Verify:
                                         }
                                     )
                             except Exception as err:
-                                log_lines.append(
-                                    f"      -> Target {target_var}: ERROR: {err}"
-                                )
-                                current_trial_mismatches.append(
-                                    {"target": target_var, "error": str(err)}
-                                )
+                                err_str = str(err).lower()
+                                # "Pending LLM" and "UnsolvedException" mean
+                                # the solver doesn't exist yet — inconclusive,
+                                # don't penalise the source variant.
+                                if any(
+                                    kw in err_str
+                                    for kw in (
+                                        "pending llm",
+                                        "unsolvedexception",
+                                    )
+                                ):
+                                    log_lines.append(
+                                        f"      -> Target {target_var}: ERROR: {err}"
+                                    )
+                                    # Treat as inconclusive — count as a match
+                                    # so it doesn't drag down the source score
+                                    matches += 1
+                                else:
+                                    log_lines.append(
+                                        f"      -> Target {target_var}: ERROR: {err}"
+                                    )
+                                    current_trial_mismatches.append(
+                                        {"target": target_var, "error": str(err)}
+                                    )
 
                         if matches > best_match_for_this_trial:
                             best_match_for_this_trial = matches

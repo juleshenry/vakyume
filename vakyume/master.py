@@ -187,7 +187,8 @@ def shard_from_chapters(ctx: PipelineContext):
         return
 
     import_header = (
-        "from math import log, sqrt, exp, pow, e\n"
+        "from cmath import log, sqrt, exp\n"
+        "from math import e, pi\n"
         "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
         "from scipy.optimize import newton\n"
         "import numpy as np\n"
@@ -490,10 +491,11 @@ def attempt_repair_shard(
     mismatches: dict,
     error: str = None,
 ):
-    """Repairs a single shard file."""
+    """Repairs a single shard file by showing the LLM a working shard as example."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
+    eqn_suffix = family_name.split("_eqn_")[1]
     safe_variant = case_safe_name(broken_variant)
-    shard_file = f"eqn_{family_name.split('_eqn_')[1]}__{safe_variant}.py"
+    shard_file = f"eqn_{eqn_suffix}__{safe_variant}.py"
     shard_path = os.path.join(family_dir, shard_file)
 
     if not os.path.exists(shard_path):
@@ -506,56 +508,122 @@ def attempt_repair_shard(
     pyeqn_match = re.search(r"# \[\.pyeqn\] (.*)", shard_code)
     pyeqn = pyeqn_match.group(1).strip() if pyeqn_match else ""
 
+    # Find a working shard from the same family to use as example
+    example_code = None
+    for tv in trusted_variants:
+        safe_tv = case_safe_name(tv)
+        tv_path = os.path.join(family_dir, f"eqn_{eqn_suffix}__{safe_tv}.py")
+        if os.path.exists(tv_path):
+            with open(tv_path, "r") as f:
+                candidate = f.read()
+            if "UnsolvedException" not in candidate:
+                example_code = candidate
+                break
+
+    # Extract the function header from the broken shard
+    header_match = re.search(r"(def eqn_.*?\*\*kwargs\)):", shard_code)
+    header = header_match.group(1) + ":" if header_match else ""
+
     print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
-    raw = repair_codigo(
-        shard_file=shard_file,
-        shard_code=shard_code,
-        error=error,
-        broken_variants=[broken_variant],
-        trusted_variants=trusted_variants,
-        scores=scores,
-        mismatches=mismatches,
-        pyeqn=pyeqn,
-        stream=False,
-        is_subshard=True,
+
+    system_prompt = (
+        "You are a math solver. Given an equation and a working example that solves for one variable, "
+        "write a Python function that solves the same equation for a different variable.\n"
+        "RULES:\n"
+        "- Return ONLY the Python function. No markdown, no explanations.\n"
+        "- Keep the EXACT function signature provided.\n"
+        "- Keep the '# [.pyeqn]' comment.\n"
+        "- Return result as a list.\n"
+        "- Use math, numpy, or scipy.optimize.newton for numerical solutions.\n"
+        "- Use cmath.sqrt/cmath.log instead of math.sqrt/math.log to handle complex results.\n"
+        "- Do NOT use leading zeros in decimals."
     )
 
+    user_prompt = f"Equation: {pyeqn}\n"
+    if example_code:
+        user_prompt += (
+            f"\nWorking example (solves for a different variable):\n{example_code}\n"
+        )
+    user_prompt += f"\nNow solve for: {broken_variant}\n"
+    user_prompt += f"Use this exact header:\n{header}\n"
+
+    from .llm import ask_llm
+
+    raw = ask_llm(system_prompt, user_prompt, stream=False)
+
     if not raw:
+        print(f"  [Repair] LLM returned empty response")
         return {"updated": False}
 
-    method_name = f"eqn_{family_name.split('_eqn_')[1]}__{broken_variant}"
+    method_name = f"eqn_{eqn_suffix}__{broken_variant}"
     code_text = extract_code(raw, target_name=method_name)
     if not code_text.strip():
+        # Fallback: try to use whatever came back without target filtering
+        code_text = extract_code(raw)
+    if not code_text.strip():
+        print(f"  [Repair] extract_code returned empty")
         return {"updated": False}
 
-    # Ensure 'self' is in the header
-    header_match = re.search(rf"def\s+{method_name}\s*\((.*?)\):", code_text)
-    if header_match:
-        params = header_match.group(1).strip()
-        if not params.startswith("self"):
-            new_params = "self, " + params if params else "self"
-            code_text = code_text.replace(
-                header_match.group(0), f"def {method_name}({new_params}):"
-            )
+    # --- Normalize the function name ---
+    # phi3 may output a different function name; replace it with the correct one.
+    any_def = re.search(r"def\s+(\w+)\s*\((.*?)\):", code_text, re.DOTALL)
+    if any_def:
+        llm_func_name = any_def.group(1)
+        params_str = any_def.group(2).strip()
+
+        # Ensure 'self' is the first parameter
+        if not params_str.startswith("self"):
+            params_str = "self, " + params_str if params_str else "self"
+
+        # Ensure **kwargs is present
+        if "**kwargs" not in params_str:
+            params_str = params_str.rstrip(", ") + ", **kwargs"
+
+        # Replace the def line with the correct function name and params
+        code_text = code_text.replace(
+            any_def.group(0), f"def {method_name}({params_str}):"
+        )
+
+    # --- Build the complete shard file ---
+    import_header = (
+        "from cmath import log, sqrt, exp\n"
+        "from math import e, pi\n"
+        "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
+        "from scipy.optimize import newton\n"
+        "import numpy as np\n"
+        "from vakyume.config import UnsolvedException\n\n"
+    )
+
+    # Strip any imports the LLM added (we provide our own)
+    body_lines = []
+    for line in code_text.splitlines():
+        s = line.strip()
+        if s.startswith("import ") or s.startswith("from "):
+            continue
+        body_lines.append(line)
+    code_text = "\n".join(body_lines)
+
+    # Ensure the pyeqn comment is present
+    if "# [.pyeqn]" not in code_text and pyeqn:
+        # Insert right after the def line
+        code_text = re.sub(
+            r"(def\s+\w+\(.*?\):)",
+            rf"\1\n    # [.pyeqn] {pyeqn}",
+            code_text,
+            count=1,
+        )
+
+    full_code = import_header + code_text + "\n"
 
     try:
-        ast.parse(code_text)
-        # Ensure it has the correct header
-        import_header = (
-            "from math import log, sqrt, exp, pow, e\n"
-            "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-            "from scipy.optimize import newton\n"
-            "import numpy as np\n"
-            "from vakyume.config import UnsolvedException\n\n"
-        )
-        if "import " not in code_text:
-            code_text = import_header + code_text
-
+        ast.parse(full_code)
         with open(shard_path, "w") as f:
-            f.write(code_text)
+            f.write(full_code)
+        print(f"  [Repair] Successfully wrote repaired shard: {shard_file}")
         return {"updated": True}
-    except Exception as e:
+    except SyntaxError as e:
         print(f"  [Repair] LLM produced invalid syntax: {e}")
+        print(f"  [Repair] Code was:\n{full_code[:500]}")
         return {"updated": False, "error": str(e)}
 
 
@@ -705,7 +773,8 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
     """Combines solved families into a single library file."""
     with open(ctx.certified_file, "w") as out:
         out.write(
-            "from math import log, sqrt, exp, pow, e\n"
+            "from cmath import log, sqrt, exp\n"
+            "from math import e, pi\n"
             "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
             "from scipy.optimize import newton\n"
             "from vakyume.kwasak import kwasak_static\n"

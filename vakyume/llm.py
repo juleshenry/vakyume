@@ -59,7 +59,7 @@ def escribir_codigo(
         f"- Output ONLY executable {lang} code.\n"
         f"- No commentary, no markdown formatting, no explanations.\n"
         f"- Do NOT add any chatty comments, explanations, or docstrings.\n"
-        f"- Use 'math' or 'numpy' for functions.\n"
+        f"- Use 'cmath' for sqrt/log/exp (handles complex results), 'numpy', or 'scipy'.\n"
         f"- IMPORTANT: Never use leading zeros in decimal literals (e.g., use 0.5, not 00.5).\n"
         f"- DO NOT remove or rename arguments in the provided function header.\n"
         f"- Ensure the result is returned as a list."
@@ -192,53 +192,83 @@ def repair_codigo(
 
 
 def extract_code(text, target_name=None):
-    """Extracts ONLY the first valid Python code block or a specific function/class definition."""
-    # 1. Try to find a markdown code block
-    pattern = re.compile(r"```(?:python)?\n(.*?)\n```", re.DOTALL)
-    matches = pattern.findall(text)
+    """Extracts ONLY the first valid Python function from LLM output.
 
-    # If we have a target_name, look through matches or text for it
-    if target_name:
-        search_text = "\n\n".join(matches) if matches else text
-        lines = search_text.splitlines()
-        code_lines = []
-        found_target = False
+    Strategy:
+    1. Strip markdown fences to get raw content.
+    2. Find the first 'def' line (optionally matching target_name).
+    3. Grab that line + all subsequent lines that are blank or indented
+       (i.e. the function body), stopping at the next unindented non-blank line.
+    """
+    # --- Step 1: Strip markdown fences ---
+    # Remove ```python ... ``` wrappers (the LLM may use them)
+    stripped = re.sub(r"```(?:python|py)?\s*\n?", "", text)
+    stripped = re.sub(r"```\s*", "", stripped)
 
-        # Look for 'def target_name' or 'class target_name'
-        target_pattern = re.compile(rf"^\s*(def|class)\s+{re.escape(target_name)}\b")
+    lines = stripped.splitlines()
 
-        for line in lines:
-            if target_pattern.match(line):
-                found_target = True
-            elif found_target and (
-                line.strip().startswith("def ") or line.strip().startswith("class ")
-            ):
-                # Found the start of another definition, stop here
+    # --- Step 2: Find the def line ---
+    def_idx = None
+    for i, line in enumerate(lines):
+        s = line.strip()
+        if s.startswith("def "):
+            if target_name:
+                # Prefer the target, but accept any def as fallback
+                if target_name in s:
+                    def_idx = i
+                    break
+                elif def_idx is None:
+                    def_idx = i  # remember first def as fallback
+            else:
+                def_idx = i
                 break
 
-            if found_target:
-                code_lines.append(line)
+    if def_idx is None:
+        # No function found at all — return whatever we got
+        return stripped.strip()
 
-        if code_lines:
-            return "\n".join(code_lines).strip()
-
-    # Fallback to first match if no target_name or target not found in matches
-    if matches:
-        return matches[0].strip()
-
-    # 2. Try to find the first 'def' and take everything until next 'def' or end
-    lines = text.splitlines()
-    code_lines = []
-    found_def = False
-    for line in lines:
-        if line.strip().startswith("def ") or line.strip().startswith("class "):
-            if found_def:
-                break  # Stop at second definition
-            found_def = True
-        if found_def:
+    # --- Step 3: Grab the function body ---
+    # The def line plus everything that is blank or indented after it
+    code_lines = [lines[def_idx]]
+    for line in lines[def_idx + 1 :]:
+        # Blank lines within the body are fine
+        if line.strip() == "":
             code_lines.append(line)
+            continue
+        # Lines starting with whitespace are part of the body
+        if line[0] in (" ", "\t"):
+            code_lines.append(line)
+            continue
+        # An unindented non-blank line means we left the function
+        # Unless it's an import (phi3 sometimes puts imports after def)
+        break
 
-    if code_lines:
-        return "\n".join(code_lines).strip()
+    result = "\n".join(code_lines).rstrip()
 
-    return text.strip()
+    # Sanity: if we only got the def line, the LLM may have put
+    # the body at a weird indent or the code is truly absent.
+    # Try one more pass: look for any line with 'return' after the def.
+    if "\n" not in result or "return" not in result:
+        # Broader grab: take everything from the def line to the end,
+        # filtering out obvious non-code lines
+        code_lines = []
+        in_func = False
+        for line in lines:
+            s = line.strip()
+            if s.startswith("def ") and (not target_name or target_name in s):
+                in_func = True
+            if in_func:
+                # Skip obvious commentary lines that aren't comments in code
+                if s and not s.startswith("#") and not s.startswith("def "):
+                    # If it looks like prose (no = , no ( , no return, no raise)
+                    if not any(
+                        kw in s for kw in ("=", "(", "return", "raise", "import", "#")
+                    ):
+                        continue
+                code_lines.append(line)
+        if code_lines and len(code_lines) > 1:
+            candidate = "\n".join(code_lines).rstrip()
+            if "return" in candidate or "raise" in candidate:
+                result = candidate
+
+    return result
