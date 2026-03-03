@@ -27,7 +27,28 @@ _MATH_FUNCS = {
     "exp": "std::exp",
     "pow": "std::pow",
     "abs": "std::abs",
+    "LambertW": "_lambertW",
 }
+
+# C++ implementation of the Lambert W₀ function (principal branch) via
+# Halley's iteration.  Emitted once at the top of the generated file.
+_LAMBERTW_IMPL = """\
+// Lambert W₀ (principal branch) via Halley iteration
+inline double _lambertW(double x) {
+    if (x == 0.0) return 0.0;
+    double w = (x > 1.0) ? std::log(x) - std::log(std::log(x)) : 0.5;
+    for (int i = 0; i < 50; ++i) {
+        double ew = std::exp(w);
+        double wew = w * ew;
+        double f  = wew - x;
+        double fp = ew * (w + 1.0);
+        double d  = f / (fp - (w + 2.0) * f / (2.0 * (w + 1.0)));
+        w -= d;
+        if (std::abs(d) < 1e-15) break;
+    }
+    return w;
+}
+"""
 
 _MATH_CONSTS = {
     "e": "M_E",
@@ -42,6 +63,9 @@ class _CppTranspileError(Exception):
 class _ExprTranspiler(ast.NodeVisitor):
     """Convert a Python expression AST node to a C++ expression string."""
 
+    def __init__(self, complex_mode=False):
+        self.complex_mode = complex_mode
+
     def visit_Constant(self, node):
         if isinstance(node.value, (int, float)):
             v = repr(node.value)
@@ -54,6 +78,9 @@ class _ExprTranspiler(ast.NodeVisitor):
     def visit_Name(self, node):
         if node.id in _MATH_CONSTS:
             return _MATH_CONSTS[node.id]
+        # SymPy imaginary unit
+        if node.id == "I":
+            return "std::complex<double>(0.0, 1.0)"
         return node.id
 
     def visit_UnaryOp(self, node):
@@ -123,6 +150,15 @@ def _transpile_expr(node):
     return _ExprTranspiler().visit(node)
 
 
+def _method_uses_complex(source):
+    """Return True if the Python source uses the imaginary unit ``I``."""
+    tree = ast.parse(textwrap.dedent(source))
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and node.id == "I":
+            return True
+    return False
+
+
 def _transpile_method(class_name, method_name, source):
     """
     Attempt a deterministic Python→C++ conversion of a solver method.
@@ -141,6 +177,11 @@ def _transpile_method(class_name, method_name, source):
 
     full_name = f"{class_name}_{method_name}"
 
+    # Detect whether this method produces complex-valued solutions
+    complex_mode = _method_uses_complex(source)
+    val_type = "std::complex<double>" if complex_mode else "double"
+    vec_type = f"std::vector<{val_type}>"
+
     # Build parameter list (skip **kwargs, self, cls)
     params = []
     for arg in func_node.args.args:
@@ -150,12 +191,15 @@ def _transpile_method(class_name, method_name, source):
         params.append(f"double {name}")
     # Skip **kwargs (func_node.args.kwarg)
 
-    sig = f"std::vector<double> {full_name}({', '.join(params)})"
+    sig = f"{vec_type} {full_name}({', '.join(params)})"
 
     body_lines = []
-    body_lines.append("    std::vector<double> result;")
+    body_lines.append(f"    {vec_type} result;")
 
-    tx = _ExprTranspiler()
+    tx = _ExprTranspiler(complex_mode=complex_mode)
+
+    # Track declared variables to avoid redefinitions
+    declared_vars = set()
 
     for stmt in func_node.body:
         # Skip: docstrings, comments (ast doesn't keep comments, but docstrings are Expr(Constant(str)))
@@ -211,7 +255,11 @@ def _transpile_method(class_name, method_name, source):
         ):
             var_name = stmt.targets[0].id
             val = tx.visit(stmt.value)
-            body_lines.append(f"    double {var_name} = {val};")
+            if var_name not in declared_vars:
+                body_lines.append(f"    {val_type} {var_name} = {val};")
+                declared_vars.add(var_name)
+            else:
+                body_lines.append(f"    {var_name} = {val};")
             continue
 
         raise _CppTranspileError(f"unsupported statement: {type(stmt).__name__}")
@@ -265,11 +313,23 @@ Python:
 
 
 def convert_method(class_name, method_name, source):
-    """Try deterministic transpilation first; fall back to LLM."""
+    """Try deterministic transpilation first; fall back to LLM, then stub."""
     try:
         return _transpile_method(class_name, method_name, source)
     except _CppTranspileError:
         return convert_with_phi3(class_name, method_name, source)
+
+
+def _make_stub(class_name, method_name, arg_names):
+    """Generate a C++ stub that throws at runtime for untranspilable methods."""
+    full_name = f"{class_name}_{method_name}"
+    real_args = [a for a in arg_names if a not in ("self", "cls")]
+    params = ", ".join(f"double {a}" for a in real_args)
+    return (
+        f"std::vector<double> {full_name}({params}) {{\n"
+        f'    throw std::runtime_error("{full_name}: requires numerical solver (not transpilable)");\n'
+        f"}}"
+    )
 
 
 # ── Public helpers ───────────────────────────────────────────────────────────
@@ -345,35 +405,31 @@ def main(project_dir=".", input_file=None):
     print(f"Converting {len(tasks_to_run)} functions to C++...")
 
     # First pass: deterministic transpiler (fast, no LLM).
-    # Collect indices that need LLM fallback.
+    # Methods that can't be transpiled get runtime-error stubs.
     cpp_functions = [None] * len(tasks_to_run)
-    llm_indices = []
+    stubbed = []
 
-    for i, (class_name, method_name, source, _args) in enumerate(tasks_to_run):
+    for i, (class_name, method_name, source, args) in enumerate(tasks_to_run):
         try:
             cpp_functions[i] = _transpile_method(class_name, method_name, source)
         except _CppTranspileError:
-            llm_indices.append(i)
+            cpp_functions[i] = _make_stub(class_name, method_name, args)
+            stubbed.append(f"{class_name}.{method_name}")
 
-    if llm_indices:
+    det_count = len(tasks_to_run) - len(stubbed)
+    if stubbed:
         print(
-            f"  {len(tasks_to_run) - len(llm_indices)} converted deterministically, "
-            f"{len(llm_indices)} require LLM..."
+            f"  {det_count} converted deterministically, "
+            f"{len(stubbed)} stubbed (not transpilable):"
         )
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            futures = {
-                idx: executor.submit(
-                    convert_with_phi3,
-                    tasks_to_run[idx][0],
-                    tasks_to_run[idx][1],
-                    tasks_to_run[idx][2],
-                )
-                for idx in llm_indices
-            }
-            for idx, fut in futures.items():
-                cpp_functions[idx] = fut.result()
+        for name in stubbed:
+            print(f"    - {name}")
     else:
-        print(f"  All {len(tasks_to_run)} converted deterministically (no LLM needed).")
+        print(f"  All {len(tasks_to_run)} converted deterministically.")
+
+    # Check whether any generated function uses _lambertW or complex types
+    all_code = "\n".join(f for f in cpp_functions if f)
+    needs_lambertw = "_lambertW" in all_code
 
     cpp_output = [
         "#include <iostream>",
@@ -385,6 +441,8 @@ def main(project_dir=".", input_file=None):
         "using namespace std::complex_literals;",
         "",
     ]
+    if needs_lambertw:
+        cpp_output.append(_LAMBERTW_IMPL)
     cpp_output.extend(f for f in cpp_functions if f)
 
     test_suite = [

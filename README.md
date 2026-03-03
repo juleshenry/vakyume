@@ -18,6 +18,122 @@ The main entry point is `vakyume.py`. It uses a project-centric directory struct
 python3 vakyume.py projects/VacuumTheory
 ```
 
+## CLI Reference
+
+Vakyume exposes four subcommands.  Run `python3 vakyume.py --help` for an overview.
+
+### `run` -- Shard, Verify & Repair
+
+Run the core pipeline: generate solver shards from equation notes, verify them
+with One-Odd-Out, and auto-repair broken solvers via LLM.
+
+```
+python3 vakyume.py run <project> [options]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--pdf PATH` | Extract equations from a textbook PDF (OCR stage) |
+| `--cpp` | Generate C++ library after certification |
+| `--max-rounds N` | Maximum repair rounds (default 10) |
+| `--overwrite` | Wipe and regenerate all shards |
+| `--verbose` | Show detailed verification output |
+| `--repair-only` | Skip shard generation; only repair broken families |
+
+```bash
+# Basic run
+python3 vakyume.py run projects/VacuumTheory
+
+# With C++ generation and verbose output
+python3 vakyume.py run projects/VacuumTheory --cpp --verbose
+
+# Resume and only repair broken equations
+python3 vakyume.py run projects/VacuumTheory --repair-only --max-rounds 5
+```
+
+### `reconstruct` -- Rebuild Importable Python Library
+
+Reassemble individual solver shards into a single, importable Python module
+(`vakyume_lib.py`).
+
+```
+python3 vakyume.py reconstruct <project> [options]
+```
+
+| Flag | Description |
+|------|-------------|
+| `-o, --output PATH` | Custom output file (default `<project>/vakyume_lib.py`) |
+| `--stdout` | Print to stdout instead of writing a file |
+
+```bash
+python3 vakyume.py reconstruct projects/VacuumTheory
+python3 vakyume.py reconstruct projects/VacuumTheory -o mylib.py
+python3 vakyume.py reconstruct projects/VacuumTheory --stdout | head
+```
+
+### `make-cpp` -- Generate & Compile C++ Library
+
+Convert the reconstructed Python library (or any certified file) to C++,
+compile it with `g++`, and run the built-in test suite.
+
+The converter uses a **deterministic AST transpiler** for standard arithmetic
+and math functions (`log`, `sqrt`, `exp`, `pow`), falling back to a local LLM
+(Phi-3 via Ollama) only for constructs the transpiler cannot handle.
+
+```
+python3 vakyume.py make-cpp <project> [options]
+```
+
+| Flag | Description |
+|------|-------------|
+| `-i, --input FILE` | Python source to convert (default: `vakyume_lib.py`, then `vakyume_certified.py`) |
+
+```bash
+# Convert the reconstructed library (default)
+python3 vakyume.py make-cpp projects/VacuumTheory
+
+# Convert a specific file
+python3 vakyume.py make-cpp projects/VacuumTheory -i vakyume_certified.py
+```
+
+Output:
+- `<project>/vakyume.cpp` -- generated C++ source
+- `<project>/vakyume_test` -- compiled test binary
+
+### `build` -- Full Pipeline (All-in-One)
+
+Run the complete pipeline in a single command: scrape equations, verify &
+repair, reconstruct the Python library, and generate the C++ library.
+
+```
+python3 vakyume.py build <project> [options]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--pdf PATH` | Extract equations from a textbook PDF |
+| `--max-rounds N` | Maximum repair rounds (default 10) |
+| `--overwrite` | Wipe and regenerate all shards |
+| `--verbose` | Show detailed verification output |
+
+```bash
+# Full build from scratch
+python3 vakyume.py build projects/MyProject --overwrite
+
+# Build from a PDF
+python3 vakyume.py build projects/MyProject --pdf textbook.pdf
+
+# Resume an existing project through to C++
+python3 vakyume.py build projects/VacuumTheory
+```
+
+Pipeline stages:
+1. **Scraping** -- generate solver shards from `notes/*.py`
+2. **Verification** -- One-Odd-Out cross-checks all solvers
+3. **Repair** -- LLM-assisted fix of broken solvers (up to `max-rounds`)
+4. **Reconstruction** -- assemble shards into `vakyume_lib.py`
+5. **C++ generation** -- transpile to C++, compile, and test
+
 ## Project Structure
 Each project (e.g., `projects/VacuumTheory/`) contains:
 - `notes/`: Python-like equation definitions (Input).
@@ -25,7 +141,9 @@ Each project (e.g., `projects/VacuumTheory/`) contains:
 - `reports/`: Verification and analysis logs.
 - `repair_prompts/`: LLM interaction logs.
 - `vakyume_certified.py`: The finalized, verified Python library.
-- `vakyume.cpp`: The generated C++ library (if `--cpp` is used).
+- `vakyume_lib.py`: Reconstructed single-file Python library.
+- `vakyume.cpp`: The generated C++ library.
+- `vakyume_test`: Compiled C++ test binary.
 
 ## Setting Up a New Project
 
@@ -37,9 +155,9 @@ To start a new project from a textbook PDF:
    ```
 2. **Run Vakyume with the PDF**:
    ```bash
-   python3 vakyume.py projects/MyNewProject --pdf path/to/textbook.pdf
+   python3 vakyume.py build projects/MyNewProject --pdf path/to/textbook.pdf
    ```
-   This will attempt to extract formulas from the PDF into `projects/MyNewProject/notes/extracted_notes.py`. 
+   This will extract formulas, generate solvers, verify, reconstruct, and compile to C++.
    
    *Note: For best results, ensure `pdftotext` is installed on your system.*
 
@@ -59,7 +177,7 @@ To start a new project from a textbook PDF:
 
 4. **Verify and Generate**:
    ```bash
-   python3 vakyume.py projects/MyNewProject --cpp
+   python3 vakyume.py build projects/MyNewProject
    ```
 
 ## Resume & Testing
@@ -73,7 +191,7 @@ The default `chapters/` directory contains equations extracted from the 1986 edi
 - **One-Odd-Out (OOO) Methodology**: We've proven that verifying $f(x, y) \to z$ and $f(x, z) \to y$ consistency is highly effective at catching algebraic errors in LLM-generated or SymPy-isolated functions.
 - **Project-Centric Structure**: Successfully transitioned to a formal Python package (`vakyume/`) with a project-based directory structure (e.g., `projects/VacuumTheory/`).
 - **Resumability**: The pipeline automatically skips existing shards, allowing for long-running verification or repair tasks to be resumed.
-- **C++ Library Generation**: High-performance C++ code is generated using local LLMs (Phi-3 via Ollama), strictly enforcing `double` precision and `std::complex` for imaginary numbers.
+- **C++ Library Generation**: A deterministic AST transpiler converts Python solvers to C++ (`log`, `sqrt`, `exp`, `pow`, arithmetic). Falls back to local LLMs (Phi-3 via Ollama) for constructs the transpiler cannot handle. Enforces `double` precision throughout.
 - **Parallelization**: Parallelizing Ollama calls (using 2-4 workers) significantly speeds up the verification of large equation sets (~500+ functions).
 
 ## Examples
@@ -81,13 +199,13 @@ The default `chapters/` directory contains equations extracted from the 1986 edi
 ### Vacuum Theory
 Equations extracted from *Process Vacuum System Design and Operation* (1986).
 ```bash
-python3 vakyume.py projects/VacuumTheory --cpp
+python3 vakyume.py build projects/VacuumTheory
 ```
 
 ### Building Models
 Physics kinematics equations extracted from *Building Models To Describe Our World*.
 ```bash
-python3 vakyume.py projects/BuildingModels --cpp
+python3 vakyume.py build projects/BuildingModels
 ```
 
 
@@ -169,9 +287,9 @@ Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
 - 5. could even make another function to reiterate over a particular failing test for efficiency
 
 # Final Goal:
-python3 vakyume.py your_text_book.pdf 
+python3 vakyume.py build your_project
 [x] loading formulae
 [x] solving via sympy
-[x]  now leveraging LLM's to solve remaining equations...
-[ ] spitting out Python libraries
-[ ]  spitting out C++ library derived from the Python...
+[x] now leveraging LLM's to solve remaining equations...
+[x] spitting out Python libraries
+[x] spitting out C++ library derived from the Python...
