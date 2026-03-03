@@ -23,9 +23,7 @@ std::vector<double> SelectingPump_eqn_8_1__NS(double NC, double SCON, double ins
 }
 
 std::vector<double> SelectingPump_eqn_8_1__SCON(double NC, double NS, double installation_cost) {
-    std::vector<double> result;
-    double SCON = (1000.0 * std::pow((installation_cost / (16000.0 * (NS + (2.0 * NC)))), (1.0 / 0.35)));
-    return {SCON};
+    throw std::runtime_error("SelectingPump_eqn_8_1__SCON: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_1__installation_cost(double NC, double NS, double SCON) {
@@ -50,9 +48,7 @@ std::vector<double> SelectingPump_eqn_8_2__installed_costs(double hp) {
 }
 
 std::vector<double> SelectingPump_eqn_8_3__hp(double installed_costs) {
-    std::vector<double> result;
-    double hp = (10.0 * std::pow((installed_costs / 38000.0), (1.0 / 0.45)));
-    return {hp};
+    throw std::runtime_error("SelectingPump_eqn_8_3__hp: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_3__installed_costs(double hp) {
@@ -153,15 +149,11 @@ std::vector<double> SelectingPump_eqn_8_6__w(double M, double P_1, double P_2, d
 }
 
 std::vector<double> SelectingPump_eqn_8_7__P_1(double P_2, double adiabatic_hp, double w) {
-    std::vector<double> result;
-    double P_1 = (P_2 / std::pow(((adiabatic_hp / (w / 20.0)) + 1.0), (1.0 / 0.286)));
-    return {P_1};
+    throw std::runtime_error("SelectingPump_eqn_8_7__P_1: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_7__P_2(double P_1, double adiabatic_hp, double w) {
-    std::vector<double> result;
-    double P_2 = (P_1 * std::pow(((adiabatic_hp / (w / 20.0)) + 1.0), (1.0 / 0.286)));
-    return {P_2};
+    throw std::runtime_error("SelectingPump_eqn_8_7__P_2: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_7__adiabatic_hp(double P_1, double P_2, double w) {
@@ -179,15 +171,11 @@ std::vector<double> SelectingPump_eqn_8_7__w(double P_1, double P_2, double adia
 }
 
 std::vector<double> SelectingPump_eqn_8_8__P_1(double P_2, double adiabatic_power_watts, double f) {
-    std::vector<double> result;
-    double P_1 = (P_2 / std::pow(((adiabatic_power_watts / (f / 12.0)) + 1.0), (1.0 / 0.286)));
-    return {P_1};
+    throw std::runtime_error("SelectingPump_eqn_8_8__P_1: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_8__P_2(double P_1, double adiabatic_power_watts, double f) {
-    std::vector<double> result;
-    double P_2 = (P_1 * std::pow(((adiabatic_power_watts / (f / 12.0)) + 1.0), (1.0 / 0.286)));
-    return {P_2};
+    throw std::runtime_error("SelectingPump_eqn_8_8__P_2: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_8__adiabatic_power_watts(double P_1, double P_2, double f) {

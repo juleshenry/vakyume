@@ -650,7 +650,7 @@ def scrape_pdf(
         skip_chapters:  Chapter titles to skip (no extractable equations).
         verbose:        Print progress info.
         chapter_filter: If set, only process these chapter numbers (1-indexed).
-        model:          Ollama model name to use for extraction (default: phi3:latest).
+        model:          Ollama model name to use for extraction (default: llama3:latest).
 
     Returns:
         Summary dict with per-chapter equation counts.
@@ -836,9 +836,10 @@ def _wizard_select_model() -> str:
 def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
     """Interactive chapter selection. Returns list of chapter numbers or None for all."""
     chapters = _extract_chapter_map(pdf_path)
+    n = len(chapters)
 
     print("\n--- Chapter Selection ---")
-    print(f"  Found {len(chapters)} chapters in PDF:\n")
+    print(f"  Found {n} chapters in PDF:\n")
 
     for ch in chapters:
         skip = (
@@ -851,8 +852,7 @@ def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
     print(f"    - Enter chapter numbers separated by commas (e.g., 3,5,9)")
     print(f"    - Enter a range with a dash (e.g., 3-9)")
     print(f"    - Press Enter to process ALL chapters")
-    print(f"    - Type 'physics' for core physics chapters (3-15)")
-    print(f"    - Type 'em' for electromagnetism chapters (16-23)")
+    print(f"    - Type 'one' to pick a single chapter (good for testing)")
 
     choice = input("\n  Chapters to process: ").strip()
 
@@ -860,15 +860,19 @@ def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
         print("  -> Processing ALL chapters")
         return None
 
-    if choice.lower() == "physics":
-        selected = list(range(3, 16))
-        print(f"  -> Core physics: chapters 3-15")
-        return selected
-
-    if choice.lower() == "em":
-        selected = list(range(16, 24))
-        print(f"  -> Electromagnetism: chapters 16-23")
-        return selected
+    if choice.lower() == "one":
+        ch_input = input("  Enter chapter number: ").strip()
+        try:
+            ch_num = int(ch_input)
+            if 1 <= ch_num <= n:
+                print(f"  -> Selected chapter {ch_num}")
+                return [ch_num]
+            else:
+                print(f"  Invalid chapter number. Processing ALL chapters.")
+                return None
+        except ValueError:
+            print(f"  Invalid input. Processing ALL chapters.")
+            return None
 
     # Parse comma-separated and ranges
     selected = []
@@ -917,15 +921,20 @@ def _wizard_confirm(
     return confirm in ("", "y", "yes")
 
 
-def run_wizard(pdf_path: str, output_dir: str | None = None) -> dict | None:
+def run_wizard(
+    pdf_path: str,
+    output_dir: str | None = None,
+    model_override: str | None = None,
+) -> dict | None:
     """Interactive wizard for PDF equation extraction.
 
     Walks the user through model selection, chapter selection, and confirmation
     before running the extraction.
 
     Args:
-        pdf_path:   Path to the PDF file.
-        output_dir: Output directory (default: notes/ next to PDF).
+        pdf_path:       Path to the PDF file.
+        output_dir:     Output directory (default: notes/ next to PDF).
+        model_override: If set, skip model selection and use this model.
 
     Returns:
         Extraction summary dict, or None if the user cancelled.
@@ -938,8 +947,12 @@ def run_wizard(pdf_path: str, output_dir: str | None = None) -> dict | None:
     if output_dir is None:
         output_dir = os.path.join(os.path.dirname(pdf_path), "notes")
 
-    # Step 1: Model selection
-    model = _wizard_select_model()
+    # Step 1: Model selection (skip if caller already chose)
+    if model_override:
+        model = model_override
+        print(f"\n  Model: {model} (from --model flag)")
+    else:
+        model = _wizard_select_model()
 
     # Step 2: Chapter selection
     chapters = _wizard_select_chapters(pdf_path)
@@ -1019,7 +1032,11 @@ def main():
         output_dir = os.path.join(os.path.dirname(args.pdf), "notes")
 
     if args.wizard:
-        run_wizard(pdf_path=args.pdf, output_dir=output_dir)
+        run_wizard(
+            pdf_path=args.pdf,
+            output_dir=output_dir,
+            model_override=args.model if args.model != LLM_MODEL else None,
+        )
     else:
         scrape_pdf(
             pdf_path=args.pdf,
