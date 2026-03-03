@@ -5,10 +5,9 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_2_4__vel_grad(self, _beta: float, mu: float, **kwargs):
     # [.pyeqn] _beta = mu * vel_grad
     result = []
-    vel_grad = _beta / mu
+    vel_grad = _beta/mu
     result.append(vel_grad)
     return result

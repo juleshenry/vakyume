@@ -12,7 +12,6 @@ from .eqn_3_2__H_cap import eqn_3_2__H
 from .eqn_3_2__P_cap import eqn_3_2__P
 from .eqn_3_2__rho import eqn_3_2__rho
 
-
 class PressMgmt:
     eqn_3_2__G = eqn_3_2__G
     eqn_3_2__G_C = eqn_3_2__G_C

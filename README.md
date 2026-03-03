@@ -15,9 +15,10 @@ graph TD
     C -->|Fail/Inconsistent| D[Scaffold Engine]
     D -->|Derivation| E[LLM Repair]
     E -->|Verify| F{OOO Check}
-    F -->|Pass| G[Certified Shards]
-    G -->|Reconstruct| H[Python Library]
+    F -->|Pass|     G[Certified Shards]
+    G -->|Reconstruct| H[Modular Python Package]
     H -->|Transpile| I[C++ Library]
+
 ```
 
 ### 1. Extraction & Parsing
@@ -38,8 +39,9 @@ When symbolic solvers (SymPy) fail on transcendental or complex engineering form
 Instead of asking an LLM to "solve the math," Vakyume asks it to "complete the code" using the pre-derived scaffold as a guardrail. This minimizes algebraic drift and sign errors common in small language models.
 
 ### 5. Multi-Target Synthesis
-*   **Python**: Generates a modular package with the `@kwasak` decorator for automatic variable dispatch.
-*   **C++**: Transpiles Python AST to C++17, utilizing `std::complex` and custom `LambertW` implementations for high-precision engineering applications.
+*   **Python**: Generates a modular package (`py/`) with the `@kwasak` decorator for automatic variable dispatch.
+*   **C++**: Transpiles Python AST to C++17, utilizing `std::complex` and custom `LambertW` implementations.
+*   **Documentation**: Generates an **Equation Certification Report** (`docs/`) with LaTeX-rendered formulas and variable definitions for peer review.
 
 ---
 
@@ -50,7 +52,8 @@ projects/
 └── VacuumTheory/
     ├── notes/           # Input: Equation definitions
     ├── shards/          # Intermediate: Individual solvers
-    ├── certified.py     # Output: Verified Python library
+    ├── reports/         # Analysis and verification logs
+    ├── docs/            # Output: Equation Certification (LaTeX/MD)
     ├── py/              # Output: Modular Python package
     └── cpp/             # Output: C++ headers and source
 ```

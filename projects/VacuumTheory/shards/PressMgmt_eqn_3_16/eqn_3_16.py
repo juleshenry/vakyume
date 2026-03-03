@@ -8,7 +8,6 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_3_16__V_cap_div_V_cap_P_cap_M_capA_capX_cap import eqn_3_16__V_div_V_P_MAX
 
-
 class PressMgmt:
     eqn_3_16__V_div_V_P_MAX = eqn_3_16__V_div_V_P_MAX
 

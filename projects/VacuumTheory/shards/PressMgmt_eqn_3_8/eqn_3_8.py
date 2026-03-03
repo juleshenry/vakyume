@@ -10,7 +10,6 @@ from .eqn_3_8__A_cap_C_cap import eqn_3_8__A_C
 from .eqn_3_8__H_cap_2 import eqn_3_8__H_2
 from .eqn_3_8__V_cap_P_cap import eqn_3_8__V_P
 
-
 class PressMgmt:
     eqn_3_8__A_C = eqn_3_8__A_C
     eqn_3_8__H_2 = eqn_3_8__H_2

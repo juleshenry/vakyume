@@ -11,7 +11,6 @@ from .eqn_5_14__P_cap_0 import eqn_5_14__P_0
 from .eqn_5_14__T_cap import eqn_5_14__T
 from .eqn_5_14__W_cap_E_cap import eqn_5_14__W_E
 
-
 class ProcessApp1:
     eqn_5_14__M = eqn_5_14__M
     eqn_5_14__P_0 = eqn_5_14__P_0

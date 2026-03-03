@@ -11,7 +11,6 @@ from .eqn_5_6__gamma_i import eqn_5_6__gamma_i
 from .eqn_5_6__p_i import eqn_5_6__p_i
 from .eqn_5_6__x_i import eqn_5_6__x_i
 
-
 class ProcessApp1:
     eqn_5_6__P_0_i = eqn_5_6__P_0_i
     eqn_5_6__gamma_i = eqn_5_6__gamma_i

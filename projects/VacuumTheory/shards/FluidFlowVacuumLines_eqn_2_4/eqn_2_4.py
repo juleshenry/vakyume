@@ -10,7 +10,6 @@ from .eqn_2_4___beta import eqn_2_4___beta
 from .eqn_2_4__mu import eqn_2_4__mu
 from .eqn_2_4__vel_grad import eqn_2_4__vel_grad
 
-
 class FluidFlowVacuumLines:
     eqn_2_4___beta = eqn_2_4___beta
     eqn_2_4__mu = eqn_2_4__mu

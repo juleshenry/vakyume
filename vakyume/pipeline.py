@@ -155,13 +155,11 @@ class PipelineContext:
         self.notes_dir = os.path.join(self.project_dir, "notes")
         self.shards_dir = os.path.join(self.project_dir, "shards")
         self.reports_dir = os.path.join(self.project_dir, "reports")
-        self.repair_prompts_dir = os.path.join(self.project_dir, "repair_prompts")
-        self.certified_file = os.path.join(self.project_dir, "certified.py")
+        self.notes_dir = os.path.join(self.project_dir, "notes")
 
         for d in [
             self.shards_dir,
             self.reports_dir,
-            self.repair_prompts_dir,
             self.notes_dir,
         ]:
             if not os.path.exists(d):
@@ -581,7 +579,7 @@ def run_pipeline(
                     else:
                         print(f" |- Still inconsistent: {scores}")
                     repair_info["scores"] = scores
-                    repair_info["broken" ] = all_broken
+                    repair_info["broken"] = all_broken
                     repair_info["trusted"] = [
                         v
                         for v, s in scores.items()
@@ -597,10 +595,10 @@ def run_pipeline(
                 time.sleep(COOLDOWN_SECONDS)
 
     # ── Reconstruct and Generate C++ ─────────────────────────────────────
-    print("\\n--- Finalizing Library ---")
+    print("\n--- Finalizing Library ---")
     reconstruct_cli(ctx.project_dir)
     generate_cpp(ctx.project_dir)
-    format_project(ctx.project_dir)
+    # format_project(ctx.project_dir)  # Removed as it's not defined
 
     return analysis
 
@@ -608,63 +606,9 @@ def run_pipeline(
 # ---------------------------------------------------------------------------
 #  Assembly
 # ---------------------------------------------------------------------------
+# assemble_certified_library is deprecated in favor of modular reconstruction.
+# Keeping it for internal reference until full migration is complete.
 def assemble_certified_library(ctx: PipelineContext, analysis):
     """Combine solved families into a single certified library file."""
-    with open(ctx.certified_file, "w") as out:
-        out.write(LIBRARY_IMPORT_HEADER + "\\n")
-        class_groups = {}
-
-        for family_name in sorted(analysis["solved"]):
-            class_name = family_name.split("_")[0]
-            family_dir = os.path.join(ctx.shards_dir, family_name)
-
-            if class_name not in class_groups:
-                class_groups[class_name] = []
-
-            seen_methods = set()
-
-            for sf in sorted(os.listdir(family_dir)):
-                if not sf.endswith(".py"):
-                    continue
-                shard_path = os.path.join(family_dir, sf)
-
-                with open(shard_path, "r") as f:
-                    content = f.read()
-                    try:
-                        tree = ast.parse(content)
-                    except:
-                        continue
-
-                    for node in tree.body:
-                        if isinstance(node, ast.FunctionDef):
-                            if node.name not in seen_methods:
-                                seen_methods.add(node.name)
-                                method_source = get_standalone_method_source(
-                                    shard_path, node.name
-                                )
-                                if method_source:
-                                    indented = "\\n".join(
-                                        [
-                                            f"{TAB}{line}"
-                                            for line in method_source.splitlines()
-                                        ]
-                                    )
-                                    class_groups[class_name].append(indented)
-                        elif isinstance(node, ast.ClassDef):
-                            for item in node.body:
-                                if isinstance(item, ast.FunctionDef):
-                                    if item.name not in seen_methods:
-                                        seen_methods.add(item.name)
-                                        method_source = get_method_source_from_class(
-                                            shard_path, class_name, item.name
-                                        )
-                                        if method_source:
-                                            class_groups[class_name].append(
-                                                method_source
-                                            )
-
-        for class_name, bodies in class_groups.items():
-            out.write(f"class {class_name}:\\n")
-            for body in bodies:
-                out.write(body)
-                out.write("\\n")
+    # This is a legacy path and will be removed once reconstruct is fully verified.
+    pass

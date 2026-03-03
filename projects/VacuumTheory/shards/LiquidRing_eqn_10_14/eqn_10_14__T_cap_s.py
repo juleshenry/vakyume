@@ -5,7 +5,6 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_10_14__T_s(self, T_c: float, **kwargs):
     # [.pyeqn] T_c = T_s + 12
     result = []

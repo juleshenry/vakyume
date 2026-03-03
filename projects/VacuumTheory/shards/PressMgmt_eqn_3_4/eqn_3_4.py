@@ -10,7 +10,6 @@ from .eqn_3_4__K_capA_capP_capP_capA_cap import eqn_3_4__KAPPA
 from .eqn_3_4__P_cap import eqn_3_4__P
 from .eqn_3_4__V_cap import eqn_3_4__V
 
-
 class PressMgmt:
     eqn_3_4__KAPPA = eqn_3_4__KAPPA
     eqn_3_4__P = eqn_3_4__P

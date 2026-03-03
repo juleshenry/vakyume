@@ -16,21 +16,18 @@ class SelectingPump:
         SCON:=steam consumption based on 100-psig motive steam, lb/hr
         """
         return
-
     def eqn_8_1__NC(self, NS: float, SCON: float, installation_cost: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         result = []
         NC = -0.5 * NS + 0.000350630766969363 * installation_cost / SCON ** (7 / 20)
         result.append(NC)
         return result
-
     def eqn_8_1__NS(self, NC: float, SCON: float, installation_cost: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         result = []
         NS = -2.0 * NC + 0.000701261533938727 * installation_cost / SCON ** (7 / 20)
         result.append(NS)
         return result
-
     def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         # Solve for SCON:
@@ -39,39 +36,33 @@ class SelectingPump:
         # Step 3: SCON = 1000 * (installation_cost / (16000 * (NS + 2 * NC))) ** (1.0 / 0.35)
         SCON = 1000 * (installation_cost / (16000 * (NS + 2 * NC))) ** (1.0 / 0.35)
         return [SCON]
-
     def eqn_8_1__installation_cost(self, NC: float, NS: float, SCON: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
         result = []
         installation_cost = 1426.00150101399 * SCON ** (7 / 20) * (2.0 * NC + NS)
         result.append(installation_cost)
         return result
-
     @kwasak
     def eqn_8_2(self, hp=None, installed_costs=None):
         """
         hp:= horse power of pump
         """
         return
-
     def eqn_8_2__hp(self, installed_costs: float, **kwargs):
         # installed_costs = 33000 * (hp / 10) ** 0.5
         result = []
         hp = 9.18273645546364e-9 * installed_costs**2
         result.append(hp)
         return result
-
     def eqn_8_2__installed_costs(self, hp: float, **kwargs):
         # installed_costs = 33000 * (hp / 10) ** 0.5
         result = []
         installed_costs = 10435.5162785557 * sqrt(hp)
         result.append(installed_costs)
         return result
-
     @kwasak
     def eqn_8_3(self, hp=None, installed_costs=None):
         return
-
     def eqn_8_3__hp(self, installed_costs: float, **kwargs):
         # installed_costs = 38000 * (hp / 10) ** 0.45
         # Solve for hp:
@@ -80,18 +71,15 @@ class SelectingPump:
         # Step 3: hp = 10 * (installed_costs / (38000)) ** (1.0 / 0.45)
         hp = 10 * (installed_costs / (38000)) ** (1.0 / 0.45)
         return [hp]
-
     def eqn_8_3__installed_costs(self, hp: float, **kwargs):
         # installed_costs = 38000 * (hp / 10) ** 0.45
         result = []
         installed_costs = 13482.9087908759 * hp ** (9 / 20)
         result.append(installed_costs)
         return result
-
     @kwasak
     def eqn_8_4(self, hp=None, installed_costs=None):
         return
-
     def eqn_8_4__hp(self, installed_costs: float, **kwargs):
         # installed_costs = 26000 * (hp / 10) ** 0.4
         result = []
@@ -100,14 +88,12 @@ class SelectingPump:
         hp = 9.1741667595569e-11 * installed_costs ** (5 / 2)
         result.append(hp)
         return result
-
     def eqn_8_4__installed_costs(self, hp: float, **kwargs):
         # installed_costs = 26000 * (hp / 10) ** 0.4
         result = []
         installed_costs = 10350.7864343909 * hp ** (2 / 5)
         result.append(installed_costs)
         return result
-
     @kwasak
     def eqn_8_5(
         self,
@@ -119,7 +105,6 @@ class SelectingPump:
         Eff:= thermal efficiency
         """
         return
-
     def eqn_8_5__Eff(
         self,
         actual_brake_horsepower: float,
@@ -131,7 +116,6 @@ class SelectingPump:
         Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
         result.append(Eff)
         return result
-
     def eqn_8_5__actual_brake_horsepower(
         self, Eff: float, theoretical_adiabatic_horsepower: float, **kwargs
     ):
@@ -140,7 +124,6 @@ class SelectingPump:
         actual_brake_horsepower = theoretical_adiabatic_horsepower / Eff
         result.append(actual_brake_horsepower)
         return result
-
     def eqn_8_5__theoretical_adiabatic_horsepower(
         self, Eff: float, actual_brake_horsepower: float, **kwargs
     ):
@@ -149,7 +132,6 @@ class SelectingPump:
         theoretical_adiabatic_horsepower = Eff * actual_brake_horsepower
         result.append(theoretical_adiabatic_horsepower)
         return result
-
     @kwasak
     def eqn_8_6(
         self,
@@ -170,7 +152,6 @@ class SelectingPump:
         P:= absolute pressure, torr
         """
         return
-
     def eqn_8_6__M(
         self,
         P_1: float,
@@ -194,7 +175,6 @@ class SelectingPump:
         )
         result.append(M)
         return result
-
     def eqn_8_6__P_1(
         self,
         M: float,
@@ -215,7 +195,6 @@ class SelectingPump:
         ) ** (k / (k - 1))
         result.append(P_1)
         return result
-
     def eqn_8_6__P_2(
         self,
         M: float,
@@ -236,7 +215,6 @@ class SelectingPump:
         ) ** (k / (k - 1))
         result.append(P_2)
         return result
-
     def eqn_8_6__R(
         self,
         M: float,
@@ -259,7 +237,6 @@ class SelectingPump:
         )
         result.append(R)
         return result
-
     def eqn_8_6__T(
         self,
         M: float,
@@ -282,7 +259,6 @@ class SelectingPump:
         )
         result.append(T)
         return result
-
     def eqn_8_6__adiabatic_hp(
         self,
         M: float,
@@ -301,7 +277,6 @@ class SelectingPump:
         )
         result.append(adiabatic_hp)
         return result
-
     def eqn_8_6__k(
         self,
         M: float,
@@ -342,7 +317,6 @@ class SelectingPump:
             raise UnsolvedException("No sign change found for k")
         k = brentq(_res, lo, hi)
         return [k]
-
     def eqn_8_6__w(
         self,
         M: float,
@@ -365,11 +339,9 @@ class SelectingPump:
         )
         result.append(w)
         return result
-
     @kwasak
     def eqn_8_7(self, P_1=None, P_2=None, adiabatic_hp=None, w=None):
         return
-
     def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # Solve for P_1:
@@ -378,7 +350,6 @@ class SelectingPump:
         # Step 3: P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         return [P_1]
-
     def eqn_8_7__P_2(self, P_1: float, adiabatic_hp: float, w: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         # Solve for P_2:
@@ -388,28 +359,22 @@ class SelectingPump:
         # Step 4: P_2 = P_1 * (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         P_2 = P_1 * (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         return [P_2]
-
     def eqn_8_7__adiabatic_hp(self, P_1: float, P_2: float, w: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         result = []
         adiabatic_hp = 0.05 * w * ((P_2 / P_1) ** (143 / 500) - 1.0)
         result.append(adiabatic_hp)
         return result
-
     def eqn_8_7__w(self, P_1: float, P_2: float, adiabatic_hp: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
         result = []
         w = 20.0 * adiabatic_hp / ((P_2 / P_1) ** 0.286 - 1.0)
         result.append(w)
         return result
-
     @kwasak
     def eqn_8_8(self, P_1=None, P_2=None, adiabatic_power_watts=None, f=None):
         return
-
-    def eqn_8_8__P_1(
-        self, P_2: float, adiabatic_power_watts: float, f: float, **kwargs
-    ):
+    def eqn_8_8__P_1(self, P_2: float, adiabatic_power_watts: float, f: float, **kwargs):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # Solve for P_1:
         # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_power_watts / (f / 12)
@@ -417,10 +382,7 @@ class SelectingPump:
         # Step 3: P_1 = P_2 / (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         P_1 = P_2 / (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         return [P_1]
-
-    def eqn_8_8__P_2(
-        self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs
-    ):
+    def eqn_8_8__P_2(self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         # Solve for P_2:
         # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_power_watts / (f / 12)
@@ -429,27 +391,18 @@ class SelectingPump:
         # Step 4: P_2 = P_1 * (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         P_2 = P_1 * (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         return [P_2]
-
-    def eqn_8_8__adiabatic_power_watts(
-        self, P_1: float, P_2: float, f: float, **kwargs
-    ):
+    def eqn_8_8__adiabatic_power_watts(self, P_1: float, P_2: float, f: float, **kwargs):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         result = []
-        adiabatic_power_watts = (
-            0.0833333333333333 * f * ((P_2 / P_1) ** (143 / 500) - 1.0)
-        )
+        adiabatic_power_watts = 0.0833333333333333 * f * ((P_2 / P_1) ** (143 / 500) - 1.0)
         result.append(adiabatic_power_watts)
         return result
-
-    def eqn_8_8__f(
-        self, P_1: float, P_2: float, adiabatic_power_watts: float, **kwargs
-    ):
+    def eqn_8_8__f(self, P_1: float, P_2: float, adiabatic_power_watts: float, **kwargs):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
         result = []
         f = 12.0 * adiabatic_power_watts / ((P_2 / P_1) ** 0.286 - 1.0)
         result.append(f)
         return result
-
     @kwasak
     def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
         """
@@ -459,35 +412,30 @@ class SelectingPump:
         E_m:=mechanical pump thermal efficiency
         """
         return
-
     def eqn_8_9__E_j(self, E_m: float, e: float, r: float, s: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         E_j = 0.341296928327645 * E_m * r * s / e
         result.append(E_j)
         return result
-
     def eqn_8_9__E_m(self, E_j: float, e: float, r: float, s: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         E_m = 2.93 * E_j * e / (r * s)
         result.append(E_m)
         return result
-
     def eqn_8_9__e(self, E_j: float, E_m: float, r: float, s: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         e = 0.341296928327645 * E_m * r * s / E_j
         result.append(e)
         return result
-
     def eqn_8_9__r(self, E_j: float, E_m: float, e: float, s: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
         result = []
         r = 2.93 * E_j * e / (E_m * s)
         result.append(r)
         return result
-
     def eqn_8_9__s(self, E_j: float, E_m: float, e: float, r: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
         result = []

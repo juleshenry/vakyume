@@ -82,8 +82,15 @@ def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=Fals
     """Unified LLM call dispatcher."""
     provider = llm_config.get("provider", "ollama")
     # Use config model if none provided
-    if model is None:
-        model = llm_config.get("model", "phi3:latest")
+    if not model:
+        model = llm_config.get("model")
+
+    if not model:
+        if provider == "ollama":
+            model = "phi3:latest"
+        else:
+            # Fallback for other providers if needed, or leave to them
+            model = "gpt-4o"  # Sensible default for OpenRouter
 
     print(
         f"[INPUT] ask_llm: provider={provider}, model={model}, system_prompt_len={len(system_prompt)}, user_prompt_len={len(user_prompt)}"

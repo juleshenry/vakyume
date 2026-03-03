@@ -80,7 +80,7 @@ def _ensure_project(args):
     project_dir = args.project
     notes_dir = os.path.join(project_dir, "notes")
 
-    for sub in ["notes", "shards", "reports", "repair_prompts"]:
+    for sub in ["notes", "shards", "reports"]:
         d = os.path.join(project_dir, sub)
         if not os.path.exists(d):
             os.makedirs(d)

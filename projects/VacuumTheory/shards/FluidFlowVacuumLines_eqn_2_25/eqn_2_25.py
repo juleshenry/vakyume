@@ -11,7 +11,6 @@ from .eqn_2_25__P_cap_1 import eqn_2_25__P_1
 from .eqn_2_25__P_cap_2 import eqn_2_25__P_2
 from .eqn_2_25__Q_cap_throughput import eqn_2_25__Q_throughput
 
-
 class FluidFlowVacuumLines:
     eqn_2_25__C = eqn_2_25__C
     eqn_2_25__P_1 = eqn_2_25__P_1

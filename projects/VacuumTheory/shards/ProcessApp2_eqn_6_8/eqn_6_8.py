@@ -17,7 +17,6 @@ from .eqn_6_8__delta_t import eqn_6_8__delta_t
 from .eqn_6_8__m_b import eqn_6_8__m_b
 from .eqn_6_8__w_v import eqn_6_8__w_v
 
-
 class ProcessApp2:
     eqn_6_8__C_1 = eqn_6_8__C_1
     eqn_6_8__C_2 = eqn_6_8__C_2
@@ -31,17 +30,5 @@ class ProcessApp2:
     eqn_6_8__w_v = eqn_6_8__w_v
 
     @kwasak
-    def eqn_6_8(
-        self,
-        C_1=None,
-        C_2=None,
-        T_1=None,
-        T_2=None,
-        c_p=None,
-        delta_h_c=None,
-        delta_h_v=None,
-        delta_t=None,
-        m_b=None,
-        w_v=None,
-    ):
+    def eqn_6_8(self, C_1=None, C_2=None, T_1=None, T_2=None, c_p=None, delta_h_c=None, delta_h_v=None, delta_t=None, m_b=None, w_v=None):
         return

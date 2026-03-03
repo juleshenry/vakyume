@@ -10,7 +10,6 @@ from .eqn_2_18b__R_cap_ll import eqn_2_18b__R_ll
 from .eqn_2_18b__h import eqn_2_18b__h
 from .eqn_2_18b__w import eqn_2_18b__w
 
-
 class FluidFlowVacuumLines:
     eqn_2_18b__R_ll = eqn_2_18b__R_ll
     eqn_2_18b__h = eqn_2_18b__h

@@ -5,10 +5,9 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_5_14__T(self, M: float, P_0: float, W_E: float, **kwargs):
     # [.pyeqn] W_E = 0.0583 * P_0 * (M / T) ** 0.5
     result = []
-    T = 0.00339889 * M * P_0**2 / W_E**2
+    T = 0.00339889*M*P_0**2/W_E**2
     result.append(T)
     return result

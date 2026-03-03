@@ -10,7 +10,6 @@ from .eqn_5_1__K_cap_i import eqn_5_1__K_i
 from .eqn_5_1__x_i import eqn_5_1__x_i
 from .eqn_5_1__y_i import eqn_5_1__y_i
 
-
 class ProcessApp1:
     eqn_5_1__K_i = eqn_5_1__K_i
     eqn_5_1__x_i = eqn_5_1__x_i

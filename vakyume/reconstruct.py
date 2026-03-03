@@ -172,12 +172,18 @@ def _collect_class_methods(
     class_order: dict[str, str] = {}
 
     family_dirs = sorted(
-        d
-        for d in os.listdir(shards_dir)
-        if os.path.isdir(os.path.join(shards_dir, d)) and "_eqn_" in d
+        d for d in os.listdir(shards_dir) if os.path.isdir(os.path.join(shards_dir, d))
+    )
+
+    # Check for standalone py files in shards_dir
+    shard_files = sorted(
+        f
+        for f in os.listdir(shards_dir)
+        if f.endswith(".py") and not f.startswith("__") and "_eqn_" in f
     )
 
     for family_dir_name in family_dirs:
+        # (existing directory logic)
         class_name = _family_class_name(family_dir_name)
         if class_name not in class_methods:
             class_methods[class_name] = {}
@@ -194,29 +200,62 @@ def _collect_class_methods(
 
         for py_file in py_files:
             file_path = os.path.join(family_path, py_file)
-            with open(file_path, "r") as fh:
-                content = fh.read()
+            _process_file(file_path, class_methods, class_order, family_dir_name)
 
-            try:
-                tree = ast.parse(content)
-            except SyntaxError:
-                continue
+    for shard_file in shard_files:
+        file_path = os.path.join(shards_dir, shard_file)
+        # For standalone files, the class name is usually the prefix before _eqn_
+        # e.g. Kinematics_eqn_1_1.py -> Kinematics
+        m = re.match(r"(.*?)_eqn_", shard_file)
+        if m:
+            class_name = m.group(1)
+        else:
+            class_name = shard_file.replace(".py", "")
 
-            for node in tree.body:
-                if isinstance(node, ast.FunctionDef):
-                    if node.name not in seen:
-                        src = _extract_standalone_function(content, node.name)
-                        if src:
-                            seen[node.name] = src
+        if class_name not in class_methods:
+            class_methods[class_name] = {}
+            class_order[class_name] = shard_file
 
-                elif isinstance(node, ast.ClassDef) and node.name == class_name:
-                    for method_name, method_src in _extract_class_methods(
-                        content, class_name
-                    ):
-                        if method_name not in seen:
-                            seen[method_name] = method_src
+        _process_file(file_path, class_methods, class_order, shard_file)
 
     return class_methods, class_order
+
+
+def _process_file(file_path, class_methods, class_order, origin_name):
+    with open(file_path, "r") as fh:
+        content = fh.read()
+
+    try:
+        tree = ast.parse(content)
+    except SyntaxError:
+        return
+
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            # standalone functions
+            class_name = (
+                _family_class_name(origin_name)
+                if "_eqn_" in origin_name
+                else origin_name
+            )
+            if class_name not in class_methods:
+                class_methods[class_name] = {}
+                class_order[class_name] = origin_name
+            seen = class_methods[class_name]
+            if node.name not in seen:
+                src = _extract_standalone_function(content, node.name)
+                if src:
+                    seen[node.name] = src
+
+        elif isinstance(node, ast.ClassDef):
+            class_name = node.name
+            if class_name not in class_methods:
+                class_methods[class_name] = {}
+                class_order[class_name] = origin_name
+            seen = class_methods[class_name]
+            for method_name, method_src in _extract_class_methods(content, class_name):
+                if method_name not in seen:
+                    seen[method_name] = method_src
 
 
 def reconstruct_from_shards(shards_dir: str) -> str:
@@ -369,32 +408,25 @@ def reconstruct_cli(project_dir: str, output: str | None = None, stdout: bool = 
     """
     Run reconstruction for a project.
 
-    Writes a ``py/`` package with one module per chapter class, plus a flat
-    ``certified.py`` for backwards compatibility.
+    Writes a ``py/`` package with one module per chapter class.
     """
     shards_dir = os.path.join(project_dir, "shards")
 
-    # Build the monolithic source (still useful for certified.py and stdout)
-    source = reconstruct_from_shards(shards_dir)
+    # Re-parse the shards to get per-class method dictionaries
+    class_methods, class_order = _collect_class_methods(shards_dir)
+    sorted_classes = sorted(class_methods.keys(), key=lambda c: class_order[c])
 
     if stdout:
+        # If user wants stdout, we'll still assemble a monolithic view
+        # for quick inspection, but it's not the primary output format.
+        source = reconstruct_from_shards(shards_dir)
         print(source)
         return
-
-    # ── Write flat certified-style file ──────────────────────────────────
-    flat_path = output or os.path.join(project_dir, "certified.py")
-    with open(flat_path, "w") as f:
-        f.write(source)
 
     # ── Write modular py/ package ────────────────────────────────────────
     py_dir = os.path.join(project_dir, "py")
     if not os.path.isdir(py_dir):
         os.makedirs(py_dir)
-
-    # Re-parse the shards to get per-class method dictionaries
-    # (reuse the internal data structure)
-    class_methods, class_order = _collect_class_methods(shards_dir)
-    sorted_classes = sorted(class_methods.keys(), key=lambda c: class_order[c])
 
     for class_name in sorted_classes:
         methods = class_methods[class_name]
@@ -410,18 +442,8 @@ def reconstruct_cli(project_dir: str, output: str | None = None, stdout: bool = 
     with open(os.path.join(py_dir, "__init__.py"), "w") as f:
         f.write(init_src)
 
-    # Count classes and methods for summary
-    try:
-        tree = ast.parse(source)
-        n_classes = sum(1 for n in tree.body if isinstance(n, ast.ClassDef))
-        n_methods = sum(
-            sum(1 for item in n.body if isinstance(item, ast.FunctionDef))
-            for n in tree.body
-            if isinstance(n, ast.ClassDef)
-        )
-    except SyntaxError:
-        n_classes = n_methods = "?"
+    n_classes = len(sorted_classes)
+    n_methods = sum(len(m) for m in class_methods.values())
 
-    print(f"Reconstructed library written to {flat_path}")
-    print(f"  Modular package written to {py_dir}/")
+    print(f"Modular package written to {py_dir}/")
     print(f"  {n_classes} classes, {n_methods} methods")

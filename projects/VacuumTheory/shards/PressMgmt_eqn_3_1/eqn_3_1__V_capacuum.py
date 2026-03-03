@@ -5,7 +5,6 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_3_1__Vacuum(self, Abs_Pressure: float, BarometricPressure: float, **kwargs):
     # [.pyeqn] Abs_Pressure = BarometricPressure - Vacuum
     result = []

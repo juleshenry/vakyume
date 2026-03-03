@@ -11,7 +11,6 @@ from .eqn_9_3__V_cap import eqn_9_3__V
 from .eqn_9_3__t_e import eqn_9_3__t_e
 from .eqn_9_3__w_j import eqn_9_3__w_j
 
-
 class SteamJetInjectors:
     eqn_9_3__P_s = eqn_9_3__P_s
     eqn_9_3__V = eqn_9_3__V

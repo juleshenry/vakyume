@@ -13,7 +13,6 @@ from .eqn_2_11__g_c import eqn_2_11__g_c
 from .eqn_2_11__h_r import eqn_2_11__h_r
 from .eqn_2_11__v import eqn_2_11__v
 
-
 class FluidFlowVacuumLines:
     eqn_2_11__D = eqn_2_11__D
     eqn_2_11__L = eqn_2_11__L

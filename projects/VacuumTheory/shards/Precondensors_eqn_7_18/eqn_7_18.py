@@ -18,7 +18,6 @@ from .eqn_7_18__h_i import eqn_7_18__h_i
 from .eqn_7_18__k_w import eqn_7_18__k_w
 from .eqn_7_18__x_w import eqn_7_18__x_w
 
-
 class Precondensors:
     eqn_7_18__D_0 = eqn_7_18__D_0
     eqn_7_18__D_LM = eqn_7_18__D_LM
@@ -33,18 +32,5 @@ class Precondensors:
     eqn_7_18__x_w = eqn_7_18__x_w
 
     @kwasak
-    def eqn_7_18(
-        self,
-        D_0=None,
-        D_LM=None,
-        D_i=None,
-        R_fi=None,
-        R_fo=None,
-        R_nc=None,
-        U_0=None,
-        h_c=None,
-        h_i=None,
-        k_w=None,
-        x_w=None,
-    ):
+    def eqn_7_18(self, D_0=None, D_LM=None, D_i=None, R_fi=None, R_fo=None, R_nc=None, U_0=None, h_c=None, h_i=None, k_w=None, x_w=None):
         return

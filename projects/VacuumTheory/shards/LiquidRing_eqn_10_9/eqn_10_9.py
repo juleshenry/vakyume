@@ -10,7 +10,6 @@ from .eqn_10_9__T_cap_c import eqn_10_9__T_c
 from .eqn_10_9__T_cap_s import eqn_10_9__T_s
 from .eqn_10_9__delta_T_cap import eqn_10_9__delta_T
 
-
 class LiquidRing:
     eqn_10_9__T_c = eqn_10_9__T_c
     eqn_10_9__T_s = eqn_10_9__T_s
