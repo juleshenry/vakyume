@@ -1,0 +1,110 @@
+[SKIP] Chapter 1: The Scientific Method and Physics (in skip list)
+[SKIP] Chapter 2: Comparing Model and Experiment (in skip list)
+[SKIP] Chapter 3: Describing motion in one dimension (not in filter)
+[SKIP] Chapter 4: Describing motion in multiple dimensions (not in filter)
+[SKIP] Chapter 5: Newton's Laws (not in filter)
+[SKIP] Chapter 6: Applying Newton's Laws (not in filter)
+[SKIP] Chapter 7: Work and energy (not in filter)
+[SKIP] Chapter 8: Potential Energy and Conservation of Energy (not in filter)
+[SKIP] Chapter 9: Gravity (not in filter)
+
+============================================================
+[SCRAPING] Chapter 10: Linear momentum and the centre of mass
+  Pages 299 - 345
+============================================================
+  Split into 26 chunks
+  [Chunk 1/26] Sending to LLM (3760 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3878
+[OUTPUT] ask_llm: content_len=552
+    -> Extracted 3 equation(s)
+       # 10-1 Momentum
+       # 10-2 Newton's Second Law (rate of change of momentum)
+       # 10-3 Newton's Second Law (components)
+  [Chunk 2/26] Sending to LLM (3770 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3888
+[OUTPUT] ask_llm: content_len=135
+    -> Extracted 1 equation(s)
+       # 10-3 Impulse
+  [Chunk 3/26] Sending to LLM (3393 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3511
+[OUTPUT] ask_llm: content_len=180
+    -> Extracted 1 equation(s)
+       # 10-4 Net impulse and change in momentum
+  [Chunk 4/26] Sending to LLM (2944 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3062
+[OUTPUT] ask_llm: content_len=18
+    -> No equations in this chunk
+  [Chunk 5/26] Sending to LLM (2697 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=2815
+[OUTPUT] ask_llm: content_len=18
+    -> No equations in this chunk
+  [Chunk 6/26] Sending to LLM (3403 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3521
+[OUTPUT] ask_llm: content_len=258
+    -> No equations in this chunk
+  [Chunk 7/26] Sending to LLM (3851 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3969
+[OUTPUT] ask_llm: content_len=18
+    -> No equations in this chunk
+  [Chunk 8/26] Sending to LLM (2778 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=2896
+[OUTPUT] ask_llm: content_len=18
+    -> No equations in this chunk
+  [Chunk 9/26] Sending to LLM (3978 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=4096
+[OUTPUT] ask_llm: content_len=521
+    -> Extracted 2 equation(s)
+       # 10-1 Conservation of total momentum
+       # 10-2 Mechanical energy after the collision
+  [Chunk 10/26] Sending to LLM (3194 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3312
+[OUTPUT] ask_llm: content_len=1414
+    -> Extracted 4 equation(s)
+       # 10-1 Momentum conservation (x component)
+       # 10-2 Momentum conservation (y component)
+       # 10-3 Final speed of the nucleus (y component)
+       # 10-4 Angle of the final nucleus velocity
+  [Chunk 11/26] Sending to LLM (3221 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3339
+[OUTPUT] ask_llm: content_len=1287
+    -> Extracted 4 equation(s)
+       # 10-6 Momentum conservation after collision
+       # 10-7 Energy conservation after collision
+       # 10-8 Simplified energy conservation equation
+       # 10-9 Relative speed conservation equation
+  [Chunk 12/26] Sending to LLM (2497 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=2615
+[OUTPUT] ask_llm: content_len=550
+    -> Extracted 3 equation(s)
+       # 10-1 Conservation of momentum for elastic collision
+       # 10-2 Vector relation between velocity vectors after elastic collision
+       # 10-3 Conservation of kinetic energy for elastic collision
+  [Chunk 13/26] Sending to LLM (3324 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3442
+[OUTPUT] ask_llm: content_len=273
+    -> No equations in this chunk
+  [Chunk 14/26] Sending to LLM (1491 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=1609
+[OUTPUT] ask_llm: content_len=721
+    -> Extracted 3 equation(s)
+       # 10-1 Velocity of the centre of mass
+       # 10-2 Centre of mass frame of reference velocities
+       # 10-3 Total momentum in the centre of mass frame of reference
+  [Chunk 15/26] Sending to LLM (2537 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=2655
+[OUTPUT] ask_llm: content_len=262
+    -> Extracted 1 equation(s)
+       # 10-9 Centre of mass equation
+  [Chunk 16/26] Sending to LLM (1566 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=1684
+[OUTPUT] ask_llm: content_len=392
+    -> Extracted 2 equation(s)
+       # 10-10 Centre of mass equation
+       # 10-11 Newton's Second Law for the centre of mass
+  [Chunk 17/26] Sending to LLM (2636 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=2754
+[OUTPUT] ask_llm: content_len=338
+    -> No equations in this chunk
+  [Chunk 18/26] Sending to LLM (3842 chars)...
+[INPUT] ask_llm: provider=ollama, model=llama3:latest, system_prompt_len=1878, user_prompt_len=3960
+[OUTPUT] ask_llm: content_len=841
