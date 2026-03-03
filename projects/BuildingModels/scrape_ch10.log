@@ -1,0 +1,47 @@
+[SKIP] Chapter 1: The Scientific Method and Physics (in skip list)
+[SKIP] Chapter 2: Comparing Model and Experiment (in skip list)
+[SKIP] Chapter 3: Describing motion in one dimension (not in filter)
+[SKIP] Chapter 4: Describing motion in multiple dimensions (not in filter)
+[SKIP] Chapter 5: Newton's Laws (not in filter)
+[SKIP] Chapter 6: Applying Newton's Laws (not in filter)
+[SKIP] Chapter 7: Work and energy (not in filter)
+[SKIP] Chapter 8: Potential Energy and Conservation of Energy (not in filter)
+[SKIP] Chapter 9: Gravity (not in filter)
+
+============================================================
+[SCRAPING] Chapter 10: Linear momentum and the centre of mass
+  Pages 299 - 345
+============================================================
+  Split into 26 chunks
+  [Chunk 1/26] Sending to LLM (3760 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3878
+[OUTPUT] ask_llm: content_len=636
+    -> Extracted 1 equation(s)
+       # Chapter 10-2 Momentum in One Dimension for a Particle with Constant Mass
+  [Chunk 2/26] Sending to LLM (3770 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3888
+[OUTPUT] ask_llm: content_len=261
+    -> Extracted 1 equation(s)
+       # Chapter 10: Linear Momentum and the Centre of Mass - Impulse Equation (10.3)
+  [Chunk 3/26] Sending to LLM (3393 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3511
+[OUTPUT] ask_llm: content_len=737
+    -> Extracted 1 equation(s)
+       # Chapter 10-2 Change in Momentum and Impulse
+  [Chunk 4/26] Sending to LLM (2944 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3062
+[OUTPUT] ask_llm: content_len=611
+    -> Extracted 1 equation(s)
+       # Chapter 10-2 Internal vs External Forces in Systems of Particles
+  [Chunk 5/26] Sending to LLM (2697 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=2815
+[OUTPUT] ask_llm: content_len=1075
+    -> Extracted 1 equation(s)
+       # Checkpoint - Internal vs External Forces in Collision Problem
+  [Chunk 6/26] Sending to LLM (3403 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3521
+[OUTPUT] ask_llm: content_len=286
+    -> Extracted 1 equation(s)
+       # Chapter 10-5 Conservation of Momentum for a System with Two Particles
+  [Chunk 7/26] Sending to LLM (3851 chars)...
+[INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3969

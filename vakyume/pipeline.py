@@ -84,6 +84,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 
@@ -101,6 +102,8 @@ from .config import (
 )
 from .parser import case_safe_name, case_unsafe_name, Solver, shard_from_chapters
 from .repair import attempt_repair_shard
+from .reconstruct import reconstruct_cli
+from .cpp_gen import main as generate_cpp
 from .utils import get_standalone_method_source, get_method_source_from_class
 from .verifier import Verify
 
@@ -243,7 +246,7 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
     except Exception as e:
         import traceback
 
-        return {"error": f"Verification failed: {e}\n{traceback.format_exc()}"}
+        return {"error": f"Verification failed: {e}\\n{traceback.format_exc()}"}
 
 
 def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
@@ -383,6 +386,23 @@ def analyze_results(ctx: PipelineContext, all_results):
     return analysis
 
 
+def format_project(project_dir):
+    """Run black and clang-format on the project."""
+    print("Formatting project...")
+    try:
+        # Format Python files with black
+        subprocess.run(["black", project_dir], check=False, capture_output=True)
+        # Format C++ files with clang-format
+        cpp_patterns = ["*.cpp", "*.hpp", "*.h", "*.cc", "*.cxx"]
+        for pattern in cpp_patterns:
+            find_cmd = ["find", project_dir, "-name", pattern]
+            files = subprocess.check_output(find_cmd).decode().splitlines()
+            if files:
+                subprocess.run(["clang-format", "-i"] + files, check=False)
+    except Exception as e:
+        print(f"Warning: Formatting failed: {e}")
+
+
 # ---------------------------------------------------------------------------
 #  Main pipeline
 # ---------------------------------------------------------------------------
@@ -394,7 +414,7 @@ def run_pipeline(
     verbose=False,
     repair_only=False,
 ):
-    """Run the full Vakyume pipeline: shard, verify, repair, certify."""
+    """Run the full Vakyume pipeline: shard, verify, repair, certify, reconstruct, and generate C++."""
     ctx = PipelineContext(project_dir)
 
     if repair_only and overwrite:
@@ -454,7 +474,7 @@ def run_pipeline(
         shard_from_chapters(ctx)
 
     for round_idx in range(1, max_rounds + 1):
-        print(f"\n--- Round {round_idx}/{max_rounds} ---")
+        print(f"\\n--- Round {round_idx}/{max_rounds} ---")
         skip = previously_solved if repair_only else None
         results = verify_all_shards(ctx, verbose=verbose, skip_families=skip)
         analysis = analyze_results(ctx, results)
@@ -561,7 +581,7 @@ def run_pipeline(
                     else:
                         print(f" |- Still inconsistent: {scores}")
                     repair_info["scores"] = scores
-                    repair_info["broken"] = all_broken
+                    repair_info["broken" ] = all_broken
                     repair_info["trusted"] = [
                         v
                         for v, s in scores.items()
@@ -576,6 +596,12 @@ def run_pipeline(
             if COOLDOWN_SECONDS > 0:
                 time.sleep(COOLDOWN_SECONDS)
 
+    # ── Reconstruct and Generate C++ ─────────────────────────────────────
+    print("\\n--- Finalizing Library ---")
+    reconstruct_cli(ctx.project_dir)
+    generate_cpp(ctx.project_dir)
+    format_project(ctx.project_dir)
+
     return analysis
 
 
@@ -585,7 +611,7 @@ def run_pipeline(
 def assemble_certified_library(ctx: PipelineContext, analysis):
     """Combine solved families into a single certified library file."""
     with open(ctx.certified_file, "w") as out:
-        out.write(LIBRARY_IMPORT_HEADER + "\n")
+        out.write(LIBRARY_IMPORT_HEADER + "\\n")
         class_groups = {}
 
         for family_name in sorted(analysis["solved"]):
@@ -617,7 +643,7 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
                                     shard_path, node.name
                                 )
                                 if method_source:
-                                    indented = "\n".join(
+                                    indented = "\\n".join(
                                         [
                                             f"{TAB}{line}"
                                             for line in method_source.splitlines()
@@ -638,7 +664,7 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
                                             )
 
         for class_name, bodies in class_groups.items():
-            out.write(f"class {class_name}:\n")
+            out.write(f"class {class_name}:\\n")
             for body in bodies:
                 out.write(body)
-                out.write("\n")
+                out.write("\\n")
