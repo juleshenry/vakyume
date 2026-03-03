@@ -1,8 +1,8 @@
 """
-                                                :+ .x..
-                                           .:...x$   $+:x  $.
-                                       ..:. XX.  &    X.   xx$....
-                                       .:X . .             & . X.
+                                               :+ .x..
+                                          .:...x$   $+:x  $.
+                                      ..:. XX.  &    X.   xx$....
+                                      .:X . .             & . X.
                                     .:;X+++xX&$X+:.   .    . .x  x..
                                   .:$++++++++++x+......:;x$$X+..+..                         .
                                 .:$x+x++++++++++x$...............&..                      .:&xxx&X.
@@ -67,7 +67,7 @@
                                       ▞
                                     ▝▘
 
-                             by Julian Henry
+                            by Julian Henry
 """
 
 """Pipeline orchestrator: scraping, verification, repair, and certification.
@@ -117,33 +117,29 @@ DEFAULT_MAX_ROUNDS = 10
 #  JSON encoder for SymPy / numpy objects
 # ---------------------------------------------------------------------------
 class VakyumeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if hasattr(obj, "evalf"):
+    def default(self, o):
+        if hasattr(o, "evalf"):
             try:
-                if hasattr(obj, "is_number") and obj.is_number:
-                    if (
-                        hasattr(obj, "is_complex")
-                        and obj.is_complex
-                        and not obj.is_real
-                    ):
-                        return str(obj)
-                    return float(obj.evalf())
-                return str(obj)
+                if hasattr(o, "is_number") and o.is_number:
+                    if hasattr(o, "is_complex") and o.is_complex and not o.is_real:
+                        return str(o)
+                    return float(o.evalf())
+                return str(o)
             except:
-                return str(obj)
-        if isinstance(obj, (set, tuple)):
-            return list(obj)
-        if type(obj).__module__ == "numpy":
-            if hasattr(obj, "tolist"):
-                return obj.tolist()
+                return str(o)
+        if isinstance(o, (set, tuple)):
+            return list(o)
+        if type(o).__module__ == "numpy":
+            if hasattr(o, "tolist"):
+                return o.tolist()
             try:
-                return float(obj)
+                return float(o)
             except:
                 try:
-                    return int(obj)
+                    return int(o)
                 except:
-                    return str(obj)
-        return str(obj)
+                    return str(o)
+        return str(o)
 
 
 # ---------------------------------------------------------------------------
@@ -221,12 +217,17 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
                 except:
                     pass
 
-        subshards_dir = os.path.join(ctx.shards_dir, "subshards")
+        subshards_dir = os.path.join(ctx.shards_dir, "harmony_checks")
         if not os.path.exists(subshards_dir):
             os.makedirs(subshards_dir)
 
-        v = Verify(cls, pyeqn=pyeqn, subshards_dir=subshards_dir, verbose=verbose)
+        v = Verify(cls, pyeqn=pyeqn, harmony_checks_dir=subshards_dir, verbose=verbose)
         raw_results = v.verify()
+
+        # Clean up harmony_checks/ folder after completing a family verification
+        if os.path.exists(subshards_dir):
+            shutil.rmtree(subshards_dir)
+            os.makedirs(subshards_dir)
 
         verification_results = {}
         mismatches = {}
@@ -244,7 +245,7 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
     except Exception as e:
         import traceback
 
-        return {"error": f"Verification failed: {e}\\n{traceback.format_exc()}"}
+        return {"error": f"Verification failed: {e}\n{traceback.format_exc()}"}
 
 
 def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
@@ -260,18 +261,19 @@ def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
         [
             d
             for d in os.listdir(ctx.shards_dir)
-            if os.path.isdir(os.path.join(ctx.shards_dir, d)) and d != "subshards"
+            if os.path.isdir(os.path.join(ctx.shards_dir, d)) and d != "harmony_checks"
         ]
     )
 
     to_verify = [f for f in family_names if not skip_families or f not in skip_families]
 
-    iterator = tqdm(to_verify, desc="Verifying", unit="family") if tqdm else to_verify
+    use_tqdm = not verbose and tqdm is not None
+    iterator = (
+        tqdm(to_verify, desc="Verifying", unit="family") if use_tqdm else to_verify
+    )
     for family_name in iterator:
         all_results[family_name] = verify_family(ctx, family_name, verbose=verbose)
 
-    # For skipped families, insert a synthetic passing result so analyze_results
-    # categorizes them as solved without re-running verification.
     if skip_families:
         for family_name in family_names:
             if family_name in skip_families and family_name not in all_results:
@@ -327,7 +329,9 @@ def analyze_results(ctx: PipelineContext, all_results):
         mismatches_data = family_res.get("mismatches", {})
         all_solved = True
 
-        for base_eq, variants_inner in eqn_results_data.items():
+        for base_eq, variants_inner in (
+            eqn_results_data.items() if eqn_results_data else []
+        ):
             if not variants_inner:
                 continue
             best_score = max(variants_inner.values())
@@ -471,144 +475,61 @@ def run_pipeline(
             ctx.clear_shards()
         shard_from_chapters(ctx)
 
+    analysis = None
     for round_idx in range(1, max_rounds + 1):
-        print(f"\\n--- Round {round_idx}/{max_rounds} ---")
-        skip = previously_solved if repair_only else None
-        results = verify_all_shards(ctx, verbose=verbose, skip_families=skip)
-        analysis = analyze_results(ctx, results)
-
-        print(
-            f"Status: {len(analysis['solved'])} families solved, "
-            f"{len(analysis['inconsistent'])} inconsistent, "
-            f"{len(analysis['failed'])} failed."
+        print(f"\n--- Round {round_idx} ---")
+        all_results = verify_all_shards(
+            ctx, verbose=verbose, skip_families=previously_solved
         )
+        analysis = analyze_results(ctx, all_results)
 
-        assemble_certified_library(ctx, analysis)
+        inconsistent = analysis.get("inconsistent", {})
+        failed = analysis.get("failed", [])
 
-        if not analysis.get("inconsistent") and not analysis.get("failed"):
-            print("All equations aligned. Stopping early.")
+        if not inconsistent and not failed:
+            print("!!! SUCCESS: All shards verified successfully!")
             break
 
-        # Focus on ONE family at a time for repair
-        target_family = None
-        if analysis["inconsistent"]:
-            target_family = sorted(analysis["inconsistent"].keys())[0]
-            repair_info = analysis["inconsistent"][target_family]
-            repair_type = "inconsistent"
-        elif analysis["failed"]:
-            target_family = analysis["failed"][0]["file"]
-            repair_info = {
-                "broken": [],
-                "trusted": [],
-                "scores": {},
-                "mismatches": {},
-                "error": analysis["failed"][0].get("error"),
-            }
-            family_dir = os.path.join(ctx.shards_dir, target_family)
-            if os.path.exists(family_dir):
-                repair_info["broken"] = [
-                    f.split("__")[1].replace(".py", "")
-                    for f in os.listdir(family_dir)
-                    if "__" in f
-                ]
-            repair_type = "failed"
-
-        if not target_family:
-            break
-
-        attempt = 1
-        max_attempts = 3
-        while attempt <= max_attempts:
+        # Mechanism to reset shards if they fail to converge
+        if round_idx >= 3:
             print(
-                f" |- [Repair] Family: {target_family} | Attempt: {attempt}/{max_attempts}"
+                f"Convergence issues detected. Re-running SymPy scraper to reset broken shards..."
             )
+            shard_from_chapters(ctx, overwrite_existing=True)
+            # Re-verify immediately after reset to see if deterministic fix worked
+            all_results = verify_all_shards(
+                ctx, verbose=verbose, skip_families=previously_solved
+            )
+            analysis = analyze_results(ctx, all_results)
+            inconsistent = analysis.get("inconsistent", {})
+            failed = analysis.get("failed", [])
+            if not inconsistent and not failed:
+                print("!!! SUCCESS: All shards verified successfully after reset!")
+                break
 
-            for broken_variant in repair_info["broken"]:
+        for family_name, data in inconsistent.items():
+            broken = data.get("broken", [])
+            trusted = data.get("trusted", [])
+            scores = data.get("scores", {})
+            mismatches = data.get("mismatches", {})
+
+            for b_var in broken:
                 attempt_repair_shard(
                     ctx,
-                    target_family,
-                    broken_variant,
-                    repair_info.get("trusted", []),
-                    repair_info.get("scores", {}),
-                    repair_info.get("mismatches", {}),
-                    error=repair_info.get("error"),
+                    family_name,
+                    b_var,
+                    trusted,
+                    scores,
+                    mismatches,
                 )
 
-            # Re-verify immediately
-            print(f" |- Re-verifying family {target_family}...")
-            new_res = verify_family(ctx, target_family, verbose=verbose)
-
-            if not new_res.get("error"):
-                eqn_name = f"eqn_{target_family.split('_eqn_')[1]}"
-                scores = new_res["results"].get(eqn_name, {})
-                num_v = len(scores)
-
-                # Check for remaining placeholder shards
-                still_placeholder = []
-                eqn_suffix = (
-                    target_family.split("_eqn_")[1]
-                    if "_eqn_" in target_family
-                    else None
-                )
-                if eqn_suffix:
-                    fam_dir = os.path.join(ctx.shards_dir, target_family)
-                    for v in scores:
-                        sv = case_safe_name(v)
-                        sp = os.path.join(fam_dir, f"eqn_{eqn_suffix}__{sv}.py")
-                        if os.path.exists(sp):
-                            with open(sp, "r") as _sf:
-                                _content = _sf.read()
-                            if 'raise UnsolvedException("Pending' in _content:
-                                still_placeholder.append(v)
-
-                all_real = (
-                    num_v > 0
-                    and all(s == num_v for s in scores.values())
-                    and not still_placeholder
-                )
-                if all_real:
-                    print(f" |- SUCCESS: Family {target_family} is now certified.")
-                    if repair_only:
-                        previously_solved.add(target_family)
-                    break
-                else:
-                    score_broken = [v for v, s in scores.items() if s < num_v]
-                    all_broken = list(set(score_broken + still_placeholder))
-                    if still_placeholder:
-                        print(f" |- Still has placeholders: {still_placeholder}")
-                    else:
-                        print(f" |- Still inconsistent: {scores}")
-                    repair_info["scores"] = scores
-                    repair_info["broken"] = all_broken
-                    repair_info["trusted"] = [
-                        v
-                        for v, s in scores.items()
-                        if s == num_v and v not in still_placeholder
-                    ]
-                    repair_info["mismatches"] = new_res.get("mismatches", {})
-            else:
-                print(f" |- Still failing: {new_res.get('error')}")
-                repair_info["error"] = new_res.get("error")
-
-            attempt += 1
-            if COOLDOWN_SECONDS > 0:
-                time.sleep(COOLDOWN_SECONDS)
-
-    # ── Reconstruct and Generate C++ ─────────────────────────────────────
-    print("\n--- Finalizing Library ---")
+    # Reconstruction & C++ generation
+    print("\nReconstructing library...")
     reconstruct_cli(ctx.project_dir)
+    print("Generating C++...")
     generate_cpp(ctx.project_dir)
-    # format_project(ctx.project_dir)  # Removed as it's not defined
-
+    format_project(ctx.project_dir)
+    print("\nPipeline complete.")
+    if analysis is None:
+        analysis = {"solved": [], "inconsistent": {}, "failed": []}
     return analysis
-
-
-# ---------------------------------------------------------------------------
-#  Assembly
-# ---------------------------------------------------------------------------
-# assemble_certified_library is deprecated in favor of modular reconstruction.
-# Keeping it for internal reference until full migration is complete.
-def assemble_certified_library(ctx: PipelineContext, analysis):
-    """Combine solved families into a single certified library file."""
-    # This is a legacy path and will be removed once reconstruct is fully verified.
-    pass
