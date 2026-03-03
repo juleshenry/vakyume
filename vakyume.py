@@ -107,6 +107,7 @@ def cmd_run(args):
         overwrite=args.overwrite,
         verbose=args.verbose,
         repair_only=args.repair_only,
+        include_families=args.families,
     )
 
     print("\nPipeline Stage: Verification & Certification Complete.")
@@ -150,6 +151,7 @@ def cmd_build(args):
         overwrite=args.overwrite,
         verbose=args.verbose,
         repair_only=args.repair_only,
+        include_families=args.families,
     )
 
     print(f"\nSolved: {len(analysis['solved'])}")
@@ -261,6 +263,11 @@ def main():
         action="store_true",
         help="Skip shard generation and re-verification of passing families; only repair broken ones",
     )
+    run_parser.add_argument(
+        "--families",
+        nargs="+",
+        help="Target specific equation families (e.g., FluidFlowVacuumLines_eqn_2_17)",
+    )
     run_parser.set_defaults(func=cmd_run)
 
     # ── reconstruct ──────────────────────────────────────────────────────
@@ -322,6 +329,11 @@ def main():
         "--repair-only",
         action="store_true",
         help="Skip shard generation and re-verification of passing families; only repair broken ones",
+    )
+    build_parser.add_argument(
+        "--families",
+        nargs="+",
+        help="Target specific equation families (e.g., FluidFlowVacuumLines_eqn_2_17)",
     )
     build_parser.set_defaults(func=cmd_build)
 

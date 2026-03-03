@@ -93,7 +93,7 @@ import sys
 
 
 class Verify:
-    def __init__(self, lib_class, pyeqn=None, subshards_dir=None, verbose=False):
+    def __init__(self, lib_class, pyeqn=None, harmony_checks_dir=None, verbose=False):
         self.lib_class = lib_class
         self.verbose = verbose
         self._log_buffer = []
@@ -107,7 +107,7 @@ class Verify:
             self.lib_instance = lib_class
 
         self.pyeqn = pyeqn
-        self.subshards_dir = subshards_dir
+        self.harmony_checks_dir = harmony_checks_dir
         self.harmony_func = None
         self.base_equations = [
             name
@@ -118,7 +118,7 @@ class Verify:
             name for name in dir(lib_class) if name.startswith("eqn") and "__" in name
         ]
 
-        if self.subshards_dir and self.pyeqn:
+        if self.harmony_checks_dir and self.pyeqn:
             self._prepare_harmony_subshard()
 
     def _prepare_harmony_subshard(self):
@@ -131,7 +131,7 @@ class Verify:
 
             h = hashlib.md5(self.pyeqn.encode()).hexdigest()
             module_name = f"harmony_check_{h}"
-            subshard_path = os.path.join(self.subshards_dir, f"{module_name}.py")
+            subshard_path = os.path.join(self.harmony_checks_dir, f"{module_name}.py")
 
             if not os.path.exists(subshard_path):
                 # Collect known equation variables from variant names
@@ -189,8 +189,8 @@ class Verify:
                         f"    return ({lhs_str.replace('ln', 'log')}) - ({rhs_str.replace('ln', 'log')})\n"
                     )
 
-            if self.subshards_dir not in sys.path:
-                sys.path.append(self.subshards_dir)
+            if self.harmony_checks_dir not in sys.path:
+                sys.path.append(self.harmony_checks_dir)
 
             importlib.invalidate_caches()
             if module_name in sys.modules:
@@ -261,21 +261,39 @@ class Verify:
             """Convert a single (non-list) value to float or complex.
             Always returns a complex number (or None) — the caller
             compares real and imaginary parts independently."""
+            if v is None:
+                return None
             if isinstance(v, (int, float)):
-                return complex(v, 0)
+                if not np.isfinite(v):
+                    return None
+                return complex(float(v), 0)
             if isinstance(v, complex):
+                if not (np.isfinite(v.real) and np.isfinite(v.imag)):
+                    return None
                 return v
             try:
                 if hasattr(v, "evalf"):
                     ev = v.evalf()
                     try:
-                        return complex(float(ev), 0)
+                        f_ev = float(ev)
+                        if not np.isfinite(f_ev):
+                            return None
+                        return complex(f_ev, 0)
                     except (TypeError, ValueError):
-                        return complex(ev)
-                return complex(float(v), 0)
+                        c_ev = complex(ev)
+                        if not (np.isfinite(c_ev.real) and np.isfinite(c_ev.imag)):
+                            return None
+                        return c_ev
+                f_v = float(v)
+                if not np.isfinite(f_v):
+                    return None
+                return complex(f_v, 0)
             except (TypeError, ValueError):
                 try:
-                    return complex(v)
+                    c_v = complex(v)
+                    if not (np.isfinite(c_v.real) and np.isfinite(c_v.imag)):
+                        return None
+                    return c_v
                 except (TypeError, ValueError):
                     return None
 
@@ -283,6 +301,12 @@ class Verify:
             if sa is None or sb is None:
                 return False
             # Both are complex — check real and imaginary parts independently
+            # If imag is very small, treat as real
+            if abs(sa.imag) < 1e-9:
+                sa = complex(sa.real, 0)
+            if abs(sb.imag) < 1e-9:
+                sb = complex(sb.real, 0)
+
             return abs(sa.real - sb.real) < 1e-6 and abs(sa.imag - sb.imag) < 1e-6
 
         # If either side is a list, check whether ANY element from one side
@@ -348,7 +372,6 @@ class Verify:
     def verify_equation(self, base_eq):
         # Collect all log output in a buffer; flush only for failures (or if verbose)
         log_lines = list(self._log_buffer)  # inherit any init/harmony-prep messages
-        log_lines.append(f"[INPUT] verify_equation: base_eq={base_eq}")
         params = self._get_params(base_eq)
         all_variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
 
@@ -370,24 +393,16 @@ class Verify:
 
         for source_var in variants:
             variant_method = getattr(self.lib_instance, f"{base_eq}__{source_var}")
-            log_lines.append(f" |- Testing source variant: {source_var}")
 
             trial_matches = []
             source_mismatches = []
 
             for trial_idx in range(num_trials):
                 test_inputs = {p: self.make_rand() for p in params if p != source_var}
-                log_lines.append(f"    [Trial {trial_idx + 1}] Inputs: {test_inputs}")
 
                 try:
                     source_values = variant_method(**test_inputs.copy())
-                    log_lines.append(
-                        f"    [Trial {trial_idx + 1}] {source_var} variant output: {source_values}"
-                    )
                     if not source_values:
-                        log_lines.append(
-                            f"    [Trial {trial_idx + 1}] {source_var} variant returned NOTHING"
-                        )
                         trial_matches.append(0)
                         source_mismatches.append({"error": "No values returned"})
                         continue
@@ -405,9 +420,6 @@ class Verify:
                                 self.pyeqn, full_set, log_lines=log_lines
                             )
                             if harmony_res is False:
-                                log_lines.append(
-                                    f"    [Trial {trial_idx + 1}] Disharmony with pyeqn for {source_var}={val}"
-                                )
                                 continue
                             elif harmony_res is None:
                                 # Inconclusive (domain error), skip this value but don't count as failure
@@ -417,9 +429,6 @@ class Verify:
                             invariant_vars
                         )  # invariant vars count as automatic matches
                         current_trial_mismatches = []
-                        log_lines.append(
-                            f"    [Trial {trial_idx + 1}] Checking targets against source_var={source_var}, val={val}"
-                        )
                         for target_var in variants:
                             if target_var == source_var:
                                 matches += 1
@@ -436,9 +445,6 @@ class Verify:
                                 target_values = target_method(**target_inputs.copy())
                                 is_sim = self.are_similar(
                                     full_set[target_var], target_values
-                                )
-                                log_lines.append(
-                                    f"      -> Target {target_var}: expected {full_set[target_var]}, got {target_values} | Match: {is_sim}"
                                 )
                                 if is_sim:
                                     matches += 1
@@ -462,16 +468,10 @@ class Verify:
                                         "unsolvedexception",
                                     )
                                 ):
-                                    log_lines.append(
-                                        f"      -> Target {target_var}: ERROR: {err}"
-                                    )
                                     # Treat as inconclusive — count as a match
                                     # so it doesn't drag down the source score
                                     matches += 1
                                 else:
-                                    log_lines.append(
-                                        f"      -> Target {target_var}: ERROR: {err}"
-                                    )
                                     current_trial_mismatches.append(
                                         {"target": target_var, "error": str(err)}
                                     )
@@ -502,14 +502,9 @@ class Verify:
                             "no valid",
                         )
                     ):
-                        log_lines.append(
-                            f"    [Trial {trial_idx + 1}] {source_var} variant: no solution for these inputs (inconclusive)"
-                        )
                         # Don't append to trial_matches — skip this trial
+                        pass
                     else:
-                        log_lines.append(
-                            f"    [Trial {trial_idx + 1}] {source_var} variant crashed: {err}"
-                        )
                         trial_matches.append(0)
                         source_mismatches.append({"error": str(err)})
 
@@ -520,21 +515,21 @@ class Verify:
                 # no root for any random input set).  Give benefit of the
                 # doubt — award a perfect score so the family isn't dragged
                 # down by an untestable source variant.
-                log_lines.append(
-                    f"    All trials inconclusive for {source_var}; awarding perfect score"
-                )
                 results[source_var] = len(all_variants)
             if results[source_var] < len(all_variants):
                 # Only keep mismatches for broken variants
                 mismatches[source_var] = source_mismatches
 
-        log_lines.append(f"[OUTPUT] verify_equation: scores={results}")
-
         # Decide whether to flush the log buffer
         num_v = len(all_variants)
         is_clean = num_v > 0 and all(s >= num_v for s in results.values())
 
-        if self.verbose or not is_clean:
+        if self.verbose:
+            for line in log_lines:
+                print(line)
+        elif not is_clean:
+            # For non-verbose mode, only print the equation name and the full log on failure
+            print(f"Testing {self.lib_class.__name__}::{base_eq}... FAILED")
             for line in log_lines:
                 print(line)
 

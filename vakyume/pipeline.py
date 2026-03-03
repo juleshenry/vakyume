@@ -248,15 +248,20 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
         return {"error": f"Verification failed: {e}\n{traceback.format_exc()}"}
 
 
-def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
+def verify_all_shards(
+    ctx: PipelineContext, verbose=False, skip_families=None, include_families=None
+):
     """Verify every equation family in the shards directory."""
-    if skip_families:
+    if include_families:
+        to_verify = include_families
+        print(f"Verifying specific families: {', '.join(include_families)}")
+    elif skip_families:
         print(
             f"Verifying families... (skipping {len(skip_families)} previously solved)"
         )
     else:
         print("Verifying families...")
-    all_results = {}
+
     family_names = sorted(
         [
             d
@@ -265,7 +270,12 @@ def verify_all_shards(ctx: PipelineContext, verbose=False, skip_families=None):
         ]
     )
 
-    to_verify = [f for f in family_names if not skip_families or f not in skip_families]
+    if not include_families:
+        to_verify = [
+            f for f in family_names if not skip_families or f not in skip_families
+        ]
+
+    all_results = {}
 
     use_tqdm = not verbose and tqdm is not None
     iterator = (
@@ -415,9 +425,14 @@ def run_pipeline(
     overwrite=False,
     verbose=False,
     repair_only=False,
+    include_families=None,
 ):
     """Run the full Vakyume pipeline: shard, verify, repair, certify, reconstruct, and generate C++."""
     ctx = PipelineContext(project_dir)
+
+    if include_families:
+        print(f"Targeted repair mode: focus on {', '.join(include_families)}")
+        repair_only = True  # include_families implies we only care about those, effectively a targeted repair
 
     if repair_only and overwrite:
         print(
@@ -427,7 +442,7 @@ def run_pipeline(
 
     # Load previously solved families when in repair-only mode
     previously_solved = set()
-    if repair_only:
+    if repair_only and not include_families:
         analysis_path = os.path.join(ctx.reports_dir, "analysis.json")
         if os.path.exists(analysis_path):
             with open(analysis_path, "r") as af:
@@ -479,7 +494,10 @@ def run_pipeline(
     for round_idx in range(1, max_rounds + 1):
         print(f"\n--- Round {round_idx} ---")
         all_results = verify_all_shards(
-            ctx, verbose=verbose, skip_families=previously_solved
+            ctx,
+            verbose=verbose,
+            skip_families=previously_solved,
+            include_families=include_families,
         )
         analysis = analyze_results(ctx, all_results)
 

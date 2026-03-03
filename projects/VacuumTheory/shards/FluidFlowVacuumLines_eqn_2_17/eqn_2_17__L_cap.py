@@ -5,9 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_2_17__L(self, d: float, delta_P: float, mu: float, v: float, **kwargs):
-    # [.pyeqn] delta_P = 0.0345* mu * L * v / d**2
-    result = []
-    L = 28.9855072463768*d**2*delta_P/(mu*v)
-    result.append(L)
-    return result
+def eqn_2_17__L(self, d: float, delta_P: float, mu: float, q: float, **kwargs):
+    # [.pyeqn] delta_P = 0.105 * mu * L * q / d**4
+    L = (delta_P * d**4) / (0.105 * mu * q)
+    return [L]

@@ -113,29 +113,29 @@ class TestVerifyCorrect:
     """Verify passes on a fully correct equation class."""
 
     def test_all_variants_consistent(self, tmp_path):
-        v = Verify(_BasicCorrect, pyeqn="z = x + y", subshards_dir=str(tmp_path))
+        v = Verify(_BasicCorrect, pyeqn="z = x + y", harmony_checks_dir=str(tmp_path))
         results = v.verify()
         for eqn, data in results.items():
             scores = data["scores"]
             valid = [s for s in scores.values() if s is not None]
             assert len(valid) > 0, f"No valid scores for {eqn}"
-            assert all(
-                s == valid[0] for s in valid
-            ), f"Scores should all match for correct equation: {scores}"
+            assert all(s == valid[0] for s in valid), (
+                f"Scores should all match for correct equation: {scores}"
+            )
 
 
 class TestVerifyBroken:
     """Verify catches a broken solver variant."""
 
     def test_detects_mismatch(self, tmp_path):
-        v = Verify(_BasicBroken, pyeqn="z = x + y", subshards_dir=str(tmp_path))
+        v = Verify(_BasicBroken, pyeqn="z = x + y", harmony_checks_dir=str(tmp_path))
         results = v.verify()
         for eqn, data in results.items():
             mismatches = data.get("mismatches", {})
             # The broken __z variant should be flagged
-            assert (
-                len(mismatches) > 0
-            ), "Expected at least one mismatch for the broken equation"
+            assert len(mismatches) > 0, (
+                "Expected at least one mismatch for the broken equation"
+            )
 
 
 class TestVerifyPendingRepair:
@@ -147,7 +147,7 @@ class TestVerifyPendingRepair:
             "(SP_1 - (Q_external_gas_throughput + Q_0))"
             "/ (SP_2 - (Q + Q_0)))"
         )
-        v = Verify(_RotaryBroken, pyeqn=pyeqn, subshards_dir=str(tmp_path))
+        v = Verify(_RotaryBroken, pyeqn=pyeqn, harmony_checks_dir=str(tmp_path))
         results = v.verify()
         # At least one variant should exist; the one that raises should
         # produce a None score or be excluded.
@@ -155,9 +155,9 @@ class TestVerifyPendingRepair:
             scores = data["scores"]
             # eqn_11_2__V raises, so its score should be None or absent
             v_score = scores.get("eqn_11_2__V")
-            assert (
-                v_score is None or v_score == 0
-            ), f"Expected None/0 for raising variant, got {v_score}"
+            assert v_score is None or v_score == 0, (
+                f"Expected None/0 for raising variant, got {v_score}"
+            )
 
 
 class TestAnalyzeResults:
@@ -165,7 +165,7 @@ class TestAnalyzeResults:
 
     def test_broken_is_inconsistent(self, tmp_path):
         ctx = PipelineContext(str(tmp_path))
-        v = Verify(_BasicBroken, pyeqn="z = x + y", subshards_dir=str(tmp_path))
+        v = Verify(_BasicBroken, pyeqn="z = x + y", harmony_checks_dir=str(tmp_path))
         raw = v.verify()
 
         verification_results = {}
@@ -181,6 +181,6 @@ class TestAnalyzeResults:
             }
         }
         analysis = analyze_results(ctx, all_results)
-        assert (
-            len(analysis["inconsistent"]) > 0
-        ), "Broken equation should be classified as inconsistent"
+        assert len(analysis["inconsistent"]) > 0, (
+            "Broken equation should be classified as inconsistent"
+        )

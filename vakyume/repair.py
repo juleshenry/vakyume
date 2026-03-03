@@ -140,8 +140,15 @@ def attempt_repair_shard(
     else:
         header = ""
 
-    # Generate algebraic derivation scaffold (fill-in-the-blank for Phi-3)
+    # Generate algebraic derivation scaffold
     scaffold = generate_derivation_scaffold(pyeqn, broken_variant, header)
+
+    # If scaffold is overly simplistic or constant-lossy (common in complex eqns),
+    # we might want to flag it or let the LLM know to be careful.
+    is_transcendental = "brentq" in (scaffold or "")
+    is_constant_suspicious = re.search(
+        r"0\.\d{5,}", pyeqn
+    )  # suspicious decimals in pyeqn
 
     print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
 
@@ -254,8 +261,14 @@ def attempt_repair_shard(
                 "Do NOT use sympy. Use direct algebraic rearrangement.\n"
                 "Return result as: return [value]\n"
                 "Use cmath.sqrt/cmath.log/cmath.exp for complex-safe math.\n"
+                "IMPORTANT: If the equation contains decimal constants, use them with high precision. "
+                "Do NOT round them to fewer than 10 decimal places.\n"
                 "If the variable is in the exponent (transcendental), use "
-                "scipy.optimize.brentq with a sign-change scan."
+                "scipy.optimize.brentq with a sign-change scan.\n"
+                "When using numerical solvers like brentq, ensure the residual function "
+                "handles complex numbers by returning the real part (val.real) and "
+                "evaluating the equation in a way that avoids RuntimeWarnings for "
+                "negative bases (e.g., complex(base, 0)**exp)."
             )
             user_prompt = f"Equation: {pyeqn}\n"
             if example_code:

@@ -461,7 +461,7 @@ def _collect_source_files(project_dir, input_file=None):
     # Modular py/ package fallback
     py_dir = os.path.join(project_dir, "py")
     if os.path.isdir(py_dir):
-        skip = {"__init__.py", "subshards.py"}
+        skip = {"__init__.py", "harmony_checks.py"}
         files = sorted(
             os.path.join(py_dir, f)
             for f in os.listdir(py_dir)

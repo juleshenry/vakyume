@@ -130,11 +130,12 @@ def _extract_inner_expr(eq: str, exp_val: str) -> str:
     that is raised to the power, returning its inner content (without the
     outer parens).
     """
-    exp_pos = eq.find("**" + exp_val)
-    if exp_pos < 0:
-        exp_pos = eq.find("** " + exp_val)
-    if exp_pos < 0:
+    exp_pattern = re.escape("**" + exp_val)
+    exp_pos_match = re.search(r"\*\*\s*" + re.escape(exp_val), eq)
+    if not exp_pos_match:
         return ""
+    exp_pos = exp_pos_match.start()
+
     start = exp_pos - 1
     while start >= 0 and eq[start] == " ":
         start -= 1
@@ -149,6 +150,7 @@ def _extract_inner_expr(eq: str, exp_val: str) -> str:
         elif eq[start] == "(":
             depth -= 1
         start -= 1
+    # Check if there's a matching ( before start
     return eq[start + 2 : end_p]
 
 
@@ -203,10 +205,9 @@ def _build_brentq_scaffold(
     rhs: str,
     total: int,
     comment: str,
-    start_expr: str = "0.01",
-    step: str = "0.01",
+    start_expr: str = "0.001",
 ) -> str:
-    """Build a complete ``brentq`` numerical-solver scaffold."""
+    """Build a complete ``brentq`` numerical-solver scaffold with robust range search."""
     rhs_sub = re.sub(
         r"\b" + re.escape(target_var) + r"\b",
         target_var + "_val",
@@ -216,26 +217,41 @@ def _build_brentq_scaffold(
     lines.append(f"    # [.pyeqn] {pyeqn}")
     lines.append(f"    # {comment}")
     lines.append(f"    from scipy.optimize import brentq")
+    lines.append(f"    import numpy as np")
     lines.append(f"    def _res({target_var}_val):")
-    lines.append(f"        return {rhs_sub} - {lhs}")
-    lines.append(f"    lo, hi = None, None")
-    lines.append(f"    prev = _res({start_expr})")
-    lines.append(f"    for i in range(1, 100000):")
-    if start_expr == "0.01":
-        lines.append(f"        x = i * {step}")
-    else:
-        lines.append(f"        x = {start_expr} + i * {step}")
     lines.append(f"        try:")
-    lines.append(f"            cur = _res(x)")
-    lines.append(f"        except Exception:")
-    lines.append(f"            continue")
-    lines.append(f"        if prev * cur < 0:")
-    lines.append(f"            lo, hi = x - {step}, x")
-    lines.append(f"            break")
-    lines.append(f"        prev = cur")
-    lines.append(f"    if lo is None:")
     lines.append(
-        f'        raise UnsolvedException("No sign change found for {target_var}")'
+        f"            # Force complex evaluation to handle negative bases in fractional powers"
+    )
+    lines.append(f"            target_var_complex = complex({target_var}_val, 0)")
+    rhs_complex = rhs_sub.replace(target_var + "_val", "target_var_complex")
+    lines.append(f"            val = {rhs_complex} - {lhs}")
+    lines.append(f"            return val.real if hasattr(val, 'real') else val")
+    lines.append(f"        except Exception:")
+    lines.append(f"            return float('nan')")
+    lines.append(f"    lo, hi = None, None")
+    lines.append(
+        f"    # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps"
+    )
+    lines.append(f"    search_points = np.logspace(-6, 6, 500)")
+    lines.append(f"    for i in range(len(search_points)-1):")
+    lines.append(f"        p1, p2 = search_points[i], search_points[i+1]")
+    lines.append(f"        r1, r2 = _res(p1), _res(p2)")
+    lines.append(f"        if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:")
+    lines.append(f"            lo, hi = p1, p2")
+    lines.append(f"            break")
+    lines.append(f"    if lo is None:")
+    lines.append(f"        # Fallback to a wider linear search if logspace fails")
+    lines.append(f"        for x in np.linspace(0.001, 10000, 1000):")
+    lines.append(f"            r = _res(x)")
+    lines.append(f"            if np.isfinite(r):")
+    lines.append(f"                if lo is None: lo_val, lo = r, x")
+    lines.append(f"                if r * lo_val <= 0:")
+    lines.append(f"                    hi = x")
+    lines.append(f"                    break")
+    lines.append(f"    if lo is None or hi is None:")
+    lines.append(
+        f'        raise UnsolvedException("No sign change found for {target_var} in expanded range")'
     )
     lines.append(f"    {target_var} = brentq(_res, lo, hi)")
     lines.append(f"    return [{target_var}]")
@@ -260,7 +276,6 @@ def _scaffold_exponent_target(eq, target_var, lhs, rhs, header, pyeqn, **_kw):
         0,
         f"{target_var} appears in the exponent — use numerical solver",
         start_expr="1.01",
-        step="0.01",
     )
 
 
@@ -341,6 +356,7 @@ def _scaffold_ratio_power_target_in_denominator(
             outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
         ratio_expr = f"{lhs} / ({outer_m1}) + 1" if outer_m1 else f"{lhs} + 1"
     else:
+        outer_m1 = ""  # Initialize to avoid unbound error
         outer = _extract_outer_coeff(rhs, pow_frag)
         ratio_expr = f"{lhs} / ({outer})" if outer else lhs
 
@@ -536,7 +552,6 @@ def _scaffold_frac_exp_multi_diff(
             f"{target_var} appears {total} times (including bare)"
             " — use numerical solver",
             start_expr="max(p_0, p_c, p_s) + 1",
-            step="0.1",
         )
 
     # Linear case — only (target - X) terms, no bare target
@@ -589,10 +604,44 @@ def _scaffold_frac_exp_single_occurrence(
 
     inner_expr = _extract_inner_expr(eq, exp_val)
     if not inner_expr:
-        return None
+        # Fallback for simple (P - p_s) ** 0.6 where it might not be parenthesized
+        # OR if _extract_inner_expr failed due to regex mismatch
+        m_simple = re.search(r"\(([^()]+)\)\s*\*\*\s*" + re.escape(exp_val), eq)
+        if m_simple:
+            inner_expr = m_simple.group(1)
+        else:
+            return None
 
     outer_mult, R_expr = _resolve_outer_mult(rhs, inner_expr, exp_val, lhs, inv_exp)
     num_part, den_part = _split_num_den(inner_expr)
+
+    # --- Helper: target found as bare variable in numerator/denominator ---
+    def _bare_target_scaffold(in_numerator):
+        if in_numerator:
+            remaining = _clean_remaining(num_part, target_var)
+            if den_part and remaining:
+                answer = f"R * ({den_part}) / ({remaining})"
+            elif den_part:
+                answer = f"R * ({den_part})"
+            elif remaining:
+                answer = f"R / ({remaining})"
+            else:
+                answer = "R"
+        else:
+            remaining = _clean_remaining(den_part, target_var)
+            if num_part and remaining:
+                answer = f"({num_part}) / (R * ({remaining}))"
+            elif num_part:
+                answer = f"({num_part}) / R"
+            else:
+                answer = "1.0 / R"
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+        lines.append(f"    R = {R_expr}")
+        lines.append(f"    # {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
 
     # --- Helper: target found in a numerator difference term ---------------
     def _num_diff_scaffold(match_obj, sign, other_var):
@@ -680,6 +729,18 @@ def _scaffold_frac_exp_single_occurrence(
         return "\n".join(lines)
 
     # Try each sub-pattern in order ------------------------------------------
+
+    # Bare target in numerator
+    if re.search(r"\b" + re.escape(target_var) + r"\b", num_part) and not re.search(
+        r"\(\s*([^()]*?)\b" + re.escape(target_var) + r"\b([^()]*?)\)", num_part
+    ):
+        return _bare_target_scaffold(in_numerator=True)
+
+    # Bare target in denominator
+    if re.search(r"\b" + re.escape(target_var) + r"\b", den_part) and not re.search(
+        r"\(\s*([^()]*?)\b" + re.escape(target_var) + r"\b([^()]*?)\)", den_part
+    ):
+        return _bare_target_scaffold(in_numerator=False)
 
     # (X - target) in numerator
     rev_num = re.search(
@@ -783,12 +844,24 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
     )
 
     for handler in _SCAFFOLD_HANDLERS:
-        result = handler(**ctx)
-        if result is not None:
-            return result
+        try:
+            result = handler(**ctx)
+            if result is not None:
+                # Basic validation: ensure the target_var is actually assigned
+                if f"{target_var} =" in result or f"return [" in result:
+                    return result
+        except Exception:
+            pass
 
     # -- Fallback: single-occurrence -> simple rearrangement --
     if total == 1:
+        # Check if the target is actually in the equation and not already on LHS
+        if lhs.strip() == target_var:
+            lines = [header]
+            lines.append(f"    # [.pyeqn] {pyeqn}")
+            lines.append(f"    return [{rhs}]")
+            return "\n".join(lines)
+
         lines = [header]
         lines.append(f"    # [.pyeqn] {pyeqn}")
         lines.append(f"    # Solve for {target_var} by rearranging the equation")

@@ -159,10 +159,12 @@ class Solver:
         MAX_COMP_TIME_SECONDS,
         timeout_exception=timeout_decorator.timeout_decorator.TimeoutError,
     )
-    def get_solns_vanilla_nf(self, nf: str, symb: Symbol, tokens: list = None):
+    def get_solns_vanilla_nf(
+        self, nf: str, symb: Symbol, tokens: list[str] | None = None
+    ):
         try:
             local_dict = {t: Symbol(t) for t in tokens} if tokens else {}
-            expr = sympify(nf, locals=local_dict)
+            expr = sympify(nf, locals=local_dict)  # type: ignore
             solns = solve(expr, symb)
             if not solns:
                 raise UnsolvedException("Sympy solve returned empty")
@@ -213,13 +215,15 @@ class Solver:
         return "\n".join(code)
 
 
-def shard_from_chapters(ctx):
+def shard_from_chapters(ctx, overwrite_existing=False):
     """Parse equation notes and generate individual solver shard files.
 
     Parameters
     ----------
     ctx : PipelineContext
         Pipeline context with ``notes_dir`` and ``shards_dir`` paths.
+    overwrite_existing : bool, optional
+        Whether to overwrite existing shard files. Defaults to False.
     """
     print(f"[INPUT] shard_from_chapters: ctx.notes_dir={ctx.notes_dir}")
     solver = Solver()
@@ -288,7 +292,7 @@ def shard_from_chapters(ctx):
                     safe_token = case_safe_name(token)
                     shard_name = f"eqn_{eqn_number}__{safe_token}.py"
                     shard_path = os.path.join(family_dir, shard_name)
-                    if os.path.exists(shard_path):
+                    if os.path.exists(shard_path) and not overwrite_existing:
                         continue
 
                     created_count += 1
