@@ -66,6 +66,12 @@ class AirLeak:
 class FluidFlowVacuumLines:
     @kwasak
     def eqn_2_1(self, D=None, Re=None, mu=None, rho=None, v=None):
+        """
+        rho := density, lb/ft^3
+        D := pipe inside diam, ft
+        v := vel. ft/s
+        mu := viscosity, lb/ft*s
+        """
         return
     def eqn_2_1__D(self, Re: float, mu: float, rho: float, v: float, **kwargs):
         # Re = rho * D * v / mu
@@ -99,6 +105,9 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_10(self, Suc_Pres=None, delta_P=None, oper_press=None):
+        """
+        delta_P := pressure loss
+        """
         return
     def eqn_2_10__Suc_Pres(self, delta_P: float, oper_press: float, **kwargs):
         # Suc_Pres = oper_press - delta_P
@@ -120,6 +129,13 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
+        """
+        f:= Moody friction
+        L:=length_pipe, ft
+        v:= velocity, ft/s
+        D:= inside diameter, ft
+        g_c:= dimensional constant, 32.2 lb * ft / lb * s
+        """
         return
     def eqn_2_11__D(self, L: float, f: float, g_c: float, h_r: float, v: float, **kwargs):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
@@ -161,6 +177,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
+        """
+        rho:= density, lb/ft^3
+        d:= pipe inside diameter, in
+        q:= vol. flow rate, ft^3/min
+        """
         return
     def eqn_2_12__L(self, d: float, delta_P: float, f: float, g: float, rho: float, v: float, **kwargs):
         # delta_P = 4.31 * rho * f * L * v ** 2 / (2 * d * g)
@@ -208,6 +229,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
+        """
+        rho:= density, lb/ft^3
+        d:= pipe inside diameter, in
+        q:= vol. flow rate, ft^3/min
+        """
         return
     def eqn_2_13__L(self, d: float, delta_P: float, f: float, q: float, rho: float, **kwargs):
         # delta_P = 2.15 * rho * f * L * q ** 2 / (d ** 5)
@@ -257,6 +283,10 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
+        """
+        v_s := sonic_velocity
+        k:=ratio of specific heat at constant temp to the specific heat at constant volume
+        """
         return
     def eqn_2_14__M(self, R: float, T: float, g_c: float, k: float, v_s: float, **kwargs):
         # v_s = (k * g_c * R / M * T) ** 0.5
@@ -475,6 +505,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_2(self, delta=None, lambd=None, psi=None):
+        """
+        lambd := average mean free path , in
+        delta := mol. diam , in
+        psi:= mol. density molecules/in^3
+        """
         return
     def eqn_2_2__delta(self, lambd: float, psi: float, **kwargs):
         # lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
@@ -498,6 +533,9 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
+        """
+        L:= laminar flow
+        """
         return
     def eqn_2_20__L(self, sum_equivalent_length: float, sum_pipe: float, **kwargs):
         # L = sum_pipe + sum_equivalent_length
@@ -519,6 +557,10 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_22(self, P_s=None, Q_throughput=None, S_p=None):
+        """
+        Q:= through_put, sucking pressure P
+        S_p:= dV / Dt
+        """
         return
     def eqn_2_22__P_s(self, Q_throughput: float, S_p: float, **kwargs):
         # Q_throughput = S_p * P_s
@@ -678,6 +720,10 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_3(self, D=None, kn=None, lambd=None):
+        """
+        D:= inside diameter, in
+        lambd:=avg. mean free path, in
+        """
         return
     def eqn_2_3__D(self, kn: float, lambd: float, **kwargs):
         # kn = lambd / D
@@ -753,10 +799,15 @@ class FluidFlowVacuumLines:
         return
     def eqn_2_34__C(self, C_1: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
+        # Solve for C by rearranging the equation
         result = []
-        C = D**3*(C_1*D*P_p + C_2*mu)/(L*mu)
-        result.append(C)
-        return result
+        try:
+            C = (mu * L) / ((D**4/P_p)*C_1 + D**3/L*C_2)
+            result.append(float(C))  # Ensure that we return a float value, not complex numbers if any roots are imaginary
+        except ZeroDivisionError:
+            print("Error: Division by zero encountered")
+        else:
+            return [result]
     def eqn_2_34__C_1(self, C: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
         result = []
@@ -801,6 +852,9 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_35(self, C_L=None, C_T=None, F_p=None):
+        """
+        F_P:= correction factor for Poiseuille's eqn from Figure
+        """
         return
     def eqn_2_35__C_L(self, C_T: float, F_p: float, **kwargs):
         # C_T = C_L * F_p
@@ -822,6 +876,10 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_36(self, C=None, C_0=None, F_t=None):
+        """
+        C_0:=conductance thin walled aperture
+        F_t:=transmission prob. for component
+        """
         return
     def eqn_2_36__C(self, C_0: float, F_t: float, **kwargs):
         # C = C_0 * F_t
@@ -843,6 +901,9 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_37(self, A=None, C=None, F_t=None, M=None, T=None):
+        """
+        F_t:= 1, for an aperture
+        """
         return
     def eqn_2_37__A(self, C: float, F_t: float, M: float, T: float, **kwargs):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
@@ -876,6 +937,9 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_4(self, _beta=None, mu=None, vel_grad=None):
+        """
+        mu:=coefficient of viscosity
+        """
         return
     def eqn_2_4___beta(self, mu: float, vel_grad: float, **kwargs):
         # _beta = mu * vel_grad
@@ -897,6 +961,13 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
+        """
+        q:=volumetric flow cm^3/s
+        D:= pipe diam.,cm
+        delta_P := upstream-downstream pressure, dyne/cm^3
+        L:=length, cm
+        mu:= coef. of visco., poise
+        """
         return
     def eqn_2_5__D(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
@@ -936,6 +1007,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
+        """
+        mu :=viscosity, poise
+        rho:= density, g/cm^3
+        lambd:= mean free path, cm
+        """
         return
     def eqn_2_6__lambd(self, mu: float, rho: float, v_a: float, **kwargs):
         # mu = 0.35 * rho * lambd * v_a
@@ -963,6 +1039,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_7(self, T=None, k=None, m=None, v_a=None):
+        """
+        k:=boltz
+        T:= abs temp
+        m:= mass of a molecule
+        """
         return
     def eqn_2_7__T(self, k: float, m: float, v_a: float, **kwargs):
         # v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
@@ -990,6 +1071,11 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_8(self, M=None, P_c=None, T_c=None, mu_c=None):
+        """
+        M:= mol. weight
+        T_c:= critical temp, K
+        P_c:= critical pressure, atm
+        """
         return
     def eqn_2_8__M(self, P_c: float, T_c: float, mu_c: float, **kwargs):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)
@@ -1021,6 +1107,11 @@ class FluidFlowVacuumLines:
 class LiquidRing:
     @kwasak
     def eqn_10_1(self, D_r=None, sig_R=None, w=None):
+        """
+        sig_R := rotor tip speed ft/s
+        D_r := rotor Diameter
+        w := rotational speed
+        """
         return
     def eqn_10_1__D_r(self, sig_R: float, w: float, **kwargs):
         # sig_R = 0.00436 * D_r * w
@@ -1245,6 +1336,9 @@ class LiquidRing:
         return result
     @kwasak
     def eqn_10_18(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
+        """
+        T_i := inlet  temperature of load
+        """
         return
     def eqn_10_18__P(self, S_Th: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs):
         # S_p = S_Th * (P - p_s)*(460 + T_i) / ((P - p_c)*(460 + T_e) )
@@ -1468,6 +1562,10 @@ class LiquidRing:
         return [p_s]
     @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
+        """
+        P_prime := pseudo suction pressure
+        P_d := actual pump discharge pressure
+        """
         return
     def eqn_10_21__P(self, P_d: float, P_prime: float, **kwargs):
         # P_prime = P / P_d * 760
@@ -2404,6 +2502,9 @@ class PressMgmt:
         return result
     @kwasak
     def eqn_3_12(self, H_2=None, KAPPA_1=None, P=None):
+        """
+        KAPPA := A_C / V, THE `GAUGE CONSTANT`
+        """
         return
     def eqn_3_12__H_2(self, KAPPA_1: float, P: float, **kwargs):
         # P = KAPPA_1 * H_2 ** 2
@@ -2454,6 +2555,9 @@ class PressMgmt:
         return result
     @kwasak
     def eqn_3_15(self, V_PMIN=None):
+        """
+        V_PMIN := `PRACTICAL MIN, 1982`
+        """
         return
     def eqn_3_15__V_PMIN(self, **kwargs):
         # V_PMIN = 3.141592653589793 / 4
@@ -2680,6 +2784,11 @@ class PressMgmt:
 class ProcessApp1:
     @kwasak
     def eqn_5_1(self, K_i=None, x_i=None, y_i=None):
+        """
+        K_i := volatility
+        y_i := component concentration, vapor
+        x_i := component concentration, liquid
+        """
         return
     def eqn_5_1__K_i(self, x_i: float, y_i: float, **kwargs):
         # K_i = y_i / x_i
@@ -3013,6 +3122,11 @@ class ProcessApp1:
         return result
     @kwasak
     def eqn_5_3(self, P_0_i=None, p_i=None, x_i=None):
+        """
+        p_i := component partial pressure
+        x_i := liquid component mole fraction
+        P_0_i := pure component vapor pressure at equilibrium temperature
+        """
         return
     def eqn_5_3__P_0_i(self, p_i: float, x_i: float, **kwargs):
         # p_i = x_i * P_0_i
@@ -3576,6 +3690,9 @@ class ProcessApp2:
 class RotaryPistonVane:
     @kwasak
     def eqn_11_1(self, PS=None, Q_0=None, Q_external_gas_throughput=None, V=None, dP=None, dT=None):
+        """
+        Q_0 := throughput of gas flow due to system outgassing
+        """
         return
     def eqn_11_1__PS(self, Q_0: float, Q_external_gas_throughput: float, V: float, dP: float, dT: float, **kwargs):
         # PS = -V * dP / dT + Q_external_gas_throughput + Q_0
@@ -3666,6 +3783,11 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_3(self, F_s=None, t=None, t_c=None):
+        """
+        t:= actual evacuation time
+        t_c:= calculated evacuation time using Eq 10.4
+        F_s:= system factor, based on operating experience
+        """
         return
     def eqn_11_3__F_s(self, t: float, t_c: float, **kwargs):
         # t = t_c * F_s
@@ -3687,6 +3809,13 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
+        """
+        p_v := partial pressure of vapor at pump suction, torr
+        p_g := pressure of permanent gas at pump suction, torr
+        p_s := pump suction pressure, sum of partial pressure of vapor and partial pressure of permanent gas, torr
+        P_0_V := saturation pressure of vapor at pump operating temperature, torr
+        P_D := pump discharge pressure, torr
+        """
         return
     def eqn_11_4__p_g(self, p_s: float, p_v: float, **kwargs):
         # p_v / (p_v + p_g) = p_v / p_s
@@ -3710,6 +3839,9 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
+        """
+        p_v_max := maximum allowable partial pressure p_v_max of the process vapor at the pump suction
+        """
         return
     def eqn_11_5__P_0_v(self, P_D: float, p_g: float, p_v_max: float, **kwargs):
         # p_v_max = P_0_v * p_g / (P_D - P_0_v)
@@ -3737,6 +3869,12 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_6(self, P_0_V=None, P_D=None, P_v_0=None, S_B=None, S_D=None, p_b=None, p_g=None, p_v_max=None):
+        """
+        P_0_v := saturation vapor pressure of a condensable vapor
+        S_B := maximum permissible gas ballast flow rate, ft^3/min
+        S_D := free air displacement of the vacuum pump, ft^3/min
+        p_b := partial pressure of vapor in the ballast gas, e.g. partial pressure of water vapor in ATM, torr
+        """
         return
     def eqn_11_6__P_0_V(self, P_D: float, P_v_0: float, S_B: float, S_D: float, p_b: float, p_g: float, p_v_max: float, **kwargs):
         # p_v_max = S_B / S_D * P_D * (P_0_V - p_b) / (P_D - P_v_0) + P_v_0 / (P_D - P_v_0) * p_g
@@ -3790,6 +3928,11 @@ class RotaryPistonVane:
 class SelectingPump:
     @kwasak
     def eqn_8_1(self, NC=None, NS=None, SCON=None, installation_cost=None):
+        """
+        NS:= number ejector stages
+        NC:= number of condensors
+        SCON:=steam consumption based on 100-psig motive steam, lb/hr
+        """
         return
     def eqn_8_1__NC(self, NS: float, SCON: float, installation_cost: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
@@ -3819,6 +3962,9 @@ class SelectingPump:
         return result
     @kwasak
     def eqn_8_2(self, hp=None, installed_costs=None):
+        """
+        hp:= horse power of pump
+        """
         return
     def eqn_8_2__hp(self, installed_costs: float, **kwargs):
         # installed_costs = 33000 * (hp / 10) ** 0.5
@@ -3868,6 +4014,9 @@ class SelectingPump:
         return result
     @kwasak
     def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
+        """
+        Eff:= thermal efficiency
+        """
         return
     def eqn_8_5__Eff(self, actual_brake_horsepower: float, theoretical_adiabatic_horsepower: float, **kwargs):
         # Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
@@ -3889,6 +4038,13 @@ class SelectingPump:
         return result
     @kwasak
     def eqn_8_6(self, M=None, P_1=None, P_2=None, R=None, T=None, adiabatic_hp=None, k=None, w=None):
+        """
+        deg_R:=absolute temperature
+        M:=molecular weight
+        R:=gas constant, 1544 ft*lb_f / (lb*mol) * deg_R
+        T:= absolute temperature, deg_R
+        P:= absolute pressure, torr
+        """
         return
     def eqn_8_6__M(self, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float, w: float, **kwargs):
         # adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
@@ -3932,11 +4088,10 @@ class SelectingPump:
         from scipy.optimize import brentq
         def _res(k_val):
             return (k_val / (k_val - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k_val - 1) / k_val) - 1)) - adiabatic_hp
-        # Scan for sign change in a wide range
         lo, hi = None, None
         prev = _res(1.01)
-        for i in range(1, 10000):
-            x = 1.0 + i * 0.01
+        for i in range(1, 100000):
+            x = 1.01 + i * 0.01
             try:
                 cur = _res(x)
             except Exception:
@@ -4021,6 +4176,12 @@ class SelectingPump:
         return result
     @kwasak
     def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
+        """
+        E_j:=ejector thermal efficiency
+        e:=electrical cost, cents per kWh
+        s:=steam cost, dollar per 1000 lb
+        E_m:=mechanical pump thermal efficiency
+        """
         return
     def eqn_8_9__E_j(self, E_m: float, e: float, r: float, s: float, **kwargs):
         # r = 2.93 * (E_j * e) / (E_m * s)
@@ -4056,6 +4217,12 @@ class SelectingPump:
 class SteamJetInjectors:
     @kwasak
     def eqn_9_1(self, A=None, rho_s=None, v=None, w_s=None):
+        """
+        w_s := motive steam flow rate, lb/hr
+        v:= velocity
+        A:= cross sectional area, ft^2
+        rhos_s := motive steam density, lb/ft^3
+        """
         return
     def eqn_9_1__A(self, rho_s: float, v: float, w_s: float, **kwargs):
         # w_s = v * A * rho_s
@@ -4083,6 +4250,11 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_2(self, P_m=None, d_n=None, rho_s=None, w_s=None):
+        """
+        d_n := nozzle throat diameter
+        P_m := motive steam pressure at point 1, psia
+        rhos_s := motive steam density at point 1, lb/ft^3
+        """
         return
     def eqn_9_2__P_m(self, d_n: float, rho_s: float, w_s: float, **kwargs):
         # w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
@@ -4112,6 +4284,12 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_3(self, P_s=None, V=None, t_e=None, w_j=None):
+        """
+        t_e := time required to evacuate system, minutes
+        P_s := design suction pressure of the ejector, torr
+        V := free volume of process system, ft^3
+        w_j := ejector capacity, 70 deg_F basis, lb/hr
+        """
         return
     def eqn_9_3__P_s(self, V: float, t_e: float, w_j: float, **kwargs):
         # t_e = (2.3 - 0.003 * P_s) * V / w_j
@@ -4139,6 +4317,11 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_4(self, AEL=None, SC=None, r=None, w_s=None):
+        """
+        w_s:= motive steam requirement
+        r := pounds of steam required to compress 1 lb air from ejector suction pressure P_s to discharge pressure P_d
+        SC := size correction factor
+        """
         return
     def eqn_9_4__AEL(self, SC: float, r: float, w_s: float, **kwargs):
         # w_s = AEL * r * SC
@@ -4166,6 +4349,12 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_5(self, V=None, r_h=None, t_h=None, w_h=None):
+        """
+        w_h:= motive steam hogging
+        r_h:=pounds of 100-psig stream required per cubic foot
+        V:= process system free volume, ft^3
+        t_h := time permitted for evatuation, hr
+        """
         return
     def eqn_9_5__V(self, r_h: float, t_h: float, w_h: float, **kwargs):
         # w_h = r_h * V / t_h
@@ -4234,6 +4423,12 @@ class VacuumTheory:
         return result
     @kwasak
     def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
+        """
+        W := lb/hr flow
+        M := molecular weight
+        P := Torr
+        T := R degrees temp
+        """
         return
     def eqn_1_11__M(self, P: float, T: float, W: float, q: float, **kwargs):
         # q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
@@ -4324,6 +4519,11 @@ class VacuumTheory:
         return result
     @kwasak
     def eqn_1_3(self, T=None, k=None, m=None, v=None):
+        """
+        k:= boltzmann constant
+        kboltz:= 1.38e-16
+        avogad:= 6.02e23
+        """
         return
     def eqn_1_3__T(self, k: float, m: float, v: float, **kwargs):
         # .5 * m * v**2 = 1.5 * k * T

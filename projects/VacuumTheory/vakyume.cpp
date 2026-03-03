@@ -683,10 +683,7 @@ std::vector<double> FluidFlowVacuumLines_eqn_2_33__arithmetic_sum_C(double C_par
     return result;
 }
 std::vector<double> FluidFlowVacuumLines_eqn_2_34__C(double C_1, double C_2, double D, double L, double P_p, double mu) {
-    std::vector<double> result;
-    double C = ((std::pow(D, 3.0) * (((C_1 * D) * P_p) + (C_2 * mu))) / (L * mu));
-    result.push_back(C);
-    return result;
+    throw std::runtime_error("FluidFlowVacuumLines_eqn_2_34__C: requires numerical solver (not transpilable)");
 }
 std::vector<double> FluidFlowVacuumLines_eqn_2_34__C_1(double C, double C_2, double D, double L, double P_p, double mu) {
     std::vector<double> result;
