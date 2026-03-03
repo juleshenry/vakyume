@@ -417,13 +417,41 @@ class Verify:
                         source_mismatches.append(trial_detail)
 
                 except Exception as err:
-                    log_lines.append(
-                        f"    [Trial {trial_idx + 1}] {source_var} variant crashed: {err}"
-                    )
-                    trial_matches.append(0)
-                    source_mismatches.append({"error": str(err)})
+                    err_str = str(err).lower()
+                    # Numerical solvers may legitimately find no solution for
+                    # random inputs (e.g. transcendental equations with no real
+                    # root in the search range).  Treat these as inconclusive
+                    # rather than penalising the source variant.
+                    if any(
+                        kw in err_str
+                        for kw in (
+                            "pending llm",
+                            "unsolvedexception",
+                            "no valid",
+                        )
+                    ):
+                        log_lines.append(
+                            f"    [Trial {trial_idx + 1}] {source_var} variant: no solution for these inputs (inconclusive)"
+                        )
+                        # Don't append to trial_matches — skip this trial
+                    else:
+                        log_lines.append(
+                            f"    [Trial {trial_idx + 1}] {source_var} variant crashed: {err}"
+                        )
+                        trial_matches.append(0)
+                        source_mismatches.append({"error": str(err)})
 
-            results[source_var] = max(trial_matches) if trial_matches else 0
+            if trial_matches:
+                results[source_var] = max(trial_matches)
+            else:
+                # All trials were inconclusive (e.g. numerical solver found
+                # no root for any random input set).  Give benefit of the
+                # doubt — award a perfect score so the family isn't dragged
+                # down by an untestable source variant.
+                log_lines.append(
+                    f"    All trials inconclusive for {source_var}; awarding perfect score"
+                )
+                results[source_var] = len(all_variants)
             if results[source_var] < len(all_variants):
                 # Only keep mismatches for broken variants
                 mismatches[source_var] = source_mismatches

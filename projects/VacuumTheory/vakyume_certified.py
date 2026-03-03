@@ -1103,9 +1103,12 @@ class LiquidRing:
         return result
     def eqn_10_10__rho(self, bhp: float, bhp_0: float, mu: float, **kwargs):
         # [.pyeqn] bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-        # Algebraic: rho = ((bhp/bhp_0 - 0.5) / (0.0155 * mu**0.16)) ** (1/0.84)
-        inner = (bhp / bhp_0 - 0.5) / (0.0155 * mu**0.16)
-        rho = inner ** (1.0 / 0.84)
+        # Solve for rho:
+        # Step 1: bhp / bhp_0 = 0.5 + 0.0155 *rho ** 0.84* mu ** 0.16
+        # Step 2: (bhp / bhp_0 - 0.5) = 0.0155 * rho ** 0.84 * mu ** 0.16
+        # Step 3: rho ** 0.84 = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16))
+        # Step 4: rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16)) ** (1.0 / 0.84)
+        rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16)) ** (1.0 / 0.84)
         return [rho]
     @kwasak_static
     def eqn_10_11(self, T_c=None, T_s=None):
@@ -1331,22 +1334,15 @@ class LiquidRing:
     def eqn_10_19(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
         return
 
-    def eqn_10_19__P(
-        self,
-        S_Th: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_19__P( self, S_Th: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Raise both sides to 5/3: R = (S_p/S_Th)^(5/3) * (460+T_e)/(460+T_i)
-        # Then R = (P - p_s)/(P - p_c)  =>  R*(P - p_c) = P - p_s  =>  P*(R-1) = R*p_c - p_s
-        # P = (R*p_c - p_s) / (R - 1)
-        R = (S_p / S_Th) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
-        P = (R * p_c - p_s) / (R - 1.0)
+        # Solve for P:
+        # Step 1: (S_p / S_Th) ** (1.666667) = (P - p_s)*(460 + T_i) / ( (P - p_c)*(460 + T_e) )
+        R = (S_p / (S_Th)) ** (1.666667)
+        # Step 2: R * ((460 + T_e)) * (P - p_c) = ((460 + T_i)) * (P - p_s)
+        # Step 3: P * (R * ((460 + T_e)) - ((460 + T_i))) = R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s
+        # Step 4: P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (R * ((460 + T_e)) - ((460 + T_i)))
+        P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (R * ((460 + T_e)) - ((460 + T_i)))
         return [P]
     def eqn_10_19__S_Th(self, P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs):
         # [.pyeqn] S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
@@ -1438,34 +1434,28 @@ class LiquidRing:
     def eqn_10_20(self, P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None):
         return
 
-    def eqn_10_20__P(
-        self,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__P( self, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
-        # where K = (S_0/S_p)^(5/3) * (460+T_e)/(460+T_i)
-        # Expand: K*P*(P-p_s) = (P-p_0)*(P-p_c)
-        # K*P^2 - K*p_s*P = P^2 - (p_0+p_c)*P + p_0*p_c
-        # (K-1)*P^2 + (p_0+p_c - K*p_s)*P - p_0*p_c = 0  (note sign: -(K*p_s) - (-(p_0+p_c)) )
-        # Wait, let me redo carefully:
-        # K*P^2 - K*p_s*P = P^2 - p_0*P - p_c*P + p_0*p_c
-        # (K-1)*P^2 + (-K*p_s + p_0 + p_c)*P - p_0*p_c = 0
-        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
-        a = K - 1.0
-        b = -K * p_s + p_0 + p_c
-        c = -p_0 * p_c
-        disc = b**2 - 4.0 * a * c
-        P_1 = (-b + sqrt(disc)) / (2.0 * a)
-        P_2 = (-b - sqrt(disc)) / (2.0 * a)
-        return [P_1, P_2]
+        # P appears 4 times — use numerical solver
+        from scipy.optimize import brentq
+        def _res(P_val):
+            return S_p * ((P_val - p_0)*(460 + T_i) * (P_val - p_c) / (P_val * (P_val - p_s)*(460 + T_e) ) )**0.6 - S_0
+        lo, hi = None, None
+        prev = _res(0.01)
+        for i in range(1, 100000):
+            x = i * 0.01
+            try:
+                cur = _res(x)
+            except Exception:
+                continue
+            if prev * cur < 0:
+                lo, hi = x - 0.01, x
+                break
+            prev = cur
+        if lo is None:
+            raise UnsolvedException("No sign change found for P")
+        P = brentq(_res, lo, hi)
+        return [P]
     def eqn_10_20__S_0(self, P: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
@@ -1478,97 +1468,48 @@ class LiquidRing:
         S_p = S_0/((P**2*T_i + 460.0*P**2 - P*T_i*p_0 - P*T_i*p_c - 460.0*P*p_0 - 460.0*P*p_c + T_i*p_0*p_c + 460.0*p_0*p_c)/(P*(P*T_e + 460.0*P - T_e*p_s - 460.0*p_s)))**(3/5)
         result.append(S_p)
         return result
-    def eqn_10_20__T_e(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__T_e( self, P: float, S_0: float, S_p: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Raise to 5/3: (S_0/S_p)^(5/3) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(460+T_e))
-        # Solve for (460+T_e):
-        # (460+T_e) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(S_0/S_p)^(5/3))
-        F = (P - p_0) * (P - p_c) / (P * (P - p_s))
-        T_e = F * (460.0 + T_i) / (S_0 / S_p) ** (5.0 / 3.0) - 460.0
+        # Solve for T_e:
+        R = (S_0 / (S_p)) ** (1.666667)
+        # (460 + T_e) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s)))
+        # T_e = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
+        T_e = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
         return [T_e]
-    def eqn_10_20__T_i(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__T_i( self, P: float, S_0: float, S_p: float, T_e: float, p_0: float, p_c: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Raise to 5/3: (S_0/S_p)^(5/3) = (P-p_0)*(460+T_i)*(P-p_c) / (P*(P-p_s)*(460+T_e))
-        # Solve for (460+T_i):
-        # (460+T_i) = (S_0/S_p)^(5/3) * P*(P-p_s)*(460+T_e) / ((P-p_0)*(P-p_c))
-        F = (P - p_0) * (P - p_c) / (P * (P - p_s))
-        T_i = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / F - 460.0
+        # Solve for T_i:
+        R = (S_0 / (S_p)) ** (1.666667)
+        # (460 + T_i) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c))
+        # T_i = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c)) - 460
+        T_i = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c)) - 460
         return [T_i]
-    def eqn_10_20__p_0(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_0( self, P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
-        # K*P*(P-p_s) = (P-p_0)*(P-p_c)
-        # p_0 is linear: (P-p_0) = K*P*(P-p_s) / (P-p_c)
-        # p_0 = P - K*P*(P-p_s) / (P-p_c)
-        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
-        p_0 = P - K * P * (P - p_s) / (P - p_c)
+        # Solve for p_0:
+        R = (S_0 / (S_p)) ** (1.666667)
+        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) 
+        # (P - p_0) = R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
+        # p_0 = P - R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
+        p_0 = P - R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
         return [p_0]
-    def eqn_10_20__p_c(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_c( self, P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_s: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
-        # p_c is linear: (P-p_c) = K*P*(P-p_s) / (P-p_0)
-        # p_c = P - K*P*(P-p_s) / (P-p_0)
-        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
-        p_c = P - K * P * (P - p_s) / (P - p_0)
+        # Solve for p_c:
+        R = (S_0 / (S_p)) ** (1.666667)
+        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) 
+        # (P - p_c) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
+        # p_c = P - R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
+        p_c = P - R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
         return [p_c]
-    def eqn_10_20__p_s(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_s( self, P: float, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, **kwargs, ):
         # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # After raising to 5/3: K = (P-p_0)*(P-p_c) / (P*(P-p_s))
-        # p_s is linear: P*(P-p_s) = (P-p_0)*(P-p_c) / K
-        # P-p_s = (P-p_0)*(P-p_c) / (K*P)
-        # p_s = P - (P-p_0)*(P-p_c) / (K*P)
-        K = (S_0 / S_p) ** (5.0 / 3.0) * (460.0 + T_e) / (460.0 + T_i)
-        p_s = P - (P - p_0) * (P - p_c) / (K * P)
+        # Solve for p_s:
+        R = (S_0 / (S_p)) ** (1.666667)
+        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) 
+        # (P - p_s) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
+        # p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
+        p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
         return [p_s]
     @kwasak_static
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
@@ -3980,10 +3921,11 @@ class SelectingPump:
         return result
     def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
         # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
-        # Algebraic: (SCON/1000)^0.35 = installation_cost / (16000*(NS+2*NC))
-        # SCON = 1000 * (installation_cost / (16000*(NS+2*NC))) ^ (1/0.35)
-        inner = installation_cost / (16000.0 * (NS + 2.0 * NC))
-        SCON = 1000.0 * inner ** (1.0 / 0.35)
+        # Solve for SCON:
+        # Step 1: (SCON / 1000) ** 0.35 = installation_cost / (16000 * (NS + 2 * NC))
+        # Step 2: SCON / 1000 = (installation_cost / (16000 * (NS + 2 * NC))) ** (1.0 / 0.35)
+        # Step 3: SCON = 1000 * (installation_cost / (16000 * (NS + 2 * NC))) ** (1.0 / 0.35)
+        SCON = 1000 * (installation_cost / (16000 * (NS + 2 * NC))) ** (1.0 / 0.35)
         return [SCON]
     def eqn_8_1__installation_cost(self, NC: float, NS: float, SCON: float, **kwargs):
         # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
@@ -4013,10 +3955,11 @@ class SelectingPump:
 
     def eqn_8_3__hp(self, installed_costs: float, **kwargs):
         # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
-        # Algebraic: (hp/10)^0.45 = installed_costs/38000
-        # hp = 10 * (installed_costs/38000) ^ (1/0.45)
-        inner = installed_costs / 38000.0
-        hp = 10.0 * inner ** (1.0 / 0.45)
+        # Solve for hp:
+        # Step 1: (hp / 10) ** 0.45 = installed_costs / (38000)
+        # Step 2: hp / 10 = (installed_costs / (38000)) ** (1.0 / 0.45)
+        # Step 3: hp = 10 * (installed_costs / (38000)) ** (1.0 / 0.45)
+        hp = 10 * (installed_costs / (38000)) ** (1.0 / 0.45)
         return [hp]
     def eqn_8_3__installed_costs(self, hp: float, **kwargs):
         # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
@@ -4065,23 +4008,94 @@ class SelectingPump:
         result.append(theoretical_adiabatic_horsepower)
         return result
     @kwasak_static
+    def eqn_8_6(self, M=None, P_1=None, P_2=None, R=None, T=None, adiabatic_hp=None, k=None, w=None):
+        return
+
+    def eqn_8_6__M(self, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        M = R*T*k*w*((P_2/P_1)**((k - 1)/k) - 1)/(1980000*adiabatic_hp*(k - 1))
+        result.append(M)
+        return result
+    def eqn_8_6__P_1(self, M: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        P_1 = P_2/(1980000*M*adiabatic_hp/(R*T*w) - 1980000*M*adiabatic_hp/(R*T*k*w) + 1)**(k/(k - 1))
+        result.append(P_1)
+        return result
+    def eqn_8_6__P_2(self, M: float, P_1: float, R: float, T: float, adiabatic_hp: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        P_2 = P_1*(1980000*M*adiabatic_hp/(R*T*w) - 1980000*M*adiabatic_hp/(R*T*k*w) + 1)**(k/(k - 1))
+        result.append(P_2)
+        return result
+    def eqn_8_6__R(self, M: float, P_1: float, P_2: float, T: float, adiabatic_hp: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        R = 1980000*M*adiabatic_hp*(k - 1)/(T*k*w*((P_2/P_1)**((k - 1)/k) - 1))
+        result.append(R)
+        return result
+    def eqn_8_6__T(self, M: float, P_1: float, P_2: float, R: float, adiabatic_hp: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        T = 1980000*M*adiabatic_hp*(k - 1)/(R*k*w*((P_2/P_1)**((k - 1)/k) - 1))
+        result.append(T)
+        return result
+    def eqn_8_6__adiabatic_hp(self, M: float, P_1: float, P_2: float, R: float, T: float, k: float, w: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        adiabatic_hp = R*T*k*w*((P_2/P_1)**((k - 1)/k) - 1)/(1980000*M*(k - 1))
+        result.append(adiabatic_hp)
+        return result
+    def eqn_8_6__k( self, M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, w: float, **kwargs, ):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        # k appears in the exponent — use numerical solver
+        from scipy.optimize import brentq
+        def _res(k_val):
+            return (k_val / (k_val - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k_val - 1) / k_val) - 1)) - adiabatic_hp
+        # Scan for sign change in a wide range
+        lo, hi = None, None
+        prev = _res(1.01)
+        for i in range(1, 10000):
+            x = 1.0 + i * 0.01
+            try:
+                cur = _res(x)
+            except Exception:
+                continue
+            if prev * cur < 0:
+                lo, hi = x - 0.01, x
+                break
+            prev = cur
+        if lo is None:
+            raise UnsolvedException("No sign change found for k")
+        k = brentq(_res, lo, hi)
+        return [k]
+    def eqn_8_6__w(self, M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float, **kwargs):
+        # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+        result = []
+        w = 1980000*M*adiabatic_hp*(k - 1)/(R*T*k*((P_2/P_1)**((k - 1)/k) - 1))
+        result.append(w)
+        return result
+    @kwasak_static
     def eqn_8_7(self, P_1=None, P_2=None, adiabatic_hp=None, w=None):
         return
 
     def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-        # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
-        # P_2/P_1 = (20*adiabatic_hp/w + 1)^(1/0.286)
-        # P_1 = P_2 / ratio
-        ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
-        P_1 = P_2 / ratio
+        # Solve for P_1:
+        # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_hp / ((w / 20))
+        # Step 2: (P_2 / P_1) ** 0.286 = adiabatic_hp / ((w / 20)) + 1
+        # Step 3: P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
+        P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         return [P_1]
     def eqn_8_7__P_2(self, P_1: float, adiabatic_hp: float, w: float, **kwargs):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-        # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
-        # P_2 = P_1 * ratio
-        ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
-        P_2 = P_1 * ratio
+        # Solve for P_2:
+        # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_hp / ((w / 20))
+        # Step 2: (P_2 / P_1) ** 0.286 = adiabatic_hp / ((w / 20)) + 1
+        # Step 3: P_2 / P_1 = (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
+        # Step 4: P_2 = P_1 * (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
+        P_2 = P_1 * (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
         return [P_2]
     def eqn_8_7__adiabatic_hp(self, P_1: float, P_2: float, w: float, **kwargs):
         # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
@@ -4101,16 +4115,20 @@ class SelectingPump:
 
     def eqn_8_8__P_1(self, P_2: float, adiabatic_power_watts: float, f: float, **kwargs):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
-        # (P_2/P_1)^0.286 = 12*adiabatic_power_watts/f + 1
-        # P_1 = P_2 / ratio
-        ratio = (12.0 * adiabatic_power_watts / f + 1.0) ** (1.0 / 0.286)
-        P_1 = P_2 / ratio
+        # Solve for P_1:
+        # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_power_watts / (f / 12)
+        # Step 2: (P_2 / P_1) ** 0.286 = adiabatic_power_watts / (f / 12) + 1
+        # Step 3: P_1 = P_2 / (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
+        P_1 = P_2 / (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         return [P_1]
     def eqn_8_8__P_2(self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
-        # P_2 = P_1 * ratio
-        ratio = (12.0 * adiabatic_power_watts / f + 1.0) ** (1.0 / 0.286)
-        P_2 = P_1 * ratio
+        # Solve for P_2:
+        # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_power_watts / (f / 12)
+        # Step 2: (P_2 / P_1) ** 0.286 = adiabatic_power_watts / (f / 12) + 1
+        # Step 3: P_2 / P_1 = (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
+        # Step 4: P_2 = P_1 * (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
+        P_2 = P_1 * (adiabatic_power_watts / (f / 12) + 1) ** (1.0 / 0.286)
         return [P_2]
     def eqn_8_8__adiabatic_power_watts(self, P_1: float, P_2: float, f: float, **kwargs):
         # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)

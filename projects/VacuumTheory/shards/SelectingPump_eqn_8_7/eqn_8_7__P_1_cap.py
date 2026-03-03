@@ -5,12 +5,11 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
     # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-    # (P_2/P_1)^0.286 = 20*adiabatic_hp/w + 1
-    # P_2/P_1 = (20*adiabatic_hp/w + 1)^(1/0.286)
-    # P_1 = P_2 / ratio
-    ratio = (20.0 * adiabatic_hp / w + 1.0) ** (1.0 / 0.286)
-    P_1 = P_2 / ratio
+    # Solve for P_1:
+    # Step 1: (P_2 / P_1) ** 0.286 - 1 = adiabatic_hp / ((w / 20))
+    # Step 2: (P_2 / P_1) ** 0.286 = adiabatic_hp / ((w / 20)) + 1
+    # Step 3: P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
+    P_1 = P_2 / (adiabatic_hp / ((w / 20)) + 1) ** (1.0 / 0.286)
     return [P_1]
