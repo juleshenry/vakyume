@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-from vakyume.master import run_pipeline
+from vakyume.pipeline import run_pipeline
 
 
 pytestmark = pytest.mark.llm

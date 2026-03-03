@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_8_9__E_j_cap import eqn_8_9__E_j
-from .eqn_8_9__E_m_cap import eqn_8_9__E_m
+from .eqn_8_9__E_cap_j import eqn_8_9__E_j
+from .eqn_8_9__E_cap_m import eqn_8_9__E_m
 from .eqn_8_9__e import eqn_8_9__e
 from .eqn_8_9__r import eqn_8_9__r
 from .eqn_8_9__s import eqn_8_9__s
@@ -21,4 +21,10 @@ class SelectingPump:
 
     @kwasak
     def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
+        """
+        E_j:=ejector thermal efficiency
+        e:=electrical cost, cents per kWh
+        s:=steam cost, dollar per 1000 lb
+        E_m:=mechanical pump thermal efficiency
+        """
         return

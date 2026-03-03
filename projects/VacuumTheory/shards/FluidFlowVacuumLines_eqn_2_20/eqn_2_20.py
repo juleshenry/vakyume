@@ -17,4 +17,7 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
+        """
+        L:= laminar flow
+        """
         return

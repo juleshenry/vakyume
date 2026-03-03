@@ -9,7 +9,7 @@ import json
 import pytest
 
 from vakyume.verifier import Verify
-from vakyume.master import PipelineContext, analyze_results
+from vakyume.pipeline import PipelineContext, analyze_results
 
 
 # ── Inline equation classes used by the tests ───────────────────────────────

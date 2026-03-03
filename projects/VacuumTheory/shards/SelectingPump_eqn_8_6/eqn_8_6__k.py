@@ -11,11 +11,10 @@ def eqn_8_6__k(self, M: float, P_1: float, P_2: float, R: float, T: float, adiab
     from scipy.optimize import brentq
     def _res(k_val):
         return (k_val / (k_val - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k_val - 1) / k_val) - 1)) - adiabatic_hp
-    # Scan for sign change in a wide range
     lo, hi = None, None
     prev = _res(1.01)
-    for i in range(1, 10000):
-        x = 1.0 + i * 0.01
+    for i in range(1, 100000):
+        x = 1.01 + i * 0.01
         try:
             cur = _res(x)
         except Exception:

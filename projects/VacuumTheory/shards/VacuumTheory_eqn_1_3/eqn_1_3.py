@@ -19,4 +19,9 @@ class VacuumTheory:
 
     @kwasak
     def eqn_1_3(self, T=None, k=None, m=None, v=None):
+        """
+        k:= boltzmann constant
+        kboltz:= 1.38e-16
+        avogad:= 6.02e23
+        """
         return

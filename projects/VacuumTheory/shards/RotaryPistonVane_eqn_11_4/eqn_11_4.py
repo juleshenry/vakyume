@@ -17,4 +17,11 @@ class RotaryPistonVane:
 
     @kwasak
     def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
+        """
+        p_v := partial pressure of vapor at pump suction, torr
+        p_g := pressure of permanent gas at pump suction, torr
+        p_s := pump suction pressure, sum of partial pressure of vapor and partial pressure of permanent gas, torr
+        P_0_V := saturation pressure of vapor at pump operating temperature, torr
+        P_D := pump discharge pressure, torr
+        """
         return

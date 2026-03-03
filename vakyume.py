@@ -1,7 +1,7 @@
 import argparse
 import os
 import sys
-from vakyume.master import run_pipeline
+from vakyume.pipeline import run_pipeline
 from vakyume.cpp_gen import main as run_cpp_gen
 from vakyume.llm import ask_llm
 from vakyume.reconstruct import reconstruct_cli

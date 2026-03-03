@@ -25,4 +25,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
+        """
+        rho:= density, lb/ft^3
+        d:= pipe inside diameter, in
+        q:= vol. flow rate, ft^3/min
+        """
         return

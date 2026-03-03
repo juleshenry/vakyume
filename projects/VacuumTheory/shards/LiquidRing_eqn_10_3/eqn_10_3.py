@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_10_3__N_mfw_cap import eqn_10_3__N_mfw
-from .eqn_10_3__Q_gas_cap import eqn_10_3__Q_gas
+from .eqn_10_3__N_cap_mfw import eqn_10_3__N_mfw
+from .eqn_10_3__Q_cap_gas import eqn_10_3__Q_gas
 from .eqn_10_3__T_cap import eqn_10_3__T
 
 class LiquidRing:

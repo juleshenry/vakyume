@@ -17,4 +17,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_2(self, delta=None, lambd=None, psi=None):
+        """
+        lambd := average mean free path , in
+        delta := mol. diam , in
+        psi:= mol. density molecules/in^3
+        """
         return

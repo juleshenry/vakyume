@@ -17,4 +17,8 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_3(self, D=None, kn=None, lambd=None):
+        """
+        D:= inside diameter, in
+        lambd:=avg. mean free path, in
+        """
         return

@@ -8,9 +8,9 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_7_7__M_cap import eqn_7_7__M
 from .eqn_7_7__P_cap import eqn_7_7__P
-from .eqn_7_7__P_i_0_cap import eqn_7_7__P_i_0
-from .eqn_7_7__W_air_cap import eqn_7_7__W_air
-from .eqn_7_7__W_i_cap import eqn_7_7__W_i
+from .eqn_7_7__P_cap_i_0 import eqn_7_7__P_i_0
+from .eqn_7_7__W_cap_air import eqn_7_7__W_air
+from .eqn_7_7__W_cap_i import eqn_7_7__W_i
 from .eqn_7_7__epsilon_i import eqn_7_7__epsilon_i
 from .eqn_7_7__p_c import eqn_7_7__p_c
 from .eqn_7_7__x_i import eqn_7_7__x_i

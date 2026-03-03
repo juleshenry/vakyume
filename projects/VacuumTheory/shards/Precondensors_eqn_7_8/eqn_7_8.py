@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_7_8__L_c_cap import eqn_7_8__L_c
-from .eqn_7_8__Q_condensor_heat_duty_cap import eqn_7_8__Q_condensor_heat_duty
+from .eqn_7_8__L_cap_c import eqn_7_8__L_c
+from .eqn_7_8__Q_cap_condensor_heat_duty import eqn_7_8__Q_condensor_heat_duty
 from .eqn_7_8__c_p import eqn_7_8__c_p
 from .eqn_7_8__del_T_cap import eqn_7_8__del_T
 

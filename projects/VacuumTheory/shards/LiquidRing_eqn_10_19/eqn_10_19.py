@@ -7,10 +7,10 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_10_19__P_cap import eqn_10_19__P
-from .eqn_10_19__S_Th_cap import eqn_10_19__S_Th
-from .eqn_10_19__S_p_cap import eqn_10_19__S_p
-from .eqn_10_19__T_e_cap import eqn_10_19__T_e
-from .eqn_10_19__T_i_cap import eqn_10_19__T_i
+from .eqn_10_19__S_cap_T_caph import eqn_10_19__S_Th
+from .eqn_10_19__S_cap_p import eqn_10_19__S_p
+from .eqn_10_19__T_cap_e import eqn_10_19__T_e
+from .eqn_10_19__T_cap_i import eqn_10_19__T_i
 from .eqn_10_19__p_c import eqn_10_19__p_c
 from .eqn_10_19__p_s import eqn_10_19__p_s
 

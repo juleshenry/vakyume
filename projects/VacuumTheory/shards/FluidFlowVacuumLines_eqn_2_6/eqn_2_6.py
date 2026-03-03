@@ -19,4 +19,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
+        """
+        mu :=viscosity, poise
+        rho:= density, g/cm^3
+        lambd:= mean free path, cm
+        """
         return

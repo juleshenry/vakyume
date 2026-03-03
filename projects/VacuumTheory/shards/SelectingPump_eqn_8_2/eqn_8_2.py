@@ -15,4 +15,7 @@ class SelectingPump:
 
     @kwasak
     def eqn_8_2(self, hp=None, installed_costs=None):
+        """
+        hp:= horse power of pump
+        """
         return

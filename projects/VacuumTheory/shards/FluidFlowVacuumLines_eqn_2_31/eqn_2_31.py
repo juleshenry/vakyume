@@ -7,8 +7,8 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_2_31__C_cap import eqn_2_31__C
-from .eqn_2_31__S_p_cap import eqn_2_31__S_p
-from .eqn_2_31__S_pump_speed_cap import eqn_2_31__S_pump_speed
+from .eqn_2_31__S_cap_p import eqn_2_31__S_p
+from .eqn_2_31__S_cap_pump_speed import eqn_2_31__S_pump_speed
 
 class FluidFlowVacuumLines:
     eqn_2_31__C = eqn_2_31__C
