@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_11_2__Q import eqn_11_2__Q
 from .eqn_11_2__Q_0 import eqn_11_2__Q_0
 from .eqn_11_2__Q_external_gas_throughput import eqn_11_2__Q_external_gas_throughput
@@ -25,6 +25,6 @@ class Rotary:
     eqn_11_2__V = staticmethod(eqn_11_2__V)
     eqn_11_2__t = staticmethod(eqn_11_2__t)
 
-    @kwasak_static
+    @kwasak
     def eqn_11_2(Q=None, Q_0=None, Q_external_gas_throughput=None, SP_1=None, SP_2=None, S_vol_pump_speed=None, V=None, t=None, **kwargs):
         return

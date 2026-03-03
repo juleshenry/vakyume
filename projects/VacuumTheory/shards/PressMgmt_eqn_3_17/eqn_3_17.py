@@ -5,12 +5,12 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_3_17__P_MIN_cap import eqn_3_17__P_MIN
 
 class PressMgmt:
     eqn_3_17__P_MIN = eqn_3_17__P_MIN
 
-    @kwasak_static
+    @kwasak
     def eqn_3_17(self, P_MIN=None):
         return

@@ -56,7 +56,7 @@ Published.
 import inspect
 
 
-def kwasak_static(func):
+def kwasak(func):
     # fmt:off
     def wrapper(self, **kw):
         params = list(inspect.signature(func).parameters)

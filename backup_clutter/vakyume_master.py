@@ -195,10 +195,10 @@ def shard_from_chapters():
                         "from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n"
                     )
                     sf.write("from scipy.optimize import newton\n")
-                    sf.write("from kwasak import kwasak_static\n")
+                    sf.write("from kwasak import kwasak\n")
                     sf.write("import numpy as np\n\n")
                     sf.write(f"class {class_name}:\n")
-                    sf.write(f"{TAB}@kwasak_static\n")
+                    sf.write(f"{TAB}@kwasak\n")
                     sf.write(
                         f"{TAB}def eqn_{eqn_number}({', '.join(f'{t}=None' for t in tokes)}, **kwargs):\n"
                     )
@@ -567,7 +567,7 @@ def assemble_certified_library(analysis):
     certified_file = os.path.join(ROOT, "vakyume_certified.py")
     with open(certified_file, "w") as out:
         out.write(
-            "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve\nfrom scipy.optimize import newton\nfrom kwasak import kwasak_static\nimport numpy as np\n\n"
+            "from math import log, sqrt, exp, pow, e\nfrom sympy import I, Piecewise, LambertW, Eq, symbols, solve\nfrom scipy.optimize import newton\nfrom kwasak import kwasak\nimport numpy as np\n\n"
         )
         class_groups = {}
         for shard_file in sorted(analysis["solved"]):

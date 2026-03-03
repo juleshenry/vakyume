@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_8_6__M_cap import eqn_8_6__M
 from .eqn_8_6__P_1_cap import eqn_8_6__P_1
 from .eqn_8_6__P_2_cap import eqn_8_6__P_2
@@ -25,6 +25,6 @@ class SelectingPump:
     eqn_8_6__k = eqn_8_6__k
     eqn_8_6__w = eqn_8_6__w
 
-    @kwasak_static
+    @kwasak
     def eqn_8_6(self, M=None, P_1=None, P_2=None, R=None, T=None, adiabatic_hp=None, k=None, w=None):
         return

@@ -56,7 +56,7 @@ Published.
 import inspect
 
 
-def kwasak_static(func):
+def kwasak(func):
     # fmt:off
     def wrapper(self, **kw):
         if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:

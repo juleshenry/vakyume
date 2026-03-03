@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_6_9__A_cap import eqn_6_9__A
 from .eqn_6_9__dV_dt_cap import eqn_6_9__dV_dt
 from .eqn_6_9__delta_P_cap import eqn_6_9__delta_P
@@ -23,6 +23,6 @@ class ProcessApp2:
     eqn_6_9__r = eqn_6_9__r
     eqn_6_9__r_M = eqn_6_9__r_M
 
-    @kwasak_static
+    @kwasak
     def eqn_6_9(self, A=None, dV_dt=None, delta_P=None, m=None, mu=None, r=None, r_M=None):
         return

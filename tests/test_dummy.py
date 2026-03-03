@@ -15,11 +15,11 @@ z = x + y
 BASIC_SHARD_MESSED = """from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 import numpy as np
 
 class Basic:
-    @kwasak_static
+    @kwasak
     def eqn_1_1(x=None, y=None, z=None, **kwargs):
         return
 
@@ -59,11 +59,11 @@ t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2
 ROTARY_SHARD_MESSED = """from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve
 from scipy.optimize import newton
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 import numpy as np
 
 class Rotary:
-    @kwasak_static
+    @kwasak
     def eqn_11_2(Q=None, Q_0=None, Q_external_gas_throughput=None, SP_1=None, SP_2=None, S_vol_pump_speed=None, V=None, t=None, **kwargs):
         return
 

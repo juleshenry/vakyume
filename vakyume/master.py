@@ -207,14 +207,39 @@ def shard_from_chapters(ctx: PipelineContext):
             lines = f.readlines()
 
         eqn_number = ""
+        # Track := annotations from docstrings to attach to @kwasak methods
+        in_docstring = False
+        var_notes: list[str] = []  # accumulates `:=` lines for current equation
         for line in lines:
+            stripped = line.strip()
+            # Toggle docstring tracking (triple-quote open/close)
+            if '"""' in stripped:
+                if stripped.count('"""') >= 2:
+                    # Single-line docstring: """...""" — extract := if present
+                    if ":=" in stripped:
+                        # Strip the triple-quotes and grab the content
+                        inner = stripped.replace('"""', "").strip()
+                        if ":=" in inner:
+                            var_notes.append(inner)
+                    continue
+                if in_docstring:
+                    in_docstring = False
+                else:
+                    in_docstring = True
+                continue
+            if in_docstring:
+                if ":=" in line:
+                    var_notes.append(stripped)
+                continue
+
             if x := re.findall(r"\d{1,2}-\d{1,2}\w*", line):
                 eqn_number = x[0].replace("-", "_")
+                var_notes = []  # reset notes for new equation header
 
             if (
                 " = " in line
-                and not line.strip().startswith("#")
-                and not line.strip().startswith('"""')
+                and not stripped.startswith("#")
+                and not stripped.startswith('"""')
             ):
                 tokes = solver.get_tokes(line)
                 nf = solver.make_normal_form(line)
@@ -274,7 +299,7 @@ def shard_from_chapters(ctx: PipelineContext):
                 if not os.path.exists(main_shard_path):
                     with open(main_shard_path, "w") as sf:
                         sf.write(import_header)
-                        sf.write("from vakyume.kwasak import kwasak_static\n")
+                        sf.write("from vakyume.kwasak import kwasak\n")
                         for token in tokes:
                             method_name = f"eqn_{eqn_number}__{token}"
                             safe_token = case_safe_name(token)
@@ -284,9 +309,15 @@ def shard_from_chapters(ctx: PipelineContext):
                         for token in tokes:
                             method_name = f"eqn_{eqn_number}__{token}"
                             sf.write(f"{TAB}{method_name} = {method_name}\n")
-                        sf.write(f"\n{TAB}@kwasak_static\n")
+                        sf.write(f"\n{TAB}@kwasak\n")
                         tokes_str = ", ".join(f"{t}=None" for t in tokes)
                         sf.write(f"{TAB}def eqn_{eqn_number}(self, {tokes_str}):\n")
+                        # Propagate := annotations from notes as docstring
+                        if var_notes:
+                            sf.write(f'{TAB * 2}"""\n')
+                            for note in var_notes:
+                                sf.write(f"{TAB * 2}{note}\n")
+                            sf.write(f'{TAB * 2}"""\n')
                         sf.write(f"{TAB * 2}return\n")
 
     print(f"Scraped {created_count} new shards.")
@@ -1841,7 +1872,7 @@ def assemble_certified_library(ctx: PipelineContext, analysis):
             "from math import e, pi\n"
             "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
             "from scipy.optimize import newton\n"
-            "from vakyume.kwasak import kwasak_static\n"
+            "from vakyume.kwasak import kwasak\n"
             "from vakyume.config import UnsolvedException\n"
             "import numpy as np\n\n"
         )

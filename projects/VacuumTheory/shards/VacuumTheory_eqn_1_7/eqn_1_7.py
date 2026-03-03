@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_1_7__R_cap import eqn_1_7__R
 from .eqn_1_7__T_cap import eqn_1_7__T
 from .eqn_1_7__V_cap import eqn_1_7__V
@@ -19,6 +19,6 @@ class VacuumTheory:
     eqn_1_7__n = eqn_1_7__n
     eqn_1_7__p = eqn_1_7__p
 
-    @kwasak_static
+    @kwasak
     def eqn_1_7(self, R=None, T=None, V=None, n=None, p=None):
         return

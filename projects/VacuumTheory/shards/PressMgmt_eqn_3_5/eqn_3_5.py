@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_3_5__P_cap import eqn_3_5__P
 from .eqn_3_5__P_P_cap import eqn_3_5__P_P
 from .eqn_3_5__V_cap import eqn_3_5__V
@@ -17,6 +17,6 @@ class PressMgmt:
     eqn_3_5__V = eqn_3_5__V
     eqn_3_5__V_P = eqn_3_5__V_P
 
-    @kwasak_static
+    @kwasak
     def eqn_3_5(self, P=None, P_P=None, V=None, V_P=None):
         return

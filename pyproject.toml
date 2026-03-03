@@ -19,12 +19,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = [
-    "config",
-    "equation_sharder_new",
-    "kwasak",
-    "tru",
-    "vakyume",
-    "vakyume_certified",
-    "vakyume_master",
-]
+packages = ["vakyume"]
