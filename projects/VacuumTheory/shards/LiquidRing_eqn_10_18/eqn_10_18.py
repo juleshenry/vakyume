@@ -14,6 +14,7 @@ from .eqn_10_18__T_cap_i import eqn_10_18__T_i
 from .eqn_10_18__p_c import eqn_10_18__p_c
 from .eqn_10_18__p_s import eqn_10_18__p_s
 
+
 class LiquidRing:
     eqn_10_18__P = eqn_10_18__P
     eqn_10_18__S_Th = eqn_10_18__S_Th
@@ -24,7 +25,9 @@ class LiquidRing:
     eqn_10_18__p_s = eqn_10_18__p_s
 
     @kwasak
-    def eqn_10_18(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
+    def eqn_10_18(
+        self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None
+    ):
         """
         T_i := inlet  temperature of load
         """

@@ -5,4 +5,3 @@ from scipy.optimize import newton
 from vakyume.kwasak import kwasak
 from vakyume.config import UnsolvedException
 import numpy as np
-

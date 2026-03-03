@@ -110,6 +110,6 @@ class TestDummyEndToEnd:
             text=True,
             cwd=repo_root,
         )
-        assert result.returncode == 0, (
-            f"CLI failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
-        )
+        assert (
+            result.returncode == 0
+        ), f"CLI failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"

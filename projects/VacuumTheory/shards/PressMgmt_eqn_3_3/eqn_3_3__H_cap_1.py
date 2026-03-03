@@ -5,6 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_3_3__H_1(self, H_2: float, P: float, P_P: float, **kwargs):
     # [.pyeqn] P_P - P = H_2 - H_1
     result = []

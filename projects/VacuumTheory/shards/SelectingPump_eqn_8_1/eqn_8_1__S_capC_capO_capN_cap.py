@@ -5,6 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
     # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
     # Solve for SCON:

@@ -13,6 +13,7 @@ from .eqn_10_4__S_cap_p import eqn_10_4__S_p
 from .eqn_10_4__V_cap import eqn_10_4__V
 from .eqn_10_4__t import eqn_10_4__t
 
+
 class LiquidRing:
     eqn_10_4__Q_gas = eqn_10_4__Q_gas
     eqn_10_4__SP_1 = eqn_10_4__SP_1

@@ -5,6 +5,7 @@ from scipy.optimize import newton
 from kwasak import kwasak
 import numpy as np
 
+
 class Kinematics:
     @kwasak
     def eqn_1_1(a=None, t=None, v=None, v0=None, **kwargs):
@@ -14,7 +15,7 @@ class Kinematics:
     def eqn_1_1__a(t: float, v: float, v0: float):
         # [.pyeqn] v = v0 + a * t
         result = []
-        a = (v - v0)/t
+        a = (v - v0) / t
         result.append(a)
         return result
 
@@ -22,7 +23,7 @@ class Kinematics:
     def eqn_1_1__t(a: float, v: float, v0: float):
         # [.pyeqn] v = v0 + a * t
         result = []
-        t = (v - v0)/a
+        t = (v - v0) / a
         result.append(t)
         return result
 
@@ -30,7 +31,7 @@ class Kinematics:
     def eqn_1_1__v(a: float, t: float, v0: float):
         # [.pyeqn] v = v0 + a * t
         result = []
-        v = a*t + v0
+        v = a * t + v0
         result.append(v)
         return result
 
@@ -38,7 +39,6 @@ class Kinematics:
     def eqn_1_1__v0(a: float, t: float, v: float):
         # [.pyeqn] v = v0 + a * t
         result = []
-        v0 = -a*t + v
+        v0 = -a * t + v
         result.append(v0)
         return result
-

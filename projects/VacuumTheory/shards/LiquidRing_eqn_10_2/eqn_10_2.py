@@ -12,6 +12,7 @@ from .eqn_10_2__V_cap import eqn_10_2__V
 from .eqn_10_2__dP_cap import eqn_10_2__dP
 from .eqn_10_2__dt import eqn_10_2__dt
 
+
 class LiquidRing:
     eqn_10_2__PS = eqn_10_2__PS
     eqn_10_2__Q_gas = eqn_10_2__Q_gas

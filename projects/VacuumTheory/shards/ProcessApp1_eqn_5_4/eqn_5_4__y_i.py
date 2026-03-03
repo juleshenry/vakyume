@@ -5,9 +5,10 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_5_4__y_i(self, P: float, P_0_i: float, x_i: float, **kwargs):
     # [.pyeqn] y_i * P = x_i * P_0_i
     result = []
-    y_i = P_0_i*x_i/P
+    y_i = P_0_i * x_i / P
     result.append(y_i)
     return result

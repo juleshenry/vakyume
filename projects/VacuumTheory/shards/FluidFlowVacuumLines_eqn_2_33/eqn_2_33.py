@@ -9,6 +9,7 @@ from vakyume.kwasak import kwasak
 from .eqn_2_33__C_cap_paralell import eqn_2_33__C_paralell
 from .eqn_2_33__arithmetic_sum_C_cap import eqn_2_33__arithmetic_sum_C
 
+
 class FluidFlowVacuumLines:
     eqn_2_33__C_paralell = eqn_2_33__C_paralell
     eqn_2_33__arithmetic_sum_C = eqn_2_33__arithmetic_sum_C

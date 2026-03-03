@@ -12,6 +12,7 @@ from .eqn_2_5__delta_P_cap import eqn_2_5__delta_P
 from .eqn_2_5__mu import eqn_2_5__mu
 from .eqn_2_5__q import eqn_2_5__q
 
+
 class FluidFlowVacuumLines:
     eqn_2_5__D = eqn_2_5__D
     eqn_2_5__L = eqn_2_5__L

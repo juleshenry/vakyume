@@ -1,6 +1,6 @@
 # Chapter 12 Advanced Pump Systems
 """
-eta := efficiency # pump efficiency is given by eta = P_out / P_in, where 'eta' denotes the efficiency. Here, P_out represents useful power output and P_in stands for total power input to a system (e.g., an engine or compressor). 
+eta := efficiency # pump efficiency is given by eta = P_out / P_in, where 'eta' denotes the efficiency. Here, P_out represents useful power output and P_in stands for total power input to a system (e.g., an engine or compressor).
 """
 
 """

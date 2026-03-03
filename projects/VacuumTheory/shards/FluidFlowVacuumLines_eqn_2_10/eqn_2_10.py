@@ -10,6 +10,7 @@ from .eqn_2_10__S_capuc_P_capres import eqn_2_10__Suc_Pres
 from .eqn_2_10__delta_P_cap import eqn_2_10__delta_P
 from .eqn_2_10__oper_press import eqn_2_10__oper_press
 
+
 class FluidFlowVacuumLines:
     eqn_2_10__Suc_Pres = eqn_2_10__Suc_Pres
     eqn_2_10__delta_P = eqn_2_10__delta_P

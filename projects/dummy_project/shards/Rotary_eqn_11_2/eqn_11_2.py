@@ -15,6 +15,7 @@ from .eqn_11_2__S_cap_vol_pump_speed import eqn_11_2__S_vol_pump_speed
 from .eqn_11_2__V_cap import eqn_11_2__V
 from .eqn_11_2__t import eqn_11_2__t
 
+
 class Rotary:
     eqn_11_2__Q = eqn_11_2__Q
     eqn_11_2__Q_0 = eqn_11_2__Q_0
@@ -26,5 +27,15 @@ class Rotary:
     eqn_11_2__t = eqn_11_2__t
 
     @kwasak
-    def eqn_11_2(self, Q=None, Q_0=None, Q_external_gas_throughput=None, SP_1=None, SP_2=None, S_vol_pump_speed=None, V=None, t=None):
+    def eqn_11_2(
+        self,
+        Q=None,
+        Q_0=None,
+        Q_external_gas_throughput=None,
+        SP_1=None,
+        SP_2=None,
+        S_vol_pump_speed=None,
+        V=None,
+        t=None,
+    ):
         return

@@ -14,6 +14,7 @@ from .eqn_10_8__f_a import eqn_10_8__f_a
 from .eqn_10_8__rho import eqn_10_8__rho
 from .eqn_10_8__w_i import eqn_10_8__w_i
 
+
 class LiquidRing:
     eqn_10_8__bhp = eqn_10_8__bhp
     eqn_10_8__c_p = eqn_10_8__c_p
@@ -24,5 +25,14 @@ class LiquidRing:
     eqn_10_8__w_i = eqn_10_8__w_i
 
     @kwasak
-    def eqn_10_8(self, bhp=None, c_p=None, delta_T=None, delta_h_i=None, f_a=None, rho=None, w_i=None):
+    def eqn_10_8(
+        self,
+        bhp=None,
+        c_p=None,
+        delta_T=None,
+        delta_h_i=None,
+        f_a=None,
+        rho=None,
+        w_i=None,
+    ):
         return

@@ -5,9 +5,10 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_1_7__p(self, R: float, T: float, V: float, n: float, **kwargs):
     # [.pyeqn] p * V = n * R * T
     result = []
-    p = R*T*n/V
+    p = R * T * n / V
     result.append(p)
     return result
