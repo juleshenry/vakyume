@@ -1,7 +1,6 @@
 import argparse
 import os
 import sys
-import shutil
 from vakyume.master import run_pipeline
 from vakyume.cpp_gen import main as run_cpp_gen
 from vakyume.llm import ask_llm
@@ -53,24 +52,29 @@ def extract_notes_from_pdf(pdf_path, output_dir):
     print(f"Saved extracted notes to {output_path}")
 
 
-def cmd_run(args):
-    """Run the full pipeline (shard, verify, repair, certify)."""
+def _ensure_project(args):
+    """Create project dirs and handle missing notes (shared by cmd_run/cmd_build)."""
     project_dir = args.project
     notes_dir = os.path.join(project_dir, "notes")
 
-    # Step 1: Ensure project structure exists
     for sub in ["notes", "shards", "reports", "repair_prompts"]:
         d = os.path.join(project_dir, sub)
         if not os.path.exists(d):
             os.makedirs(d)
 
-    # Step 2: Handle missing notes
     if not os.listdir(notes_dir):
-        if args.pdf:
+        if getattr(args, "pdf", None):
             extract_notes_from_pdf(args.pdf, notes_dir)
         else:
             print(f"Warning: No files found in {notes_dir} and no --pdf provided.")
             print("OCR stage skipped.")
+
+    return project_dir
+
+
+def cmd_run(args):
+    """Run the full pipeline (shard, verify, repair, certify)."""
+    project_dir = _ensure_project(args)
 
     # Step 3: Run Python Pipeline
     print(f"Starting Vakyume pipeline for project '{project_dir}'...")
@@ -112,22 +116,7 @@ def cmd_make_cpp(args):
 
 def cmd_build(args):
     """Full build: scrape, verify, reconstruct, and generate C++."""
-    project_dir = args.project
-    notes_dir = os.path.join(project_dir, "notes")
-
-    # Step 1: Ensure project structure exists
-    for sub in ["notes", "shards", "reports", "repair_prompts"]:
-        d = os.path.join(project_dir, sub)
-        if not os.path.exists(d):
-            os.makedirs(d)
-
-    # Step 2: Handle missing notes
-    if not os.listdir(notes_dir):
-        if args.pdf:
-            extract_notes_from_pdf(args.pdf, notes_dir)
-        else:
-            print(f"Warning: No files found in {notes_dir} and no --pdf provided.")
-            print("OCR stage skipped.")
+    project_dir = _ensure_project(args)
 
     # Step 3: Run Python Pipeline (shard, verify, repair, certify)
     print(f"\n=== [build] Scraping & Verification ===")

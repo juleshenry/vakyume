@@ -20,3 +20,11 @@ dependencies = [
 
 [tool.setuptools]
 packages = ["vakyume"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "llm: requires a running Ollama LLM instance (deselect with '-m not llm')",
+    "slow: long-running test",
+]
+addopts = "-m 'not llm'"

@@ -210,86 +210,206 @@ python3 vakyume.py build projects/BuildingModels
 
 
 ## Architecture
-- **Sympy Solvers**: Initial algebraic isolation of variables.
-- **Numerical Fallbacks**: Uses `scipy.optimize.newton` or `fsolve` for transcendental equations where algebraic isolation is impossible.
-- **One-Odd-Out Verification**: Random "fuzzed" inputs are used to verify that moving between any two variables in an equation family returns to the source of truth.
 
----
+### Core Components
 
-# Kwarg Solver Decorator
-(Existing documentation...)
+| Module | Purpose |
+|--------|---------|
+| `vakyume.py` | CLI entry point (`run`, `reconstruct`, `make-cpp`, `build`) |
+| `vakyume/master.py` | Pipeline orchestrator: scraping, verification, repair |
+| `vakyume/verifier.py` | One-Odd-Out cross-validation engine |
+| `vakyume/llm.py` | LLM interface (Phi-3 / Ollama) |
+| `vakyume/kwasak.py` | `@kwasak` decorator for kwarg-solver dispatch |
+| `vakyume/reconstruct.py` | Shard reassembly into a single importable library |
+| `vakyume/cpp_gen.py` | AST-based Python-to-C++ transpiler |
+| `vakyume/config.py` | Shared constants and import headers |
 
-As long as one keyword argument is not given, its value is calculated
+### Algorithmic Flowchart
 
-E.g. 
+Below is the end-to-end processing pipeline that Vakyume executes when you
+run `python3 vakyume.py build <project>`.
+
 ```
-@kwarg_solver
-def einstein(...):
-	"""e = m * c ** 2"""
-	return ...
-
-einstein(e = 1000) # returns m, (1000 / 8.98755179 e16), ~1.11265 e -14
-einstein(m = 1000) # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
+                         notes/*.py
+                    (Python-like equations)
+                             |
+                             v
+               ┌─────────────────────────┐
+               │  1. PARSE EQUATION FILE │
+               │                         │
+               │  For each notes/*.py:   │
+               │  - Parse header comment │
+               │    "# X-Y Title"        │
+               │  - Parse docstring for  │
+               │    variable definitions │
+               │    "var := description"  │
+               │  - Extract equation     │
+               │    body  "lhs = rhs"    │
+               └────────────┬────────────┘
+                            |
+                            v
+               ┌─────────────────────────┐
+               │  2. GENERATE SOLVERS    │
+               │                         │
+               │  For each variable V    │
+               │  in the equation:       │
+               │                         │
+               │  ┌───────────────────┐  │
+               │  │ 2a. SymPy Solve   │  │
+               │  │  sympy.solve(     │  │
+               │  │    Eq(lhs, rhs),  │  │
+               │  │    Symbol(V))     │  │
+               │  └────────┬──────────┘  │
+               │           |             │
+               │       success?          │
+               │        /     \          │
+               │      yes      no        │
+               │       |        |        │
+               │       |        v        │
+               │       │  ┌───────────┐  │
+               │       │  │ 2b. Build │  │
+               │       │  │ Scaffold  │  │
+               │       │  │ (pattern  │  │
+               │       │  │ matching) │  │
+               │       │  └─────┬─────┘  │
+               │       │        |        │
+               │       │        v        │
+               │       │  ┌───────────┐  │
+               │       │  │ 2c. LLM   │  │
+               │       │  │ Fill-in   │  │
+               │       │  │ (Phi-3)   │  │
+               │       │  └─────┬─────┘  │
+               │       │        |        │
+               │       v        v        │
+               │     Write shard file:   │
+               │     shards/<Family>/    │
+               │       eqn_X_Y__V.py    │
+               └────────────┬────────────┘
+                            |
+                            v
+               ┌─────────────────────────┐
+               │  3. VERIFY (OOO)        │
+               │                         │
+               │  For each equation      │
+               │  family with N vars:    │
+               │                         │
+               │  For each variable V:   │
+               │    Generate random      │
+               │    inputs for other     │
+               │    N-1 variables        │
+               │    ┌─────────────────┐  │
+               │    │ Compute V via   │  │
+               │    │ its solver      │  │
+               │    └────────┬────────┘  │
+               │             |           │
+               │    ┌─────────────────┐  │
+               │    │ Plug V + inputs │  │
+               │    │ into ALL other  │  │
+               │    │ solvers & check │  │
+               │    │ round-trip      │  │
+               │    └────────┬────────┘  │
+               │             |           │
+               │         pass/fail?      │
+               │          /      \       │
+               │        pass    FAIL     │
+               │         |       |       │
+               │         |       v       │
+               │         | Flag variant  │
+               │         | as broken     │
+               └─────────┬──┬────────────┘
+                         |  |
+                    pass |  | broken
+                         |  v
+                         |  ┌─────────────────────┐
+                         |  │  4. REPAIR (LLM)    │
+                         |  │                     │
+                         |  │  Show LLM:          │
+                         |  │  - The equation     │
+                         |  │  - A working solver │
+                         |  │    (as example)     │
+                         |  │  - The error info   │
+                         |  │                     │
+                         |  │  LLM writes fixed   │
+                         |  │  solver code        │
+                         |  │                     │
+                         |  │  Repeat verify +    │
+                         |  │  repair up to       │
+                         |  │  --max-rounds N     │
+                         |  └──────────┬──────────┘
+                         |             |
+                         v             v
+               ┌─────────────────────────┐
+               │  5. RECONSTRUCT         │
+               │                         │
+               │  Assemble all certified │
+               │  shards into one file:  │
+               │  vakyume_lib.py         │
+               │                         │
+               │  Each equation family   │
+               │  becomes a @kwasak      │
+               │  decorated method with  │
+               │  variant sub-functions: │
+               │                         │
+               │  @kwasak                │
+               │  def eqn_X_Y(...):      │
+               │      ...                │
+               │  def eqn_X_Y__V1(...):  │
+               │      return <solution>  │
+               │  def eqn_X_Y__V2(...):  │
+               │      return <solution>  │
+               └────────────┬────────────┘
+                            |
+                            v
+               ┌─────────────────────────┐
+               │  6. C++ TRANSPILE       │
+               │  (optional --cpp)       │
+               │                         │
+               │  AST-based converter:   │
+               │  - Parse Python AST     │
+               │  - Map math.log -> log  │
+               │  - Map ** -> pow()      │
+               │  - Enforce double types │
+               │  - Fallback to LLM for  │
+               │    complex constructs   │
+               │                         │
+               │  Output: vakyume.cpp    │
+               │  Compile: g++ -> test   │
+               └─────────────────────────┘
 ```
 
-Transcription Phase
-- [x] Transcription of Formulae
-- [x] Develop universal format for these notes
-- [x] Confirm adherence to strict format
-- [x] Filling in physics constants
+### Scaffold Pattern Matching (Step 2b Detail)
 
-Implementation Phase
-- [x] Use sympy to arbitrary solve all equations for one variable 🐍📐🎊
-- [x] Implement solver-decorator
+When SymPy cannot isolate a variable, the scaffold builder
+(`_generate_derivation_scaffold`) tries pattern handlers in order:
 
-Integration Phase
-- [x] Separate the python library that converts equations to dynamic classes
-- [x] Use c++-imports to speed up python library
-- [x] Make class decorator to ensure invariants on `kwarg_solver`
-- [x] Metacode Motherlode, the class that does it all
+| Priority | Pattern | Strategy |
+|----------|---------|----------|
+| 1 | Target in exponent: `X ** (... target ...)` | Numerical `brentq` solver |
+| 2 | `(target / C) ** n` | Invert: `C * (lhs/outer) ** (1/n)` |
+| 3 | `(A / target) ** n` | Invert: `A / (ratio) ** (1/n)` |
+| 4 | `(target / B) ** n` (re-match) | Invert for numerator |
+| 5 | `target ** n` (bare power) | Isolate and apply `(1/n)` root |
+| 6 | Fractional exponent, 2+ `(target - X)` terms | Clear exponent, cross-multiply, solve linear |
+| 7 | Fractional exponent, single `(target - X)` | Clear exponent, isolate difference |
+| F1 | Single occurrence (no pattern match) | Stub for LLM to fill in |
+| F2 | Multiple occurrences (no pattern match) | Numerical `brentq` solver |
 
-Namely, kwarg_solver is a decorator that requires for x kwargs default to zero, there are x auxiliary functions of the form `vanilla__a, vanilla__b, etc.., vanilla__z`. Implement this as a class decorator. 
+Each handler either returns a complete scaffold string or `None` to fall
+through to the next handler.
 
-Finally, metacode motherlode : 
+### The `@kwasak` Decorator
 
-UniversalSolver({"eqn_name" : "name of method", "eqn": "normal form of equation"})
--> 
-UniversalSolver({"eqn_name" : "Einstein", "eqn": "0 = m  * 8.98755179e16 - e"})
-->
-`
-class Einstein:
-    @kwarg_solver
-    def einstein(s, e: float = None, m: float = None, **kwargs):
-        return  # decorator skips return
-    def einstein__m(s, e: float):
-        return e / 8.98755179e16
-    def einstein__e(s, m: float) -> float:
-        return m * 8.98755179e16
-`
+The `@kwasak` decorator enables kwarg-solver dispatch.  Given a function
+`eqn_X_Y` with variant solvers `eqn_X_Y__V1`, `eqn_X_Y__V2`, etc., calling
+with one keyword argument omitted automatically dispatches to the correct
+variant solver:
 
-You get returned a generated class code that solves the equation for parameters
-Einstein().einstein(e = 1000)# Instantly returns ~1.11265 e -14
+```python
+@kwasak
+def ideal_gas(P=None, V=None, n=None, R=None, T=None):
+    """P * V = n * R * T"""
+    pass
 
-# Structure:
-
-- 1. Original notes, Python equations
-- 2. Python class creation
-- 3. Testing of all existing methods, filling in unresolved equation-stubs or deferring (need help here!)
-- 4. Conversion to C++
-- 5. Testing in C++ all calls
-- 6. Speed tests over compute space
-
-# Process of creation:
-- 1. Sympy attempt
-- 2. LLM failover
-- 3. Can say, with LLM, flow is: MAKE, EVAL(CODE), TEST_CODE 
-- 4. a loop could be created to run in perpetuity until failovers are all working.
-- 5. could even make another function to reiterate over a particular failing test for efficiency
-
-# Final Goal:
-python3 vakyume.py build your_project
-[x] loading formulae
-[x] solving via sympy
-[x] now leveraging LLM's to solve remaining equations...
-[x] spitting out Python libraries
-[x] spitting out C++ library derived from the Python...
+# Omit P -> dispatches to ideal_gas__P(V, n, R, T)
+ideal_gas(V=1.0, n=1.0, R=8.314, T=300)  # returns P
+```

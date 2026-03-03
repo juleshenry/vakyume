@@ -15,20 +15,12 @@ import re
 import sys
 import textwrap
 
-from .config import TAB
+from .config import TAB, LIBRARY_IMPORT_HEADER
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
-IMPORT_HEADER = (
-    "from cmath import log, sqrt, exp\n"
-    "from math import e, pi\n"
-    "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-    "from scipy.optimize import newton\n"
-    "from vakyume.kwasak import kwasak\n"
-    "from vakyume.config import UnsolvedException\n"
-    "import numpy as np\n"
-)
+IMPORT_HEADER = LIBRARY_IMPORT_HEADER
 
 
 def _family_class_name(family_dir_name: str) -> str:

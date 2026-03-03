@@ -7,7 +7,6 @@ import importlib.util
 import json
 import re
 import timeout_decorator
-import argparse
 import time
 import ast
 import py_compile
@@ -26,8 +25,10 @@ from .config import (
     COOLDOWN_SECONDS,
     MAX_COMP_TIME_SECONDS,
     FUNKTORZ,
+    SHARD_IMPORT_HEADER,
+    LIBRARY_IMPORT_HEADER,
 )
-from .llm import escribir_codigo, repair_codigo, extract_code
+from .llm import extract_code
 
 # Paths
 DEFAULT_MAX_ROUNDS = 10
@@ -186,14 +187,7 @@ def shard_from_chapters(ctx: PipelineContext):
         print(f"[OUTPUT] shard_from_chapters: No chapters to process")
         return
 
-    import_header = (
-        "from cmath import log, sqrt, exp\n"
-        "from math import e, pi\n"
-        "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-        "from scipy.optimize import newton\n"
-        "import numpy as np\n"
-        "from vakyume.config import UnsolvedException\n\n"
-    )
+    import_header = SHARD_IMPORT_HEADER
 
     for chapter_file in to_process:
         chapter_path = os.path.join(ctx.notes_dir, chapter_file)
@@ -537,6 +531,676 @@ def analyze_results(ctx: PipelineContext, all_results):
     return analysis
 
 
+# ---------------------------------------------------------------------------
+#  Derivation-scaffold helpers  (extracted from the former 860-line function)
+# ---------------------------------------------------------------------------
+
+
+def _extract_outer_coeff(expr: str, pow_fragment: str) -> str:
+    """Given ``'A * B * (fragment)**exp'``, return ``'A * B'``.
+
+    Everything *except* *pow_fragment* itself.  Returns ``""`` when the
+    outer coefficient is trivially ``1``.
+    """
+    rest = expr.replace(pow_fragment, "1").strip()
+    rest = re.sub(r"\b1\s*\*\s*", "", rest)
+    rest = re.sub(r"\s*\*\s*1\b", "", rest)
+    rest = rest.strip()
+    return rest if rest and rest != "1" else ""
+
+
+def _remove_target_diffs(expr: str, target_var: str) -> str:
+    """Remove ``(target - X)`` factors from *expr*, leaving other factors."""
+    cleaned = re.sub(
+        r"\(\s*" + re.escape(target_var) + r"\s*-\s*\w+\s*\)\s*\*?\s*",
+        "",
+        expr,
+    )
+    cleaned = cleaned.strip().strip("*").strip()
+    return cleaned if cleaned else "1"
+
+
+def _strip_balanced_outer_parens(text: str) -> str:
+    """Strip one layer of balanced outer parentheses if present."""
+    text = text.strip()
+    if text.startswith("(") and text.endswith(")"):
+        depth = 0
+        for i, c in enumerate(text):
+            if c == "(":
+                depth += 1
+            elif c == ")":
+                depth -= 1
+            if depth == 0 and i < len(text) - 1:
+                return text  # parens close before the end — not wrapping
+        return text[1:-1]
+    return text
+
+
+def _extract_inner_expr(eq: str, exp_val: str) -> str:
+    """Walk backwards from ``**<exp_val>`` to find the parenthesized expression
+    that is raised to the power, returning its inner content (without the
+    outer parens).
+    """
+    exp_pos = eq.find("**" + exp_val)
+    if exp_pos < 0:
+        exp_pos = eq.find("** " + exp_val)
+    if exp_pos < 0:
+        return ""
+    start = exp_pos - 1
+    while start >= 0 and eq[start] == " ":
+        start -= 1
+    if start < 0 or eq[start] != ")":
+        return ""
+    end_p = start
+    depth = 1
+    start -= 1
+    while start >= 0 and depth > 0:
+        if eq[start] == ")":
+            depth += 1
+        elif eq[start] == "(":
+            depth -= 1
+        start -= 1
+    return eq[start + 2 : end_p]
+
+
+def _split_num_den(inner_expr: str) -> tuple[str, str]:
+    """Split *inner_expr* into (numerator, denominator) around ``' / '``.
+
+    Balanced outer parens on the denominator are stripped.
+    """
+    if " / " not in inner_expr:
+        return inner_expr, ""
+    num_part, den_part = inner_expr.split(" / ", 1)
+    den_part = _strip_balanced_outer_parens(den_part.strip())
+    return num_part.strip(), den_part
+
+
+def _resolve_outer_mult(
+    rhs: str,
+    inner_expr: str,
+    exp_val: str,
+    lhs: str,
+    inv_exp: str,
+) -> tuple[str, str]:
+    """Return ``(outer_mult, R_expr)`` where *R_expr* is the expression for the
+    ratio with the exponent cleared.
+    """
+    outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})**{exp_val}")
+    if not outer_mult:
+        outer_mult = _extract_outer_coeff(rhs, f"({inner_expr}) ** {exp_val}")
+    if not outer_mult:
+        outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})")
+    if outer_mult:
+        R_expr = f"({lhs} / ({outer_mult})) ** ({inv_exp})"
+    else:
+        R_expr = f"({lhs}) ** ({inv_exp})"
+    return outer_mult, R_expr
+
+
+def _clean_remaining(expr: str, fragment: str) -> str:
+    """Replace *fragment* with ``1`` in *expr* then tidy up stray ``* 1``."""
+    r = expr.replace(fragment, "1")
+    r = re.sub(r"\b1\s*\*\s*", "", r)
+    r = re.sub(r"\s*\*\s*1\b", "", r)
+    r = r.strip().strip("*").strip()
+    return r if r and r != "1" else ""
+
+
+def _build_brentq_scaffold(
+    header: str,
+    pyeqn: str,
+    target_var: str,
+    lhs: str,
+    rhs: str,
+    total: int,
+    comment: str,
+    start_expr: str = "0.01",
+    step: str = "0.01",
+) -> str:
+    """Build a complete ``brentq`` numerical-solver scaffold."""
+    rhs_sub = re.sub(
+        r"\b" + re.escape(target_var) + r"\b",
+        target_var + "_val",
+        rhs,
+    )
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # {comment}")
+    lines.append(f"    from scipy.optimize import brentq")
+    lines.append(f"    def _res({target_var}_val):")
+    lines.append(f"        return {rhs_sub} - {lhs}")
+    lines.append(f"    lo, hi = None, None")
+    lines.append(f"    prev = _res({start_expr})")
+    lines.append(f"    for i in range(1, 100000):")
+    if start_expr == "0.01":
+        lines.append(f"        x = i * {step}")
+    else:
+        lines.append(f"        x = {start_expr} + i * {step}")
+    lines.append(f"        try:")
+    lines.append(f"            cur = _res(x)")
+    lines.append(f"        except Exception:")
+    lines.append(f"            continue")
+    lines.append(f"        if prev * cur < 0:")
+    lines.append(f"            lo, hi = x - {step}, x")
+    lines.append(f"            break")
+    lines.append(f"        prev = cur")
+    lines.append(f"    if lo is None:")
+    lines.append(
+        f'        raise UnsolvedException("No sign change found for {target_var}")'
+    )
+    lines.append(f"    {target_var} = brentq(_res, lo, hi)")
+    lines.append(f"    return [{target_var}]")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+#  Individual pattern handlers — each returns ``str | None``
+# ---------------------------------------------------------------------------
+
+
+def _scaffold_exponent_target(eq, target_var, lhs, rhs, header, pyeqn, **_kw):
+    """Branch 1: target appears inside an exponent  →  brentq solver."""
+    if not re.search(r"\*\*\s*\([^)]*" + re.escape(target_var) + r"[^)]*\)", eq):
+        return None
+    return _build_brentq_scaffold(
+        header,
+        pyeqn,
+        target_var,
+        lhs,
+        rhs,
+        0,
+        f"{target_var} appears in the exponent — use numerical solver",
+        start_expr="1.01",
+        step="0.01",
+    )
+
+
+def _scaffold_ratio_power_target_in_numerator(
+    eq, target_var, lhs, rhs, header, pyeqn, **_kw
+):
+    """Branch 2: ``(target / C) ** n``."""
+    m = re.search(
+        r"\(\s*" + re.escape(target_var) + r"\s*/\s*([\w.]+)\s*\)"
+        r"\s*\*\*\s*([\d.]+)",
+        eq,
+    )
+    if not m:
+        return None
+    divisor, exp_val = m.group(1), m.group(2)
+    inv_exp = f"1.0 / {exp_val}"
+    pow_frag = m.group(0)
+
+    minus1 = re.search(re.escape(pow_frag) + r"\s*-\s*1", eq)
+    if minus1:
+        outer_m1 = _extract_outer_coeff(rhs, "(" + pow_frag + " - 1)")
+        if not outer_m1:
+            outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
+        ratio_expr = f"{lhs} / ({outer_m1}) + 1" if outer_m1 else f"{lhs} + 1"
+        answer = f"{divisor} * ({ratio_expr}) ** ({inv_exp})"
+        outer_label = outer_m1 if outer_m1 else "1"
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+        lines.append(
+            f"    # Step 1: ({target_var} / {divisor}) ** {exp_val}"
+            f" - 1 = {lhs} / ({outer_label})"
+        )
+        lines.append(
+            f"    # Step 2: ({target_var} / {divisor}) ** {exp_val} = {ratio_expr}"
+        )
+        lines.append(
+            f"    # Step 3: {target_var} / {divisor} = ({ratio_expr}) ** ({inv_exp})"
+        )
+        lines.append(f"    # Step 4: {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # No "- 1" — simple (target/C)**n isolation
+    outer = _extract_outer_coeff(rhs, pow_frag)
+    iso_expr = f"{lhs} / ({outer})" if outer else lhs
+    answer = f"{divisor} * ({iso_expr}) ** ({inv_exp})"
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    lines.append(f"    # Step 1: ({target_var} / {divisor}) ** {exp_val} = {iso_expr}")
+    lines.append(
+        f"    # Step 2: {target_var} / {divisor} = ({iso_expr}) ** ({inv_exp})"
+    )
+    lines.append(f"    # Step 3: {target_var} = {answer}")
+    lines.append(f"    {target_var} = {answer}")
+    return "\n".join(lines)
+
+
+def _scaffold_ratio_power_target_in_denominator(
+    eq, target_var, lhs, rhs, header, pyeqn, **_kw
+):
+    """Branch 3: ``(A / target) ** n``."""
+    m = re.search(
+        r"\(\s*(\w+)\s*/\s*" + re.escape(target_var) + r"\s*\)"
+        r"\s*\*\*\s*([\d.]+)",
+        eq,
+    )
+    if not m:
+        return None
+    numerator_var, exp_val = m.group(1), m.group(2)
+    inv_exp = f"1.0 / {exp_val}"
+    pow_frag = m.group(0)
+
+    minus1 = re.search(re.escape(pow_frag) + r"\s*-\s*1", eq)
+    if minus1:
+        outer_m1 = _extract_outer_coeff(rhs, "(" + pow_frag + " - 1)")
+        if not outer_m1:
+            outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
+        ratio_expr = f"{lhs} / ({outer_m1}) + 1" if outer_m1 else f"{lhs} + 1"
+    else:
+        outer = _extract_outer_coeff(rhs, pow_frag)
+        ratio_expr = f"{lhs} / ({outer})" if outer else lhs
+
+    answer = f"{numerator_var} / ({ratio_expr}) ** ({inv_exp})"
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    if minus1:
+        outer_label = outer_m1 if outer_m1 else "1"
+        lines.append(
+            f"    # Step 1: ({numerator_var} / {target_var}) ** {exp_val}"
+            f" - 1 = {lhs} / ({outer_label})"
+        )
+        lines.append(
+            f"    # Step 2: ({numerator_var} / {target_var}) ** {exp_val}"
+            f" = {ratio_expr}"
+        )
+    else:
+        lines.append(
+            f"    # Step 1: ({numerator_var} / {target_var}) ** {exp_val}"
+            f" = {ratio_expr}"
+        )
+    lines.append(f"    # Step 3: {target_var} = {answer}")
+    lines.append(f"    {target_var} = {answer}")
+    return "\n".join(lines)
+
+
+def _scaffold_ratio_power_solve_numerator(
+    eq, target_var, lhs, rhs, header, pyeqn, **_kw
+):
+    """Branch 4: ``(target / B) ** n``  (re-match solving for numerator)."""
+    m = re.search(
+        r"\(\s*" + re.escape(target_var) + r"\s*/\s*(\w+)\s*\)"
+        r"\s*\*\*\s*([\d.]+)",
+        eq,
+    )
+    if not m:
+        return None
+    denom_var, exp_val = m.group(1), m.group(2)
+    inv_exp = f"1.0 / {exp_val}"
+    pow_frag = m.group(0)
+
+    minus1 = re.search(re.escape(pow_frag) + r"\s*-\s*1", eq)
+    if minus1:
+        outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
+        ratio_expr = f"{lhs} / ({outer_m1}) + 1" if outer_m1 else f"{lhs} + 1"
+    else:
+        outer = _extract_outer_coeff(rhs, pow_frag)
+        ratio_expr = f"{lhs} / ({outer})" if outer else lhs
+
+    answer = f"{denom_var} * ({ratio_expr}) ** ({inv_exp})"
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    lines.append(
+        f"    # Step 1: ({target_var} / {denom_var}) ** {exp_val} = {ratio_expr}"
+    )
+    lines.append(
+        f"    # Step 2: {target_var} / {denom_var} = ({ratio_expr}) ** ({inv_exp})"
+    )
+    lines.append(f"    # Step 3: {target_var} = {answer}")
+    lines.append(f"    {target_var} = {answer}")
+    return "\n".join(lines)
+
+
+def _scaffold_bare_power(eq, target_var, lhs, rhs, header, pyeqn, total, **_kw):
+    """Branch 5: ``target ** n``  (bare power, single occurrence)."""
+    m = re.search(
+        r"\b" + re.escape(target_var) + r"\s*\*\*\s*([\d.]+)",
+        eq,
+    )
+    if not m or total != 1:
+        return None
+
+    exp_val = m.group(1)
+    inv_exp = f"1.0 / {exp_val}"
+    pow_frag = m.group(0)
+
+    # Is the power term inside parens with an additive term?
+    paren_match = re.search(
+        r"\(([^()]*?)\b" + re.escape(pow_frag) + r"([^()]*?)\)",
+        eq,
+    )
+    if paren_match:
+        inside_before = paren_match.group(1).strip()
+        inside_after = paren_match.group(2).strip()
+        parts = re.split(r"\s*\+\s*", inside_before, maxsplit=1)
+        if len(parts) == 2:
+            additive_const = parts[0].strip()
+            target_coeff = parts[1].rstrip("* ").strip()
+        else:
+            additive_const = None
+            target_coeff = inside_before.rstrip("* ").strip()
+        cofactors = inside_after.lstrip("* ").strip()
+        full_paren = paren_match.group(0)
+        outer = _extract_outer_coeff(rhs, full_paren)
+
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+
+        step1_rhs = f"{lhs} / {outer}" if outer else lhs
+        lines.append(
+            f"    # Step 1: {step1_rhs} = {inside_before}{pow_frag}{inside_after}"
+        )
+
+        iso_base = f"({step1_rhs} - {additive_const})" if additive_const else step1_rhs
+        if additive_const:
+            lines.append(
+                f"    # Step 2: {iso_base}"
+                f" = {target_coeff} * {pow_frag}"
+                + (f" * {cofactors}" if cofactors else "")
+            )
+
+        coeff_divisor = ""
+        if target_coeff and target_coeff != "1":
+            coeff_divisor += target_coeff
+        if cofactors:
+            coeff_divisor = (
+                f"{coeff_divisor} * {cofactors}" if coeff_divisor else cofactors
+            )
+
+        isolated = f"({iso_base} / ({coeff_divisor}))" if coeff_divisor else iso_base
+        answer = f"{isolated} ** ({inv_exp})"
+        lines.append(f"    # Step 3: {target_var} ** {exp_val} = {isolated}")
+        lines.append(f"    # Step 4: {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # target**exp NOT inside extra parens — simpler structure
+    outer = _extract_outer_coeff(rhs, pow_frag)
+    isolated = f"{lhs} / ({outer})" if outer else lhs
+    answer = f"({isolated}) ** ({inv_exp})"
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    lines.append(f"    # Step 1: {target_var} ** {exp_val} = {isolated}")
+    lines.append(f"    # Step 2: {target_var} = {answer}")
+    lines.append(f"    {target_var} = {answer}")
+    return "\n".join(lines)
+
+
+def _scaffold_frac_exp_multi_diff(
+    eq, target_var, lhs, rhs, header, pyeqn, total, **_kw
+):
+    """Branch 6: fractional exponent with target in 2+ difference terms.
+
+    E.g. ``S_p = S_Th * ((P-p_s)*(460+T_i) / ((P-p_c)*(460+T_e)))**0.6``
+    After clearing exponent the equation becomes linear in *target_var*.
+    """
+    exp_match = re.search(r"\*\*\s*(0\.\d+)", eq)
+    if not exp_match or total < 2:
+        return None
+
+    exp_val = exp_match.group(1)
+    inv_exp = str(round(1.0 / float(exp_val), 6))
+
+    diff_terms = re.findall(
+        r"\(" + re.escape(target_var) + r"\s*-\s*(\w+)\)",
+        eq,
+    )
+    if len(diff_terms) < 2 or total > 3:
+        return None
+
+    inner_expr = _extract_inner_expr(eq, exp_val)
+    if not inner_expr:
+        return None
+
+    num_part, den_part = _split_num_den(inner_expr)
+
+    num_diffs = re.findall(
+        r"\(" + re.escape(target_var) + r"\s*-\s*(\w+)\)",
+        num_part,
+    )
+    den_diffs = re.findall(
+        r"\(" + re.escape(target_var) + r"\s*-\s*(\w+)\)",
+        den_part,
+    )
+    num_other = _remove_target_diffs(num_part, target_var)
+    den_other = _remove_target_diffs(den_part, target_var)
+
+    # Bare target in denominator → brentq
+    bare_in_den = bool(
+        re.search(r"\b" + re.escape(target_var) + r"\b(?!\s*-)", den_part)
+    )
+    if bare_in_den:
+        return _build_brentq_scaffold(
+            header,
+            pyeqn,
+            target_var,
+            lhs,
+            rhs,
+            total,
+            f"{target_var} appears {total} times (including bare)"
+            " — use numerical solver",
+            start_expr="max(p_0, p_c, p_s) + 1",
+            step="0.1",
+        )
+
+    # Linear case — only (target - X) terms, no bare target
+    outer_mult, R_expr = _resolve_outer_mult(rhs, inner_expr, exp_val, lhs, inv_exp)
+
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    lines.append(
+        f"    # Step 1: ({lhs} / {outer_mult if outer_mult else '1'})"
+        f" ** ({inv_exp}) = {inner_expr}"
+    )
+    lines.append(f"    R = {R_expr}")
+
+    if len(num_diffs) == 1 and len(den_diffs) == 1:
+        nd, dd = num_diffs[0], den_diffs[0]
+        lines.append(
+            f"    # Step 2: R * ({den_other}) * ({target_var} - {dd})"
+            f" = ({num_other}) * ({target_var} - {nd})"
+        )
+        lines.append(
+            f"    # Step 3: {target_var} * (R * ({den_other}) - ({num_other}))"
+            f" = R * ({den_other}) * {dd} - ({num_other}) * {nd}"
+        )
+        answer = (
+            f"(R * ({den_other}) * {dd} - ({num_other}) * {nd})"
+            f" / (R * ({den_other}) - ({num_other}))"
+        )
+        lines.append(f"    # Step 4: {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # Unsupported diff-term counts — fall through to later handlers
+    return None
+
+
+def _scaffold_frac_exp_single_occurrence(
+    eq, target_var, lhs, rhs, header, pyeqn, total, **_kw
+):
+    """Branch 7: single-occurrence target inside ``(target - X)`` under ``**exp``.
+
+    Clear exponent, isolate the difference, solve for *target_var*.
+    """
+    exp_match = re.search(r"\*\*\s*(0\.\d+)", eq)
+    if not exp_match or total != 1:
+        return None
+
+    exp_val = exp_match.group(1)
+    inv_exp = str(round(1.0 / float(exp_val), 6))
+
+    inner_expr = _extract_inner_expr(eq, exp_val)
+    if not inner_expr:
+        return None
+
+    outer_mult, R_expr = _resolve_outer_mult(rhs, inner_expr, exp_val, lhs, inv_exp)
+    num_part, den_part = _split_num_den(inner_expr)
+
+    # --- Helper: target found in a numerator difference term ---------------
+    def _num_diff_scaffold(match_obj, sign, other_var):
+        num_remaining = _clean_remaining(num_part, match_obj.group(0))
+        if den_part and num_remaining:
+            factor = f"R * ({den_part}) / ({num_remaining})"
+        elif den_part:
+            factor = f"R * ({den_part})"
+        elif num_remaining:
+            factor = f"R / ({num_remaining})"
+        else:
+            factor = "R"
+        if sign == "+":
+            diff_str = f"({target_var} - {other_var})"
+            answer = f"{other_var} + {factor}"
+        else:
+            diff_str = f"({other_var} - {target_var})"
+            answer = f"{other_var} - {factor}"
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+        lines.append(f"    R = {R_expr}")
+        lines.append(f"    # After clearing **{exp_val}: R = {inner_expr}")
+        lines.append(f"    # {diff_str} = {factor}")
+        lines.append(f"    # {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # --- Helper: target found in a denominator difference term -------------
+    def _den_diff_scaffold(other_var, sign, match_obj):
+        den_remaining = _clean_remaining(den_part, match_obj.group(0))
+        if num_part and den_remaining:
+            factor = f"({num_part}) / (R * ({den_remaining}))"
+        elif num_part:
+            factor = f"({num_part}) / R"
+        elif den_remaining:
+            factor = f"1.0 / (R * ({den_remaining}))"
+        else:
+            factor = "1.0 / R"
+        answer = f"{other_var} + {factor}" if sign == "+" else f"{other_var} - {factor}"
+        diff_str = (
+            f"({target_var} - {other_var})"
+            if sign == "+"
+            else f"({other_var} - {target_var})"
+        )
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+        lines.append(f"    R = {R_expr}")
+        lines.append(f"    # After clearing **{exp_val}: R = {inner_expr}")
+        lines.append(f"    # {diff_str} = {factor}")
+        lines.append(f"    # {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # --- Helper: (C + target) additive term --------------------------------
+    def _add_term_scaffold(match_obj, in_numerator):
+        const = match_obj.group(1)
+        if in_numerator:
+            remaining = _clean_remaining(num_part, match_obj.group(0))
+            if den_part and remaining:
+                factor = f"R * ({den_part}) / ({remaining})"
+            elif den_part:
+                factor = f"R * ({den_part})"
+            elif remaining:
+                factor = f"R / ({remaining})"
+            else:
+                factor = "R"
+        else:
+            remaining = _clean_remaining(den_part, match_obj.group(0))
+            if num_part and remaining:
+                factor = f"({num_part}) / (R * ({remaining}))"
+            elif num_part:
+                factor = f"({num_part}) / R"
+            else:
+                factor = "1.0 / R"
+        answer = f"{factor} - {const}"
+        lines = [header]
+        lines.append(f"    # [.pyeqn] {pyeqn}")
+        lines.append(f"    # Solve for {target_var}:")
+        lines.append(f"    R = {R_expr}")
+        lines.append(f"    # ({const} + {target_var}) = {factor}")
+        lines.append(f"    # {target_var} = {answer}")
+        lines.append(f"    {target_var} = {answer}")
+        return "\n".join(lines)
+
+    # Try each sub-pattern in order ------------------------------------------
+
+    # (X - target) in numerator
+    rev_num = re.search(
+        r"\(\s*(\w+)\s*-\s*" + re.escape(target_var) + r"\s*\)",
+        num_part,
+    )
+    if rev_num:
+        return _num_diff_scaffold(rev_num, "-", rev_num.group(1))
+
+    # (target - X) in numerator
+    fwd_num = re.search(
+        r"\(\s*" + re.escape(target_var) + r"\s*-\s*(\w+)\s*\)",
+        num_part,
+    )
+    if fwd_num:
+        return _num_diff_scaffold(fwd_num, "+", fwd_num.group(1))
+
+    # (target - X) in denominator
+    fwd_den = re.search(
+        r"\(\s*" + re.escape(target_var) + r"\s*-\s*(\w+)\s*\)",
+        den_part,
+    )
+    if fwd_den:
+        return _den_diff_scaffold(fwd_den.group(1), "+", fwd_den)
+
+    # (X - target) in denominator
+    rev_den = re.search(
+        r"\(\s*(\w+)\s*-\s*" + re.escape(target_var) + r"\s*\)",
+        den_part,
+    )
+    if rev_den:
+        return _den_diff_scaffold(rev_den.group(1), "-", rev_den)
+
+    # (C + target) in numerator or denominator
+    add_num = re.search(
+        r"\((\d+)\s*\+\s*" + re.escape(target_var) + r"\)",
+        num_part,
+    )
+    if add_num:
+        return _add_term_scaffold(add_num, in_numerator=True)
+
+    add_den = re.search(
+        r"\((\d+)\s*\+\s*" + re.escape(target_var) + r"\)",
+        den_part,
+    )
+    if add_den:
+        return _add_term_scaffold(add_den, in_numerator=False)
+
+    return None
+
+
+# ---------------------------------------------------------------------------
+#  Main dispatcher
+# ---------------------------------------------------------------------------
+
+# Pattern handlers in priority order.  Each takes the same keyword arguments
+# and returns ``str`` on match or ``None`` to fall through.
+_SCAFFOLD_HANDLERS = [
+    _scaffold_exponent_target,  # target in exponent → brentq
+    _scaffold_ratio_power_target_in_numerator,  # (target / C) ** n
+    _scaffold_ratio_power_target_in_denominator,  # (A / target) ** n
+    _scaffold_ratio_power_solve_numerator,  # (target / B) ** n re-match
+    _scaffold_bare_power,  # target ** n
+    _scaffold_frac_exp_multi_diff,  # fractional exp, 2+ diffs
+    _scaffold_frac_exp_single_occurrence,  # fractional exp, 1 occurrence
+]
+
+
 def _generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> str:
     """Generate a code scaffold with CONCRETE algebraic derivation for the LLM.
 
@@ -550,812 +1214,33 @@ def _generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> s
     if not pyeqn or not target_var or not header:
         return ""
 
-    import re as _re
-
     eq = " ".join(pyeqn.split())
     if " = " not in eq:
         return ""
     lhs, rhs = eq.split(" = ", 1)
 
-    pattern = _re.compile(r"\b" + _re.escape(target_var) + r"\b")
+    pattern = re.compile(r"\b" + re.escape(target_var) + r"\b")
     total = len(pattern.findall(eq))
     if total == 0:
         return ""
 
-    # ── Helper: extract the outer coefficient multiplying the (**exp) term ──
-    def _extract_outer_coeff(expr: str, pow_fragment: str) -> str:
-        """Given 'A * B * (fragment)**exp', return 'A * B' (everything except
-        the power term itself)."""
-        # Remove the power sub-expression to get the rest
-        rest = expr.replace(pow_fragment, "1").strip()
-        # Clean up: 1 * X → X, X * 1 → X
-        rest = _re.sub(r"\b1\s*\*\s*", "", rest)
-        rest = _re.sub(r"\s*\*\s*1\b", "", rest)
-        rest = rest.strip()
-        return rest if rest and rest != "1" else ""
-
-    # ── Detect target in exponent → transcendental → complete brentq body ──
-    if _re.search(r"\*\*\s*\([^)]*" + _re.escape(target_var) + r"[^)]*\)", eq):
-        # Build a complete brentq solver with concrete residual.
-        # Replace target_var with target_var + "_val" in the equation.
-        rhs_sub = _re.sub(
-            r"\b" + _re.escape(target_var) + r"\b",
-            target_var + "_val",
-            rhs,
-        )
-        lines = [header]
-        lines.append(f"    # [.pyeqn] {pyeqn}")
-        lines.append(
-            f"    # {target_var} appears in the exponent — use numerical solver"
-        )
-        lines.append(f"    from scipy.optimize import brentq")
-        lines.append(f"    def _res({target_var}_val):")
-        lines.append(f"        return {rhs_sub} - {lhs}")
-        lines.append(f"    # Scan for sign change in a wide range")
-        lines.append(f"    lo, hi = None, None")
-        lines.append(f"    prev = _res(1.01)")
-        lines.append(f"    for i in range(1, 10000):")
-        lines.append(f"        x = 1.0 + i * 0.01")
-        lines.append(f"        try:")
-        lines.append(f"            cur = _res(x)")
-        lines.append(f"        except Exception:")
-        lines.append(f"            continue")
-        lines.append(f"        if prev * cur < 0:")
-        lines.append(f"            lo, hi = x - 0.01, x")
-        lines.append(f"            break")
-        lines.append(f"        prev = cur")
-        lines.append(f"    if lo is None:")
-        lines.append(
-            f'        raise UnsolvedException("No sign change found for {target_var}")'
-        )
-        lines.append(f"    {target_var} = brentq(_res, lo, hi)")
-        lines.append(f"    return [{target_var}]")
-        return "\n".join(lines)
-
-    # ── Pattern: (target / C) ** n  ──
-    # e.g. installed_costs = 38000 * (hp / 10) ** 0.45
-    # e.g. installation_cost = 16000 * (NS + 2*NC) * (SCON / 1000) ** 0.35
-    # e.g. adiabatic_hp = (w/20) * ((P_2 / P_1) ** 0.286 - 1), solve for P_2
-    div_pow = _re.search(
-        r"\(\s*" + _re.escape(target_var) + r"\s*/\s*([\w.]+)\s*\)"
-        r"\s*\*\*\s*([\d.]+)",
-        eq,
+    # Shared kwargs passed to every handler
+    ctx = dict(
+        eq=eq,
+        target_var=target_var,
+        lhs=lhs,
+        rhs=rhs,
+        header=header,
+        pyeqn=pyeqn,
+        total=total,
     )
-    if div_pow:
-        divisor = div_pow.group(1)
-        exp_val = div_pow.group(2)
-        inv_exp = f"1.0 / {exp_val}"
-        pow_frag = div_pow.group(0)
-        # Detect "- 1" pattern: coeff * ((target/C)**n - 1)
-        minus1 = _re.search(_re.escape(pow_frag) + r"\s*-\s*1", eq)
-        if minus1:
-            # Extract outer coeff around the whole "((target/C)**n - 1)" block
-            outer_m1 = _extract_outer_coeff(rhs, "(" + pow_frag + " - 1)")
-            if not outer_m1:
-                outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
-            if outer_m1:
-                ratio_expr = f"{lhs} / ({outer_m1}) + 1"
-            else:
-                ratio_expr = f"{lhs} + 1"
-            answer = f"{divisor} * ({ratio_expr}) ** ({inv_exp})"
-            lines = [header]
-            lines.append(f"    # [.pyeqn] {pyeqn}")
-            lines.append(f"    # Solve for {target_var}:")
-            lines.append(
-                f"    # Step 1: ({target_var} / {divisor}) ** {exp_val}"
-                f" - 1 = {lhs} / ({outer_m1 if outer_m1 else '1'})"
-            )
-            lines.append(
-                f"    # Step 2: ({target_var} / {divisor}) ** {exp_val} = {ratio_expr}"
-            )
-            lines.append(
-                f"    # Step 3: {target_var} / {divisor}"
-                f" = ({ratio_expr}) ** ({inv_exp})"
-            )
-            lines.append(f"    # Step 4: {target_var} = {answer}")
-            lines.append(f"    {target_var} = {answer}")
-            return "\n".join(lines)
-        else:
-            # No "- 1" — simple (target/C)**n isolation
-            outer = _extract_outer_coeff(rhs, pow_frag)
-            if outer:
-                iso_expr = f"{lhs} / ({outer})"
-            else:
-                iso_expr = lhs
-            answer = f"{divisor} * ({iso_expr}) ** ({inv_exp})"
-            lines = [header]
-            lines.append(f"    # [.pyeqn] {pyeqn}")
-            lines.append(f"    # Solve for {target_var}:")
-            lines.append(
-                f"    # Step 1: ({target_var} / {divisor}) ** {exp_val} = {iso_expr}"
-            )
-            lines.append(
-                f"    # Step 2: {target_var} / {divisor} = ({iso_expr}) ** ({inv_exp})"
-            )
-            lines.append(f"    # Step 3: {target_var} = {answer}")
-            lines.append(f"    {target_var} = {answer}")
-            return "\n".join(lines)
 
-    # ── Pattern: (A / target) ** n — solve for target in denominator of ratio ──
-    # e.g. adiabatic_hp = (w/20) * ((P_2 / P_1) ** 0.286 - 1)
-    # Solving for P_1:  P_1 = P_2 / (adiabatic_hp * 20 / w + 1) ** (1/0.286)
-    # Solving for P_2:  P_2 = P_1 * (adiabatic_hp * 20 / w + 1) ** (1/0.286)
-    ratio_pow = _re.search(
-        r"\(\s*(\w+)\s*/\s*" + _re.escape(target_var) + r"\s*\)"
-        r"\s*\*\*\s*([\d.]+)",
-        eq,
-    )
-    if ratio_pow:
-        numerator_var = ratio_pow.group(1)
-        exp_val = ratio_pow.group(2)
-        inv_exp = f"1.0 / {exp_val}"
-        pow_frag = ratio_pow.group(0)
-        # Detect "- 1" pattern: coeff * ((A/B)**n - 1)
-        minus1 = _re.search(_re.escape(pow_frag) + r"\s*-\s*1", eq)
-        if minus1:
-            outer_m1 = _extract_outer_coeff(rhs, "(" + pow_frag + " - 1)")
-            if not outer_m1:
-                outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
-            if outer_m1:
-                ratio_expr = f"{lhs} / ({outer_m1}) + 1"
-            else:
-                ratio_expr = f"{lhs} + 1"
-        else:
-            outer = _extract_outer_coeff(rhs, pow_frag)
-            if outer:
-                ratio_expr = f"{lhs} / ({outer})"
-            else:
-                ratio_expr = lhs
-        answer = f"{numerator_var} / ({ratio_expr}) ** ({inv_exp})"
-        lines = [header]
-        lines.append(f"    # [.pyeqn] {pyeqn}")
-        lines.append(f"    # Solve for {target_var}:")
-        if minus1:
-            outer_label = outer_m1 if outer_m1 else "1"
-            lines.append(
-                f"    # Step 1: ({numerator_var} / {target_var}) ** {exp_val}"
-                f" - 1 = {lhs} / ({outer_label})"
-            )
-            lines.append(
-                f"    # Step 2: ({numerator_var} / {target_var}) ** {exp_val}"
-                f" = {ratio_expr}"
-            )
-        else:
-            lines.append(
-                f"    # Step 1: ({numerator_var} / {target_var}) ** {exp_val}"
-                f" = {ratio_expr}"
-            )
-        lines.append(f"    # Step 3: {target_var} = {answer}")
-        lines.append(f"    {target_var} = {answer}")
-        return "\n".join(lines)
+    for handler in _SCAFFOLD_HANDLERS:
+        result = handler(**ctx)
+        if result is not None:
+            return result
 
-    # ── Pattern: solve for NUMERATOR of (A / B) ** n ──
-    # e.g. adiabatic_hp = (w/20) * ((P_2 / P_1) ** 0.286 - 1), solve for P_2
-    ratio_pow_num = _re.search(
-        r"\(\s*" + _re.escape(target_var) + r"\s*/\s*(\w+)\s*\)"
-        r"\s*\*\*\s*([\d.]+)",
-        eq,
-    )
-    if ratio_pow_num:
-        denom_var = ratio_pow_num.group(1)
-        exp_val = ratio_pow_num.group(2)
-        inv_exp = f"1.0 / {exp_val}"
-        pow_frag = ratio_pow_num.group(0)
-        minus1 = _re.search(_re.escape(pow_frag) + r"\s*-\s*1", eq)
-        if minus1:
-            outer_m1 = _extract_outer_coeff(rhs, pow_frag + " - 1")
-            if outer_m1:
-                ratio_expr = f"{lhs} / ({outer_m1}) + 1"
-            else:
-                ratio_expr = f"{lhs} + 1"
-        else:
-            outer = _extract_outer_coeff(rhs, pow_frag)
-            if outer:
-                ratio_expr = f"{lhs} / ({outer})"
-            else:
-                ratio_expr = lhs
-        answer = f"{denom_var} * ({ratio_expr}) ** ({inv_exp})"
-        lines = [header]
-        lines.append(f"    # [.pyeqn] {pyeqn}")
-        lines.append(f"    # Solve for {target_var}:")
-        if minus1:
-            lines.append(
-                f"    # Step 1: ({target_var} / {denom_var}) ** {exp_val}"
-                f" = {ratio_expr}"
-            )
-        else:
-            lines.append(
-                f"    # Step 1: ({target_var} / {denom_var}) ** {exp_val}"
-                f" = {ratio_expr}"
-            )
-        lines.append(
-            f"    # Step 2: {target_var} / {denom_var} = ({ratio_expr}) ** ({inv_exp})"
-        )
-        lines.append(f"    # Step 3: {target_var} = {answer}")
-        lines.append(f"    {target_var} = {answer}")
-        return "\n".join(lines)
-
-    # ── Pattern: target ** n (bare power, e.g. rho ** 0.84) ──
-    # e.g. bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-    bare_pow = _re.search(r"\b" + _re.escape(target_var) + r"\s*\*\*\s*([\d.]+)", eq)
-    if bare_pow and total == 1:
-        exp_val = bare_pow.group(1)
-        inv_exp = f"1.0 / {exp_val}"
-        # Parse the structure: lhs = outer_coeff * (additive_const + coeff * target**exp * cofactors)
-        # We need to produce: target = ((lhs / outer - additive_const) / (coeff * cofactors)) ** inv_exp
-        # Try to parse: rhs = A * (B + C * target**exp * D)
-        #   where A is outer multiplicand, B is additive constant, C*D are cofactors
-
-        # Find cofactors: everything multiplied with target**exp in the same product
-        # The target**exp fragment in the expression
-        pow_frag = bare_pow.group(0)  # e.g. "rho ** 0.84"
-
-        # Try to detect if target**exp is inside parentheses with an additive term
-        # Pattern: (additive + coeff * target**exp * cofactors)
-        paren_match = _re.search(
-            r"\(([^()]*?)\b" + _re.escape(pow_frag) + r"([^()]*?)\)",
-            eq,
-        )
-        if paren_match:
-            inside_before = paren_match.group(1).strip()
-            inside_after = paren_match.group(2).strip()
-            # inside_before might be "0.5 + 0.0155 * " → split on +
-            # Find the additive constant and the coefficient of target
-            parts = _re.split(r"\s*\+\s*", inside_before, maxsplit=1)
-            if len(parts) == 2:
-                additive_const = parts[0].strip()
-                target_coeff = parts[1].rstrip("* ").strip()
-            else:
-                additive_const = None
-                target_coeff = inside_before.rstrip("* ").strip()
-            # cofactors after target**exp
-            cofactors = inside_after.lstrip("* ").strip()
-            # Full parenthesized expression
-            full_paren = paren_match.group(0)
-            # Outer coefficient: everything outside the parens
-            outer = _extract_outer_coeff(rhs, full_paren)
-
-            # Build concrete steps
-            lines = [header]
-            lines.append(f"    # [.pyeqn] {pyeqn}")
-            lines.append(f"    # Solve for {target_var}:")
-
-            step1_rhs = f"{lhs}"
-            if outer:
-                step1_rhs = f"{lhs} / {outer}"
-                lines.append(
-                    f"    # Step 1: {step1_rhs} = {inside_before}{pow_frag}{inside_after}"
-                )
-            else:
-                lines.append(
-                    f"    # Step 1: {lhs} = {inside_before}{pow_frag}{inside_after}"
-                )
-
-            if additive_const:
-                iso_base = f"({step1_rhs} - {additive_const})"
-                lines.append(
-                    f"    # Step 2: {iso_base}"
-                    f" = {target_coeff} * {pow_frag}"
-                    + (f" * {cofactors}" if cofactors else "")
-                )
-            else:
-                iso_base = step1_rhs
-
-            coeff_divisor = ""
-            if target_coeff and target_coeff != "1":
-                coeff_divisor += target_coeff
-            if cofactors:
-                if coeff_divisor:
-                    coeff_divisor += f" * {cofactors}"
-                else:
-                    coeff_divisor = cofactors
-
-            if coeff_divisor:
-                isolated = f"({iso_base} / ({coeff_divisor}))"
-            else:
-                isolated = iso_base
-
-            answer = f"{isolated} ** ({inv_exp})"
-            lines.append(f"    # Step 3: {target_var} ** {exp_val} = {isolated}")
-            lines.append(f"    # Step 4: {target_var} = {answer}")
-            lines.append(f"    {target_var} = {answer}")
-            return "\n".join(lines)
-
-        else:
-            # target**exp is NOT inside extra parens — simpler structure
-            # e.g. lhs = coeff * target ** exp
-            outer = _extract_outer_coeff(rhs, pow_frag)
-            if outer:
-                isolated = f"{lhs} / ({outer})"
-            else:
-                isolated = lhs
-            answer = f"({isolated}) ** ({inv_exp})"
-            lines = [header]
-            lines.append(f"    # [.pyeqn] {pyeqn}")
-            lines.append(f"    # Solve for {target_var}:")
-            lines.append(f"    # Step 1: {target_var} ** {exp_val} = {isolated}")
-            lines.append(f"    # Step 2: {target_var} = {answer}")
-            lines.append(f"    {target_var} = {answer}")
-            return "\n".join(lines)
-
-    # ── Pattern: fractional exponent with target in 2+ difference terms ──
-    # e.g. S_p = S_Th * ((P-p_s)*(460+T_i) / ((P-p_c)*(460+T_e)))**0.6
-    # Target appears in (target - X) AND (target - Y) under one **exp
-    # After clearing exponent → linear in target → cross-multiply
-    exp_match = _re.search(r"\*\*\s*(0\.\d+)", eq)
-    if exp_match and total >= 2:
-        exp_val = exp_match.group(1)
-        inv_exp_f = round(1.0 / float(exp_val), 6)
-        inv_exp = str(inv_exp_f)
-        diff_terms = _re.findall(r"\(" + _re.escape(target_var) + r"\s*-\s*(\w+)\)", eq)
-        if len(diff_terms) >= 2 and total <= 3:
-            # ── Ratio-of-differences pattern (e.g. eqn_10_19 P) ──
-            # After clearing exponent we get a ratio of linear terms in target.
-            # We need to know which differences are in numerator vs denominator.
-            # Parse: big_expr = (...numerator...) / (...denominator...)
-            # Inside the **exp, find the full fraction.
-
-            # For eqn_10_19: ((P-p_s)*(460+T_i) / ((P-p_c)*(460+T_e)))**0.6
-            # lhs_ratio = S_p / S_Th
-            # ratio_cleared = (S_p / S_Th) ** (1/0.6)
-            # Then: ratio_cleared = (P-p_s)*(460+T_i) / ((P-p_c)*(460+T_e))
-            # R * (P-p_c)*(460+T_e) = (P-p_s)*(460+T_i)
-
-            outer = _extract_outer_coeff(rhs, exp_match.group(0))
-            # outer should be like "S_Th * (...)" or just the coeff before **
-
-            # Extract what's inside (...)**exp
-            # Find the parenthesized expression before **exp
-            paren_depth = 0
-            exp_pos = eq.find("**" + exp_val)
-            if exp_pos < 0:
-                exp_pos = eq.find("** " + exp_val)
-            start = exp_pos - 1
-            while start >= 0 and eq[start] == " ":
-                start -= 1
-            if start >= 0 and eq[start] == ")":
-                end_p = start
-                depth = 1
-                start -= 1
-                while start >= 0 and depth > 0:
-                    if eq[start] == ")":
-                        depth += 1
-                    elif eq[start] == "(":
-                        depth -= 1
-                    start -= 1
-                inner_expr = eq[start + 2 : end_p]  # content inside outermost parens
-            else:
-                inner_expr = ""
-
-            if inner_expr:
-                # Find the outer multiplier of the **exp term
-                # rhs = outer_mult * (inner_expr)**exp
-                pow_full = f"({inner_expr})**{exp_val}"
-                # Try exact or with spaces
-                rhs_stripped = rhs.replace(" ", "")
-                pow_stripped = pow_full.replace(" ", "")
-                # Get the outer multiplier (everything in rhs except the power term)
-                outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})")
-                # Actually simpler: the outer multiplier for the whole expression
-                # For S_p = S_Th * (...)**0.6, outer_mult = S_Th
-                # lhs / outer_mult = (...)**0.6
-                # (lhs / outer_mult) ** (1/exp) = inner_expr
-
-                # Identify numerator and denominator of inner_expr
-                # inner_expr is like "(P - p_s)*(460 + T_i) / ((P - p_c)*(460 + T_e))"
-                # or "(P-p_0)*(460+T_i)*(P-p_c) / (P * (P-p_s)*(460+T_e))"
-                if " / " in inner_expr:
-                    num_part, den_part = inner_expr.split(" / ", 1)
-                    # Strip outer parens from denominator
-                    den_part = den_part.strip()
-                    if den_part.startswith("(") and den_part.endswith(")"):
-                        # Check if the outer parens are balanced
-                        depth = 0
-                        for i, c in enumerate(den_part):
-                            if c == "(":
-                                depth += 1
-                            elif c == ")":
-                                depth -= 1
-                            if depth == 0 and i < len(den_part) - 1:
-                                break
-                        else:
-                            den_part = den_part[1:-1]
-                    num_part = num_part.strip()
-                else:
-                    num_part = inner_expr
-                    den_part = ""
-
-                # Determine which diff terms are in numerator vs denominator
-                num_diffs = _re.findall(
-                    r"\(" + _re.escape(target_var) + r"\s*-\s*(\w+)\)", num_part
-                )
-                den_diffs = _re.findall(
-                    r"\(" + _re.escape(target_var) + r"\s*-\s*(\w+)\)", den_part
-                )
-
-                # Non-target factors in num and den
-                def _remove_target_diffs(expr, tv):
-                    """Remove (target - X) terms, leaving other factors."""
-                    cleaned = _re.sub(
-                        r"\(\s*" + _re.escape(tv) + r"\s*-\s*\w+\s*\)\s*\*?\s*",
-                        "",
-                        expr,
-                    )
-                    cleaned = cleaned.strip().strip("*").strip()
-                    return cleaned if cleaned else "1"
-
-                num_other = _remove_target_diffs(num_part, target_var)
-                den_other = _remove_target_diffs(den_part, target_var)
-
-                # Also handle bare target_var in denominator (e.g. "P * (P-p_s)...")
-                bare_in_den = bool(
-                    _re.search(r"\b" + _re.escape(target_var) + r"\b(?!\s*-)", den_part)
-                )
-
-                if bare_in_den:
-                    # Target appears as a bare multiplier in denominator too
-                    # This is the eqn_10_20 P case — needs brentq
-                    rhs_sub = _re.sub(
-                        r"\b" + _re.escape(target_var) + r"\b",
-                        target_var + "_val",
-                        rhs,
-                    )
-                    lines = [header]
-                    lines.append(f"    # [.pyeqn] {pyeqn}")
-                    lines.append(
-                        f"    # {target_var} appears {total} times"
-                        f" (including bare) — use numerical solver"
-                    )
-                    lines.append(f"    from scipy.optimize import brentq")
-                    lines.append(f"    def _res({target_var}_val):")
-                    lines.append(f"        return {rhs_sub} - {lhs}")
-                    lines.append(f"    lo, hi = None, None")
-                    lines.append(f"    prev = _res(max(p_0, p_c, p_s) + 1)")
-                    lines.append(f"    for i in range(1, 100000):")
-                    lines.append(f"        x = max(p_0, p_c, p_s) + 1 + i * 0.1")
-                    lines.append(f"        try:")
-                    lines.append(f"            cur = _res(x)")
-                    lines.append(f"        except Exception:")
-                    lines.append(f"            continue")
-                    lines.append(f"        if prev * cur < 0:")
-                    lines.append(f"            lo, hi = x - 0.1, x")
-                    lines.append(f"            break")
-                    lines.append(f"        prev = cur")
-                    lines.append(f"    if lo is None:")
-                    lines.append(
-                        f"        raise UnsolvedException("
-                        f'"No sign change found for {target_var}")'
-                    )
-                    lines.append(f"    {target_var} = brentq(_res, lo, hi)")
-                    lines.append(f"    return [{target_var}]")
-                    return "\n".join(lines)
-
-                # Linear case: only (target - X) terms, no bare target
-                # After clearing exponent:
-                #   R = (lhs / outer_mult) ** (1/exp)
-                #   R = num_part / den_part
-                #   R * den_factors * prod(target - den_diffs) = num_factors * prod(target - num_diffs)
-                # With exactly 2 diff terms (one num, one den):
-                #   R * den_other * (target - den_diff) = num_other * (target - num_diff)
-                #   target * (R * den_other - num_other) = R * den_other * den_diff - num_other * num_diff
-                #   target = (R * den_other * den_diff - num_other * num_diff) / (R * den_other - num_other)
-
-                # Find the outer coefficient before the **exp term
-                # rhs might be "S_Th * (inner)**0.6" → outer_mult = "S_Th"
-                # lhs/outer = (inner)**0.6 → R = (lhs/outer)**(1/0.6)
-                outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})**{exp_val}")
-                if not outer_mult:
-                    # Try with spaces around **
-                    outer_mult = _extract_outer_coeff(
-                        rhs, f"({inner_expr}) ** {exp_val}"
-                    )
-                # Also try matching without the exp
-                if not outer_mult:
-                    outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})")
-
-                if outer_mult:
-                    R_expr = f"({lhs} / ({outer_mult})) ** ({inv_exp})"
-                else:
-                    R_expr = f"({lhs}) ** ({inv_exp})"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(
-                    f"    # Step 1: ({lhs} / {outer_mult if outer_mult else '1'})"
-                    f" ** ({inv_exp}) = {inner_expr}"
-                )
-                lines.append(f"    R = {R_expr}")
-
-                if len(num_diffs) == 1 and len(den_diffs) == 1:
-                    nd = num_diffs[0]
-                    dd = den_diffs[0]
-                    # R * den_other * (target - dd) = num_other * (target - nd)
-                    lines.append(
-                        f"    # Step 2: R * ({den_other}) * ({target_var} - {dd})"
-                        f" = ({num_other}) * ({target_var} - {nd})"
-                    )
-                    lines.append(
-                        f"    # Step 3: {target_var} * (R * ({den_other}) - ({num_other}))"
-                        f" = R * ({den_other}) * {dd} - ({num_other}) * {nd}"
-                    )
-                    answer = (
-                        f"(R * ({den_other}) * {dd} - ({num_other}) * {nd})"
-                        f" / (R * ({den_other}) - ({num_other}))"
-                    )
-                    lines.append(f"    # Step 4: {target_var} = {answer}")
-                    lines.append(f"    {target_var} = {answer}")
-                    return "\n".join(lines)
-
-                elif len(num_diffs) == 2 and len(den_diffs) == 1:
-                    # e.g. eqn_10_20 with P in num twice and den once
-                    # but P also bare in den → already handled by brentq above
-                    # This case shouldn't occur for our equations, fallthrough
-                    pass
-                elif len(num_diffs) >= 1 and len(den_diffs) >= 1:
-                    # General: produce brentq as safe fallback
-                    pass
-
-    # ── Pattern: single-occurrence target inside (target - X) with **exp ──
-    # e.g. eqn_10_20 solve for p_0: (P - p_0) appears once
-    # Clear exponent, isolate (P - p_0), solve for p_0
-    if exp_match and total == 1:
-        exp_val = exp_match.group(1)
-        inv_exp_f = round(1.0 / float(exp_val), 6)
-        inv_exp = str(inv_exp_f)
-
-        # Parse the inner expression of (**exp) to find target's role
-        exp_pos = eq.find("**" + exp_val)
-        if exp_pos < 0:
-            exp_pos = eq.find("** " + exp_val)
-        if exp_pos >= 0:
-            start = exp_pos - 1
-            while start >= 0 and eq[start] == " ":
-                start -= 1
-            if start >= 0 and eq[start] == ")":
-                end_p = start
-                depth = 1
-                start -= 1
-                while start >= 0 and depth > 0:
-                    if eq[start] == ")":
-                        depth += 1
-                    elif eq[start] == "(":
-                        depth -= 1
-                    start -= 1
-                inner_expr = eq[start + 2 : end_p]
-            else:
-                inner_expr = ""
-        else:
-            inner_expr = ""
-
-        if inner_expr:
-            # Get outer multiplier
-            outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})**{exp_val}")
-            if not outer_mult:
-                outer_mult = _extract_outer_coeff(rhs, f"({inner_expr}) ** {exp_val}")
-            if not outer_mult:
-                outer_mult = _extract_outer_coeff(rhs, f"({inner_expr})")
-
-            if outer_mult:
-                R_expr = f"({lhs} / ({outer_mult})) ** ({inv_exp})"
-            else:
-                R_expr = f"({lhs}) ** ({inv_exp})"
-
-            # inner_expr after clearing exponent = R
-            # Find target in inner_expr
-            if " / " in inner_expr:
-                num_part, den_part = inner_expr.split(" / ", 1)
-                den_part = den_part.strip()
-                if den_part.startswith("(") and den_part.endswith(")"):
-                    depth = 0
-                    for i, c in enumerate(den_part):
-                        if c == "(":
-                            depth += 1
-                        elif c == ")":
-                            depth -= 1
-                        if depth == 0 and i < len(den_part) - 1:
-                            break
-                    else:
-                        den_part = den_part[1:-1]
-            else:
-                num_part = inner_expr
-                den_part = ""
-
-            target_in_num = bool(
-                _re.search(r"\b" + _re.escape(target_var) + r"\b", num_part)
-            )
-            target_in_den = bool(
-                _re.search(r"\b" + _re.escape(target_var) + r"\b", den_part)
-            )
-
-            # Helper to build factor_expr and answer for a diff term in numerator
-            def _handle_num_diff(match_obj, sign, other_var, num_part, den_part):
-                """Build scaffold lines for target found in numerator diff term.
-                sign='+' means (target - other), sign='-' means (other - target)."""
-                num_remaining = num_part.replace(match_obj.group(0), "1")
-                num_remaining = _re.sub(r"\b1\s*\*\s*", "", num_remaining)
-                num_remaining = _re.sub(r"\s*\*\s*1\b", "", num_remaining)
-                num_remaining = num_remaining.strip().strip("*").strip()
-                if not num_remaining or num_remaining == "1":
-                    num_remaining = ""
-
-                if den_part and num_remaining:
-                    factor_expr = f"R * ({den_part}) / ({num_remaining})"
-                elif den_part:
-                    factor_expr = f"R * ({den_part})"
-                elif num_remaining:
-                    factor_expr = f"R / ({num_remaining})"
-                else:
-                    factor_expr = "R"
-
-                if sign == "+":
-                    diff_str = f"({target_var} - {other_var})"
-                    answer = f"{other_var} + {factor_expr}"
-                else:
-                    diff_str = f"({other_var} - {target_var})"
-                    answer = f"{other_var} - {factor_expr}"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(f"    R = {R_expr}")
-                lines.append(f"    # After clearing **{exp_val}: R = {inner_expr}")
-                lines.append(f"    # {diff_str} = {factor_expr}")
-                lines.append(f"    # {target_var} = {answer}")
-                lines.append(f"    {target_var} = {answer}")
-                return "\n".join(lines)
-
-            # Case: (X - target) in numerator
-            rev_diff_num = _re.search(
-                r"\(\s*(\w+)\s*-\s*" + _re.escape(target_var) + r"\s*\)", num_part
-            )
-            if rev_diff_num:
-                return _handle_num_diff(
-                    rev_diff_num, "-", rev_diff_num.group(1), num_part, den_part
-                )
-
-            # Case: (target - X) in numerator
-            fwd_diff_num = _re.search(
-                r"\(\s*" + _re.escape(target_var) + r"\s*-\s*(\w+)\s*\)", num_part
-            )
-            if fwd_diff_num:
-                return _handle_num_diff(
-                    fwd_diff_num, "+", fwd_diff_num.group(1), num_part, den_part
-                )
-
-            # Case: (target - X) in denominator
-            diff_den = _re.search(
-                r"\(\s*" + _re.escape(target_var) + r"\s*-\s*(\w+)\s*\)", den_part
-            )
-            if diff_den:
-                other_var = diff_den.group(1)
-                den_remaining = den_part.replace(diff_den.group(0), "1")
-                den_remaining = _re.sub(r"\b1\s*\*\s*", "", den_remaining)
-                den_remaining = _re.sub(r"\s*\*\s*1\b", "", den_remaining)
-                den_remaining = den_remaining.strip().strip("*").strip()
-                if not den_remaining or den_remaining == "1":
-                    den_remaining = ""
-
-                # (target - other) = num_part / (R * den_remaining)
-                if num_part and den_remaining:
-                    factor_expr = f"({num_part}) / (R * ({den_remaining}))"
-                elif num_part:
-                    factor_expr = f"({num_part}) / R"
-                elif den_remaining:
-                    factor_expr = f"1.0 / (R * ({den_remaining}))"
-                else:
-                    factor_expr = f"1.0 / R"
-
-                answer = f"{other_var} + {factor_expr}"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(f"    R = {R_expr}")
-                lines.append(f"    # After clearing **{exp_val}: R = {inner_expr}")
-                lines.append(f"    # ({target_var} - {other_var}) = {factor_expr}")
-                lines.append(f"    # {target_var} = {answer}")
-                lines.append(f"    {target_var} = {answer}")
-                return "\n".join(lines)
-
-            # Case: (X - target) in denominator
-            rev_diff_den = _re.search(
-                r"\(\s*(\w+)\s*-\s*" + _re.escape(target_var) + r"\s*\)", den_part
-            )
-            if rev_diff_den:
-                other_var = rev_diff_den.group(1)
-                den_remaining = den_part.replace(rev_diff_den.group(0), "1")
-                den_remaining = _re.sub(r"\b1\s*\*\s*", "", den_remaining)
-                den_remaining = _re.sub(r"\s*\*\s*1\b", "", den_remaining)
-                den_remaining = den_remaining.strip().strip("*").strip()
-                if not den_remaining or den_remaining == "1":
-                    den_remaining = ""
-
-                # R * den = num, so (other - target) = num / (R * den_remaining)
-                if num_part and den_remaining:
-                    factor_expr = f"({num_part}) / (R * ({den_remaining}))"
-                elif num_part:
-                    factor_expr = f"({num_part}) / R"
-                elif den_remaining:
-                    factor_expr = f"1.0 / (R * ({den_remaining}))"
-                else:
-                    factor_expr = f"1.0 / R"
-
-                answer = f"{other_var} - {factor_expr}"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(f"    R = {R_expr}")
-                lines.append(f"    # After clearing **{exp_val}: R = {inner_expr}")
-                lines.append(f"    # ({other_var} - {target_var}) = {factor_expr}")
-                lines.append(f"    # {target_var} = {answer}")
-                lines.append(f"    {target_var} = {answer}")
-                return "\n".join(lines)
-
-            # Case: (C + target) in numerator or denominator
-            add_num = _re.search(
-                r"\((\d+)\s*\+\s*" + _re.escape(target_var) + r"\)", num_part
-            )
-            add_den = _re.search(
-                r"\((\d+)\s*\+\s*" + _re.escape(target_var) + r"\)", den_part
-            )
-            if add_num:
-                const = add_num.group(1)
-                num_remaining = num_part.replace(add_num.group(0), "1")
-                num_remaining = _re.sub(r"\b1\s*\*\s*", "", num_remaining)
-                num_remaining = _re.sub(r"\s*\*\s*1\b", "", num_remaining)
-                num_remaining = num_remaining.strip().strip("*").strip()
-                if not num_remaining or num_remaining == "1":
-                    num_remaining = ""
-
-                if den_part and num_remaining:
-                    factor_expr = f"R * ({den_part}) / ({num_remaining})"
-                elif den_part:
-                    factor_expr = f"R * ({den_part})"
-                elif num_remaining:
-                    factor_expr = f"R / ({num_remaining})"
-                else:
-                    factor_expr = "R"
-
-                answer = f"{factor_expr} - {const}"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(f"    R = {R_expr}")
-                lines.append(f"    # ({const} + {target_var}) = {factor_expr}")
-                lines.append(f"    # {target_var} = {answer}")
-                lines.append(f"    {target_var} = {answer}")
-                return "\n".join(lines)
-            elif add_den:
-                const = add_den.group(1)
-                den_remaining = den_part.replace(add_den.group(0), "1")
-                den_remaining = _re.sub(r"\b1\s*\*\s*", "", den_remaining)
-                den_remaining = _re.sub(r"\s*\*\s*1\b", "", den_remaining)
-                den_remaining = den_remaining.strip().strip("*").strip()
-                if not den_remaining or den_remaining == "1":
-                    den_remaining = ""
-
-                if num_part and den_remaining:
-                    factor_expr = f"({num_part}) / (R * ({den_remaining}))"
-                elif num_part:
-                    factor_expr = f"({num_part}) / R"
-                else:
-                    factor_expr = f"1.0 / R"
-
-                answer = f"{factor_expr} - {const}"
-
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solve for {target_var}:")
-                lines.append(f"    R = {R_expr}")
-                lines.append(f"    # ({const} + {target_var}) = {factor_expr}")
-                lines.append(f"    # {target_var} = {answer}")
-                lines.append(f"    {target_var} = {answer}")
-                return "\n".join(lines)
-
-    # ── Fallback: general single-occurrence → simple rearrangement ──
+    # ── Fallback: single-occurrence → simple rearrangement ──
     if total == 1:
         lines = [header]
         lines.append(f"    # [.pyeqn] {pyeqn}")
@@ -1365,36 +1250,15 @@ def _generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> s
 
     # ── Fallback: multiple occurrences → brentq numerical ──
     if total >= 2:
-        rhs_sub = _re.sub(
-            r"\b" + _re.escape(target_var) + r"\b",
-            target_var + "_val",
+        return _build_brentq_scaffold(
+            header,
+            pyeqn,
+            target_var,
+            lhs,
             rhs,
+            total,
+            f"{target_var} appears {total} times — use numerical solver",
         )
-        lines = [header]
-        lines.append(f"    # [.pyeqn] {pyeqn}")
-        lines.append(f"    # {target_var} appears {total} times — use numerical solver")
-        lines.append(f"    from scipy.optimize import brentq")
-        lines.append(f"    def _res({target_var}_val):")
-        lines.append(f"        return {rhs_sub} - {lhs}")
-        lines.append(f"    lo, hi = None, None")
-        lines.append(f"    prev = _res(0.01)")
-        lines.append(f"    for i in range(1, 100000):")
-        lines.append(f"        x = i * 0.01")
-        lines.append(f"        try:")
-        lines.append(f"            cur = _res(x)")
-        lines.append(f"        except Exception:")
-        lines.append(f"            continue")
-        lines.append(f"        if prev * cur < 0:")
-        lines.append(f"            lo, hi = x - 0.01, x")
-        lines.append(f"            break")
-        lines.append(f"        prev = cur")
-        lines.append(f"    if lo is None:")
-        lines.append(
-            f'        raise UnsolvedException("No sign change found for {target_var}")'
-        )
-        lines.append(f"    {target_var} = brentq(_res, lo, hi)")
-        lines.append(f"    return [{target_var}]")
-        return "\n".join(lines)
 
     return ""
 
@@ -1472,14 +1336,7 @@ def attempt_repair_shard(
                 code_text += f"\n    return [{broken_variant}]"
 
             # Build the complete shard file
-            import_header = (
-                "from cmath import log, sqrt, exp\n"
-                "from math import e, pi\n"
-                "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-                "from scipy.optimize import newton\n"
-                "import numpy as np\n"
-                "from vakyume.config import UnsolvedException\n\n"
-            )
+            import_header = SHARD_IMPORT_HEADER
 
             # Strip only top-level import lines from the scaffold
             # (keep indented imports like 'from scipy.optimize import brentq'
@@ -1615,14 +1472,7 @@ def attempt_repair_shard(
         )
 
     # --- Build the complete shard file ---
-    import_header = (
-        "from cmath import log, sqrt, exp\n"
-        "from math import e, pi\n"
-        "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-        "from scipy.optimize import newton\n"
-        "import numpy as np\n"
-        "from vakyume.config import UnsolvedException\n\n"
-    )
+    import_header = SHARD_IMPORT_HEADER
 
     # Strip any imports the LLM added (we provide our own)
     body_lines = []
@@ -1867,15 +1717,7 @@ def run_pipeline(
 def assemble_certified_library(ctx: PipelineContext, analysis):
     """Combines solved families into a single library file."""
     with open(ctx.certified_file, "w") as out:
-        out.write(
-            "from cmath import log, sqrt, exp\n"
-            "from math import e, pi\n"
-            "from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp\n"
-            "from scipy.optimize import newton\n"
-            "from vakyume.kwasak import kwasak\n"
-            "from vakyume.config import UnsolvedException\n"
-            "import numpy as np\n\n"
-        )
+        out.write(LIBRARY_IMPORT_HEADER + "\n")
         class_groups = {}
 
         for family_name in sorted(analysis["solved"]):
@@ -2022,17 +1864,3 @@ def get_method_source_from_class(file_path, class_name, method_name):
         end_idx += 1
 
     return "".join(lines[start_idx:end_idx])
-
-
-def extract_code_block(text):
-    fence = "```"
-    if fence not in text:
-        return text
-    in_code = False
-    code_lines = []
-    for line in text.splitlines():
-        if line.strip().startswith(fence):
-            if in_code:
-                break
-            in_code = True
-            continue

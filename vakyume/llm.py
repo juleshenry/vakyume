@@ -2,8 +2,6 @@ import ollama
 import re
 import time
 
-n = "\n"
-
 LLM_COOLDOWN_SECONDS = 5
 
 
