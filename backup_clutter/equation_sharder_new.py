@@ -170,11 +170,11 @@ def f(s, k):
     # for a,b in zip(wooo, wooo[1:]+[len(mama)]):
     #     # print(a,b+1)
     #     print(*["@"*54]*5,sep='\n')
-    #     print(w:=(n.join(  ['@kwasak_static'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] )))
+    #     print(w:=(n.join(  ['@kwasak'if i-1==0 or 0==len(mama)-1-i else mama[b]]+mama[a:b-1] )))
     return {
         s: [
             n.join(
-                [("    @kwasak_static" if a == 0 or b == len(mama) else mama[b])]
+                [("    @kwasak" if a == 0 or b == len(mama) else mama[b])]
                 + mama[a : b - 1]
             )
             for a, b in zip(wooo, wooo[1:] + [len(mama)])
@@ -202,10 +202,10 @@ for s, k in ded_clipz.items():
                     "from sympy import I, Piecewise, LambertW, Eq, symbols, solve\n"
                 )
                 ff.write("from scipy.optimize import newton\n")
-                ff.write("from kwasak import kwasak_static\n")
+                ff.write("from kwasak import kwasak\n")
                 ff.write("import pandas as pd\n")
                 ff.write("import numpy as np\n")
-                ff.write("from kwasak import kwasak_static\n")
+                ff.write("from kwasak import kwasak\n")
                 ff.write("from suck_consts import *\n")
                 ff.write("class " + normalize_class_name(a) + ":\n\n")
                 ff.write(aaa)

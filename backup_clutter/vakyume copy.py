@@ -1,14 +1,14 @@
 from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve
 from scipy.optimize import newton, fsolve
-from kwasak import kwasak_static
+from kwasak import kwasak
 import pandas as pd
 import numpy as np
 
 
 class VacuumTheory:
 
-    @kwasak_static
+    @kwasak
     def eqn_1_03(
         T: float = None, k: float = None, m: float = None, v: float = None, **kwargs
     ):
@@ -48,7 +48,7 @@ class VacuumTheory:
         result.append(v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_07(
         R: float = None,
         T: float = None,
@@ -99,7 +99,7 @@ class VacuumTheory:
         result.append(p)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_08(
         M: float = None,
         P: float = None,
@@ -159,7 +159,7 @@ class VacuumTheory:
         result.append(m)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_09(
         M: float = None,
         P: float = None,
@@ -210,7 +210,7 @@ class VacuumTheory:
         result.append(rho)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_10(
         P_1: float = None,
         P_2: float = None,
@@ -270,7 +270,7 @@ class VacuumTheory:
         result.append(V_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_11(
         M: float = None,
         P: float = None,
@@ -321,7 +321,7 @@ class VacuumTheory:
         result.append(q)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_12(Total_P: float = None, sum_partial_pressures: float = None, **kwargs):
         return
 
@@ -341,7 +341,7 @@ class VacuumTheory:
         result.append(sum_partial_pressures)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_13a(n: float = None, n_a: float = None, y_a: float = None, **kwargs):
         return
 
@@ -369,7 +369,7 @@ class VacuumTheory:
         result.append(y_a)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_1_13b(P: float = None, p_a: float = None, y_a: float = None, **kwargs):
         return
 
@@ -400,7 +400,7 @@ class VacuumTheory:
 
 class FluidFlowVacuumLines:
 
-    @kwasak_static
+    @kwasak
     def eqn_2_01(
         D: float = None,
         Re: float = None,
@@ -451,7 +451,7 @@ class FluidFlowVacuumLines:
         result.append(v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_02(delta: float = None, lambd: float = None, psi: float = None, **kwargs):
         return
 
@@ -481,7 +481,7 @@ class FluidFlowVacuumLines:
         result.append(psi)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_03(D: float = None, kn: float = None, lambd: float = None, **kwargs):
         return
 
@@ -509,7 +509,7 @@ class FluidFlowVacuumLines:
         result.append(lambd)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_04(
         _beta: float = None, mu: float = None, vel_grad: float = None, **kwargs
     ):
@@ -539,7 +539,7 @@ class FluidFlowVacuumLines:
         result.append(vel_grad)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_05(
         D: float = None,
         L: float = None,
@@ -596,7 +596,7 @@ class FluidFlowVacuumLines:
         result.append(q)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_06(
         lambd: float = None,
         mu: float = None,
@@ -638,7 +638,7 @@ class FluidFlowVacuumLines:
         result.append(v_a)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_07(
         T: float = None, k: float = None, m: float = None, v_a: float = None, **kwargs
     ):
@@ -676,7 +676,7 @@ class FluidFlowVacuumLines:
         result.append(v_a)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_08(
         M: float = None,
         P_c: float = None,
@@ -720,7 +720,7 @@ class FluidFlowVacuumLines:
         result.append(mu_c)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_08(
         M: float = None,
         P_c: float = None,
@@ -764,7 +764,7 @@ class FluidFlowVacuumLines:
         result.append(mu_c)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_10(
         Suc_Pres: float = None,
         delta_P: float = None,
@@ -797,7 +797,7 @@ class FluidFlowVacuumLines:
         result.append(oper_press)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_11(
         D: float = None,
         L: float = None,
@@ -859,7 +859,7 @@ class FluidFlowVacuumLines:
         result.append(v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_12(
         L: float = None,
         d: float = None,
@@ -930,7 +930,7 @@ class FluidFlowVacuumLines:
         result.append(v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_13(
         L: float = None,
         d: float = None,
@@ -1008,7 +1008,7 @@ class FluidFlowVacuumLines:
         result.append(rho)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_14(
         M: float = None,
         R: float = None,
@@ -1068,7 +1068,7 @@ class FluidFlowVacuumLines:
         result.append(v_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_15(Re: float = None, f: float = None, **kwargs):
         return
 
@@ -1088,7 +1088,7 @@ class FluidFlowVacuumLines:
         result.append(f)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_17(
         L: float = None,
         d: float = None,
@@ -1141,7 +1141,7 @@ class FluidFlowVacuumLines:
         result.append(v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_2_17(
         L: float = None,
         d: float = None,
@@ -1201,7 +1201,7 @@ class FluidFlowVacuumLines:
 
 class PressMgmt:
 
-    @kwasak_static
+    @kwasak
     def eqn_3_01(
         Abs_Pressure: float = None,
         BarometricPressure: float = None,
@@ -1234,7 +1234,7 @@ class PressMgmt:
         result.append(Vacuum)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_3_02(
         G: float = None,
         G_C: float = None,
@@ -1285,7 +1285,7 @@ class PressMgmt:
         result.append(rho)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_3_03(
         H_1: float = None,
         H_2: float = None,
@@ -1327,7 +1327,7 @@ class PressMgmt:
         result.append(P_P)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_3_04(KAPPA: float = None, P: float = None, V: float = None, **kwargs):
         return
 
@@ -1355,7 +1355,7 @@ class PressMgmt:
         result.append(V)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_3_05(
         P: float = None, P_P: float = None, V: float = None, V_P: float = None, **kwargs
     ):
@@ -1393,7 +1393,7 @@ class PressMgmt:
         result.append(V_P)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_3_06(
         H_1: float = None,
         H_2: float = None,
@@ -1447,7 +1447,7 @@ class PressMgmt:
 
 class AirLeak:
 
-    @kwasak_static
+    @kwasak
     def eqn_4_07(
         W: float = None,
         W_T: float = None,
@@ -1480,7 +1480,7 @@ class AirLeak:
         result.append(sum_individual_leak_rates)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_4_10(
         T: float = None,
         V: float = None,
@@ -1534,7 +1534,7 @@ class AirLeak:
 
 class ProcessApp1:
 
-    @kwasak_static
+    @kwasak
     def eqn_5_01(K_i: float = None, x_i: float = None, y_i: float = None, **kwargs):
         return
 
@@ -1562,7 +1562,7 @@ class ProcessApp1:
         result.append(y_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_02a(
         K_1: float = None, K_2: float = None, alpha_1_2: float = None, **kwargs
     ):
@@ -1592,7 +1592,7 @@ class ProcessApp1:
         result.append(alpha_1_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_02b(
         K_1: float = None,
         K_2: float = None,
@@ -1652,7 +1652,7 @@ class ProcessApp1:
         result.append(y_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_03(P_0_i: float = None, p_i: float = None, x_i: float = None, **kwargs):
         return
 
@@ -1680,7 +1680,7 @@ class ProcessApp1:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_04(
         P: float = None,
         P_0_i: float = None,
@@ -1722,7 +1722,7 @@ class ProcessApp1:
         result.append(y_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_05(
         P_0_1: float = None, P_0_2: float = None, alpha_12: float = None, **kwargs
     ):
@@ -1752,7 +1752,7 @@ class ProcessApp1:
         result.append(alpha_12)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_06(
         P_0_i: float = None,
         gamma_i: float = None,
@@ -1794,7 +1794,7 @@ class ProcessApp1:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_07(
         P: float = None,
         P_0_i: float = None,
@@ -1845,7 +1845,7 @@ class ProcessApp1:
         result.append(y_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_08(
         P_0_1: float = None,
         P_0_2: float = None,
@@ -1896,7 +1896,7 @@ class ProcessApp1:
         result.append(gamma_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_09(D: float = None, L_0: float = None, V_1: float = None, **kwargs):
         return
 
@@ -1926,7 +1926,7 @@ class ProcessApp1:
         result.append(V_1)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_10a(D: float = None, L_0: float = None, V_1: float = None, **kwargs):
         return
 
@@ -1956,7 +1956,7 @@ class ProcessApp1:
         result.append(V_1)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_10b(L_0: float = None, R: float = None, V_1: float = None, **kwargs):
         return
 
@@ -1984,7 +1984,7 @@ class ProcessApp1:
         result.append(V_1)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_10c(D: float = None, L_0: float = None, R: float = None, **kwargs):
         return
 
@@ -2012,7 +2012,7 @@ class ProcessApp1:
         result.append(R)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_11(B: float = None, L_N: float = None, V_0: float = None, **kwargs):
         return
 
@@ -2040,7 +2040,7 @@ class ProcessApp1:
         result.append(V_0)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_12(
         Eff: float = None,
         N_ES: float = None,
@@ -2082,7 +2082,7 @@ class ProcessApp1:
         result.append(T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_13(HETP: float = None, H_p: float = None, N_ES: float = None, **kwargs):
         return
 
@@ -2110,7 +2110,7 @@ class ProcessApp1:
         result.append(N_ES)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_14(
         M: float = None, P_0: float = None, T: float = None, W_E: float = None, **kwargs
     ):
@@ -2148,7 +2148,7 @@ class ProcessApp1:
         result.append(W_E)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_15(
         M_1: float = None,
         M_2: float = None,
@@ -2203,7 +2203,7 @@ class ProcessApp1:
         result.append(a_M_12)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_16(H_i: float = None, p_i: float = None, x_i: float = None, **kwargs):
         return
 
@@ -2231,7 +2231,7 @@ class ProcessApp1:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_5_17(
         H_2_1: float = None,
         H_2_3: float = None,
@@ -2285,7 +2285,7 @@ class ProcessApp1:
 
 class ProcessApp2:
 
-    @kwasak_static
+    @kwasak
     def eqn_6_01(
         T_1: float = None,
         T_2: float = None,
@@ -2427,7 +2427,7 @@ class ProcessApp2:
         result.append(w_v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_02(
         Q_v: float = None,
         T_1: float = None,
@@ -2510,7 +2510,7 @@ class ProcessApp2:
         result.append(w_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_04(
         Q_v: float = None, delta_h_v: float = None, w_v: float = None, **kwargs
     ):
@@ -2540,7 +2540,7 @@ class ProcessApp2:
         result.append(w_v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_06(
         Q_r: float = None, delta_h_v: float = None, f_m: float = None, **kwargs
     ):
@@ -2570,7 +2570,7 @@ class ProcessApp2:
         result.append(f_m)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_07(
         C_1: float = None,
         C_2: float = None,
@@ -2760,7 +2760,7 @@ class ProcessApp2:
         result.append(m_v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_08(
         C_1: float = None,
         C_2: float = None,
@@ -2985,7 +2985,7 @@ class ProcessApp2:
         result.append(w_v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_09(
         A: float = None,
         dV_dt: float = None,
@@ -3074,7 +3074,7 @@ class ProcessApp2:
         result.append(r_M)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_10(
         A: float = None,
         dV_dt: float = None,
@@ -3157,7 +3157,7 @@ class ProcessApp2:
         result.append(tau)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_6_11a(
         A_d: float = None,
         delta_T: float = None,
@@ -3263,7 +3263,7 @@ class ProcessApp2:
 
 class Precondensors:
 
-    @kwasak_static
+    @kwasak
     def eqn_7_01(P: float = None, p_i: float = None, y_i: float = None, **kwargs):
         return
 
@@ -3291,7 +3291,7 @@ class Precondensors:
         result.append(y_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_02(P_i_0: float = None, p_i: float = None, x_i: float = None, **kwargs):
         return
 
@@ -3319,7 +3319,7 @@ class Precondensors:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_03(
         P_i_0: float = None,
         epsilon_i: float = None,
@@ -3361,7 +3361,7 @@ class Precondensors:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_04a(P: float = None, p_c: float = None, p_nc: float = None, **kwargs):
         return
 
@@ -3389,7 +3389,7 @@ class Precondensors:
         result.append(p_nc)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_04aa(
         n_i: float = None,
         n_nc: float = None,
@@ -3431,7 +3431,7 @@ class Precondensors:
         result.append(p_nc)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_04ab(
         P_c: float = None,
         p: float = None,
@@ -3473,7 +3473,7 @@ class Precondensors:
         result.append(p_nc)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_04ac(
         P_c: float = None,
         n_i: float = None,
@@ -3524,7 +3524,7 @@ class Precondensors:
         result.append(p_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_05(
         N_i: float = None,
         N_nc: float = None,
@@ -3575,7 +3575,7 @@ class Precondensors:
         result.append(p_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_06(
         M: float = None,
         P: float = None,
@@ -3658,7 +3658,7 @@ class Precondensors:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_07(
         M: float = None,
         P: float = None,
@@ -3800,7 +3800,7 @@ class Precondensors:
         result.append(x_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_08(
         L_c: float = None,
         Q_condensor_heat_duty: float = None,
@@ -3842,7 +3842,7 @@ class Precondensors:
         result.append(del_T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_09(
         L_c: float = None,
         Q_condensor_heat_duty: float = None,
@@ -3903,7 +3903,7 @@ class Precondensors:
         result.append(rho)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_10(
         L_c_P: float = None,
         Q_condensor_heat_duty: float = None,
@@ -3936,7 +3936,7 @@ class Precondensors:
         result.append(del_T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_11(
         Q_condensor_heat_duty: float = None,
         U_v: float = None,
@@ -3978,7 +3978,7 @@ class Precondensors:
         result.append(del_T_LM)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_12(
         A: float = None,
         Q_condensor_heat_duty: float = None,
@@ -4020,7 +4020,7 @@ class Precondensors:
         result.append(del_T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_14a(
         A: float = None,
         Q_condensor_heat_duty: float = None,
@@ -4062,7 +4062,7 @@ class Precondensors:
         result.append(del_T_LM)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_14b(
         A: float = None,
         Q_condensor_heat_duty: float = None,
@@ -4123,7 +4123,7 @@ class Precondensors:
         result.append(del_T_2)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_15(U: float = None, sum_R: float = None, **kwargs):
         return
 
@@ -4143,7 +4143,7 @@ class Precondensors:
         result.append(sum_R)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_16(
         D_0: float = None,
         D_LM: float = None,
@@ -4453,7 +4453,7 @@ class Precondensors:
         result.append(x_w)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_17(R_0: float = None, R_nc: float = None, h_c: float = None, **kwargs):
         return
 
@@ -4481,7 +4481,7 @@ class Precondensors:
         result.append(h_c)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_7_18(
         D_0: float = None,
         D_LM: float = None,
@@ -4840,7 +4840,7 @@ class Precondensors:
 
 class SelectingPump:
 
-    @kwasak_static
+    @kwasak
     def eqn_8_01(
         NC: float = None,
         NS: float = None,
@@ -4882,7 +4882,7 @@ class SelectingPump:
         result.append(installation_cost)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_02(hp: float = None, installed_costs: float = None, **kwargs):
         return
 
@@ -4902,7 +4902,7 @@ class SelectingPump:
         result.append(installed_costs)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_03(hp: float = None, installed_costs: float = None, **kwargs):
         return
 
@@ -4924,7 +4924,7 @@ class SelectingPump:
         result.append(installed_costs)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_04(hp: float = None, installed_costs: float = None, **kwargs):
         return
 
@@ -4946,7 +4946,7 @@ class SelectingPump:
         result.append(installed_costs)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_05(
         Eff: float = None,
         actual_brake_horsepower: float = None,
@@ -4985,7 +4985,7 @@ class SelectingPump:
         result.append(theoretical_adiabatic_horsepower)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_06(
         M: float = None,
         P_1: float = None,
@@ -5155,7 +5155,7 @@ class SelectingPump:
         result.append(w)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_07(
         P_1: float = None,
         P_2: float = None,
@@ -5197,7 +5197,7 @@ class SelectingPump:
         result.append(w)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_08(
         P_1: float = None,
         P_2: float = None,
@@ -5247,7 +5247,7 @@ class SelectingPump:
         result.append(f)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_8_09(
         E_j: float = None,
         E_m: float = None,
@@ -5301,7 +5301,7 @@ class SelectingPump:
 
 class SteamJetInjectors:
 
-    @kwasak_static
+    @kwasak
     def eqn_9_01(
         A: float = None,
         rho_s: float = None,
@@ -5343,7 +5343,7 @@ class SteamJetInjectors:
         result.append(w_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_9_02(
         P_m: float = None,
         d_n: float = None,
@@ -5387,7 +5387,7 @@ class SteamJetInjectors:
         result.append(w_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_9_03(
         P_s: float = None,
         V: float = None,
@@ -5429,7 +5429,7 @@ class SteamJetInjectors:
         result.append(w_j)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_9_04(
         AEL: float = None,
         SC: float = None,
@@ -5471,7 +5471,7 @@ class SteamJetInjectors:
         result.append(w_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_9_05(
         V: float = None,
         r_h: float = None,
@@ -5516,7 +5516,7 @@ class SteamJetInjectors:
 
 class LiquidRing:
 
-    @kwasak_static
+    @kwasak
     def eqn_10_01(D_r: float = None, sig_R: float = None, w: float = None, **kwargs):
         return
 
@@ -5544,7 +5544,7 @@ class LiquidRing:
         result.append(w)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_02(
         PS: float = None,
         Q_gas: float = None,
@@ -5595,7 +5595,7 @@ class LiquidRing:
         result.append(dt)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_03(N_mfw: float = None, Q_gas: float = None, T: float = None, **kwargs):
         return
 
@@ -5623,7 +5623,7 @@ class LiquidRing:
         result.append(T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_04(
         Q_gas: float = None,
         SP_1: float = None,
@@ -5683,7 +5683,7 @@ class LiquidRing:
         result.append(t)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_05(
         P_1: float = None,
         P_2: float = None,
@@ -5734,7 +5734,7 @@ class LiquidRing:
         result.append(t)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_06(
         P_1: float = None,
         P_2: float = None,
@@ -5785,7 +5785,7 @@ class LiquidRing:
         result.append(t)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_08(
         bhp: float = None,
         c_p: float = None,
@@ -5879,7 +5879,7 @@ class LiquidRing:
         result.append(w_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_09(
         T_c: float = None, T_s: float = None, delta_T: float = None, **kwargs
     ):
@@ -5909,7 +5909,7 @@ class LiquidRing:
         result.append(delta_T)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_10(
         bhp: float = None,
         bhp_0: float = None,
@@ -5973,7 +5973,7 @@ class LiquidRing:
         result.append(rho)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_11(T_c: float = None, T_s: float = None, **kwargs):
         return
 
@@ -5993,7 +5993,7 @@ class LiquidRing:
         result.append(T_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_12(T_c: float = None, T_s: float = None, **kwargs):
         return
 
@@ -6013,7 +6013,7 @@ class LiquidRing:
         result.append(T_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_13(T_c: float = None, T_s: float = None, **kwargs):
         return
 
@@ -6033,7 +6033,7 @@ class LiquidRing:
         result.append(T_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_14(T_c: float = None, T_s: float = None, **kwargs):
         return
 
@@ -6053,7 +6053,7 @@ class LiquidRing:
         result.append(T_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_15(
         P: float = None,
         S_Th: float = None,
@@ -6095,7 +6095,7 @@ class LiquidRing:
         result.append(p_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_16(
         P: float = None,
         S_0: float = None,
@@ -6197,7 +6197,7 @@ class LiquidRing:
         result.append(p_0)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_17(
         P: float = None,
         S_0: float = None,
@@ -6364,7 +6364,7 @@ class LiquidRing:
         result.append(p_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_18(
         P: float = None,
         S_Th: float = None,
@@ -6485,7 +6485,7 @@ class LiquidRing:
         result.append(p_s)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_19(
         P: float = None,
         S_Th: float = None,
@@ -6606,7 +6606,7 @@ class LiquidRing:
         p_s = P - power_term * ((P - p_c) * (460 + T_e)) / (460 + T_i)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_10_20(
         P: float = None,
         S_0: float = None,
@@ -6857,7 +6857,7 @@ class LiquidRing:
 
         return [p_s]
 
-    @kwasak_static
+    @kwasak
     def eqn_10_21(P: float = None, P_d: float = None, P_prime: float = None, **kwargs):
         return
 
@@ -6888,7 +6888,7 @@ class LiquidRing:
 
 class RotaryPistonVane:
 
-    @kwasak_static
+    @kwasak
     def eqn_11_01(
         PS: float = None,
         Q_0: float = None,
@@ -6960,7 +6960,7 @@ class RotaryPistonVane:
         result.append(dT)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_11_02(
         Q: float = None,
         Q_0: float = None,
@@ -7325,7 +7325,7 @@ class RotaryPistonVane:
 
         return [t]
 
-    @kwasak_static
+    @kwasak
     def eqn_11_03(F_s: float = None, t: float = None, t_c: float = None, **kwargs):
         return
 
@@ -7353,7 +7353,7 @@ class RotaryPistonVane:
         result.append(t_c)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_11_04(p_g: float = None, p_s: float = None, p_v: float = None, **kwargs):
         return
 
@@ -7383,7 +7383,7 @@ class RotaryPistonVane:
         result.append(p_v)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_11_05(
         P_0_v: float = None,
         P_D: float = None,
@@ -7425,7 +7425,7 @@ class RotaryPistonVane:
         result.append(p_v_max)
         return result
 
-    @kwasak_static
+    @kwasak
     def eqn_11_06(
         P_0_V: float = None,
         P_D: float = None,

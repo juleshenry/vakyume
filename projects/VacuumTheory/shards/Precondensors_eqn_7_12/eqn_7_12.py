@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_7_12__A_cap import eqn_7_12__A
 from .eqn_7_12__Q_condensor_heat_duty_cap import eqn_7_12__Q_condensor_heat_duty
 from .eqn_7_12__U_cap import eqn_7_12__U
@@ -17,6 +17,6 @@ class Precondensors:
     eqn_7_12__U = eqn_7_12__U
     eqn_7_12__del_T = eqn_7_12__del_T
 
-    @kwasak_static
+    @kwasak
     def eqn_7_12(self, A=None, Q_condensor_heat_duty=None, U=None, del_T=None):
         return

@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_8_5__Eff_cap import eqn_8_5__Eff
 from .eqn_8_5__actual_brake_horsepower import eqn_8_5__actual_brake_horsepower
 from .eqn_8_5__theoretical_adiabatic_horsepower import eqn_8_5__theoretical_adiabatic_horsepower
@@ -15,6 +15,6 @@ class SelectingPump:
     eqn_8_5__actual_brake_horsepower = eqn_8_5__actual_brake_horsepower
     eqn_8_5__theoretical_adiabatic_horsepower = eqn_8_5__theoretical_adiabatic_horsepower
 
-    @kwasak_static
+    @kwasak
     def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
         return

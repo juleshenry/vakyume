@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_11_6__P_0_V_cap import eqn_11_6__P_0_V
 from .eqn_11_6__P_D_cap import eqn_11_6__P_D
 from .eqn_11_6__P_v_0_cap import eqn_11_6__P_v_0
@@ -25,6 +25,6 @@ class RotaryPistonVane:
     eqn_11_6__p_g = eqn_11_6__p_g
     eqn_11_6__p_v_max = eqn_11_6__p_v_max
 
-    @kwasak_static
+    @kwasak
     def eqn_11_6(self, P_0_V=None, P_D=None, P_v_0=None, S_B=None, S_D=None, p_b=None, p_g=None, p_v_max=None):
         return

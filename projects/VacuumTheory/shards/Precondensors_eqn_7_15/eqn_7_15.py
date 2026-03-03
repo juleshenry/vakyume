@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_7_15__U_cap import eqn_7_15__U
 from .eqn_7_15__sum_R_cap import eqn_7_15__sum_R
 
@@ -13,6 +13,6 @@ class Precondensors:
     eqn_7_15__U = eqn_7_15__U
     eqn_7_15__sum_R = eqn_7_15__sum_R
 
-    @kwasak_static
+    @kwasak
     def eqn_7_15(self, U=None, sum_R=None):
         return

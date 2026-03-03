@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_2_28__C_cap import eqn_2_28__C
 from .eqn_2_28__D_cap import eqn_2_28__D
 from .eqn_2_28__L_cap import eqn_2_28__L
@@ -19,6 +19,6 @@ class FluidFlowVacuumLines:
     eqn_2_28__P_p = eqn_2_28__P_p
     eqn_2_28__mu = eqn_2_28__mu
 
-    @kwasak_static
+    @kwasak
     def eqn_2_28(self, C=None, D=None, L=None, P_p=None, mu=None):
         return

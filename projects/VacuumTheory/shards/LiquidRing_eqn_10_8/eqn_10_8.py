@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_10_8__bhp import eqn_10_8__bhp
 from .eqn_10_8__c_p import eqn_10_8__c_p
 from .eqn_10_8__delta_T_cap import eqn_10_8__delta_T
@@ -23,6 +23,6 @@ class LiquidRing:
     eqn_10_8__rho = eqn_10_8__rho
     eqn_10_8__w_i = eqn_10_8__w_i
 
-    @kwasak_static
+    @kwasak
     def eqn_10_8(self, bhp=None, c_p=None, delta_T=None, delta_h_i=None, f_a=None, rho=None, w_i=None):
         return

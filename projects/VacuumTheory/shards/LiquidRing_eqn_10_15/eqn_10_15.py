@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_10_15__P_cap import eqn_10_15__P
 from .eqn_10_15__S_Th_cap import eqn_10_15__S_Th
 from .eqn_10_15__S_p_cap import eqn_10_15__S_p
@@ -17,6 +17,6 @@ class LiquidRing:
     eqn_10_15__S_p = eqn_10_15__S_p
     eqn_10_15__p_s = eqn_10_15__p_s
 
-    @kwasak_static
+    @kwasak
     def eqn_10_15(self, P=None, S_Th=None, S_p=None, p_s=None):
         return

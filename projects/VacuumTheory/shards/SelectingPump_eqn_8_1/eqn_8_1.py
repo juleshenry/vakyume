@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_8_1__NC_cap import eqn_8_1__NC
 from .eqn_8_1__NS_cap import eqn_8_1__NS
 from .eqn_8_1__SCON_cap import eqn_8_1__SCON
@@ -17,6 +17,6 @@ class SelectingPump:
     eqn_8_1__SCON = eqn_8_1__SCON
     eqn_8_1__installation_cost = eqn_8_1__installation_cost
 
-    @kwasak_static
+    @kwasak
     def eqn_8_1(self, NC=None, NS=None, SCON=None, installation_cost=None):
         return

@@ -1,11 +1,11 @@
 from math import log, sqrt, exp, pow, e
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve
 from scipy.optimize import newton
-from kwasak import kwasak_static
+from kwasak import kwasak
 import numpy as np
 
 class Kinematics:
-    @kwasak_static
+    @kwasak
     def eqn_1_1(a=None, t=None, v=None, v0=None, **kwargs):
         return
 

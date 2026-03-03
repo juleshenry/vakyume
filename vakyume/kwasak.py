@@ -56,10 +56,13 @@ Published.
 import inspect
 
 
-def kwasak_static(func):
+def kwasak(func):
     # fmt:off
     def wrapper(self, **kw):
         params = list(inspect.signature(func).parameters)
+        # Skip 'self' so instance methods work correctly
+        if params and params[0] == 'self':
+            params = params[1:]
         if params and params[-1] == 'kwargs':
             params = params[:-1]
         if len(m:=[w for w in params if w not in kw])-1:

@@ -2,12 +2,12 @@ from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from vakyume.config import UnsolvedException
 import numpy as np
 
 class Basic:
-    @kwasak_static
+    @kwasak
     def eqn_1_1(x=None, y=None, z=None, **kwargs):
         return
 
@@ -30,7 +30,7 @@ class Basic:
         result.append(z)
         return result
 class Rotary:
-    @kwasak_static
+    @kwasak
     def eqn_11_2(Q=None, Q_0=None, Q_external_gas_throughput=None, SP_1=None, SP_2=None, S_vol_pump_speed=None, V=None, t=None, **kwargs):
         return
 

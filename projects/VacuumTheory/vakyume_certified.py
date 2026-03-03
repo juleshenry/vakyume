@@ -2,12 +2,12 @@ from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
 from scipy.optimize import newton
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from vakyume.config import UnsolvedException
 import numpy as np
 
 class AirLeak:
-    @kwasak_static
+    @kwasak
     def eqn_4_10(self, T=None, V=None, del_P=None, leakage=None, t=None):
         return
 
@@ -41,7 +41,7 @@ class AirLeak:
         t = 3.127*V*del_P/(T*leakage)
         result.append(t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_4_7(self, W=None, W_T=None, sum_individual_leak_rates=None):
         return
 
@@ -64,7 +64,7 @@ class AirLeak:
         result.append(sum_individual_leak_rates)
         return result
 class FluidFlowVacuumLines:
-    @kwasak_static
+    @kwasak
     def eqn_2_1(self, D=None, Re=None, mu=None, rho=None, v=None):
         return
 
@@ -98,7 +98,7 @@ class FluidFlowVacuumLines:
         v = Re*mu/(D*rho)
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_10(self, Suc_Pres=None, delta_P=None, oper_press=None):
         return
 
@@ -120,7 +120,7 @@ class FluidFlowVacuumLines:
         oper_press = Suc_Pres + delta_P
         result.append(oper_press)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
         return
 
@@ -162,7 +162,7 @@ class FluidFlowVacuumLines:
         v = sqrt(2)*sqrt(D*g_c*h_r/(L*f))
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
         return
 
@@ -210,7 +210,7 @@ class FluidFlowVacuumLines:
         v = 0.681202703290172*sqrt(d*delta_P*g/(L*f*rho))
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
         return
 
@@ -260,7 +260,7 @@ class FluidFlowVacuumLines:
         rho = 0.465116279069767*d**5*delta_P/(L*f*q**2)
         result.append(rho)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
         return
 
@@ -300,7 +300,7 @@ class FluidFlowVacuumLines:
         v_s = sqrt(R*T*g_c*k/M)
         result.append(v_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_15(self, Re=None, f=None):
         return
 
@@ -316,7 +316,7 @@ class FluidFlowVacuumLines:
         f = 0.316/Re**(1/4)
         result.append(f)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_16(self, Re=None, f=None):
         return
 
@@ -332,7 +332,7 @@ class FluidFlowVacuumLines:
         f = 64/Re
         result.append(f)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_17(self, L=None, d=None, delta_P=None, mu=None, v=None):
         return
 
@@ -374,7 +374,7 @@ class FluidFlowVacuumLines:
         v = 28.9855072463768*d**2*delta_P/(L*mu)
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_18a(self, D_eq=None, R_ll=None):
         return
 
@@ -390,7 +390,7 @@ class FluidFlowVacuumLines:
         R_ll = D_eq/4
         result.append(R_ll)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_18b(self, R_ll=None, h=None, w=None):
         return
 
@@ -412,7 +412,7 @@ class FluidFlowVacuumLines:
         w = 2*R_ll*h/(-2*R_ll + h)
         result.append(w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_19a(self, R_ll=None, Re=None, mu=None, rho=None, v=None):
         return
 
@@ -446,7 +446,7 @@ class FluidFlowVacuumLines:
         v = Re*mu/(4*R_ll*rho)
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_19b(self, Re=None, h=None, mu=None, rho=None, v=None, w=None):
         return
 
@@ -486,7 +486,7 @@ class FluidFlowVacuumLines:
         w = Re*h*mu/(-Re*mu + 2*h*rho*v)
         result.append(w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_2(self, delta=None, lambd=None, psi=None):
         return
 
@@ -510,7 +510,7 @@ class FluidFlowVacuumLines:
         psi = 0.225079079039277*lambd/delta**2
         result.append(psi)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
         return
 
@@ -532,7 +532,7 @@ class FluidFlowVacuumLines:
         sum_pipe = L - sum_equivalent_length
         result.append(sum_pipe)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_22(self, P_s=None, Q_throughput=None, S_p=None):
         return
 
@@ -554,7 +554,7 @@ class FluidFlowVacuumLines:
         S_p = Q_throughput/P_s
         result.append(S_p)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_25(self, C=None, P_1=None, P_2=None, Q_throughput=None):
         return
 
@@ -582,7 +582,7 @@ class FluidFlowVacuumLines:
         Q_throughput = C*(P_1 - P_2)
         result.append(Q_throughput)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_26(self, D=None, L=None, P_downstream=None, P_p=None, P_upstream=None, mu=None, q=None):
         return
 
@@ -634,7 +634,7 @@ class FluidFlowVacuumLines:
         q = 0.0245436926061703*D**4*(-P_downstream + P_upstream)/(L*mu)
         result.append(q)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_28(self, C=None, D=None, L=None, P_p=None, mu=None):
         return
 
@@ -674,7 +674,7 @@ class FluidFlowVacuumLines:
         mu = 0.0245436926061703*D**4*P_p/(C*L)
         result.append(mu)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_29(self, C=None, S_1=None, S_2=None):
         return
 
@@ -696,7 +696,7 @@ class FluidFlowVacuumLines:
         S_2 = C*S_1/(C - S_1)
         result.append(S_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_3(self, D=None, kn=None, lambd=None):
         return
 
@@ -718,7 +718,7 @@ class FluidFlowVacuumLines:
         lambd = D*kn
         result.append(lambd)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_31(self, C=None, S_p=None, S_pump_speed=None):
         return
 
@@ -740,7 +740,7 @@ class FluidFlowVacuumLines:
         S_pump_speed = C*S_p/(C + S_p)
         result.append(S_pump_speed)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_32(self, C_series=None, geometric_sum_C=None):
         return
 
@@ -756,7 +756,7 @@ class FluidFlowVacuumLines:
         geometric_sum_C = 1/C_series
         result.append(geometric_sum_C)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_33(self, C_paralell=None, arithmetic_sum_C=None):
         return
 
@@ -772,7 +772,7 @@ class FluidFlowVacuumLines:
         arithmetic_sum_C = 1/C_paralell
         result.append(arithmetic_sum_C)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_34(self, C=None, C_1=None, C_2=None, D=None, L=None, P_p=None, mu=None):
         return
 
@@ -824,7 +824,7 @@ class FluidFlowVacuumLines:
         mu = C_1*D**4*P_p/(C*L - C_2*D**3)
         result.append(mu)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_35(self, C_L=None, C_T=None, F_p=None):
         return
 
@@ -846,7 +846,7 @@ class FluidFlowVacuumLines:
         F_p = C_T/C_L
         result.append(F_p)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_36(self, C=None, C_0=None, F_t=None):
         return
 
@@ -868,7 +868,7 @@ class FluidFlowVacuumLines:
         F_t = C/C_0
         result.append(F_t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_37(self, A=None, C=None, F_t=None, M=None, T=None):
         return
 
@@ -902,7 +902,7 @@ class FluidFlowVacuumLines:
         T = 0.000681714375311032*C**2*M/(A*F_t)
         result.append(T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_4(self, _beta=None, mu=None, vel_grad=None):
         return
 
@@ -924,7 +924,7 @@ class FluidFlowVacuumLines:
         vel_grad = _beta/mu
         result.append(vel_grad)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
         return
 
@@ -964,7 +964,7 @@ class FluidFlowVacuumLines:
         q = 0.0245436926061703*D**4*delta_P/(L*mu)
         result.append(q)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
         return
 
@@ -992,7 +992,7 @@ class FluidFlowVacuumLines:
         v_a = 2.85714285714286*mu/(lambd*rho)
         result.append(v_a)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_7(self, T=None, k=None, m=None, v_a=None):
         return
 
@@ -1020,7 +1020,7 @@ class FluidFlowVacuumLines:
         v_a = 1.59576912160573*sqrt(T*k/m)
         result.append(v_a)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_2_8(self, M=None, P_c=None, T_c=None, mu_c=None):
         return
 
@@ -1051,7 +1051,7 @@ class FluidFlowVacuumLines:
         result.append(mu_c)
         return result
 class LiquidRing:
-    @kwasak_static
+    @kwasak
     def eqn_10_1(self, D_r=None, sig_R=None, w=None):
         return
 
@@ -1073,7 +1073,7 @@ class LiquidRing:
         w = 229.357798165138*sig_R/D_r
         result.append(w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_10(self, bhp=None, bhp_0=None, mu=None, rho=None):
         return
 
@@ -1110,7 +1110,7 @@ class LiquidRing:
         # Step 4: rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16)) ** (1.0 / 0.84)
         rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16)) ** (1.0 / 0.84)
         return [rho]
-    @kwasak_static
+    @kwasak
     def eqn_10_11(self, T_c=None, T_s=None):
         return
 
@@ -1126,7 +1126,7 @@ class LiquidRing:
         T_s = T_c - 10
         result.append(T_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_12(self, T_c=None, T_s=None):
         return
 
@@ -1142,7 +1142,7 @@ class LiquidRing:
         T_s = T_c - 5
         result.append(T_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_13(self, T_c=None, T_s=None):
         return
 
@@ -1158,7 +1158,7 @@ class LiquidRing:
         T_s = T_c - 25
         result.append(T_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_14(self, T_c=None, T_s=None):
         return
 
@@ -1174,7 +1174,7 @@ class LiquidRing:
         T_s = T_c - 12
         result.append(T_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_15(self, P=None, S_Th=None, S_p=None, p_s=None):
         return
 
@@ -1202,7 +1202,7 @@ class LiquidRing:
         p_s = P*(S_Th - S_p)/S_Th
         result.append(p_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_16(self, P=None, S_0=None, S_Th=None, p_0=None):
         return
 
@@ -1238,7 +1238,7 @@ class LiquidRing:
         p_0 = P - P/(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
         result.append(p_0)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_17(self, P=None, S_0=None, S_Th=None, p_0=None, p_s=None):
         return
 
@@ -1284,7 +1284,7 @@ class LiquidRing:
         p_s = -P*(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5 + P + p_0*(-0.5*(S_Th/S_0)**0.333333333333333 + 0.866025403784439*I*(S_Th/S_0)**0.333333333333333)**5
         result.append(p_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_18(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
         return
 
@@ -1330,7 +1330,7 @@ class LiquidRing:
         p_s = (P*S_Th*T_i + 460*P*S_Th - P*S_p*T_e - 460*P*S_p + S_p*T_e*p_c + 460*S_p*p_c)/(S_Th*(T_i + 460))
         result.append(p_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_19(self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None):
         return
 
@@ -1396,7 +1396,7 @@ class LiquidRing:
         p_s = (-P*T_e*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + P*T_i - 460.0*P*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*P + T_e*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5 + 460.0*p_c*(-0.5*(S_p/S_Th)**0.333333333333333 + 0.866025403784439*I*(S_p/S_Th)**0.333333333333333)**5)/(T_i + 460.0)
         result.append(p_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_2(self, PS=None, Q_gas=None, V=None, dP=None, dt=None):
         return
 
@@ -1430,7 +1430,7 @@ class LiquidRing:
         dt = -V*dP/(PS - Q_gas)
         result.append(dt)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_20(self, P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None):
         return
 
@@ -1511,7 +1511,7 @@ class LiquidRing:
         # p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
         p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
         return [p_s]
-    @kwasak_static
+    @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
         return
 
@@ -1533,7 +1533,7 @@ class LiquidRing:
         P_prime = 760*P/P_d
         result.append(P_prime)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_3(self, N_mfw=None, Q_gas=None, T=None):
         return
 
@@ -1555,7 +1555,7 @@ class LiquidRing:
         T = 0.108108108108108*Q_gas/N_mfw
         result.append(T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_4(self, Q_gas=None, SP_1=None, SP_2=None, S_p=None, V=None, t=None):
         return
 
@@ -1595,7 +1595,7 @@ class LiquidRing:
         t = V*log((Q_gas - SP_1)/(Q_gas - SP_2))/S_p
         result.append(t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_5(self, P_1=None, P_2=None, S_p=None, V=None, t=None):
         return
 
@@ -1629,7 +1629,7 @@ class LiquidRing:
         t = V*log(P_1/P_2)/S_p
         result.append(t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_6(self, P_1=None, P_2=None, S_a=None, V=None, t=None):
         return
 
@@ -1663,7 +1663,7 @@ class LiquidRing:
         t = V*log(P_1/P_2)/S_a
         result.append(t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_8(self, bhp=None, c_p=None, delta_T=None, delta_h_i=None, f_a=None, rho=None, w_i=None):
         return
 
@@ -1709,7 +1709,7 @@ class LiquidRing:
         w_i = 0.02*(-127250.0*bhp + 401.0*c_p*delta_T*f_a*rho)/delta_h_i
         result.append(w_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_10_9(self, T_c=None, T_s=None, delta_T=None):
         return
 
@@ -1732,7 +1732,7 @@ class LiquidRing:
         result.append(delta_T)
         return result
 class Precondensors:
-    @kwasak_static
+    @kwasak
     def eqn_7_1(self, P=None, p_i=None, y_i=None):
         return
 
@@ -1754,7 +1754,7 @@ class Precondensors:
         y_i = p_i/P
         result.append(y_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_10(self, L_c_P=None, Q_condensor_heat_duty=None, del_T=None):
         return
 
@@ -1776,7 +1776,7 @@ class Precondensors:
         del_T = Q_condensor_heat_duty/(500*L_c_P)
         result.append(del_T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_11(self, Q_condensor_heat_duty=None, U_v=None, V_c=None, del_T_LM=None):
         return
 
@@ -1804,7 +1804,7 @@ class Precondensors:
         del_T_LM = Q_condensor_heat_duty/(U_v*V_c)
         result.append(del_T_LM)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_12(self, A=None, Q_condensor_heat_duty=None, U=None, del_T=None):
         return
 
@@ -1832,7 +1832,7 @@ class Precondensors:
         del_T = Q_condensor_heat_duty/(A*U)
         result.append(del_T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_14a(self, A=None, Q_condensor_heat_duty=None, U=None, del_T_LM=None):
         return
 
@@ -1860,7 +1860,7 @@ class Precondensors:
         del_T_LM = Q_condensor_heat_duty/(A*U)
         result.append(del_T_LM)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_14b(self, A=None, Q_condensor_heat_duty=None, U=None, del_T_1=None, del_T_2=None):
         return
 
@@ -1894,7 +1894,7 @@ class Precondensors:
         del_T_2 = del_T_1 - exp(LambertW(Q_condensor_heat_duty/(A*U)))
         result.append(del_T_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_15(self, U=None, sum_R=None):
         return
 
@@ -1910,7 +1910,7 @@ class Precondensors:
         sum_R = 1/U
         result.append(sum_R)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_16(self, D_0=None, D_LM=None, D_i=None, R_f_0=None, R_fi=None, U_0=None, h_0=None, h_i=None, k_w=None, x_w=None):
         return
 
@@ -1974,7 +1974,7 @@ class Precondensors:
         x_w = -D_LM*R_fi*k_w/D_i - D_LM*k_w/(D_i*h_i) - D_LM*R_f_0*k_w/D_0 - D_LM*k_w/(D_0*h_0) + D_LM*k_w/(D_0*U_0)
         result.append(x_w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_17(self, R_0=None, R_nc=None, h_c=None):
         return
 
@@ -1996,7 +1996,7 @@ class Precondensors:
         h_c = 1/(R_0 - R_nc)
         result.append(h_c)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_18(self, D_0=None, D_LM=None, D_i=None, R_fi=None, R_fo=None, R_nc=None, U_0=None, h_c=None, h_i=None, k_w=None, x_w=None):
         return
 
@@ -2066,7 +2066,7 @@ class Precondensors:
         x_w = -D_LM*R_fi*k_w/D_i - D_LM*k_w/(D_i*h_i) - D_LM*R_fo*k_w/D_0 - D_LM*R_nc*k_w/D_0 - D_LM*k_w/(D_0*h_c) + D_LM*k_w/(D_0*U_0)
         result.append(x_w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_2(self, P_i_0=None, p_i=None, x_i=None):
         return
 
@@ -2088,7 +2088,7 @@ class Precondensors:
         x_i = p_i/P_i_0
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_3(self, P_i_0=None, epsilon_i=None, p_i=None, x_i=None):
         return
 
@@ -2116,7 +2116,7 @@ class Precondensors:
         x_i = p_i/(P_i_0*epsilon_i)
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_4a(self, P=None, p_c=None, p_nc=None):
         return
 
@@ -2138,7 +2138,7 @@ class Precondensors:
         p_nc = P - p_c
         result.append(p_nc)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_4aa(self, n_i=None, n_nc=None, p_i=None, p_nc=None):
         return
 
@@ -2166,7 +2166,7 @@ class Precondensors:
         p_nc = n_nc*p_i/n_i
         result.append(p_nc)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_4ab(self, P_c=None, p=None, p_i=None, p_nc=None):
         return
 
@@ -2194,7 +2194,7 @@ class Precondensors:
         p_nc = -P_c + p
         result.append(p_nc)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_4ac(self, P_c=None, n_i=None, n_nc=None, p=None, p_i=None):
         return
 
@@ -2228,7 +2228,7 @@ class Precondensors:
         p_i = n_i*(-P_c + p)/n_nc
         result.append(p_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_5(self, N_i=None, N_nc=None, P=None, P_c=None, p_i=None):
         return
 
@@ -2262,7 +2262,7 @@ class Precondensors:
         p_i = N_i*(P - P_c)/N_nc
         result.append(p_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_6(self, M=None, P=None, P_i_0=None, W_air=None, W_i=None, p_c=None, x_i=None):
         return
 
@@ -2308,7 +2308,7 @@ class Precondensors:
         x_i = 29*W_i*(P - p_c)/(M*P_i_0*W_air)
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_7(self, M=None, P=None, P_i_0=None, W_air=None, W_i=None, epsilon_i=None, p_c=None, x_i=None):
         return
 
@@ -2360,7 +2360,7 @@ class Precondensors:
         x_i = 29*W_i*(P - p_c)/(M*P_i_0*W_air*epsilon_i)
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_8(self, L_c=None, Q_condensor_heat_duty=None, c_p=None, del_T=None):
         return
 
@@ -2388,7 +2388,7 @@ class Precondensors:
         del_T = Q_condensor_heat_duty/(L_c*c_p)
         result.append(del_T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_7_9(self, L_c=None, Q_condensor_heat_duty=None, c_p=None, del_T=None, rho=None):
         return
 
@@ -2423,7 +2423,7 @@ class Precondensors:
         result.append(rho)
         return result
 class PressMgmt:
-    @kwasak_static
+    @kwasak
     def eqn_3_1(self, Abs_Pressure=None, BarometricPressure=None, Vacuum=None):
         return
 
@@ -2445,7 +2445,7 @@ class PressMgmt:
         Vacuum = -Abs_Pressure + BarometricPressure
         result.append(Vacuum)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_11(self, A_C=None, H_2=None, P=None, V=None):
         return
 
@@ -2475,7 +2475,7 @@ class PressMgmt:
         V = A_C*H_2**2/P
         result.append(V)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_12(self, H_2=None, KAPPA_1=None, P=None):
         return
 
@@ -2499,7 +2499,7 @@ class PressMgmt:
         P = H_2**2*KAPPA_1
         result.append(P)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_13(self, H_1=None, H_2=None, KAPPA_2=None, P=None):
         return
 
@@ -2527,7 +2527,7 @@ class PressMgmt:
         P = KAPPA_2*(-H_1 + H_2)
         result.append(P)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_15(self, V_PMIN=None):
         return
 
@@ -2537,7 +2537,7 @@ class PressMgmt:
         V_PMIN = 0.785398163397448
         result.append(V_PMIN)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_16(self, V_div_V_P_MAX=None):
         return
 
@@ -2547,7 +2547,7 @@ class PressMgmt:
         V_div_V_P_MAX = 254647.908947033
         result.append(V_div_V_P_MAX)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_17(self, P_MIN=None):
         return
 
@@ -2557,7 +2557,7 @@ class PressMgmt:
         P_MIN = 0.00000392699081698724
         result.append(P_MIN)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_2(self, G=None, G_C=None, H=None, P=None, rho=None):
         return
 
@@ -2591,7 +2591,7 @@ class PressMgmt:
         rho = G/(G_C*H*P)
         result.append(rho)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_3(self, H_1=None, H_2=None, P=None, P_P=None):
         return
 
@@ -2619,7 +2619,7 @@ class PressMgmt:
         P = H_1 - H_2 + P_P
         result.append(P)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_4(self, KAPPA=None, P=None, V=None):
         return
 
@@ -2641,7 +2641,7 @@ class PressMgmt:
         V = KAPPA/P
         result.append(V)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_5(self, P=None, P_P=None, V=None, V_P=None):
         return
 
@@ -2669,7 +2669,7 @@ class PressMgmt:
         V = P_P*V_P/P
         result.append(V)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_6(self, H_1=None, H_2=None, P=None, V=None, V_P=None):
         return
 
@@ -2703,7 +2703,7 @@ class PressMgmt:
         V = V_P*(-H_1 + H_2 + P)/P
         result.append(V)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_8(self, A_C=None, H_2=None, V_P=None):
         return
 
@@ -2725,7 +2725,7 @@ class PressMgmt:
         V_P = A_C*H_2
         result.append(V_P)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_3_9(self, A_C=None, H_1=None, H_2=None, P=None, V=None):
         return
 
@@ -2762,7 +2762,7 @@ class PressMgmt:
         result.append(V)
         return result
 class ProcessApp1:
-    @kwasak_static
+    @kwasak
     def eqn_5_1(self, K_i=None, x_i=None, y_i=None):
         return
 
@@ -2784,7 +2784,7 @@ class ProcessApp1:
         y_i = K_i*x_i
         result.append(y_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_10a(self, D=None, L_0=None, V_1=None):
         return
 
@@ -2808,7 +2808,7 @@ class ProcessApp1:
         V_1 = D + L_0
         result.append(V_1)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_10b(self, L_0=None, R=None, V_1=None):
         return
 
@@ -2830,7 +2830,7 @@ class ProcessApp1:
         V_1 = L_0 + L_0/R
         result.append(V_1)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_10c(self, D=None, L_0=None, R=None):
         return
 
@@ -2852,7 +2852,7 @@ class ProcessApp1:
         R = L_0/D
         result.append(R)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_11(self, B=None, L_N=None, V_0=None):
         return
 
@@ -2874,7 +2874,7 @@ class ProcessApp1:
         V_0 = -B + L_N
         result.append(V_0)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_12(self, Eff=None, N_ES=None, N_t=None, T=None):
         return
 
@@ -2902,7 +2902,7 @@ class ProcessApp1:
         T = log(N_ES/N_t)/log(Eff)
         result.append(T)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_13(self, HETP=None, H_p=None, N_ES=None):
         return
 
@@ -2924,7 +2924,7 @@ class ProcessApp1:
         N_ES = H_p/HETP
         result.append(N_ES)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_14(self, M=None, P_0=None, T=None, W_E=None):
         return
 
@@ -2952,7 +2952,7 @@ class ProcessApp1:
         W_E = 0.0583*P_0*sqrt(M/T)
         result.append(W_E)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_15(self, M_1=None, M_2=None, P_0_1=None, P_0_2=None, a_M_12=None):
         return
 
@@ -2990,7 +2990,7 @@ class ProcessApp1:
         a_M_12 = P_0_1*(M_2/M_1)**(2/5)/P_0_2
         result.append(a_M_12)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_16(self, H_i=None, p_i=None, x_i=None):
         return
 
@@ -3012,7 +3012,7 @@ class ProcessApp1:
         x_i = p_i/H_i
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_17(self, H_2_1=None, H_2_3=None, H_2_mi=None, x_1=None, x_3=None):
         return
 
@@ -3046,7 +3046,7 @@ class ProcessApp1:
         x_3 = (-x_1*log(H_2_1) + log(H_2_mi))/log(H_2_3)
         result.append(x_3)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_2a(self, K_1=None, K_2=None, alpha_1_2=None):
         return
 
@@ -3068,7 +3068,7 @@ class ProcessApp1:
         alpha_1_2 = K_1/K_2
         result.append(alpha_1_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_2b(self, K_1=None, K_2=None, x_1=None, x_2=None, y_1=None, y_2=None):
         return
 
@@ -3108,7 +3108,7 @@ class ProcessApp1:
         y_2 = K_2*x_2*y_1/(K_1*x_1)
         result.append(y_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_3(self, P_0_i=None, p_i=None, x_i=None):
         return
 
@@ -3130,7 +3130,7 @@ class ProcessApp1:
         x_i = p_i/P_0_i
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_4(self, P=None, P_0_i=None, x_i=None, y_i=None):
         return
 
@@ -3158,7 +3158,7 @@ class ProcessApp1:
         y_i = P_0_i*x_i/P
         result.append(y_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_5(self, P_0_1=None, P_0_2=None, alpha_12=None):
         return
 
@@ -3180,7 +3180,7 @@ class ProcessApp1:
         alpha_12 = P_0_1/P_0_2
         result.append(alpha_12)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_6(self, P_0_i=None, gamma_i=None, p_i=None, x_i=None):
         return
 
@@ -3208,7 +3208,7 @@ class ProcessApp1:
         x_i = p_i/(P_0_i*gamma_i)
         result.append(x_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_7(self, P=None, P_0_i=None, gamma_i=None, x_i=None, y_i=None):
         return
 
@@ -3242,7 +3242,7 @@ class ProcessApp1:
         y_i = P_0_i*gamma_i*x_i/P
         result.append(y_i)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_8(self, P_0_1=None, P_0_2=None, alpha_12=None, gamma_1=None, gamma_2=None):
         return
 
@@ -3276,7 +3276,7 @@ class ProcessApp1:
         gamma_2 = P_0_1*gamma_1/(P_0_2*alpha_12)
         result.append(gamma_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_5_9(self, D=None, L_0=None, V_1=None):
         return
 
@@ -3301,7 +3301,7 @@ class ProcessApp1:
         result.append(V_1)
         return result
 class ProcessApp2:
-    @kwasak_static
+    @kwasak
     def eqn_6_1(self, T_1=None, T_2=None, T_R=None, c_p=None, del_h_v=None, w_1=None, w_2=None, w_v=None):
         return
 
@@ -3353,7 +3353,7 @@ class ProcessApp2:
         w_v = c_p*(T_1*w_1 + T_2*w_2 - T_R*w_1 - T_R*w_2)/del_h_v
         result.append(w_v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_10(self, A=None, dV_dt=None, delta_P=None, mu=None, r_c=None, s=None, tau=None):
         return
 
@@ -3399,7 +3399,7 @@ class ProcessApp2:
         tau = A*delta_P**(1 - s)/(dV_dt*mu*r_c)
         result.append(tau)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_11a(self, A_d=None, delta_T=None, delta_h_i=None, delta_m=None, h_d=None, m_b=None, t_R=None):
         return
 
@@ -3445,7 +3445,7 @@ class ProcessApp2:
         t_R = delta_h_i*delta_m*m_b/(A_d*delta_T*h_d)
         result.append(t_R)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_2(self, Q_v=None, T_1=None, T_2=None, T_R=None, c_p=None, w_1=None, w_2=None):
         return
 
@@ -3491,7 +3491,7 @@ class ProcessApp2:
         w_2 = (12000*Q_v - T_1*c_p*w_1 + T_R*c_p*w_1)/(c_p*(T_2 - T_R))
         result.append(w_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_4(self, Q_v=None, delta_h_v=None, w_v=None):
         return
 
@@ -3513,7 +3513,7 @@ class ProcessApp2:
         w_v = 12000*Q_v/delta_h_v
         result.append(w_v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_7(self, C_1=None, C_2=None, T_1=None, T_2=None, c_p=None, delta_h_c=None, delta_h_v=None, m_b=None, m_v=None):
         return
 
@@ -3571,7 +3571,7 @@ class ProcessApp2:
         m_v = m_b*(C_1*delta_h_c - C_2*delta_h_c + T_1*c_p - T_2*c_p)/delta_h_v
         result.append(m_v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_8(self, C_1=None, C_2=None, T_1=None, T_2=None, c_p=None, delta_h_c=None, delta_h_v=None, delta_t=None, m_b=None, w_v=None):
         return
 
@@ -3635,7 +3635,7 @@ class ProcessApp2:
         w_v = m_b*(C_1*delta_h_c - C_2*delta_h_c + T_1*c_p - T_2*c_p)/(delta_h_v*delta_t)
         result.append(w_v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_6_9(self, A=None, dV_dt=None, delta_P=None, m=None, mu=None, r=None, r_M=None):
         return
 
@@ -3684,7 +3684,7 @@ class ProcessApp2:
         result.append(r_M)
         return result
 class RotaryPistonVane:
-    @kwasak_static
+    @kwasak
     def eqn_11_1(self, PS=None, Q_0=None, Q_external_gas_throughput=None, V=None, dP=None, dT=None):
         return
 
@@ -3724,7 +3724,7 @@ class RotaryPistonVane:
         dT = V*dP/(-PS + Q_0 + Q_external_gas_throughput)
         result.append(dT)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_11_2(self, Q=None, Q_0=None, Q_external_gas_throughput=None, SP_1=None, SP_2=None, S_vol_pump_speed=None, V=None, t=None):
         return
 
@@ -3776,7 +3776,7 @@ class RotaryPistonVane:
         t = V*log((Q_0 + Q_external_gas_throughput - SP_1)/(Q + Q_0 - SP_2))/S_vol_pump_speed
         result.append(t)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_11_3(self, F_s=None, t=None, t_c=None):
         return
 
@@ -3798,7 +3798,7 @@ class RotaryPistonVane:
         t_c = t/F_s
         result.append(t_c)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
         return
 
@@ -3822,7 +3822,7 @@ class RotaryPistonVane:
         p_v = -p_g + p_s
         result.append(p_v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
         return
 
@@ -3850,7 +3850,7 @@ class RotaryPistonVane:
         p_v_max = -P_0_v*p_g/(P_0_v - P_D)
         result.append(p_v_max)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_11_6(self, P_0_V=None, P_D=None, P_v_0=None, S_B=None, S_D=None, p_b=None, p_g=None, p_v_max=None):
         return
 
@@ -3903,7 +3903,7 @@ class RotaryPistonVane:
         result.append(p_v_max)
         return result
 class SelectingPump:
-    @kwasak_static
+    @kwasak
     def eqn_8_1(self, NC=None, NS=None, SCON=None, installation_cost=None):
         return
 
@@ -3933,7 +3933,7 @@ class SelectingPump:
         installation_cost = 1426.00150101399*SCON**(7/20)*(2.0*NC + NS)
         result.append(installation_cost)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_2(self, hp=None, installed_costs=None):
         return
 
@@ -3949,7 +3949,7 @@ class SelectingPump:
         installed_costs = 10435.5162785557*sqrt(hp)
         result.append(installed_costs)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_3(self, hp=None, installed_costs=None):
         return
 
@@ -3967,7 +3967,7 @@ class SelectingPump:
         installed_costs = 13482.9087908759*hp**(9/20)
         result.append(installed_costs)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_4(self, hp=None, installed_costs=None):
         return
 
@@ -3985,7 +3985,7 @@ class SelectingPump:
         installed_costs = 10350.7864343909*hp**(2/5)
         result.append(installed_costs)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
         return
 
@@ -4007,7 +4007,7 @@ class SelectingPump:
         theoretical_adiabatic_horsepower = Eff*actual_brake_horsepower
         result.append(theoretical_adiabatic_horsepower)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_6(self, M=None, P_1=None, P_2=None, R=None, T=None, adiabatic_hp=None, k=None, w=None):
         return
 
@@ -4076,7 +4076,7 @@ class SelectingPump:
         w = 1980000*M*adiabatic_hp*(k - 1)/(R*T*k*((P_2/P_1)**((k - 1)/k) - 1))
         result.append(w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_7(self, P_1=None, P_2=None, adiabatic_hp=None, w=None):
         return
 
@@ -4109,7 +4109,7 @@ class SelectingPump:
         w = 20.0*adiabatic_hp/((P_2/P_1)**0.286 - 1.0)
         result.append(w)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_8(self, P_1=None, P_2=None, adiabatic_power_watts=None, f=None):
         return
 
@@ -4142,7 +4142,7 @@ class SelectingPump:
         f = 12.0*adiabatic_power_watts/((P_2/P_1)**0.286 - 1.0)
         result.append(f)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_8_9(self, E_j=None, E_m=None, e=None, r=None, s=None):
         return
 
@@ -4177,7 +4177,7 @@ class SelectingPump:
         result.append(s)
         return result
 class SteamJetInjectors:
-    @kwasak_static
+    @kwasak
     def eqn_9_1(self, A=None, rho_s=None, v=None, w_s=None):
         return
 
@@ -4205,7 +4205,7 @@ class SteamJetInjectors:
         w_s = A*rho_s*v
         result.append(w_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_9_2(self, P_m=None, d_n=None, rho_s=None, w_s=None):
         return
 
@@ -4235,7 +4235,7 @@ class SteamJetInjectors:
         w_s = 865.8*d_n**2*sqrt(P_m*rho_s)
         result.append(w_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_9_3(self, P_s=None, V=None, t_e=None, w_j=None):
         return
 
@@ -4263,7 +4263,7 @@ class SteamJetInjectors:
         w_j = 0.001*V*(2300.0 - 3.0*P_s)/t_e
         result.append(w_j)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_9_4(self, AEL=None, SC=None, r=None, w_s=None):
         return
 
@@ -4291,7 +4291,7 @@ class SteamJetInjectors:
         w_s = AEL*SC*r
         result.append(w_s)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_9_5(self, V=None, r_h=None, t_h=None, w_h=None):
         return
 
@@ -4320,7 +4320,7 @@ class SteamJetInjectors:
         result.append(w_h)
         return result
 class VacuumTheory:
-    @kwasak_static
+    @kwasak
     def eqn_1_10(self, P_1=None, P_2=None, T_1=None, T_2=None, V_1=None, V_2=None):
         return
 
@@ -4360,7 +4360,7 @@ class VacuumTheory:
         V_2 = P_1*T_2*V_1/(P_2*T_1)
         result.append(V_2)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
         return
 
@@ -4394,7 +4394,7 @@ class VacuumTheory:
         q = 6821*T*W/(738*M*P)
         result.append(q)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_12(self, Total_P=None, sum_partial_pressures=None):
         return
 
@@ -4410,7 +4410,7 @@ class VacuumTheory:
         sum_partial_pressures = Total_P
         result.append(sum_partial_pressures)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_13a(self, n=None, n_a=None, y_a=None):
         return
 
@@ -4432,7 +4432,7 @@ class VacuumTheory:
         y_a = n_a/n
         result.append(y_a)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_13b(self, P=None, p_a=None, y_a=None):
         return
 
@@ -4454,7 +4454,7 @@ class VacuumTheory:
         y_a = p_a/P
         result.append(y_a)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_3(self, T=None, k=None, m=None, v=None):
         return
 
@@ -4484,7 +4484,7 @@ class VacuumTheory:
         v = 1.73205080756888*sqrt(T*k/m)
         result.append(v)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_7(self, R=None, T=None, V=None, n=None, p=None):
         return
 
@@ -4518,7 +4518,7 @@ class VacuumTheory:
         p = R*T*n/V
         result.append(p)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_8(self, M=None, P=None, R=None, T=None, V=None, m=None):
         return
 
@@ -4558,7 +4558,7 @@ class VacuumTheory:
         m = M*P*V/(R*T)
         result.append(m)
         return result
-    @kwasak_static
+    @kwasak
     def eqn_1_9(self, M=None, P=None, R=None, T=None, rho=None):
         return
 

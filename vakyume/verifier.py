@@ -13,7 +13,7 @@ try:
 except Exception:
     tqdm = None
 
-from .kwasak import kwasak_static
+from .kwasak import kwasak
 
 import importlib
 import os

@@ -5,7 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-from vakyume.kwasak import kwasak_static
+from vakyume.kwasak import kwasak
 from .eqn_9_2__P_m_cap import eqn_9_2__P_m
 from .eqn_9_2__d_n import eqn_9_2__d_n
 from .eqn_9_2__rho_s import eqn_9_2__rho_s
@@ -17,6 +17,6 @@ class SteamJetInjectors:
     eqn_9_2__rho_s = eqn_9_2__rho_s
     eqn_9_2__w_s = eqn_9_2__w_s
 
-    @kwasak_static
+    @kwasak
     def eqn_9_2(self, P_m=None, d_n=None, rho_s=None, w_s=None):
         return
