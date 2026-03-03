@@ -1,0 +1,13 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+def eqn_2_37__T(self, A: float, C: float, F_t: float, M: float, **kwargs):
+    # [.pyeqn] C = 38.3 * (T * A * F_t / M) ** 0.5
+    result = []
+    T = 0.000681714375311032*C**2*M/(A*F_t)
+    result.append(T)
+    return result

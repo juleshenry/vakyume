@@ -1,0 +1,1 @@
+PS = -V * dP / dT + Q_external_gas_throughput + Q_0

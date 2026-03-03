@@ -1,0 +1,1 @@
+installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35

@@ -1,0 +1,1 @@
+installed_costs = 38000 * (hp / 10) ** 0.45

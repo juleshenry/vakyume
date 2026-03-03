@@ -1,0 +1,3 @@
+# Chapter 11 : Rotary Piston and Rotary Vane Pumps
+# 11-2 Sizing for Evacuation
+t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))

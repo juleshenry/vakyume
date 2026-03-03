@@ -1,16 +1,105 @@
 # Vakyume
 # A Python Library for Vacuum Design
 
-Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by James L. Ryans and Daniel L. Roper, this project offers functions related to engineering vacuums. 
+Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by James L. Ryans and Daniel L. Roper, this project offers functions related to engineering vacuums.
 
-We revisit the history of low pressure devices, recreating the example calculations programatically. Furthermore, a supplementary decorator is developed to calculate arbitrary missing values for a given formula. 
+We utilize a "One-Odd-Out" (OOO) verification methodology: for any equation family (e.g., $PV=nRT$), if solvers exist for every variable ($P, V, n, R, T$), they must be mathematically consistent. If one solver produces a result that breaks the equality when plugged into the others, it is flagged for LLM-assisted repair.
 
-In a nutshell, we demonstrate how to take a textbook's equations and turn it into a complete equation solver for all permutations. 
+## Quick Start
 
-Later, we convert the Python code to C++ for optimization.
+### 1. Install Dependencies
+```bash
+python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama
+```
 
+### 2. Run the Orchestrator
+The main entry point is `vakyume.py`. It uses a project-centric directory structure:
+```bash
+python3 vakyume.py projects/VacuumTheory
+```
+
+## Project Structure
+Each project (e.g., `projects/VacuumTheory/`) contains:
+- `notes/`: Python-like equation definitions (Input).
+- `shards/`: Individual generated solvers (Intermediate).
+- `reports/`: Verification and analysis logs.
+- `repair_prompts/`: LLM interaction logs.
+- `vakyume_certified.py`: The finalized, verified Python library.
+- `vakyume.cpp`: The generated C++ library (if `--cpp` is used).
+
+## Setting Up a New Project
+
+To start a new project from a textbook PDF:
+
+1. **Create the Project Directory**:
+   ```bash
+   mkdir -p projects/MyNewProject/notes
+   ```
+2. **Run Vakyume with the PDF**:
+   ```bash
+   python3 vakyume.py projects/MyNewProject --pdf path/to/textbook.pdf
+   ```
+   This will attempt to extract formulas from the PDF into `projects/MyNewProject/notes/extracted_notes.py`. 
+   
+   *Note: For best results, ensure `pdftotext` is installed on your system.*
+
+3. **Manual Notes (Optional)**:
+   You can also manually add `.py` files to the `notes/` directory. Use the following format:
+   ```python
+   # 1-1 Ideal Gas Law
+   """
+   p := pressure
+   V := volume
+   n := moles
+   R := gas constant
+   T := temperature
+   """
+   p * V = n * R * T
+   ```
+
+4. **Verify and Generate**:
+   ```bash
+   python3 vakyume.py projects/MyNewProject --cpp
+   ```
+
+## Resume & Testing
+The orchestrator naturally supports resuming. If a shard file already exists in the project's `shards/` directory, it is tested but not re-scraped unless you use the `--overwrite` flag.
+
+## Vacuum Theory Example
+The default `chapters/` directory contains equations extracted from the 1986 edition of *Process Vacuum System Design and Operation*. These files (`01_vacuum_theory.py`, etc.) serve as a primary example of how the pipeline processes a complex engineering textbook.
+
+## Accomplished & Discoveries
+
+- **One-Odd-Out (OOO) Methodology**: We've proven that verifying $f(x, y) \to z$ and $f(x, z) \to y$ consistency is highly effective at catching algebraic errors in LLM-generated or SymPy-isolated functions.
+- **Project-Centric Structure**: Successfully transitioned to a formal Python package (`vakyume/`) with a project-based directory structure (e.g., `projects/VacuumTheory/`).
+- **Resumability**: The pipeline automatically skips existing shards, allowing for long-running verification or repair tasks to be resumed.
+- **C++ Library Generation**: High-performance C++ code is generated using local LLMs (Phi-3 via Ollama), strictly enforcing `double` precision and `std::complex` for imaginary numbers.
+- **Parallelization**: Parallelizing Ollama calls (using 2-4 workers) significantly speeds up the verification of large equation sets (~500+ functions).
+
+## Examples
+
+### Vacuum Theory
+Equations extracted from *Process Vacuum System Design and Operation* (1986).
+```bash
+python3 vakyume.py projects/VacuumTheory --cpp
+```
+
+### Building Models
+Physics kinematics equations extracted from *Building Models To Describe Our World*.
+```bash
+python3 vakyume.py projects/BuildingModels --cpp
+```
+
+
+## Architecture
+- **Sympy Solvers**: Initial algebraic isolation of variables.
+- **Numerical Fallbacks**: Uses `scipy.optimize.newton` or `fsolve` for transcendental equations where algebraic isolation is impossible.
+- **One-Odd-Out Verification**: Random "fuzzed" inputs are used to verify that moving between any two variables in an equation family returns to the source of truth.
+
+---
 
 # Kwarg Solver Decorator
+(Existing documentation...)
 
 As long as one keyword argument is not given, its value is calculated
 

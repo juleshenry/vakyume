@@ -1,2 +1,6 @@
 __pycache__/*
-__pycache__
+__pycache__/
+*.bak
+*.pyc
+.pytest_cache/
+reports/
