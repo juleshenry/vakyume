@@ -36,8 +36,7 @@
   [Chunk 5/26] Sending to LLM (2697 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=2815
 [OUTPUT] ask_llm: content_len=1075
-    -> Extracted 1 equation(s)
-       # Checkpoint - Internal vs External Forces in Collision Problem
+    -> No equations in this chunk
   [Chunk 6/26] Sending to LLM (3403 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3521
 [OUTPUT] ask_llm: content_len=286
@@ -51,8 +50,7 @@
   [Chunk 8/26] Sending to LLM (2778 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=2896
 [OUTPUT] ask_llm: content_len=474
-    -> Extracted 1 equation(s)
-       # Inelastic Collisions - Example 10-5: Two objects collide and stick together
+    -> No equations in this chunk
   [Chunk 9/26] Sending to LLM (3978 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=4096
 [OUTPUT] ask_llm: content_len=314
@@ -60,8 +58,7 @@
   [Chunk 10/26] Sending to LLM (3194 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3312
 [OUTPUT] ask_llm: content_len=1434
-    -> Extracted 1 equation(s)
-       # Elastic Collisions - Example Problems
+    -> No equations in this chunk
   [Chunk 11/26] Sending to LLM (3221 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3339
 [OUTPUT] ask_llm: content_len=1519
@@ -100,8 +97,7 @@
   [Chunk 18/26] Sending to LLM (3842 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3960
 [OUTPUT] ask_llm: content_len=723
-    -> Extracted 1 equation(s)
-       # Chapter-10: Linear Momentum and Centre of Mass (Example Equations)
+    -> No equations in this chunk
   [Chunk 19/26] Sending to LLM (3571 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3689
 [OUTPUT] ask_llm: content_len=376
@@ -119,13 +115,11 @@
   [Chunk 22/26] Sending to LLM (3771 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3889
 [OUTPUT] ask_llm: content_len=1127
-    -> Extracted 1 equation(s)
-       # Important Equations Momentum and Impulse for a point particle
+    -> No equations in this chunk
   [Chunk 23/26] Sending to LLM (2942 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=3060
 [OUTPUT] ask_llm: content_len=773
-    -> Extracted 1 equation(s)
-       # Problem 10-1 Bullet and Ballistic Pendulum Speed Calculation
+    -> No equations in this chunk
   [Chunk 24/26] Sending to LLM (2041 chars)...
 [INPUT] ask_llm: provider=ollama, model=phi3:latest, system_prompt_len=1878, user_prompt_len=2159
 [OUTPUT] ask_llm: content_len=785
@@ -142,7 +136,7 @@
     -> Extracted 1 equation(s)
        # Chapter 10-4 Centre of Mass Y Position Calculation
 
-  [SAVED] projects/BuildingModels/notes/10_linear_momentum_and_the_centre_of_mass.py (24 equations)
+  [SAVED] projects/BuildingModels/notes_phi3/10_linear_momentum_and_the_centre_of_mass.py (18 equations)
 [SKIP] Chapter 11: Rotational dynamics (not in filter)
 [SKIP] Chapter 12: Rotational energy and momentum (not in filter)
 [SKIP] Chapter 13: Simple harmonic motion (not in filter)
@@ -164,7 +158,7 @@
 
 ============================================================
 EXTRACTION COMPLETE
-  Total equations extracted: 24
+  Total equations extracted: 18
   Chapters processed: 1
-  Summary: projects/BuildingModels/notes/_extraction_summary.json
+  Summary: projects/BuildingModels/notes_phi3/_extraction_summary.json
 ============================================================

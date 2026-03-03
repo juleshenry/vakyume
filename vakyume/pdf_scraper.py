@@ -277,6 +277,25 @@ def _parse_llm_output(raw: str) -> list[dict]:
         lines = block.split("\n")
         header = lines[0]
 
+        # Reject headers that are clearly not numbered equations
+        header_lower = header.lower()
+        if any(
+            kw in header_lower
+            for kw in (
+                "checkpoint",
+                "example",
+                "problem",
+                "exercise",
+                "practice",
+                "review",
+                "summary",
+                "discussion",
+                "important equations",
+                "important concepts",
+            )
+        ):
+            continue
+
         # Extract docstring (between triple quotes)
         doc_match = re.search(r'"""(.*?)"""', block, re.DOTALL)
         docstring = doc_match.group(1).strip() if doc_match else ""
@@ -325,12 +344,24 @@ def _parse_llm_output(raw: str) -> list[dict]:
 
 def _sanitize_equation(eq: str) -> str:
     """Clean up common LLM artifacts in equations."""
+    # Take only the FIRST line if the LLM crammed multiple equations together
+    lines = [l.strip() for l in eq.split("\n") if l.strip()]
+    eq = lines[0] if lines else eq
+
     # Remove markdown artifacts
     eq = eq.replace("```", "").strip()
     # Remove inline comments
     eq = re.sub(r"#.*$", "", eq, flags=re.MULTILINE).strip()
+    # Remove leading equation numbers like (3.1) or (9.3) at start
+    eq = re.sub(r"^\(\d+[\.\-]\d+\)\s*", "", eq).strip()
     # Remove trailing equation numbers like (3.1)
-    eq = re.sub(r"\(\d+\.\d+\)\s*$", "", eq).strip()
+    eq = re.sub(r"\(\d+[\.\-]\d+\)\s*$", "", eq).strip()
+    # Remove trailing parenthetical comments like "(since p_car is zero)"
+    eq = re.sub(r"\(since\s[^)]*\)", "", eq, flags=re.IGNORECASE).strip()
+    # Remove trivial "+ 0" or "- 0" terms (specific-value artifacts)
+    eq = re.sub(r"\s*[+\-]\s*0(?![\d\.])", "", eq).strip()
+    # Strip unicode arrows, hat symbols, and other junk
+    eq = re.sub(r"[↭↔→←↑↓ϱϑk̂π∑∏∂∇$]", "", eq)
     # Fix ^ to ** (common LLM mistake)
     eq = re.sub(r"\^(\d+)", r"**\1", eq)
     eq = re.sub(r"\^(\()", r"**\1", eq)
@@ -340,7 +371,9 @@ def _sanitize_equation(eq: str) -> str:
     eq = re.sub(r"(\w+)\(t\)\s*=", r"\1 =", eq)
     eq = re.sub(r"(\w+)\(t\)", r"\1", eq)
     # Remove unit annotations in parentheses after numbers, e.g. (15 m/s)
-    eq = re.sub(r"\(\d+\s+[a-zA-Z/^]+\)", "", eq)
+    eq = re.sub(r"\(\d+[\.\d]*\s+[a-zA-Z/^]+\)", "", eq)
+    # Remove " N" or " kg" etc. unit suffixes at end of equation
+    eq = re.sub(r"\s+[A-Z][a-z]?\s*$", "", eq)
     # Fix "* *" before normalization (from PDF text with spaces)
     eq = eq.replace("* *", "**")
     # Normalize whitespace around operators
@@ -350,10 +383,9 @@ def _sanitize_equation(eq: str) -> str:
     eq = re.sub(r"\s*\+\s*", " + ", eq)
     eq = re.sub(r"(?<!=)\s*-\s*(?!=)", " - ", eq)
     eq = re.sub(r"\s*=\s*", " = ", eq)
-    # Fix "* *" again after normalization
-    eq = eq.replace("* *", "**")
-    # Collapse multiple spaces
+    # Collapse multiple spaces first, then fix "* *" -> "**"
     eq = re.sub(r" +", " ", eq)
+    eq = eq.replace("* *", "**")
     return eq.strip()
 
 
@@ -361,25 +393,136 @@ def _is_valid_algebraic(eq: str) -> bool:
     """Check if an equation is a valid algebraic expression (not a derivative/integral).
 
     Vakyume can only handle algebraic equations, not calculus expressions.
+    Rejects narrative text, unicode junk, derivative notation, and numeric-only equations.
     """
-    # Reject derivative notation
-    if re.search(r"\bd\s*/\s*dt", eq):
+    # Reject derivative notation (d/dt, dp/dt, d_t, d(...)/dt)
+    if re.search(r"\bd\s*/\s*d[a-z]", eq):
+        return False
+    if re.search(r"\bd_t\b", eq):
+        return False
+    if re.search(r"\bd\(\w", eq):
         return False
     if re.search(r"\bdd\w", eq):
+        return False
+    if re.search(r"\bdp\b", eq) and "/" in eq:
+        return False
+    if re.search(r"\bdv\b", eq) and "/" in eq:
         return False
     # Reject integral notation
     if "∫" in eq or "integral" in eq.lower():
         return False
+    # Reject any remaining unicode symbols (arrows, accented, etc.)
+    if re.search(r"[^\x00-\x7F]", eq):
+        return False
+    # Reject prime notation (v', PM', etc.) — not valid Python syntax
+    if "'" in eq:
+        return False
+    # Reject "Prime_" prefixed identifiers — LLM misinterpretation of prime notation
+    if re.search(r"\bPrime_\w+", eq):
+        return False
     # Reject limit notation
     if "lim" in eq.lower() and "=" not in eq.split("lim")[0]:
         return False
-    # Must have exactly one = sign (an equality)
+    # Reject equations that are mostly English narrative
+    words = re.findall(r"\b[a-zA-Z]{4,}\b", eq)
+    english_words = {
+        "since",
+        "both",
+        "sides",
+        "gives",
+        "function",
+        "time",
+        "initial",
+        "particle",
+        "rest",
+        "constant",
+        "over",
+        "entire",
+        "system",
+        "particles",
+        "force",
+        "times",
+        "change",
+        "scalar",
+        "quantity",
+        "which",
+        "zero",
+        "before",
+        "after",
+        "collision",
+        "needed",
+        "here",
+        "infinitesimally",
+        "small",
+        "thickness",
+        "position",
+        "with",
+        "respect",
+        "where",
+        "from",
+        "that",
+        "this",
+        "acting",
+        "between",
+        "total",
+        "mass",
+        "velocity",
+        "acceleration",
+        "integrating",
+        "Integrating",
+        "description",
+        "applicable",
+        "instantaneous",
+        "event",
+        "unknown",
+        "calculation",
+        "conservation",
+        "relative",
+    }
+    if len(words) > 3 and sum(1 for w in words if w.lower() in english_words) > 2:
+        return False
+    # Reject ":=" in equation body (leaked docstring definitions)
+    if ":=" in eq or ": =" in eq:
+        return False
+    # Must have at least one = sign
     eq_parts = eq.split("=")
     if len(eq_parts) < 2:
         return False
-    # LHS should be a simple variable expression
+    # Reject chained equalities with 3+ segments that look like derivation chains
+    # e.g., "dp = m * dv = m * a * dt = m * g * dt = g * dt"
+    # Allow exactly 2 parts (one = sign) which is a proper equation
+    if len(eq_parts) > 2:
+        return False
+    # LHS should be a simple variable/expression (not empty)
     lhs = eq_parts[0].strip()
-    if not lhs or not re.match(r"^[\w\s\*\+\-\./\(\)\,]+$", lhs):
+    if not lhs:
+        return False
+    # LHS must contain at least one letter (variable name) OR be "0" (valid form: 0 = expr)
+    if not re.search(r"[a-zA-Z]", lhs) and lhs != "0":
+        return False
+    # LHS must be valid Python-ish characters
+    if not re.match(r"^[\w\s\*\+\-\./\(\)\,]+$", lhs):
+        return False
+    # LHS must look like a variable (no spaces inside a single identifier)
+    # e.g., reject "F netdt" but allow "0.5 * m * v"
+    lhs_tokens = lhs.split()
+    if len(lhs_tokens) == 1 and not re.match(r"^[a-zA-Z_\d][\w]*$", lhs_tokens[0]):
+        return False
+    # If LHS is multiple tokens, they must be joined by operators
+    if len(lhs_tokens) == 2 and lhs_tokens[1] not in ("*", "/", "+", "-"):
+        # Two tokens with no operator = broken, e.g., "F netdt"
+        return False
+    # RHS must not be empty
+    rhs = eq_parts[1].strip()
+    if not rhs:
+        return False
+    # RHS must contain at least one letter or digit
+    if not re.search(r"[a-zA-Z0-9]", rhs):
+        return False
+    # Reject equations where RHS is purely numeric (no variables)
+    # e.g., "F = 740" — these are specific values, not general equations
+    rhs_full = "=".join(eq_parts[1:])  # handle case with extra = signs
+    if re.match(r"^[\s\d\.\+\-\*/\(\)]+$", rhs_full):
         return False
     return True
 
@@ -401,6 +544,31 @@ def _dedup_equations(equations: list[dict]) -> list[dict]:
 # ─── Output formatting ──────────────────────────────────────────────────────
 
 
+def _sanitize_docstring(doc: str) -> str:
+    """Clean up the docstring, removing non-variable-definition lines."""
+    clean_lines = []
+    for line in doc.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+        # Must be in "var := description" format
+        if ":=" not in line:
+            continue
+        # Reject lines with unicode junk
+        if re.search(r"[^\x00-\x7F]", line):
+            continue
+        # Reject lines where the var name contains spaces or parens
+        # e.g., "xA(t) := description" or "ϱF netdt := ..."
+        var_part = line.split(":=")[0].strip()
+        if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", var_part):
+            continue
+        # Reject lines where description contains $..$ LaTeX
+        desc_part = line.split(":=")[1].strip()
+        desc_part = re.sub(r"\$[^$]*\$", "", desc_part).strip()
+        clean_lines.append(f"{var_part} := {desc_part}")
+    return "\n".join(clean_lines)
+
+
 def _format_notes_file(
     chapter_num: int, chapter_title: str, equations: list[dict]
 ) -> str:
@@ -411,11 +579,13 @@ def _format_notes_file(
         sanitized = _sanitize_equation(eq["equation"])
         if not _is_valid_algebraic(sanitized):
             continue  # Skip non-algebraic equations (derivatives, integrals, etc.)
+        clean_doc = _sanitize_docstring(eq["docstring"]) if eq["docstring"] else ""
+        if not clean_doc:
+            continue  # Skip equations with no valid variable definitions
         lines.append(eq["header"])
-        if eq["docstring"]:
-            lines.append('"""')
-            lines.append(eq["docstring"])
-            lines.append('"""')
+        lines.append('"""')
+        lines.append(clean_doc)
+        lines.append('"""')
         lines.append(sanitized)
         lines.append("")  # blank line between equations
 
