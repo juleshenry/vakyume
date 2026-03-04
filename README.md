@@ -202,11 +202,10 @@ doesn't work very well -- too many failure modes, too much glue code, and
 too brittle to scale gracefully.
 
 That said, I learned a tremendous amount about coding and life through making
-this. Symbolic math, AST manipulation, C++ transpilation, OOO verification --
-it was a fun journey and a genuine education.
+this. Symbolic math, AST manipulation, C++ transpilation, and OOO verification.
 
 Today, a free tool like the Gemini CLI could vastly outshine this entire
 pipeline in a single prompt. The world moved fast, and Vakyume is a snapshot
-of what it took to do this the hard way before it became easy.
+of what it took to do metaprogram the hard way before it became easy.
 
 
