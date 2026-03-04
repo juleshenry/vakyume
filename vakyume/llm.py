@@ -1,73 +1,73 @@
 """
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
 """
 
 import logging
@@ -115,8 +115,9 @@ def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=Fals
             messages=messages,
             stream=stream,
             options={
-                "num_ctx": llm_config.get("num_ctx", 8192),
+                "num_ctx": llm_config.get("num_ctx", 16384),
                 "temperature": llm_config.get("temperature", 0),
+                "num_predict": llm_config.get("num_predict", 4096),
             },
         )
         if stream:
@@ -159,23 +160,13 @@ def escribir_codigo(
         knowns = header.split("(")[1].split(")")[0]
 
     system_prompt = (
-        f"You are a mathematical programming assistant. Your task is to solve equations for a specific variable in {lang}.\n"
-        f"CONSTRAINTS:\n"
-        f"- Output ONLY executable {lang} code.\n"
-        f"- No commentary, no markdown formatting, no explanations.\n"
-        f"- Do NOT add any chatty comments, explanations, or docstrings.\n"
-        f"- Use 'cmath' for sqrt/log/exp (handles complex results), 'numpy', or 'scipy'.\n"
-        f"- IMPORTANT: Never use leading zeros in decimal literals (e.g., use 0.5, not 00.5).\n"
-        f"- DO NOT remove or rename arguments in the provided function header.\n"
-        f"- Ensure the result is returned as a list."
+        "Write a Python function. Output ONLY code. No markdown.\n"
+        "Use log/sqrt/exp from cmath. Return result as [value]."
     )
 
     user_prompt = (
-        f"Equation: {eqn}\n"
-        f"Solve for: {target}\n"
-        f"Known variables: {knowns}\n"
-        f"Function Header: {header if header else f'def solve_for_{target}({knowns}):'}\n\n"
-        f"Provide the {lang} function implementation now (code only):"
+        f"{eqn}\nSolve for {target}.\n"
+        f"{header if header else f'def solve_for_{target}({knowns}):'}\n"
     )
 
     return ask_llm(system_prompt, user_prompt, stream=stream)
@@ -205,96 +196,29 @@ def repair_codigo(
 
     if is_subshard:
         system_prompt = (
-            "You are a mathematical code repair assistant. Your goal is to fix inconsistencies or errors in Python equation solver functions.\n"
-            "CONSTRAINTS:\n"
-            "- Return ONLY the corrected Python functions.\n"
-            "- Do NOT use classes or decorators like '@staticmethod'.\n"
-            "- Do NOT use leading zeros in decimal literals.\n"
-            "- Do NOT add any chatty comments, explanations, or docstrings.\n"
-            "- ALWAYS preserve the '# [.pyeqn] <original_equation>' comment at the start of each function body.\n"
-            "- DO NOT remove or rename arguments in the function signature. Keep the signature exactly as provided.\n"
-            "- If SymPy cannot solve it analytically, provide a robust numerical/approximate solution (e.g., using scipy.optimize.newton).\n"
-            "- Return executable code only, no markdown markers."
+            "Fix Python equation solver functions. Output ONLY corrected code.\n"
+            "No markdown. No classes. No decorators. Keep signatures and # [.pyeqn] comments.\n"
+            "Return result as [value]."
         )
     else:
         system_prompt = (
-            "You are a mathematical code repair assistant. Your goal is to fix inconsistencies or errors in Python equation solver classes.\n"
-            "CONSTRAINTS:\n"
-            "- Return ONLY the corrected Python class and methods.\n"
-            "- Include necessary decorators like '@staticmethod' for each method.\n"
-            "- Do NOT use leading zeros in decimal literals.\n"
-            "- Do NOT add any chatty comments, explanations, or docstrings.\n"
-            "- ALWAYS preserve the '# [.pyeqn] <original_equation>' comment at the start of each method body.\n"
-            "- DO NOT remove or rename arguments in the method signature. Keep the signature exactly as provided.\n"
-            "- Ensure all methods in the class are mathematically equivalent and satisfy the original equation.\n"
-            "- Use the 'trusted' variants as the ground truth if provided.\n"
-            "- If SymPy cannot solve it analytically, provide a robust numerical/approximate solution (e.g., using scipy.optimize.newton).\n"
-            "- Return executable code only, no markdown markers."
+            "Fix Python equation solver class. Output ONLY corrected code.\n"
+            "No markdown. Keep @staticmethod. Keep signatures and # [.pyeqn] comments.\n"
+            "Return result as [value]."
         )
 
-    context = ""
-    if pyeqn:
-        context = f"Original Equation: {pyeqn}\n"
-
-    mismatch_context = ""
-    if mismatches:
-        mismatch_context = "HARMONY FAILURES (Specific examples where code is wrong):\n"
-        for var, trials in mismatches.items():
-            if trials:
-                # Just show the first few trials to keep prompt size manageable
-                for i, trial in enumerate(trials[:2]):
-                    mismatch_context += f"Variant {var}, Example {i + 1}:\n"
-                    if "inputs" in trial:
-                        mismatch_context += f"  Inputs: {trial['inputs']}\n"
-                        mismatch_context += f"  Got Output: {trial['output']}\n"
-                        for m in trial.get("mismatches", []):
-                            if "target" in m:
-                                mismatch_context += f"  Mismatch with {m['target']}:"
-                                if "expected" in m:
-                                    mismatch_context += f" expected {m['expected']},"
-                                if "got" in m:
-                                    mismatch_context += f" got {m['got']}"
-                                mismatch_context += "\n"
-                            elif "error" in m:
-                                mismatch_context += (
-                                    f"  Error in {m['target']}: {m['error']}\n"
-                                )
-                    elif "error" in trial:
-                        mismatch_context += f"  Error: {trial['error']}\n"
-        mismatch_context += "\n"
+    context = f"Equation: {pyeqn}\n" if pyeqn else ""
 
     if error:
-        user_prompt = (
-            f"The Python shard '{shard_file}' failed with error: {error}\n\n"
-            f"{context}"
-            f"{mismatch_context}"
-            "CODE TO FIX:\n"
-            f"{shard_code}\n\n"
-            "Please fix the syntax and logical errors. Provide an analytic or robust numerical solution. Return the corrected methods."
-        )
+        user_prompt = f"{context}Error: {error}\n\nCODE:\n{shard_code}\n\nFix it."
     elif trusted_variants:
         user_prompt = (
-            f"The Python shard '{shard_file}' has inconsistent variants.\n"
-            f"{context}"
-            f"{mismatch_context}"
-            f"TRUSTED (Correct): {trusted_variants}\n"
-            f"BROKEN (Incorrect): {broken_variants}\n"
-            f"Scores: {scores}\n\n"
-            "CODE TO REPAIR:\n"
-            f"{shard_code}\n\n"
-            f"The variants {trusted_variants} are confirmed correct. Repair the variants {broken_variants} "
-            f"to be mathematically equivalent to the trusted ones. DO NOT modify the trusted variants."
+            f"{context}Trusted: {trusted_variants}\nBroken: {broken_variants}\n\n"
+            f"CODE:\n{shard_code}\n\nFix the broken variants."
         )
     else:
         user_prompt = (
-            f"The Python shard '{shard_file}' has inconsistent variants.\n"
-            f"{context}"
-            f"{mismatch_context}"
-            f"Inconsistent: {broken_variants}\n"
-            f"Scores: {scores}\n\n"
-            "CODE TO REPAIR:\n"
-            f"{shard_code}\n\n"
-            "Fix the inconsistent variants so they all yield the same results (analytic or numerical). Return the corrected methods."
+            f"{context}Broken: {broken_variants}\n\nCODE:\n{shard_code}\n\nFix them."
         )
 
     return ask_llm(system_prompt, user_prompt, stream=stream)

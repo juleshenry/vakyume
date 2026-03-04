@@ -63,6 +63,18 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
+  std::cout << "Testing AirLeak_eqn_4_10__t... ";
+  try {
+    auto r = AirLeak_eqn_4_10__t(1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
   std::cout << "Testing AirLeak_eqn_4_7__W... ";
   try {
     auto r = AirLeak_eqn_4_7__W(1.0, 1.0);
@@ -7638,6 +7650,18 @@ int main() {
   std::cout << "Testing VacuumTheory_eqn_1_8__V... ";
   try {
     auto r = VacuumTheory_eqn_1_8__V(1.0, 1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
+  std::cout << "Testing VacuumTheory_eqn_1_8__m... ";
+  try {
+    auto r = VacuumTheory_eqn_1_8__m(1.0, 1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {

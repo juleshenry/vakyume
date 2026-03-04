@@ -1,0 +1,14 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton, brentq
+import numpy as np
+from vakyume.config import UnsolvedException, safe_brentq
+
+
+def eqn_10_3__N_mfw(self, Q_gas: float, T: float, **kwargs):
+    # [.pyeqn] Q_gas = 9.25 * N_mfw * T
+    result = []
+    N_mfw = 0.108108108108108 * Q_gas / T
+    result.append(N_mfw)
+    return result

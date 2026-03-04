@@ -80,9 +80,13 @@ LiquidRing_eqn_10_10__mu(double bhp, double bhp_0, double rho) {
 std::vector<double> LiquidRing_eqn_10_10__rho(double bhp, double bhp_0,
                                               double mu) {
   std::vector<double> result;
-  double term = (std::log((bhp / bhp_0)) - 0.5);
-  result.push_back(std::pow(10.0, term));
-  return result;
+  // Solves the given equation for rho.
+    :param bhp: The brake horsepower (bhp) value.
+    :param bhp_0: The brake horsepower at reference conditions.
+    :param mu: The friction coefficient.
+    :return: The calculated value of rho.
+    double rho = (std::pow(((bhp / bhp_0) - 0.5), (1.0 / 0.84)) / std::pow((0.0155 * std::pow(mu, 0.16)), (1.0 / 0.84)));
+    return {rho};
 }
 
 std::vector<double> LiquidRing_eqn_10_11__T_c(double T_s) {
@@ -445,11 +449,69 @@ std::vector<double> LiquidRing_eqn_10_18__p_s(double P, double S_Th, double S_p,
   return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_19__P(double S_Th, double S_p, double T_e,
-                                            double T_i, double p_c,
-                                            double p_s) {
-  throw std::runtime_error(
-      "LiquidRing_eqn_10_19__P: requires numerical solver (not transpilable)");
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_19__P(double S_Th, double S_p, double T_e, double T_i,
+                        double p_c, double p_s) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> P =
+      ((((((T_e * p_c) * std::pow((S_p / S_Th), (5.0 / 3.0))) - (T_i * p_s)) +
+         ((460.0 * p_c) * std::pow((S_p / S_Th), (5.0 / 3.0)))) -
+        (460.0 * p_s)) /
+       ((((T_e * std::pow((S_p / S_Th), 1.66666666666667)) - T_i) +
+         (460.0 * std::pow((S_p / S_Th), 1.66666666666667))) -
+        460.0));
+  result.push_back(P);
+  P = ((((((T_e * p_c) *
+           std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) -
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_p / S_Th), 0.333333333333333))),
+                    5.0)) -
+          (T_i * p_s)) +
+         ((460.0 * p_c) *
+          std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_p / S_Th), 0.333333333333333))),
+                   5.0))) -
+        (460.0 * p_s)) /
+       ((((T_e *
+           std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) -
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_p / S_Th), 0.333333333333333))),
+                    5.0)) -
+          T_i) +
+         (460.0 *
+          std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_p / S_Th), 0.333333333333333))),
+                   5.0))) -
+        460.0));
+  result.push_back(P);
+  P = ((((((T_e * p_c) *
+           std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) +
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_p / S_Th), 0.333333333333333))),
+                    5.0)) -
+          (T_i * p_s)) +
+         ((460.0 * p_c) *
+          std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_p / S_Th), 0.333333333333333))),
+                   5.0))) -
+        (460.0 * p_s)) /
+       ((((T_e *
+           std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) +
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_p / S_Th), 0.333333333333333))),
+                    5.0)) -
+          T_i) +
+         (460.0 *
+          std::pow((((-0.5) * std::pow((S_p / S_Th), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_p / S_Th), 0.333333333333333))),
+                   5.0))) -
+        460.0));
+  result.push_back(P);
+  return result;
 }
 
 std::vector<double> LiquidRing_eqn_10_19__S_Th(double P, double S_p, double T_e,
@@ -758,13 +820,8 @@ std::vector<double> LiquidRing_eqn_10_2__dt(double PS, double Q_gas, double V,
 std::vector<double> LiquidRing_eqn_10_20__P(double S_0, double S_p, double T_e,
                                             double T_i, double p_0, double p_c,
                                             double p_s) {
-  std::vector<double> result;
-  double numerator = ((S_0 / S_p) * (((T_e + 460.0) * (p_s - P)) * (P - p_c)));
-  double denominator =
-      (((P - p_0) * (460.0 + T_i)) * ((P * (P - p_s)) * (460.0 + T_e)));
-  double P = std::pow((numerator / denominator), (1.0 / 0.6));
-  result.push_back(P);
-  return {result};
+  throw std::runtime_error(
+      "LiquidRing_eqn_10_20__P: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> LiquidRing_eqn_10_20__S_0(double P, double S_p, double T_e,
@@ -807,72 +864,374 @@ std::vector<double> LiquidRing_eqn_10_20__S_p(double P, double S_0, double T_e,
   return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_20__T_e(double P, double S_0, double S_p,
-                                              double T_i, double p_0,
-                                              double p_c, double p_s) {
-  std::vector<double> result;
-  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_c)));
-  double denominator =
-      ((P * (P - p_s)) * (460.0 + std::log((P / (460.0 + T_i)))));
-  result.push_back(std::pow((numerator / denominator), (1.0 / 0.6)));
-  return {result};
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_20__T_e(double P, double S_0, double S_p, double T_i,
+                          double p_0, double p_c, double p_s) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> T_e =
+      (((((((((((std::pow(P, 2.0) * T_i) -
+                ((460.0 * std::pow(P, 2.0)) *
+                 std::pow((S_0 / S_p), (5.0 / 3.0)))) +
+               (460.0 * std::pow(P, 2.0))) -
+              ((P * T_i) * p_0)) -
+             ((P * T_i) * p_c)) -
+            ((460.0 * P) * p_0)) -
+           ((460.0 * P) * p_c)) +
+          (((460.0 * P) * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0)))) +
+         ((T_i * p_0) * p_c)) +
+        ((460.0 * p_0) * p_c)) /
+       ((P * std::pow((S_0 / S_p), (5.0 / 3.0))) * (P - p_s)));
+  result.push_back(T_e);
+  T_e = (((((((((((std::pow(P, 2.0) * T_i) -
+                  ((460.0 * std::pow(P, 2.0)) *
+                   std::pow(
+                       (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                        ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                         std::pow((S_0 / S_p), 0.333333333333333))),
+                       5.0))) +
+                 (460.0 * std::pow(P, 2.0))) -
+                ((P * T_i) * p_0)) -
+               ((P * T_i) * p_c)) -
+              ((460.0 * P) * p_0)) -
+             ((460.0 * P) * p_c)) +
+            (((460.0 * P) * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) +
+           ((T_i * p_0) * p_c)) +
+          ((460.0 * p_0) * p_c)) /
+         ((P * (P - p_s)) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)));
+  result.push_back(T_e);
+  T_e = (((((((((((std::pow(P, 2.0) * T_i) -
+                  ((460.0 * std::pow(P, 2.0)) *
+                   std::pow(
+                       (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                        ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                         std::pow((S_0 / S_p), 0.333333333333333))),
+                       5.0))) +
+                 (460.0 * std::pow(P, 2.0))) -
+                ((P * T_i) * p_0)) -
+               ((P * T_i) * p_c)) -
+              ((460.0 * P) * p_0)) -
+             ((460.0 * P) * p_c)) +
+            (((460.0 * P) * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) +
+           ((T_i * p_0) * p_c)) +
+          ((460.0 * p_0) * p_c)) /
+         ((P * (P - p_s)) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)));
+  result.push_back(T_e);
+  return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_20__T_i(double P, double S_0, double S_p,
-                                              double T_e, double p_0,
-                                              double p_c, double p_s) {
-  std::vector<double> result;
-  double numerator = (((S_0 / S_p) * ((P - p_0) * (460.0 + T_e))) * (P - p_c));
-  double denominator = ((P * (P - p_s)) * (460.0 + T_e));
-  double term1 = std::pow((numerator / denominator), (1.0 / 3.0));
-  double term2 = ((((P - p_0) * (460.0 + T_i)) * (P - p_c)) /
-                  ((P * (P - p_s)) * (460.0 + T_e)));
-  result.push_back(
-      (std::pow(term1, ((-5.0) / 3.0)) *
-       std::pow(((460.0 + T_i) * ((((P - p_0) * (460.0 + T_e)) * (P - p_c)) /
-                                  ((P * (P - p_s)) * (460.0 + T_e)))),
-                ((-2.0) / 3.0))));
-  return {result};
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_20__T_i(double P, double S_0, double S_p, double T_e,
+                          double p_0, double p_c, double p_s) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> T_i =
+      ((((((((((std::pow(P, 2.0) * T_e) * std::pow((S_0 / S_p), (5.0 / 3.0))) +
+              ((460.0 * std::pow(P, 2.0)) *
+               std::pow((S_0 / S_p), (5.0 / 3.0)))) -
+             (460.0 * std::pow(P, 2.0))) -
+            (((P * T_e) * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0)))) +
+           ((460.0 * P) * p_0)) +
+          ((460.0 * P) * p_c)) -
+         (((460.0 * P) * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0)))) -
+        ((460.0 * p_0) * p_c)) /
+       (((std::pow(P, 2.0) - (P * p_0)) - (P * p_c)) + (p_0 * p_c)));
+  result.push_back(T_i);
+  T_i =
+      ((((((((((std::pow(P, 2.0) * T_e) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0)) +
+              ((460.0 * std::pow(P, 2.0)) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) -
+             (460.0 * std::pow(P, 2.0))) -
+            (((P * T_e) * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) +
+           ((460.0 * P) * p_0)) +
+          ((460.0 * P) * p_c)) -
+         (((460.0 * P) * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0))) -
+        ((460.0 * p_0) * p_c)) /
+       (((std::pow(P, 2.0) - (P * p_0)) - (P * p_c)) + (p_0 * p_c)));
+  result.push_back(T_i);
+  T_i =
+      ((((((((((std::pow(P, 2.0) * T_e) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0)) +
+              ((460.0 * std::pow(P, 2.0)) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) -
+             (460.0 * std::pow(P, 2.0))) -
+            (((P * T_e) * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) +
+           ((460.0 * P) * p_0)) +
+          ((460.0 * P) * p_c)) -
+         (((460.0 * P) * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0))) -
+        ((460.0 * p_0) * p_c)) /
+       (((std::pow(P, 2.0) - (P * p_0)) - (P * p_c)) + (p_0 * p_c)));
+  result.push_back(T_i);
+  return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_20__p_0(double P, double S_0, double S_p,
-                                              double T_e, double T_i,
-                                              double p_c, double p_s) {
-  std::vector<double> result;
-  double numerator =
-      (S_0 / (S_p * std::pow(((P - p_c) / (P * (P - p_s))), (3.0 / 5.0))));
-  double denominator = (460.0 + T_i);
-  double p_0 = (P - ((numerator * denominator) /
-                     (((460.0 + T_e) * (P - p_c)) / (P * (P - p_s)))));
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_20__p_0(double P, double S_0, double S_p, double T_e,
+                          double T_i, double p_c, double p_s) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> p_0 =
+      ((P * ((((((((((-P) * T_e) * std::pow((S_0 / S_p), (5.0 / 3.0))) +
+                   (P * T_i)) -
+                  ((460.0 * P) * std::pow((S_0 / S_p), (5.0 / 3.0)))) +
+                 (460.0 * P)) +
+                ((T_e * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0)))) -
+               (T_i * p_c)) -
+              (460.0 * p_c)) +
+             ((460.0 * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0))))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_c)) - (460.0 * p_c)));
   result.push_back(p_0);
-  return {result};
+  p_0 =
+      ((P *
+        ((((((((((-P) * T_e) *
+                std::pow(
+                    (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_0 / S_p), 0.333333333333333))),
+                    5.0)) +
+               (P * T_i)) -
+              ((460.0 * P) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) +
+             (460.0 * P)) +
+            ((T_e * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+           (T_i * p_c)) -
+          (460.0 * p_c)) +
+         ((460.0 * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_c)) - (460.0 * p_c)));
+  result.push_back(p_0);
+  p_0 =
+      ((P *
+        ((((((((((-P) * T_e) *
+                std::pow(
+                    (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_0 / S_p), 0.333333333333333))),
+                    5.0)) +
+               (P * T_i)) -
+              ((460.0 * P) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) +
+             (460.0 * P)) +
+            ((T_e * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+           (T_i * p_c)) -
+          (460.0 * p_c)) +
+         ((460.0 * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_c)) - (460.0 * p_c)));
+  result.push_back(p_0);
+  return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_20__p_c(double P, double S_0, double S_p,
-                                              double T_e, double T_i,
-                                              double p_0, double p_s) {
-  std::vector<double> result;
-  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_s)));
-  double denominator = ((P * (P - T_e)) * (460.0 + T_i));
-  double term1 = ((((P - p_0) * (460.0 + T_i)) * (P - p_s)) /
-                  ((P * (P - p_s)) * (460.0 + T_e)));
-  double term2 = std::pow((numerator / denominator), (1.0 / 0.6));
-  result.push_back(((term1 - 1.0) * p_c));
-  return {result[0.0]};
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_20__p_c(double P, double S_0, double S_p, double T_e,
+                          double T_i, double p_0, double p_s) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> p_c =
+      ((P * ((((((((((-P) * T_e) * std::pow((S_0 / S_p), (5.0 / 3.0))) +
+                   (P * T_i)) -
+                  ((460.0 * P) * std::pow((S_0 / S_p), (5.0 / 3.0)))) +
+                 (460.0 * P)) +
+                ((T_e * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0)))) -
+               (T_i * p_0)) -
+              (460.0 * p_0)) +
+             ((460.0 * p_s) * std::pow((S_0 / S_p), (5.0 / 3.0))))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_0)) - (460.0 * p_0)));
+  result.push_back(p_c);
+  p_c =
+      ((P *
+        ((((((((((-P) * T_e) *
+                std::pow(
+                    (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_0 / S_p), 0.333333333333333))),
+                    5.0)) +
+               (P * T_i)) -
+              ((460.0 * P) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) +
+             (460.0 * P)) +
+            ((T_e * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+           (T_i * p_0)) -
+          (460.0 * p_0)) +
+         ((460.0 * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_0)) - (460.0 * p_0)));
+  result.push_back(p_c);
+  p_c =
+      ((P *
+        ((((((((((-P) * T_e) *
+                std::pow(
+                    (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                     ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                      std::pow((S_0 / S_p), 0.333333333333333))),
+                    5.0)) +
+               (P * T_i)) -
+              ((460.0 * P) *
+               std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                         ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                          std::pow((S_0 / S_p), 0.333333333333333))),
+                        5.0))) +
+             (460.0 * P)) +
+            ((T_e * p_s) *
+             std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+           (T_i * p_0)) -
+          (460.0 * p_0)) +
+         ((460.0 * p_s) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)))) /
+       ((((P * T_i) + (460.0 * P)) - (T_i * p_0)) - (460.0 * p_0)));
+  result.push_back(p_c);
+  return result;
 }
 
-std::vector<double> LiquidRing_eqn_10_20__p_s(double P, double S_0, double S_p,
-                                              double T_e, double T_i,
-                                              double p_0, double p_c) {
-  std::vector<double> result;
-  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_c)));
-  double denominator =
-      ((P * (P - ((p_0 * p_s) / (460.0 + T_i)))) * (460.0 + T_e));
-  double p_s =
-      ((std::pow((numerator / denominator), (1.0 / 0.6)) - (p_0 * p_c)) /
-       (P - p_c));
+std::vector<std::complex<double>>
+LiquidRing_eqn_10_20__p_s(double P, double S_0, double S_p, double T_e,
+                          double T_i, double p_0, double p_c) {
+  std::vector<std::complex<double>> result;
+  std::complex<double> p_s =
+      ((((((((((((std::pow(P, 2.0) * T_e) *
+                 std::pow((S_0 / S_p), (5.0 / 3.0))) -
+                (std::pow(P, 2.0) * T_i)) +
+               ((460.0 * std::pow(P, 2.0)) *
+                std::pow((S_0 / S_p), (5.0 / 3.0)))) -
+              (460.0 * std::pow(P, 2.0))) +
+             ((P * T_i) * p_0)) +
+            ((P * T_i) * p_c)) +
+           ((460.0 * P) * p_0)) +
+          ((460.0 * P) * p_c)) -
+         ((T_i * p_0) * p_c)) -
+        ((460.0 * p_0) * p_c)) /
+       ((P * std::pow((S_0 / S_p), (5.0 / 3.0))) * (T_e + 460.0)));
   result.push_back(p_s);
-  return {result};
+  p_s = ((((((((((((std::pow(P, 2.0) * T_e) *
+                   std::pow(
+                       (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                        ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                         std::pow((S_0 / S_p), 0.333333333333333))),
+                       5.0)) -
+                  (std::pow(P, 2.0) * T_i)) +
+                 ((460.0 * std::pow(P, 2.0)) *
+                  std::pow(
+                      (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+                (460.0 * std::pow(P, 2.0))) +
+               ((P * T_i) * p_0)) +
+              ((P * T_i) * p_c)) +
+             ((460.0 * P) * p_0)) +
+            ((460.0 * P) * p_c)) -
+           ((T_i * p_0) * p_c)) -
+          ((460.0 * p_0) * p_c)) /
+         ((P * (T_e + 460.0)) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) -
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)));
+  result.push_back(p_s);
+  p_s = ((((((((((((std::pow(P, 2.0) * T_e) *
+                   std::pow(
+                       (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                        ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                         std::pow((S_0 / S_p), 0.333333333333333))),
+                       5.0)) -
+                  (std::pow(P, 2.0) * T_i)) +
+                 ((460.0 * std::pow(P, 2.0)) *
+                  std::pow(
+                      (((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                       ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                        std::pow((S_0 / S_p), 0.333333333333333))),
+                      5.0))) -
+                (460.0 * std::pow(P, 2.0))) +
+               ((P * T_i) * p_0)) +
+              ((P * T_i) * p_c)) +
+             ((460.0 * P) * p_0)) +
+            ((460.0 * P) * p_c)) -
+           ((T_i * p_0) * p_c)) -
+          ((460.0 * p_0) * p_c)) /
+         ((P * (T_e + 460.0)) *
+          std::pow((((-0.5) * std::pow((S_0 / S_p), 0.333333333333333)) +
+                    ((0.866025403784439 * std::complex<double>(0.0, 1.0)) *
+                     std::pow((S_0 / S_p), 0.333333333333333))),
+                   5.0)));
+  result.push_back(p_s);
+  return result;
 }
 
 std::vector<double> LiquidRing_eqn_10_21__P(double P_d, double P_prime) {

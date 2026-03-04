@@ -1,9 +1,9 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 from vakyume.kwasak import kwasak
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 import numpy as np
 
 
@@ -38,6 +38,13 @@ class AirLeak:
         result = []
         leakage = 3.127 * V * del_P / (T * t)
         result.append(leakage)
+        return result
+
+    def eqn_4_10__t(self, T: float, V: float, del_P: float, leakage: float, **kwargs):
+        # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
+        result = []
+        t = 3.127 * V * del_P / (T * leakage)
+        result.append(t)
         return result
 
     @kwasak

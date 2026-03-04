@@ -1,0 +1,14 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton, brentq
+import numpy as np
+from vakyume.config import UnsolvedException, safe_brentq
+
+
+def eqn_3_17__P_MIN(self, **kwargs):
+    # [.pyeqn] P_MIN = (3.141592653589793 / 4) / (200000)
+    result = []
+    P_MIN = 0.00000392699081698724
+    result.append(P_MIN)
+    return result

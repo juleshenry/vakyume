@@ -1,14 +1,14 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_3_4__KAPPA import eqn_3_4__KAPPA
-from .eqn_3_4__P import eqn_3_4__P
-from .eqn_3_4__V import eqn_3_4__V
+from .eqn_3_4__K_capA_capP_capP_capA_cap import eqn_3_4__KAPPA
+from .eqn_3_4__P_cap import eqn_3_4__P
+from .eqn_3_4__V_cap import eqn_3_4__V
 
 
 class PressMgmt:

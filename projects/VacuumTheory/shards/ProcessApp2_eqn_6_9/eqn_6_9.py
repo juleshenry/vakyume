@@ -1,18 +1,18 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_6_9__A import eqn_6_9__A
-from .eqn_6_9__dV_dt import eqn_6_9__dV_dt
-from .eqn_6_9__delta_P import eqn_6_9__delta_P
+from .eqn_6_9__A_cap import eqn_6_9__A
+from .eqn_6_9__dV_cap_dt import eqn_6_9__dV_dt
+from .eqn_6_9__delta_P_cap import eqn_6_9__delta_P
 from .eqn_6_9__m import eqn_6_9__m
 from .eqn_6_9__mu import eqn_6_9__mu
 from .eqn_6_9__r import eqn_6_9__r
-from .eqn_6_9__r_M import eqn_6_9__r_M
+from .eqn_6_9__r_M_cap import eqn_6_9__r_M
 
 
 class ProcessApp2:

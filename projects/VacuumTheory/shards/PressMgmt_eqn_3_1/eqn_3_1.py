@@ -1,14 +1,14 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_3_1__Abs_Pressure import eqn_3_1__Abs_Pressure
-from .eqn_3_1__BarometricPressure import eqn_3_1__BarometricPressure
-from .eqn_3_1__Vacuum import eqn_3_1__Vacuum
+from .eqn_3_1__A_capbs_P_capressure import eqn_3_1__Abs_Pressure
+from .eqn_3_1__B_caparometricP_capressure import eqn_3_1__BarometricPressure
+from .eqn_3_1__V_capacuum import eqn_3_1__Vacuum
 
 
 class PressMgmt:

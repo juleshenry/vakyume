@@ -1,9 +1,9 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 from vakyume.kwasak import kwasak
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 import numpy as np
 
 
@@ -294,6 +294,13 @@ class VacuumTheory:
         result = []
         V = R * T * m / (M * P)
         result.append(V)
+        return result
+
+    def eqn_1_8__m(self, M: float, P: float, R: float, T: float, V: float, **kwargs):
+        # P * V = m / M * R * T
+        result = []
+        m = M * P * V / (R * T)
+        result.append(m)
         return result
 
     @kwasak

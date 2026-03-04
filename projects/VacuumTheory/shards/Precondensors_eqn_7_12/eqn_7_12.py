@@ -1,15 +1,15 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_7_12__A import eqn_7_12__A
-from .eqn_7_12__Q_condensor_heat_duty import eqn_7_12__Q_condensor_heat_duty
-from .eqn_7_12__U import eqn_7_12__U
-from .eqn_7_12__del_T import eqn_7_12__del_T
+from .eqn_7_12__A_cap import eqn_7_12__A
+from .eqn_7_12__Q_cap_condensor_heat_duty import eqn_7_12__Q_condensor_heat_duty
+from .eqn_7_12__U_cap import eqn_7_12__U
+from .eqn_7_12__del_T_cap import eqn_7_12__del_T
 
 
 class Precondensors:

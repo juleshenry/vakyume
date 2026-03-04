@@ -556,8 +556,9 @@ def run_pipeline(
         shard_from_chapters(ctx)
 
     analysis = None
-    # Pinned golden tuples: generated in round 1, reused in subsequent rounds
-    # for deterministic verification.  Structure:
+    # Pinned golden tuples: generated fresh each round, but only from
+    # *trusted* oracles.  After a repair, tuples from the repaired oracle
+    # are invalidated so re-verification uses fresh data.  Structure:
     #   { family_name: { base_eq: [(oracle_var, full_value_dict), ...] } }
     pinned_golden_tuples = {}
     for round_idx in range(1, max_rounds + 1):
@@ -567,29 +568,36 @@ def run_pipeline(
             verbose=verbose,
             skip_families=previously_solved,
             include_families=include_families,
-            pinned_tuples=pinned_golden_tuples if round_idx > 1 else None,
+            pinned_tuples=pinned_golden_tuples if pinned_golden_tuples else None,
         )
 
-        # After round 1, extract and pin the golden tuples for reuse
-        if round_idx == 1:
-            for family_name, family_res in all_results.items():
-                if not isinstance(family_res, dict) or "golden_data" not in family_res:
-                    continue
-                golden_data = family_res.get("golden_data", {})
-                family_tuples = {}
-                for base_eq, eq_data in golden_data.items():
-                    raw_tuples = eq_data.get("golden_tuples", [])
-                    # Convert from serialised format back to (oracle, values) pairs
-                    pinned = []
-                    for gt in raw_tuples:
-                        if isinstance(gt, dict) and "oracle" in gt and "values" in gt:
+        # Extract and update pinned golden tuples every round, keeping
+        # only tuples from oracles that are currently trusted.
+        for family_name, family_res in all_results.items():
+            if not isinstance(family_res, dict) or "golden_data" not in family_res:
+                continue
+            golden_data = family_res.get("golden_data", {})
+            family_tuples = {}
+            for base_eq, eq_data in golden_data.items():
+                trusted_vars = set(eq_data.get("trusted", []))
+                raw_tuples = eq_data.get("golden_tuples", [])
+                # Convert from serialised format back to (oracle, values) pairs
+                # but ONLY keep tuples whose oracle is currently trusted
+                pinned = []
+                for gt in raw_tuples:
+                    if isinstance(gt, dict) and "oracle" in gt and "values" in gt:
+                        if gt["oracle"] in trusted_vars:
                             pinned.append((gt["oracle"], dict(gt["values"])))
-                        elif isinstance(gt, (list, tuple)) and len(gt) == 2:
+                    elif isinstance(gt, (list, tuple)) and len(gt) == 2:
+                        if gt[0] in trusted_vars:
                             pinned.append((gt[0], dict(gt[1])))
-                    if pinned:
-                        family_tuples[base_eq] = pinned
-                if family_tuples:
-                    pinned_golden_tuples[family_name] = family_tuples
+                if pinned:
+                    family_tuples[base_eq] = pinned
+            if family_tuples:
+                pinned_golden_tuples[family_name] = family_tuples
+            elif family_name in pinned_golden_tuples:
+                # All oracles were broken — clear stale tuples entirely
+                del pinned_golden_tuples[family_name]
 
         analysis = analyze_results(ctx, all_results)
 
@@ -697,8 +705,17 @@ def run_pipeline(
                 )
                 if result.get("updated"):
                     any_repaired = True
-                    # Re-verify the family immediately to update broken/trusted
-                    # lists so subsequent repairs in this round use fresh info.
+                    # Invalidate pinned tuples from the repaired oracle so
+                    # re-verification generates fresh ones from trusted oracles.
+                    if family_name in pinned_golden_tuples:
+                        for _beq in list(pinned_golden_tuples[family_name].keys()):
+                            pinned_golden_tuples[family_name][_beq] = [
+                                (o, v)
+                                for o, v in pinned_golden_tuples[family_name][_beq]
+                                if o != b_var
+                            ]
+                    # Re-verify the family with fresh tuples to update
+                    # broken/trusted lists for subsequent repairs this round.
                     family_pinned = pinned_golden_tuples.get(family_name)
                     re_res = verify_family(
                         ctx,
@@ -712,12 +729,35 @@ def run_pipeline(
                             re_broken = _eqd.get("broken", [])
                             re_trusted = _eqd.get("trusted", [])
                             re_failures = _eqd.get("failures", {})
-                            if re_broken is not None:
+                            if re_broken is not None and re_trusted is not None:
                                 # Update live lists for remaining repairs
-                                trusted = list(re_trusted) if re_trusted else trusted
+                                broken = list(re_broken)
+                                trusted = list(re_trusted)
                                 golden_failures = (
                                     re_failures if re_failures else golden_failures
                                 )
+                                # Also refresh pinned tuples for this family
+                                # with only trusted-oracle tuples
+                                raw_tuples = _eqd.get("golden_tuples", [])
+                                trusted_set = set(re_trusted)
+                                refreshed = []
+                                for gt in raw_tuples:
+                                    if (
+                                        isinstance(gt, dict)
+                                        and "oracle" in gt
+                                        and "values" in gt
+                                    ):
+                                        if gt["oracle"] in trusted_set:
+                                            refreshed.append(
+                                                (gt["oracle"], dict(gt["values"]))
+                                            )
+                                    elif isinstance(gt, (list, tuple)) and len(gt) == 2:
+                                        if gt[0] in trusted_set:
+                                            refreshed.append((gt[0], dict(gt[1])))
+                                if refreshed:
+                                    if family_name not in pinned_golden_tuples:
+                                        pinned_golden_tuples[family_name] = {}
+                                    pinned_golden_tuples[family_name][_beq] = refreshed
 
         if not any_repaired:
             print(f"  No repairs were made in round {round_idx} — stopping early.")

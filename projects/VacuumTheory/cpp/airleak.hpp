@@ -40,6 +40,14 @@ std::vector<double> AirLeak_eqn_4_10__leakage(double T, double V, double del_P,
   return result;
 }
 
+std::vector<double> AirLeak_eqn_4_10__t(double T, double V, double del_P,
+                                        double leakage) {
+  std::vector<double> result;
+  double t = (((3.127 * V) * del_P) / (T * leakage));
+  result.push_back(t);
+  return result;
+}
+
 std::vector<double> AirLeak_eqn_4_7__W(double W_T,
                                        double sum_individual_leak_rates) {
   std::vector<double> result;

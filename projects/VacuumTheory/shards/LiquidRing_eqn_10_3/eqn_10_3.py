@@ -1,14 +1,14 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_10_3__N_mfw import eqn_10_3__N_mfw
-from .eqn_10_3__Q_gas import eqn_10_3__Q_gas
-from .eqn_10_3__T import eqn_10_3__T
+from .eqn_10_3__N_cap_mfw import eqn_10_3__N_mfw
+from .eqn_10_3__Q_cap_gas import eqn_10_3__Q_gas
+from .eqn_10_3__T_cap import eqn_10_3__T
 
 
 class LiquidRing:

@@ -1,0 +1,14 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton, brentq
+import numpy as np
+from vakyume.config import UnsolvedException, safe_brentq
+
+
+def eqn_5_12__T(self, Eff: float, N_ES: float, N_t: float, **kwargs):
+    # [.pyeqn] N_t = N_ES / Eff ** T
+    result = []
+    T = log(N_ES / N_t) / log(Eff)
+    result.append(T)
+    return result

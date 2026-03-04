@@ -1,17 +1,17 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_11_1__PS import eqn_11_1__PS
-from .eqn_11_1__Q_0 import eqn_11_1__Q_0
-from .eqn_11_1__Q_external_gas_throughput import eqn_11_1__Q_external_gas_throughput
-from .eqn_11_1__V import eqn_11_1__V
-from .eqn_11_1__dP import eqn_11_1__dP
-from .eqn_11_1__dT import eqn_11_1__dT
+from .eqn_11_1__P_capS_cap import eqn_11_1__PS
+from .eqn_11_1__Q_cap_0 import eqn_11_1__Q_0
+from .eqn_11_1__Q_cap_external_gas_throughput import eqn_11_1__Q_external_gas_throughput
+from .eqn_11_1__V_cap import eqn_11_1__V
+from .eqn_11_1__dP_cap import eqn_11_1__dP
+from .eqn_11_1__dT_cap import eqn_11_1__dT
 
 
 class RotaryPistonVane:

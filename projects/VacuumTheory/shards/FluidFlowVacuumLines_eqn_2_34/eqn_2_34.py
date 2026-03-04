@@ -1,17 +1,17 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_2_34__C import eqn_2_34__C
-from .eqn_2_34__C_1 import eqn_2_34__C_1
-from .eqn_2_34__C_2 import eqn_2_34__C_2
-from .eqn_2_34__D import eqn_2_34__D
-from .eqn_2_34__L import eqn_2_34__L
-from .eqn_2_34__P_p import eqn_2_34__P_p
+from .eqn_2_34__C_cap import eqn_2_34__C
+from .eqn_2_34__C_cap_1 import eqn_2_34__C_1
+from .eqn_2_34__C_cap_2 import eqn_2_34__C_2
+from .eqn_2_34__D_cap import eqn_2_34__D
+from .eqn_2_34__L_cap import eqn_2_34__L
+from .eqn_2_34__P_cap_p import eqn_2_34__P_p
 from .eqn_2_34__mu import eqn_2_34__mu
 
 

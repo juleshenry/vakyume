@@ -1,9 +1,9 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 from vakyume.kwasak import kwasak
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 import numpy as np
 
 
@@ -83,9 +83,22 @@ class LiquidRing:
 
     def eqn_10_10__rho(self, bhp, bhp_0, mu, **kwargs):
         # bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-        result = []
-        term = log(bhp / bhp_0) - 0.5
-        result.append(pow(10, term))
+        """
+        Solves the given equation for rho.
+        :param bhp: The brake horsepower (bhp) value.
+        :param bhp_0: The brake horsepower at reference conditions.
+        :param mu: The friction coefficient.
+        :return: The calculated value of rho.
+        """
+        # Rearrange the equation to isolate rho on one side
+        # bhp / bhp_0 = 0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16
+        # rho ** 0.84 * mu ** 0.16 = (bhp / bhp_0 - 0.5)
+        # rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16) ** (1 / 0.84)
+
+        # Calculate rho
+        rho = ((bhp / bhp_0 - 0.5) ** (1 / 0.84)) / (0.0155 * mu**0.16) ** (1 / 0.84)
+
+        return [rho]
 
     @kwasak
     def eqn_10_11(self, T_c=None, T_s=None):
@@ -577,16 +590,99 @@ class LiquidRing:
     ):
         return
 
-    def eqn_10_19__P(self, S_Th, S_p, T_e, T_i, p_c, p_s, **kwargs):
+    def eqn_10_19__P(
+        self,
+        S_Th: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
         result = []
-        P = (S_p / S_Th * ((460 + T_i) * p_c - (460 + T_e) * p_s) ** (1 / 0.6)) ** (
-            5 / 3
+        P = (
+            T_e * p_c * (S_p / S_Th) ** (5 / 3)
+            - T_i * p_s
+            + 460.0 * p_c * (S_p / S_Th) ** (5 / 3)
+            - 460.0 * p_s
+        ) / (
+            T_e * (S_p / S_Th) ** 1.66666666666667
+            - T_i
+            + 460.0 * (S_p / S_Th) ** 1.66666666666667
+            - 460.0
         )
-        if P == 0:
-            raise ValueError("P cannot be zero")
         result.append(P)
-        return [result]
+        P = (
+            T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - T_i * p_s
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_s
+        ) / (
+            T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - T_i
+            + 460.0
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0
+        )
+        result.append(P)
+        P = (
+            T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - T_i * p_s
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_s
+        ) / (
+            T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - T_i
+            + 460.0
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0
+        )
+        result.append(P)
+        return result
 
     def eqn_10_19__S_Th(
         self,
@@ -1017,12 +1113,53 @@ class LiquidRing:
 
     def eqn_10_20__P(self, S_0, S_p, T_e, T_i, p_0, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        result = []
-        numerator = (S_0 / S_p) * ((T_e + 460) * (p_s - P) * (P - p_c))
-        denominator = ((P - p_0) * (460 + T_i)) * (P * (P - p_s) * (460 + T_e))
-        P = pow(numerator / denominator, 1 / 0.6)
-        result.append(P)
-        return [result]
+        def _residual(P):
+            return (
+                S_p
+                * ((P - p_0) * (460 + T_i) * (P - p_c) / (P * (P - p_s) * (460 + T_e)))
+                ** 0.6
+            ) - (S_0)
+
+        from scipy.optimize import brentq as _brentq
+        import math as _math
+
+        def _rf(x):
+            v = _residual(x)
+            return v.real if isinstance(v, complex) else float(v)
+
+        _sings = sorted(set([0, p_0, p_c, p_s]))
+        _intervals = []
+        if _sings[0] > 1e-12:
+            _e0 = min(0.01, _sings[0] * 0.001)
+            _intervals.append((1e-12, _sings[0] - _e0))
+        for _i in range(len(_sings) - 1):
+            _gap = _sings[_i + 1] - _sings[_i]
+            _eg = min(0.01, _gap * 0.001)
+            if _gap > 2 * _eg:
+                _intervals.append((_sings[_i] + _eg, _sings[_i + 1] - _eg))
+        _top = _sings[-1] + min(0.01, max(abs(_sings[-1]) * 0.001, 1e-10))
+        for _hi in [_top + 1, _top + 10, _top * 100, _top + 1000, 1e6]:
+            _intervals.append((_top, _hi))
+        _roots = []
+        for _lo, _hi in _intervals:
+            if _lo >= _hi:
+                continue
+            _N = 50
+            _step = (_hi - _lo) / _N
+            for _j in range(_N):
+                _a = _lo + _j * _step
+                _b = _lo + (_j + 1) * _step
+                try:
+                    _fa = _rf(_a)
+                    _fb = _rf(_b)
+                    if _math.isfinite(_fa) and _math.isfinite(_fb) and _fa * _fb < 0:
+                        _roots.append(_brentq(_rf, _a, _b))
+                except Exception:
+                    continue
+        if _roots:
+            _pos = [r for r in _roots if r > 0]
+            return list(set(round(r, 10) for r in (_pos if _pos else _roots)))
+        return [safe_brentq(_residual)]
 
     def eqn_10_20__S_0(
         self,
@@ -1082,60 +1219,481 @@ class LiquidRing:
         result.append(S_p)
         return result
 
-    def eqn_10_20__T_e(self, P, S_0, S_p, T_i, p_0, p_c, p_s, **kwargs):
+    def eqn_10_20__T_e(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_c))
-        denominator = P * (P - p_s) * (460 + log(P / (460 + T_i)))
-        result.append(pow(numerator / denominator, 1 / 0.6))
-        return [result]
+        T_e = (
+            P**2 * T_i
+            - 460.0 * P**2 * (S_0 / S_p) ** (5 / 3)
+            + 460.0 * P**2
+            - P * T_i * p_0
+            - P * T_i * p_c
+            - 460.0 * P * p_0
+            - 460.0 * P * p_c
+            + 460.0 * P * p_s * (S_0 / S_p) ** (5 / 3)
+            + T_i * p_0 * p_c
+            + 460.0 * p_0 * p_c
+        ) / (P * (S_0 / S_p) ** (5 / 3) * (P - p_s))
+        result.append(T_e)
+        T_e = (
+            P**2 * T_i
+            - 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P**2
+            - P * T_i * p_0
+            - P * T_i * p_c
+            - 460.0 * P * p_0
+            - 460.0 * P * p_c
+            + 460.0
+            * P
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + T_i * p_0 * p_c
+            + 460.0 * p_0 * p_c
+        ) / (
+            P
+            * (P - p_s)
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(T_e)
+        T_e = (
+            P**2 * T_i
+            - 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P**2
+            - P * T_i * p_0
+            - P * T_i * p_c
+            - 460.0 * P * p_0
+            - 460.0 * P * p_c
+            + 460.0
+            * P
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + T_i * p_0 * p_c
+            + 460.0 * p_0 * p_c
+        ) / (
+            P
+            * (P - p_s)
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(T_e)
+        return result
 
     def eqn_10_20__T_i(self, P, S_0, S_p, T_e, p_0, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_e)) * (P - p_c)
-        denominator = P * (P - p_s) * (460 + T_e)
-        term1 = pow(numerator / denominator, 1 / 3)
-        term2 = ((P - p_0) * (460 + T_i) * (P - p_c)) / (P * (P - p_s) * (460 + T_e))
-        result.append(
-            (term1 ** (-5 / 3))
+        T_i = (
+            P**2 * T_e * (S_0 / S_p) ** (5 / 3)
+            + 460.0 * P**2 * (S_0 / S_p) ** (5 / 3)
+            - 460.0 * P**2
+            - P * T_e * p_s * (S_0 / S_p) ** (5 / 3)
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - 460.0 * P * p_s * (S_0 / S_p) ** (5 / 3)
+            - 460.0 * p_0 * p_c
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
+        result.append(T_i)
+        T_i = (
+            P**2
+            * T_e
             * (
-                (460 + T_i)
-                * ((P - p_0) * (460 + T_e) * (P - p_c) / (P * (P - p_s) * (460 + T_e)))
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
             )
-            ** (-2 / 3)
-        )
-        return [result]
+            ** 5
+            + 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P**2
+            - P
+            * T_e
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - 460.0
+            * P
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_0 * p_c
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
+        result.append(T_i)
+        T_i = (
+            P**2
+            * T_e
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P**2
+            - P
+            * T_e
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - 460.0
+            * P
+            * p_s
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_0 * p_c
+        ) / (P**2 - P * p_0 - P * p_c + p_0 * p_c)
+        result.append(T_i)
+        return result
 
     def eqn_10_20__p_0(self, P, S_0, S_p, T_e, T_i, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        numerator = S_0 / (S_p * ((P - p_c) / (P * (P - p_s))) ** (3 / 5))
-        denominator = 460 + T_i
-        p_0 = P - (numerator * denominator) / (
-            (460 + T_e) * (P - p_c) / (P * (P - p_s))
+        p_0 = (
+            P
+            * (
+                -P * T_e * (S_0 / S_p) ** (5 / 3)
+                + P * T_i
+                - 460.0 * P * (S_0 / S_p) ** (5 / 3)
+                + 460.0 * P
+                + T_e * p_s * (S_0 / S_p) ** (5 / 3)
+                - T_i * p_c
+                - 460.0 * p_c
+                + 460.0 * p_s * (S_0 / S_p) ** (5 / 3)
+            )
+            / (P * T_i + 460.0 * P - T_i * p_c - 460.0 * p_c)
         )
         result.append(p_0)
-        return [result]
+        p_0 = (
+            P
+            * (
+                -P
+                * T_e
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + P * T_i
+                - 460.0
+                * P
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + 460.0 * P
+                + T_e
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                - T_i * p_c
+                - 460.0 * p_c
+                + 460.0
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+            )
+            / (P * T_i + 460.0 * P - T_i * p_c - 460.0 * p_c)
+        )
+        result.append(p_0)
+        p_0 = (
+            P
+            * (
+                -P
+                * T_e
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + P * T_i
+                - 460.0
+                * P
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + 460.0 * P
+                + T_e
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                - T_i * p_c
+                - 460.0 * p_c
+                + 460.0
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+            )
+            / (P * T_i + 460.0 * P - T_i * p_c - 460.0 * p_c)
+        )
+        result.append(p_0)
+        return result
 
     def eqn_10_20__p_c(self, P, S_0, S_p, T_e, T_i, p_0, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_s))
-        denominator = P * (P - T_e) * (460 + T_i)
-        term1 = ((P - p_0) * (460 + T_i) * (P - p_s)) / (P * (P - p_s) * (460 + T_e))
-        term2 = (numerator / denominator) ** (1 / 0.6)
-        result.append((term1 - 1) * p_c)
-        return [result[0]]
+        p_c = (
+            P
+            * (
+                -P * T_e * (S_0 / S_p) ** (5 / 3)
+                + P * T_i
+                - 460.0 * P * (S_0 / S_p) ** (5 / 3)
+                + 460.0 * P
+                + T_e * p_s * (S_0 / S_p) ** (5 / 3)
+                - T_i * p_0
+                - 460.0 * p_0
+                + 460.0 * p_s * (S_0 / S_p) ** (5 / 3)
+            )
+            / (P * T_i + 460.0 * P - T_i * p_0 - 460.0 * p_0)
+        )
+        result.append(p_c)
+        p_c = (
+            P
+            * (
+                -P
+                * T_e
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + P * T_i
+                - 460.0
+                * P
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + 460.0 * P
+                + T_e
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                - T_i * p_0
+                - 460.0 * p_0
+                + 460.0
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+            )
+            / (P * T_i + 460.0 * P - T_i * p_0 - 460.0 * p_0)
+        )
+        result.append(p_c)
+        p_c = (
+            P
+            * (
+                -P
+                * T_e
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + P * T_i
+                - 460.0
+                * P
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                + 460.0 * P
+                + T_e
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+                - T_i * p_0
+                - 460.0 * p_0
+                + 460.0
+                * p_s
+                * (
+                    -0.5 * (S_0 / S_p) ** 0.333333333333333
+                    + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+                )
+                ** 5
+            )
+            / (P * T_i + 460.0 * P - T_i * p_0 - 460.0 * p_0)
+        )
+        result.append(p_c)
+        return result
 
-    def eqn_10_20__p_s(self, P, S_0, S_p, T_e, T_i, p_0, p_c, **kwargs):
+    def eqn_10_20__p_s(
+        self,
+        P: float,
+        S_0: float,
+        S_p: float,
+        T_e: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        **kwargs,
+    ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         result = []
-        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_c))
-        denominator = P * (P - (p_0 * p_s / (460 + T_i))) * (460 + T_e)
-        p_s = ((numerator / denominator) ** (1 / 0.6) - (p_0 * p_c)) / (P - p_c)
+        p_s = (
+            P**2 * T_e * (S_0 / S_p) ** (5 / 3)
+            - P**2 * T_i
+            + 460.0 * P**2 * (S_0 / S_p) ** (5 / 3)
+            - 460.0 * P**2
+            + P * T_i * p_0
+            + P * T_i * p_c
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - T_i * p_0 * p_c
+            - 460.0 * p_0 * p_c
+        ) / (P * (S_0 / S_p) ** (5 / 3) * (T_e + 460.0))
         result.append(p_s)
-        return [result]
+        p_s = (
+            P**2
+            * T_e
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - P**2 * T_i
+            + 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P**2
+            + P * T_i * p_0
+            + P * T_i * p_c
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - T_i * p_0 * p_c
+            - 460.0 * p_0 * p_c
+        ) / (
+            P
+            * (T_e + 460.0)
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(p_s)
+        p_s = (
+            P**2
+            * T_e
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - P**2 * T_i
+            + 460.0
+            * P**2
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P**2
+            + P * T_i * p_0
+            + P * T_i * p_c
+            + 460.0 * P * p_0
+            + 460.0 * P * p_c
+            - T_i * p_0 * p_c
+            - 460.0 * p_0 * p_c
+        ) / (
+            P
+            * (T_e + 460.0)
+            * (
+                -0.5 * (S_0 / S_p) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_0 / S_p) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(p_s)
+        return result
 
     @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):

@@ -1,16 +1,16 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_10_18__P import eqn_10_18__P
-from .eqn_10_18__S_Th import eqn_10_18__S_Th
-from .eqn_10_18__S_p import eqn_10_18__S_p
-from .eqn_10_18__T_e import eqn_10_18__T_e
-from .eqn_10_18__T_i import eqn_10_18__T_i
+from .eqn_10_18__P_cap import eqn_10_18__P
+from .eqn_10_18__S_cap_T_caph import eqn_10_18__S_Th
+from .eqn_10_18__S_cap_p import eqn_10_18__S_p
+from .eqn_10_18__T_cap_e import eqn_10_18__T_e
+from .eqn_10_18__T_cap_i import eqn_10_18__T_i
 from .eqn_10_18__p_c import eqn_10_18__p_c
 from .eqn_10_18__p_s import eqn_10_18__p_s
 

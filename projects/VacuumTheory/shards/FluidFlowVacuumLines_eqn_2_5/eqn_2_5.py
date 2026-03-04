@@ -1,14 +1,14 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_2_5__D import eqn_2_5__D
-from .eqn_2_5__L import eqn_2_5__L
-from .eqn_2_5__delta_P import eqn_2_5__delta_P
+from .eqn_2_5__D_cap import eqn_2_5__D
+from .eqn_2_5__L_cap import eqn_2_5__L
+from .eqn_2_5__delta_P_cap import eqn_2_5__delta_P
 from .eqn_2_5__mu import eqn_2_5__mu
 from .eqn_2_5__q import eqn_2_5__q
 

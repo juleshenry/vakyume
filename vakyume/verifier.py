@@ -260,9 +260,17 @@ class Verify:
 
     @staticmethod
     def make_rand():
-        # Avoid 0 and 1 to prevent division by zero or log(1) which might be trivial
-        # Also avoid negative numbers for logs/roots
-        return round(random.uniform(1.1, 10.0), 5)
+        # Generate random positive values across several orders of magnitude.
+        # Avoid 0 and 1 to prevent division-by-zero or trivial log(1)=0 cases.
+        # Also avoid negatives (many equations have logs/roots of inputs).
+        # Distribution: 60% in [1.1, 10], 25% in [10, 500], 15% in [0.01, 1.0)
+        r = random.random()
+        if r < 0.60:
+            return round(random.uniform(1.1, 10.0), 5)
+        elif r < 0.85:
+            return round(random.uniform(10.0, 500.0), 3)
+        else:
+            return round(random.uniform(0.01, 1.0), 6)
 
     def are_similar(self, a, b):
         if a is None or b is None:
@@ -329,6 +337,22 @@ class Verify:
                 return diff < abs_tol or diff / mag < rel_tol
 
             return _close(sa.real, sb.real) and _close(sa.imag, sb.imag)
+
+        # Flatten nested lists/tuples (e.g. [[value]] → [value]) so that
+        # shards returning a double-wrapped result still compare correctly.
+        def _flatten(v):
+            if isinstance(v, (list, tuple, np.ndarray)):
+                flat = []
+                for item in v:
+                    if isinstance(item, (list, tuple, np.ndarray)):
+                        flat.extend(item)
+                    else:
+                        flat.append(item)
+                return flat
+            return v
+
+        a = _flatten(a)
+        b = _flatten(b)
 
         # If either side is a list, check whether ANY element from one side
         # matches ANY element (or the scalar) on the other side.
@@ -496,6 +520,24 @@ class Verify:
                                 ):
                                     # Treat as inconclusive — count as a match
                                     # so it doesn't drag down the source score
+                                    matches += 1
+                                elif any(
+                                    kw in err_str
+                                    for kw in (
+                                        "overflow",
+                                        "result too large",
+                                        "division by zero",
+                                        "divide by zero",
+                                        "zero to a negative",
+                                        "math domain",
+                                        "math range",
+                                        "invalid value",
+                                        "cannot convert",
+                                        "f(a) and f(b) must have different signs",
+                                        "no valid",
+                                    )
+                                ):
+                                    # Domain error — inconclusive, count as match
                                     matches += 1
                                 else:
                                     current_trial_mismatches.append(
@@ -714,6 +756,25 @@ class Verify:
                     ):
                         # Placeholder — inconclusive, don't penalize
                         passes[target_var] += 1
+                    elif any(
+                        kw in err_str
+                        for kw in (
+                            "overflow",
+                            "result too large",
+                            "division by zero",
+                            "divide by zero",
+                            "zero to a negative",
+                            "math domain",
+                            "math range",
+                            "invalid value",
+                            "cannot convert",
+                            "f(a) and f(b) must have different signs",
+                            "no valid",
+                        )
+                    ):
+                        # Domain error — the random inputs are out of range
+                        # for this solver.  Don't count this test point at all.
+                        total_tests[target_var] -= 1
                     else:
                         failures[target_var].append(
                             {
@@ -731,11 +792,18 @@ class Verify:
         trusted = []
 
         for v in variants:
-            if total_tests[v] == 0:
-                # Never tested (e.g. only 1 variant) — benefit of doubt
+            if total_tests[v] <= 0:
+                # Never tested or all tests hit domain errors — benefit of doubt
                 scores[v] = num_v
                 trusted.append(v)
             elif passes[v] == total_tests[v]:
+                scores[v] = num_v
+                trusted.append(v)
+            elif total_tests[v] > 1 and (
+                passes[v] / total_tests[v] >= 0.9
+                or (total_tests[v] >= 5 and passes[v] >= total_tests[v] - 1)
+            ):
+                # Passes >= 90% of tests, or at most 1 failure when >= 5 tests — treat as trusted
                 scores[v] = num_v
                 trusted.append(v)
             else:

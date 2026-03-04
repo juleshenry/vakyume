@@ -1,9 +1,9 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 from vakyume.kwasak import kwasak
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 import numpy as np
 
 
@@ -33,10 +33,10 @@ class SelectingPump:
 
     def eqn_8_1__SCON(self, NC, NS, installation_cost, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
-        result = []
-        SCON = pow((installation_cost / (16000 * (NS + 2 * NC))), 1 / 0.35) * 1000
-        result.append(SCON)
-        return [result]
+        def _residual(SCON):
+            return (16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35) - (installation_cost)
+
+        return [safe_brentq(_residual)]
 
     def eqn_8_1__installation_cost(self, NC: float, NS: float, SCON: float, **kwargs):
         # installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
@@ -73,9 +73,49 @@ class SelectingPump:
     def eqn_8_3__hp(self, installed_costs, **kwargs):
         # installed_costs = 38000 * (hp / 10) ** 0.45
         result = []
-        hp = pow((installed_costs / 38000), 1 / 0.45)
+        hp = 6.64818534458494e-10 * installed_costs ** (20 / 9)
         result.append(hp)
-        return [result]
+        hp = (
+            -0.326678815618226 * installed_costs**0.111111111111111
+            - 0.118901365050371 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            -0.326678815618226 * installed_costs**0.111111111111111
+            + 0.118901365050371 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            -0.173822167159837 * installed_costs**0.111111111111111
+            - 0.301068825002567 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            -0.173822167159837 * installed_costs**0.111111111111111
+            + 0.301068825002567 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            0.0603678051308443 * installed_costs**0.111111111111111
+            - 0.342362835728782 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            0.0603678051308443 * installed_costs**0.111111111111111
+            + 0.342362835728782 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            0.266311010487382 * installed_costs**0.111111111111111
+            - 0.223461470678411 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        hp = (
+            0.266311010487382 * installed_costs**0.111111111111111
+            + 0.223461470678411 * I * installed_costs**0.111111111111111
+        ) ** 20
+        result.append(hp)
+        return result
 
     def eqn_8_3__installed_costs(self, hp: float, **kwargs):
         # installed_costs = 38000 * (hp / 10) ** 0.45
@@ -298,20 +338,74 @@ class SelectingPump:
         result.append(adiabatic_hp)
         return result
 
-    def eqn_8_6__k(self, M, P_1, P_2, R, T, adiabatic_hp, w, **kwargs):
+    def eqn_8_6__k(
+        self,
+        M: float,
+        P_1: float,
+        P_2: float,
+        R: float,
+        T: float,
+        adiabatic_hp: float,
+        w: float,
+        **kwargs,
+    ):
         # adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
-        result = []
-        k = (
-            M
-            * 1980000
-            * adiabatic_hp
-            * (k - 1)
-            / (R * T * w * ((P_2 / P_1) ** ((k - 1) / k) - 1))
-        )
-        if k == 0:
-            return [None]
-        result.append(k)
-        return [result]
+        def _residual(k):
+            return (
+                (
+                    k
+                    / (k - 1)
+                    * (w * R * T)
+                    / (M * 550 * 3600)
+                    * ((P_2 / P_1) ** ((k - 1) / k) - 1)
+                )
+            ) - (adiabatic_hp)
+
+        lo = max(0, 1, 1) + 0.01
+        hi_candidates = [lo + 0.5, lo + 2, lo + 10, lo * 100, lo + 1000, 1e6]
+        from scipy.optimize import brentq as _brentq
+        import math as _math
+
+        for hi in hi_candidates:
+            try:
+                fa = _residual(lo)
+                fb = _residual(hi)
+                if isinstance(fa, complex):
+                    fa = fa.real
+                if isinstance(fb, complex):
+                    fb = fb.real
+                if _math.isfinite(fa) and _math.isfinite(fb) and fa * fb < 0:
+
+                    def _rf(x):
+                        v = _residual(x)
+                        return v.real if isinstance(v, complex) else float(v)
+
+                    return [_brentq(_rf, lo, hi)]
+            except Exception:
+                continue
+        for _lo2, _hi2 in [
+            (lo, lo * 1e3),
+            (lo, lo * 1e6),
+            (lo, lo * 1e8),
+            (lo * 0.5 + 0.001, lo * 1e4),
+        ]:
+            try:
+                _fa2 = _residual(_lo2)
+                _fb2 = _residual(_hi2)
+                if isinstance(_fa2, complex):
+                    _fa2 = _fa2.real
+                if isinstance(_fb2, complex):
+                    _fb2 = _fb2.real
+                if _math.isfinite(_fa2) and _math.isfinite(_fb2) and _fa2 * _fb2 < 0:
+
+                    def _rf2(x):
+                        v = _residual(x)
+                        return v.real if isinstance(v, complex) else float(v)
+
+                    return [_brentq(_rf2, _lo2, _hi2)]
+            except Exception:
+                continue
+        return [safe_brentq(_residual)]
 
     def eqn_8_6__w(
         self,
@@ -342,17 +436,17 @@ class SelectingPump:
 
     def eqn_8_7__P_1(self, P_2, adiabatic_hp, w, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-        result = []
-        p_1 = pow((adiabatic_hp * 20 / w + 1), 1 / 0.286)
-        result.append(p_1)
-        return [result]
+        def _residual(P_1):
+            return ((w / 20) * ((P_2 / P_1) ** 0.286 - 1)) - (adiabatic_hp)
 
-    def eqn_8_7__P_2(self, P_1, adiabatic_hp, w, **kwargs):
+        return [safe_brentq(_residual)]
+
+    def eqn_8_7__P_2(self, P_1: float, adiabatic_hp: float, w: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-        result = []
-        p_2 = pow((adiabatic_hp * 20 / w + 1), 1 / 0.286)
-        result.append(p_2)
-        return [result]
+        def _residual(P_2):
+            return ((w / 20) * ((P_2 / P_1) ** 0.286 - 1)) - (adiabatic_hp)
+
+        return [safe_brentq(_residual)]
 
     def eqn_8_7__adiabatic_hp(self, P_1: float, P_2: float, w: float, **kwargs):
         # adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
@@ -374,21 +468,19 @@ class SelectingPump:
 
     def eqn_8_8__P_1(self, P_2, adiabatic_power_watts, f, **kwargs):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
-        result = []
-        numerator = (adiabatic_power_watts * 12) + 1
-        denominator = pow(P_2, 0.286)
-        P_1 = pow(denominator, 1 / 0.286)
-        result.append(P_1)
-        return [result]
+        def _residual(P_1):
+            return (f / 12 * ((P_2 / P_1) ** 0.286 - 1)) - (adiabatic_power_watts)
 
-    def eqn_8_8__P_2(self, P_1, adiabatic_power_watts, f, **kwargs):
+        return [safe_brentq(_residual)]
+
+    def eqn_8_8__P_2(
+        self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs
+    ):
         # adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
-        result = []
-        numerator = (adiabatic_power_watts * 12) + 1
-        denominator = pow(P_1, 0.286)
-        P_2 = numerator / denominator
-        result.append(P_2)
-        return [result]
+        def _residual(P_2):
+            return (f / 12 * ((P_2 / P_1) ** 0.286 - 1)) - (adiabatic_power_watts)
+
+        return [safe_brentq(_residual)]
 
     def eqn_8_8__adiabatic_power_watts(
         self, P_1: float, P_2: float, f: float, **kwargs

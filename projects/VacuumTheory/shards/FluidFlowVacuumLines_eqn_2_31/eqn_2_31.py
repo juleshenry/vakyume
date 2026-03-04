@@ -1,14 +1,14 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_2_31__C import eqn_2_31__C
-from .eqn_2_31__S_p import eqn_2_31__S_p
-from .eqn_2_31__S_pump_speed import eqn_2_31__S_pump_speed
+from .eqn_2_31__C_cap import eqn_2_31__C
+from .eqn_2_31__S_cap_p import eqn_2_31__S_p
+from .eqn_2_31__S_cap_pump_speed import eqn_2_31__S_pump_speed
 
 
 class FluidFlowVacuumLines:

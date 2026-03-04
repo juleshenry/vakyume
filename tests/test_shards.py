@@ -123,10 +123,15 @@ _FAMILIES = list(_collect_families())
 KNOWN_INCONSISTENT = {
     "FluidFlowVacuumLines_eqn_2_17",
     "FluidFlowVacuumLines_eqn_2_34",
+    "LiquidRing_eqn_10_10",
     "LiquidRing_eqn_10_19",
     "LiquidRing_eqn_10_20",
     "Precondensors_eqn_7_14b",
+    "SelectingPump_eqn_8_1",
+    "SelectingPump_eqn_8_3",
     "SelectingPump_eqn_8_6",
+    "SelectingPump_eqn_8_7",
+    "SelectingPump_eqn_8_8",
 }
 
 

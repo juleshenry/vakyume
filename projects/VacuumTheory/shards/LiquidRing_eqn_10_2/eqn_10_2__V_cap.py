@@ -1,0 +1,14 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton, brentq
+import numpy as np
+from vakyume.config import UnsolvedException, safe_brentq
+
+
+def eqn_10_2__V(self, PS: float, Q_gas: float, dP: float, dt: float, **kwargs):
+    # [.pyeqn] PS = - V * dP / dt + Q_gas
+    result = []
+    V = dt * (-PS + Q_gas) / dP
+    result.append(V)
+    return result

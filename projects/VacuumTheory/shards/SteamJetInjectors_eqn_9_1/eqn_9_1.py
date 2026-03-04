@@ -1,12 +1,12 @@
 from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
-from scipy.optimize import newton
+from scipy.optimize import newton, brentq
 import numpy as np
-from vakyume.config import UnsolvedException
+from vakyume.config import UnsolvedException, safe_brentq
 
 from vakyume.kwasak import kwasak
-from .eqn_9_1__A import eqn_9_1__A
+from .eqn_9_1__A_cap import eqn_9_1__A
 from .eqn_9_1__rho_s import eqn_9_1__rho_s
 from .eqn_9_1__v import eqn_9_1__v
 from .eqn_9_1__w_s import eqn_9_1__w_s
