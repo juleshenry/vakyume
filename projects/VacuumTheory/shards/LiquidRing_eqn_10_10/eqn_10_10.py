@@ -11,7 +11,6 @@ from .eqn_10_10__bhp_0 import eqn_10_10__bhp_0
 from .eqn_10_10__mu import eqn_10_10__mu
 from .eqn_10_10__rho import eqn_10_10__rho
 
-
 class LiquidRing:
     eqn_10_10__bhp = eqn_10_10__bhp
     eqn_10_10__bhp_0 = eqn_10_10__bhp_0

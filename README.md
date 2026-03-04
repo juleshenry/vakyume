@@ -12,12 +12,11 @@ Vakyume automates the path from a textbook PDF to a compiled binary through an e
 graph TD
     A[PDF Textbook] -->|Scrape| B(Equation Notes)
     B -->|SymPy| C{Initial Solvers}
-    C -->|Fail/Inconsistent| D[Scaffold Engine]
-    D -->|Derivation| E[LLM Repair]
-    E -->|Verify| F{OOO Check}
-    F -->|Pass|     G[Certified Shards]
-    G -->|Reconstruct| H[Modular Python Package]
-    H -->|Transpile| I[C++ Library]
+    C -->|Fail/Inconsistent| D[LLM Repair]
+    D -->|Verify| E{OOO Check}
+    E -->|Pass|     F[Certified Shards]
+    F -->|Reconstruct| G[Modular Python Package]
+    G -->|Transpile| H[C++ Library]
 
 ```
 
@@ -30,15 +29,10 @@ For any equation (e.g., $PV=nRT$), Vakyume generates solvers for every variable 
 *   **Consistency Check**: It picks a random input, solves for one variable, and then uses that result to solve for the others. 
 *   **Harmony**: If the results don't satisfy the original equation within a $1e-4$ tolerance, the solver is flagged for repair.
 
-### 3. Algorithmic Scaffolding
-When symbolic solvers (SymPy) fail on transcendental or complex engineering forms, Vakyume employs a **Scaffold Engine**. This engine uses deterministic regex patterns to pre-derive the algebra.
-*   **Numerical Fallback**: Automatically generates `brentq` solvers for transcendental variables.
-*   **Algebraic Roadmaps**: Provides step-by-step derivations for fractional power and ratio-based equations.
+### 3. LLM-Assisted Repair
+When symbolic solvers (SymPy) fail on transcendental or complex engineering forms, Vakyume uses LLM-assisted repair. The LLM is given the equation, a working example shard from the same family, and concrete expected-vs-got test cases to produce a corrected solver function.
 
-### 4. LLM-Assisted Repair
-Instead of asking an LLM to "solve the math," Vakyume asks it to "complete the code" using the pre-derived scaffold as a guardrail. This minimizes algebraic drift and sign errors common in small language models.
-
-### 5. Multi-Target Synthesis
+### 4. Multi-Target Synthesis
 *   **Python**: Generates a modular package (`py/`) with the `@kwasak` decorator for automatic variable dispatch.
 *   **C++**: Transpiles Python AST to C++17, utilizing `std::complex` and custom `LambertW` implementations.
 *   **Documentation**: Generates an **Equation Certification Report** (`docs/`) with LaTeX-rendered formulas and variable definitions for peer review.
@@ -179,21 +173,7 @@ python3 vakyume.py scrape textbook.pdf -c 10 -q
 
 ---
 
-## Analysis: Scaffolding vs. Unconstrained Inference
-
-A key architectural discovery of this project is the limitation of Small Language Models (SLMs) in purely algebraic contexts. While models like Phi-3 are excellent at structured reasoning, their internal representation of algebra often "drifts" during multi-step manipulations.
-
-### The Weakness of SLMs in Algebra
-In early iterations, we observed high error rates in equations with:
-*   **High Term Density**: Errors in distributing negatives through nested parentheses.
-*   **Transcendental Forms**: Incorrect application of log identities.
-
-### Scaffolding as the Solution
-The **Scaffold Engine** (in `scaffold.py`) transforms the LLM's role. By providing a fixed algebraic roadmap, the model is no longer required to reason about the math—only to translate the final step into syntax. This approach reduced repair failures by **80%**, proving that **deterministic structural guardrails are superior to raw model capability** for high-precision engineering tasks.
-
----
-
 ## Conclusion
-Vakyume bridges the gap between static textbook theory and verified, executable code. By combining symbolic math, deterministic scaffolding, and LLM-assisted repair, it provides a scalable blueprint for preserving and digitizing complex engineering knowledge.
+Vakyume bridges the gap between static textbook theory and verified, executable code. By combining symbolic math, OOO cross-validation, and LLM-assisted repair, it provides a scalable blueprint for preserving and digitizing complex engineering knowledge.
 
 

@@ -12,7 +12,6 @@ from .eqn_2_28__L import eqn_2_28__L
 from .eqn_2_28__P_p import eqn_2_28__P_p
 from .eqn_2_28__mu import eqn_2_28__mu
 
-
 class FluidFlowVacuumLines:
     eqn_2_28__C = eqn_2_28__C
     eqn_2_28__D = eqn_2_28__D

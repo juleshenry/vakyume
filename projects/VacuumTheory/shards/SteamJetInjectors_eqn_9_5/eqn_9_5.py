@@ -11,7 +11,6 @@ from .eqn_9_5__r_h import eqn_9_5__r_h
 from .eqn_9_5__t_h import eqn_9_5__t_h
 from .eqn_9_5__w_h import eqn_9_5__w_h
 
-
 class SteamJetInjectors:
     eqn_9_5__V = eqn_9_5__V
     eqn_9_5__r_h = eqn_9_5__r_h

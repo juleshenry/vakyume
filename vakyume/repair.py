@@ -73,8 +73,7 @@
 """LLM-assisted repair of broken solver shards.
 
 When a solver shard fails One-Odd-Out verification, this module generates a
-repair prompt (optionally with an algebraic scaffold) and queries the LLM to
-produce a corrected solver function.
+repair prompt and queries the LLM to produce a corrected solver function.
 """
 
 import ast
@@ -83,7 +82,6 @@ import re
 
 from .config import SHARD_IMPORT_HEADER
 from .llm import ask_llm, extract_code
-from .scaffold import generate_derivation_scaffold
 
 
 def _postprocess_code(code: str) -> str:
@@ -150,12 +148,7 @@ def attempt_repair_shard(
     error: str = None,
     golden_test_cases: list = None,
 ):
-    """Repair a single shard file — scaffold-first, LLM only as last resort.
-
-    The algebraic scaffold is deterministic and fast; phi3 produces invalid
-    syntax ~80% of the time so we only fall through to the LLM when the
-    scaffold returns a stub.
-    """
+    """Repair a single shard file using LLM-assisted code generation."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
     eqn_suffix = family_name.split("_eqn_")[1]
     shard_path = _find_shard_file(family_dir, eqn_suffix, broken_variant)
@@ -224,23 +217,6 @@ def attempt_repair_shard(
             print(f"  [Repair] Regenerated header: {header}")
 
     print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
-
-    # ── 1. Try scaffold first (fast, deterministic) ──────────────────
-    scaffold_result = _scaffold_fallback(
-        ctx,
-        family_name,
-        broken_variant,
-        shard_path,
-        shard_file,
-        pyeqn,
-        header,
-        eqn_suffix,
-    )
-    if scaffold_result.get("updated"):
-        return scaffold_result
-
-    # ── 2. Scaffold failed (stub / empty) — try LLM as fallback ─────
-    print(f"  [Repair] Scaffold incomplete — trying LLM fallback")
 
     # Find a working shard from the same family to use as example
     example_code = None
@@ -390,71 +366,3 @@ def attempt_repair_shard(
                 )
 
     return {"updated": False}
-
-
-def _scaffold_fallback(
-    ctx,
-    family_name,
-    broken_variant,
-    shard_path,
-    shard_file,
-    pyeqn,
-    header,
-    eqn_suffix,
-):
-    """Try scaffold-derived algebraic solution as a fallback when LLM fails."""
-    scaffold = generate_derivation_scaffold(pyeqn, broken_variant, header)
-    if not scaffold:
-        print(f"  [Repair] Scaffold also returned empty")
-        return {"updated": False}
-
-    # Only use scaffold if it produced a complete solution (not just a stub)
-    if scaffold.strip().endswith(f"{broken_variant} ="):
-        print(f"  [Repair] Scaffold only produced a stub")
-        return {"updated": False}
-
-    has_return = "return [" in scaffold or "return result" in scaffold
-    has_assignment = f"{broken_variant} =" in scaffold or "result.append(" in scaffold
-
-    if not (has_assignment or has_return):
-        print(f"  [Repair] Scaffold incomplete")
-        return {"updated": False}
-
-    code_text = scaffold
-    if not has_return:
-        code_text += f"\n    return [{broken_variant}]"
-
-    import_header = SHARD_IMPORT_HEADER
-
-    body_lines = []
-    for line in code_text.splitlines():
-        stripped = line.lstrip()
-        if line == stripped and (
-            stripped.startswith("import ") or stripped.startswith("from ")
-        ):
-            continue
-        body_lines.append(line)
-    code_text = "\n".join(body_lines)
-
-    if "# [.pyeqn]" not in code_text and pyeqn:
-        code_text = re.sub(
-            r"(def\s+\w+\(.*?\):)",
-            rf"\1\n    # [.pyeqn] {pyeqn}",
-            code_text,
-            count=1,
-        )
-
-    # Fix common LLM code issues (cmath.X -> X, ln -> log, etc.)
-    code_text = _postprocess_code(code_text)
-
-    full_code = import_header + code_text + "\n"
-
-    try:
-        ast.parse(full_code)
-        with open(shard_path, "w") as f:
-            f.write(full_code)
-        print(f"  [Repair] Successfully wrote scaffold-derived shard: {shard_file}")
-        return {"updated": True}
-    except SyntaxError as e:
-        print(f"  [Repair] Scaffold syntax error: {e}")
-        return {"updated": False}

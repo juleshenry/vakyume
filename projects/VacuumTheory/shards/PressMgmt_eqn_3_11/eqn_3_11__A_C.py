@@ -5,10 +5,9 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_3_11__A_C(self, H_2: float, P: float, V: float, **kwargs):
     # [.pyeqn] P = A_C / V * (H_2) ** 2
     result = []
-    A_C = P * V / H_2**2
+    A_C = P*V/H_2**2
     result.append(A_C)
     return result

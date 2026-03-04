@@ -5,7 +5,6 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_2_20__L(self, sum_equivalent_length: float, sum_pipe: float, **kwargs):
     # [.pyeqn] L = sum_pipe + sum_equivalent_length
     result = []

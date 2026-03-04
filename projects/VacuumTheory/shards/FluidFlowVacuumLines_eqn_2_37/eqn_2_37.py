@@ -12,7 +12,6 @@ from .eqn_2_37__F_t import eqn_2_37__F_t
 from .eqn_2_37__M import eqn_2_37__M
 from .eqn_2_37__T import eqn_2_37__T
 
-
 class FluidFlowVacuumLines:
     eqn_2_37__A = eqn_2_37__A
     eqn_2_37__C = eqn_2_37__C

@@ -10,7 +10,6 @@ from .eqn_5_13__HETP import eqn_5_13__HETP
 from .eqn_5_13__H_p import eqn_5_13__H_p
 from .eqn_5_13__N_ES import eqn_5_13__N_ES
 
-
 class ProcessApp1:
     eqn_5_13__HETP = eqn_5_13__HETP
     eqn_5_13__H_p = eqn_5_13__H_p

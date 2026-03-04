@@ -633,6 +633,16 @@ class Verify:
                     full_set = dict(inputs)
                     full_set[oracle_var] = val
 
+                    # Reject golden tuples where the oracle value is
+                    # significantly complex — this indicates the random inputs
+                    # land outside the equation's physical domain
+                    if isinstance(val, complex):
+                        if abs(val.imag) > 1e-6:
+                            continue
+                        # Negligible imaginary part — use real
+                        val = val.real
+                        full_set[oracle_var] = val
+
                     # Validate against harmony function (equation residual)
                     if self.pyeqn:
                         harmony_res = self._check_pyeqn_harmony(

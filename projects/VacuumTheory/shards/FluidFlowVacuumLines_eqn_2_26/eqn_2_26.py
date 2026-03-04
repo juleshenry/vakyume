@@ -14,7 +14,6 @@ from .eqn_2_26__P_upstream import eqn_2_26__P_upstream
 from .eqn_2_26__mu import eqn_2_26__mu
 from .eqn_2_26__q import eqn_2_26__q
 
-
 class FluidFlowVacuumLines:
     eqn_2_26__D = eqn_2_26__D
     eqn_2_26__L = eqn_2_26__L
@@ -25,14 +24,5 @@ class FluidFlowVacuumLines:
     eqn_2_26__q = eqn_2_26__q
 
     @kwasak
-    def eqn_2_26(
-        self,
-        D=None,
-        L=None,
-        P_downstream=None,
-        P_p=None,
-        P_upstream=None,
-        mu=None,
-        q=None,
-    ):
+    def eqn_2_26(self, D=None, L=None, P_downstream=None, P_p=None, P_upstream=None, mu=None, q=None):
         return

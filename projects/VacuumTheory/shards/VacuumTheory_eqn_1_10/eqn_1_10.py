@@ -13,7 +13,6 @@ from .eqn_1_10__T_2 import eqn_1_10__T_2
 from .eqn_1_10__V_1 import eqn_1_10__V_1
 from .eqn_1_10__V_2 import eqn_1_10__V_2
 
-
 class VacuumTheory:
     eqn_1_10__P_1 = eqn_1_10__P_1
     eqn_1_10__P_2 = eqn_1_10__P_2

@@ -11,7 +11,6 @@ from .eqn_11_5__P_D import eqn_11_5__P_D
 from .eqn_11_5__p_g import eqn_11_5__p_g
 from .eqn_11_5__p_v_max import eqn_11_5__p_v_max
 
-
 class RotaryPistonVane:
     eqn_11_5__P_0_v = eqn_11_5__P_0_v
     eqn_11_5__P_D = eqn_11_5__P_D

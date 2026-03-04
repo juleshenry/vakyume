@@ -14,7 +14,6 @@ from .eqn_6_10__r_c import eqn_6_10__r_c
 from .eqn_6_10__s import eqn_6_10__s
 from .eqn_6_10__tau import eqn_6_10__tau
 
-
 class ProcessApp2:
     eqn_6_10__A = eqn_6_10__A
     eqn_6_10__dV_dt = eqn_6_10__dV_dt
@@ -25,7 +24,5 @@ class ProcessApp2:
     eqn_6_10__tau = eqn_6_10__tau
 
     @kwasak
-    def eqn_6_10(
-        self, A=None, dV_dt=None, delta_P=None, mu=None, r_c=None, s=None, tau=None
-    ):
+    def eqn_6_10(self, A=None, dV_dt=None, delta_P=None, mu=None, r_c=None, s=None, tau=None):
         return

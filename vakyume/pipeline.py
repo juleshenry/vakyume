@@ -573,7 +573,7 @@ def run_pipeline(
             # --- Handle swapped variable pairs by resetting to stubs ---
             # When the verifier detects that two shards are swapped (each
             # computes the other's answer), the cleanest fix is to reset both
-            # to stubs so the scaffold regenerates them from the equation.
+            # to stubs so the repair pipeline regenerates them from the equation.
             # Simply swapping file contents doesn't work because the parameter
             # signatures and body variable references would still be wrong.
             already_swapped = set()

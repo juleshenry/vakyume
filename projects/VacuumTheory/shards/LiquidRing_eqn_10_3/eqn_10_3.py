@@ -10,7 +10,6 @@ from .eqn_10_3__N_mfw import eqn_10_3__N_mfw
 from .eqn_10_3__Q_gas import eqn_10_3__Q_gas
 from .eqn_10_3__T import eqn_10_3__T
 
-
 class LiquidRing:
     eqn_10_3__N_mfw = eqn_10_3__N_mfw
     eqn_10_3__Q_gas = eqn_10_3__Q_gas

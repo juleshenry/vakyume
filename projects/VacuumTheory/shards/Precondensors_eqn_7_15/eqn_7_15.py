@@ -9,7 +9,6 @@ from vakyume.kwasak import kwasak
 from .eqn_7_15__U import eqn_7_15__U
 from .eqn_7_15__sum_R import eqn_7_15__sum_R
 
-
 class Precondensors:
     eqn_7_15__U = eqn_7_15__U
     eqn_7_15__sum_R = eqn_7_15__sum_R

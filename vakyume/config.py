@@ -132,9 +132,6 @@ LIBRARY_IMPORT_HEADER = (
 #   "openai"      – direct OpenAI API
 #   "anthropic"   – direct Anthropic API
 #   "gemini"      – direct Google Gemini API
-#
-# ``llm_raw`` when True tells the repair path to skip scaffolding and send
-# only the method header + equation + "return as a list [x_b]" to the LLM.
 
 llm_config: dict = {
     "provider": os.environ.get("VAKYUME_LLM_PROVIDER", "ollama"),
@@ -142,5 +139,4 @@ llm_config: dict = {
     "api_key": os.environ.get("VAKYUME_LLM_API_KEY", ""),
     "temperature": float(os.environ.get("VAKYUME_LLM_TEMPERATURE", "0")),
     "num_ctx": int(os.environ.get("VAKYUME_LLM_NUM_CTX", "8192")),
-    "llm_raw": False,
 }

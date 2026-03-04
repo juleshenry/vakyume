@@ -12,7 +12,6 @@ from .eqn_2_19a__mu import eqn_2_19a__mu
 from .eqn_2_19a__rho import eqn_2_19a__rho
 from .eqn_2_19a__v import eqn_2_19a__v
 
-
 class FluidFlowVacuumLines:
     eqn_2_19a__R_ll = eqn_2_19a__R_ll
     eqn_2_19a__Re = eqn_2_19a__Re

@@ -9,7 +9,6 @@ from vakyume.kwasak import kwasak
 from .eqn_2_18a__D_eq import eqn_2_18a__D_eq
 from .eqn_2_18a__R_ll import eqn_2_18a__R_ll
 
-
 class FluidFlowVacuumLines:
     eqn_2_18a__D_eq = eqn_2_18a__D_eq
     eqn_2_18a__R_ll = eqn_2_18a__R_ll

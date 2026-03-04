@@ -10,7 +10,6 @@ from .eqn_7_10__L_c_P import eqn_7_10__L_c_P
 from .eqn_7_10__Q_condensor_heat_duty import eqn_7_10__Q_condensor_heat_duty
 from .eqn_7_10__del_T import eqn_7_10__del_T
 
-
 class Precondensors:
     eqn_7_10__L_c_P = eqn_7_10__L_c_P
     eqn_7_10__Q_condensor_heat_duty = eqn_7_10__Q_condensor_heat_duty

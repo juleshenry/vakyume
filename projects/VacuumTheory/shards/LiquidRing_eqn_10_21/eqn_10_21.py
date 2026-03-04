@@ -10,7 +10,6 @@ from .eqn_10_21__P import eqn_10_21__P
 from .eqn_10_21__P_d import eqn_10_21__P_d
 from .eqn_10_21__P_prime import eqn_10_21__P_prime
 
-
 class LiquidRing:
     eqn_10_21__P = eqn_10_21__P
     eqn_10_21__P_d = eqn_10_21__P_d

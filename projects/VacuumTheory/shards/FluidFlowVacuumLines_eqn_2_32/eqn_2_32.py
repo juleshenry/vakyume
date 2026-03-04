@@ -9,7 +9,6 @@ from vakyume.kwasak import kwasak
 from .eqn_2_32__C_series import eqn_2_32__C_series
 from .eqn_2_32__geometric_sum_C import eqn_2_32__geometric_sum_C
 
-
 class FluidFlowVacuumLines:
     eqn_2_32__C_series = eqn_2_32__C_series
     eqn_2_32__geometric_sum_C = eqn_2_32__geometric_sum_C

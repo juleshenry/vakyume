@@ -226,11 +226,6 @@ def main():
     )
     llm_group.add_argument("--llm-api-key", help="API key for the chosen provider")
     llm_group.add_argument(
-        "--llm-raw",
-        action="store_true",
-        help="Bypass algebraic scaffolding and send raw equation to LLM",
-    )
-    llm_group.add_argument(
         "--llm-temp", type=float, help="Temperature for LLM sampling"
     )
 
@@ -390,8 +385,6 @@ def main():
         llm_config["model"] = args.llm_model
     if args.llm_api_key:
         llm_config["api_key"] = args.llm_api_key
-    if args.llm_raw:
-        llm_config["llm_raw"] = True
     if args.llm_temp is not None:
         llm_config["temperature"] = args.llm_temp
 

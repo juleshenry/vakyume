@@ -15,7 +15,6 @@ from .eqn_10_20__p_0 import eqn_10_20__p_0
 from .eqn_10_20__p_c import eqn_10_20__p_c
 from .eqn_10_20__p_s import eqn_10_20__p_s
 
-
 class LiquidRing:
     eqn_10_20__P = eqn_10_20__P
     eqn_10_20__S_0 = eqn_10_20__S_0
@@ -27,15 +26,5 @@ class LiquidRing:
     eqn_10_20__p_s = eqn_10_20__p_s
 
     @kwasak
-    def eqn_10_20(
-        self,
-        P=None,
-        S_0=None,
-        S_p=None,
-        T_e=None,
-        T_i=None,
-        p_0=None,
-        p_c=None,
-        p_s=None,
-    ):
+    def eqn_10_20(self, P=None, S_0=None, S_p=None, T_e=None, T_i=None, p_0=None, p_c=None, p_s=None):
         return
