@@ -296,13 +296,6 @@ class VacuumTheory:
         result.append(V)
         return result
 
-    def eqn_1_8__m(self, M: float, P: float, R: float, T: float, V: float, **kwargs):
-        # P * V = m / M * R * T
-        result = []
-        m = M * P * V / (R * T)
-        result.append(m)
-        return result
-
     @kwasak
     def eqn_1_9(self, M=None, P=None, R=None, T=None, rho=None):
         return

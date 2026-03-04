@@ -1,0 +1,6 @@
+usage: vakyume.py [-h]
+                  [--llm-provider {ollama,openrouter,openai,anthropic,gemini}]
+                  [--llm-model LLM_MODEL] [--llm-api-key LLM_API_KEY]
+                  [--llm-temp LLM_TEMP]
+                  {run,reconstruct,make-cpp,build,scrape} ...
+vakyume.py: error: unrecognized arguments: --llm-raw

@@ -63,18 +63,6 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing AirLeak_eqn_4_10__t... ";
-  try {
-    auto r = AirLeak_eqn_4_10__t(1.0, 1.0, 1.0, 1.0);
-    std::cout << "OK (" << r.size() << " results)" << std::endl;
-    pass++;
-  } catch (std::exception &e) {
-    std::cout << "FAIL: " << e.what() << std::endl;
-    fail++;
-  } catch (...) {
-    std::cout << "FAIL" << std::endl;
-    fail++;
-  }
   std::cout << "Testing AirLeak_eqn_4_7__W... ";
   try {
     auto r = AirLeak_eqn_4_7__W(1.0, 1.0);
@@ -556,9 +544,9 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__L... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17a__L... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__L(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17a__L(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -568,9 +556,9 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__d... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17a__d... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__d(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17a__d(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -580,9 +568,9 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__delta_P... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17a__delta_P... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__delta_P(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17a__delta_P(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -592,9 +580,9 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__mu... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17a__mu... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__mu(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17a__mu(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -604,9 +592,9 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__q... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17a__v... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__q(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17a__v(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -616,9 +604,57 @@ int main() {
     std::cout << "FAIL" << std::endl;
     fail++;
   }
-  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17__v... ";
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17b__L... ";
   try {
-    auto r = FluidFlowVacuumLines_eqn_2_17__v(1.0, 1.0, 1.0, 1.0);
+    auto r = FluidFlowVacuumLines_eqn_2_17b__L(1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17b__d... ";
+  try {
+    auto r = FluidFlowVacuumLines_eqn_2_17b__d(1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17b__delta_P... ";
+  try {
+    auto r = FluidFlowVacuumLines_eqn_2_17b__delta_P(1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17b__mu... ";
+  try {
+    auto r = FluidFlowVacuumLines_eqn_2_17b__mu(1.0, 1.0, 1.0, 1.0);
+    std::cout << "OK (" << r.size() << " results)" << std::endl;
+    pass++;
+  } catch (std::exception &e) {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    fail++;
+  } catch (...) {
+    std::cout << "FAIL" << std::endl;
+    fail++;
+  }
+  std::cout << "Testing FluidFlowVacuumLines_eqn_2_17b__q... ";
+  try {
+    auto r = FluidFlowVacuumLines_eqn_2_17b__q(1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {
@@ -7602,18 +7638,6 @@ int main() {
   std::cout << "Testing VacuumTheory_eqn_1_8__V... ";
   try {
     auto r = VacuumTheory_eqn_1_8__V(1.0, 1.0, 1.0, 1.0, 1.0);
-    std::cout << "OK (" << r.size() << " results)" << std::endl;
-    pass++;
-  } catch (std::exception &e) {
-    std::cout << "FAIL: " << e.what() << std::endl;
-    fail++;
-  } catch (...) {
-    std::cout << "FAIL" << std::endl;
-    fail++;
-  }
-  std::cout << "Testing VacuumTheory_eqn_1_8__m... ";
-  try {
-    auto r = VacuumTheory_eqn_1_8__m(1.0, 1.0, 1.0, 1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {

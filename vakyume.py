@@ -80,7 +80,7 @@ def _ensure_project(args):
     project_dir = args.project
     notes_dir = os.path.join(project_dir, "notes")
 
-    for sub in ["notes", "shards", "reports", "repair_prompts"]:
+    for sub in ["notes", "shards", "reports"]:
         d = os.path.join(project_dir, sub)
         if not os.path.exists(d):
             os.makedirs(d)
@@ -107,6 +107,7 @@ def cmd_run(args):
         overwrite=args.overwrite,
         verbose=args.verbose,
         repair_only=args.repair_only,
+        include_families=args.families,
     )
 
     print("\nPipeline Stage: Verification & Certification Complete.")
@@ -149,7 +150,8 @@ def cmd_build(args):
         max_rounds=args.max_rounds,
         overwrite=args.overwrite,
         verbose=args.verbose,
-        repair_only=False,
+        repair_only=args.repair_only,
+        include_families=args.families,
     )
 
     print(f"\nSolved: {len(analysis['solved'])}")
@@ -166,8 +168,17 @@ def cmd_build(args):
 
 
 def cmd_scrape(args):
-    """Extract equations from a PDF into vakyume notes format."""
-    from vakyume.pdf_scraper import _extract_chapter_map, SKIP_CHAPTERS
+    """Extract equations from a PDF into vakyume notes format.
+
+    Default behaviour is to launch the interactive wizard which lets the
+    user pick a model and chapters.  The wizard is skipped when the caller
+    already knows what they want (``--chapters`` or ``--no-wizard``).
+    """
+    from vakyume.pdf_scraper import (
+        _extract_chapter_map,
+        SKIP_CHAPTERS,
+        run_wizard,
+    )
 
     if args.list_chapters:
         chapters = _extract_chapter_map(args.pdf)
@@ -182,12 +193,20 @@ def cmd_scrape(args):
     if output_dir is None:
         output_dir = os.path.join(os.path.dirname(args.pdf), "notes")
 
-    scrape_pdf(
-        pdf_path=args.pdf,
-        output_dir=output_dir,
-        verbose=True,
-        chapter_filter=args.chapters,
-    )
+    # Decide whether to run the wizard.
+    # --chapters or --no-wizard bypass it; otherwise wizard is the default.
+    use_wizard = not args.no_wizard and args.chapters is None
+
+    if use_wizard:
+        run_wizard(pdf_path=args.pdf, output_dir=output_dir, model_override=args.model)
+    else:
+        scrape_pdf(
+            pdf_path=args.pdf,
+            output_dir=output_dir,
+            verbose=not args.quiet,
+            chapter_filter=args.chapters,
+            model=args.model or "llama3:latest",
+        )
 
 
 def main():
@@ -206,11 +225,6 @@ def main():
         "--llm-model", help="LLM model name (e.g. gpt-4o, claude-3-opus)"
     )
     llm_group.add_argument("--llm-api-key", help="API key for the chosen provider")
-    llm_group.add_argument(
-        "--llm-raw",
-        action="store_true",
-        help="Bypass algebraic scaffolding and send raw equation to LLM",
-    )
     llm_group.add_argument(
         "--llm-temp", type=float, help="Temperature for LLM sampling"
     )
@@ -243,6 +257,11 @@ def main():
         "--repair-only",
         action="store_true",
         help="Skip shard generation and re-verification of passing families; only repair broken ones",
+    )
+    run_parser.add_argument(
+        "--families",
+        nargs="+",
+        help="Target specific equation families (e.g., FluidFlowVacuumLines_eqn_2_17)",
     )
     run_parser.set_defaults(func=cmd_run)
 
@@ -301,6 +320,16 @@ def main():
         action="store_true",
         help="Show detailed verification output for all families",
     )
+    build_parser.add_argument(
+        "--repair-only",
+        action="store_true",
+        help="Skip shard generation and re-verification of passing families; only repair broken ones",
+    )
+    build_parser.add_argument(
+        "--families",
+        nargs="+",
+        help="Target specific equation families (e.g., FluidFlowVacuumLines_eqn_2_17)",
+    )
     build_parser.set_defaults(func=cmd_build)
 
     # ── scrape (PDF equation extraction) ─────────────────────────────────
@@ -320,12 +349,29 @@ def main():
         "-c",
         type=int,
         nargs="+",
-        help="Only process specific chapter numbers (1-indexed)",
+        help="Chapter numbers to process (skips wizard, e.g. -c 3 5 9)",
+    )
+    scrape_parser.add_argument(
+        "--model",
+        "-m",
+        default=None,
+        help="Ollama model name (default: llama3:latest, or chosen in wizard)",
     )
     scrape_parser.add_argument(
         "--list-chapters",
         action="store_true",
         help="List available chapters and exit",
+    )
+    scrape_parser.add_argument(
+        "--no-wizard",
+        action="store_true",
+        help="Skip the interactive wizard and process all chapters",
+    )
+    scrape_parser.add_argument(
+        "--quiet",
+        "-q",
+        action="store_true",
+        help="Suppress progress output",
     )
     scrape_parser.set_defaults(func=cmd_scrape)
 
@@ -339,8 +385,6 @@ def main():
         llm_config["model"] = args.llm_model
     if args.llm_api_key:
         llm_config["api_key"] = args.llm_api_key
-    if args.llm_raw:
-        llm_config["llm_raw"] = True
     if args.llm_temp is not None:
         llm_config["temperature"] = args.llm_temp
 

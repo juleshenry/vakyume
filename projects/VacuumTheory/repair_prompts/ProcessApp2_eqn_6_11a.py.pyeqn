@@ -1,1 +1,0 @@
-t_R = delta_h_i * m_b * delta_m / (A_d * h_d * delta_T)

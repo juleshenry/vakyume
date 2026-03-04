@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_5_8__P_cap_0_1 import eqn_5_8__P_0_1
-from .eqn_5_8__P_cap_0_2 import eqn_5_8__P_0_2
+from .eqn_5_8__P_0_1 import eqn_5_8__P_0_1
+from .eqn_5_8__P_0_2 import eqn_5_8__P_0_2
 from .eqn_5_8__alpha_12 import eqn_5_8__alpha_12
 from .eqn_5_8__gamma_1 import eqn_5_8__gamma_1
 from .eqn_5_8__gamma_2 import eqn_5_8__gamma_2

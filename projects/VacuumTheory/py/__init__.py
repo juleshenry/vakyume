@@ -11,6 +11,7 @@ from .rotarypistonvane import RotaryPistonVane
 from .selectingpump import SelectingPump
 from .steamjetinjectors import SteamJetInjectors
 from .vacuumtheory import VacuumTheory
+from .harmony_checks import harmony_checks
 
 __all__ = [
     "AirLeak",
@@ -24,4 +25,5 @@ __all__ = [
     "SelectingPump",
     "SteamJetInjectors",
     "VacuumTheory",
+    "harmony_checks",
 ]

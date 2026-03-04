@@ -1,73 +1,73 @@
 """
-                                                :+ .x..
-                                           .:...x$   $+:x  $.
-                                       ..:. XX.  &    X.   xx$....
-                                       .:X . .             & . X.
-                                    .:;X+++xX&$X+:.   .    . .x  x..
-                                  .:$++++++++++x+......:;x$$X+..+..                         .
-                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
-                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
-                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
-                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
-                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
-                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
-                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
-                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
-                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
-                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
-                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
-                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
-                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
-                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
-   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
-.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
-.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
- .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
- .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
-     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
-   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
-   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
-    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
-         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
-                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
-              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
-          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
-       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
-      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
-      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
-     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
-    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
-     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
-      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
-      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
-      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
-       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
-        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
-        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
-         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
-          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
-          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
-           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
-            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
-               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
-                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
-                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
-                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
-                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
-                   .::x+++++++++++++++++++++++$...
-                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
-                      ..:X&&&&&&&$xX&&&&&&x:.
-                             ........   ...
-
-                                 ▐
-                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
-                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
-                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
-                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
-                                      ▞
-                                    ▝▘
-
-                             by Julian Henry
+                                                               :+ .x..                                                                        
+                                                          .:...x$   $+:x  $.                                                                  
+                                                      ..:. XX.  &    X.   xx$....                                                             
+                                                      .:X . .             & . X.                                                              
+                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
+                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
+                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
+                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
+                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
+                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
+                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
+                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
+                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
+                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
+                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
+                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
+                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
+                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
+                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
+                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
+                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
+               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
+               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
+                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
+                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
+                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
+                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
+                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
+                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
+                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
+                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
+                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
+                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
+                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
+                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
+                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
+                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
+                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
+                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
+                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
+                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
+                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
+                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
+                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
+                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
+                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
+                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
+                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
+                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
+                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
+                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
+                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
+                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
+                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
+                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
+                                  .::x+++++++++++++++++++++++$...                                                                             
+                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
+                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
+                                            ........   ...                      
+                                         
+                                                ▐                   
+                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
+                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
+                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
+                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
+                                                     ▞              
+                                                   ▝▘              
+                                        
+                                            by Julian Henry
 """
 
 """
@@ -316,6 +316,10 @@ def _transpile_method(class_name, method_name, source):
                 body_lines.append("    return result;")
             else:
                 val = tx.visit(stmt.value)
+                # If we're returning a single value but the function return type is std::vector,
+                # wrap it in an initializer list.
+                if not (val.startswith("{") and val.endswith("}")):
+                    val = f"{{ {val} }}"
                 body_lines.append(f"    return {val};")
             continue
 
@@ -434,28 +438,59 @@ def get_method_source(file_path, method_node):
 # ── Main entry point ────────────────────────────────────────────────────────
 
 
-def main(project_dir=".", input_file=None):
-    project_dir = os.path.abspath(project_dir)
+def _collect_source_files(project_dir, input_file=None):
+    """Resolve Python source file(s) to convert to C++.
 
-    # Resolve the Python source to convert.  Prefer an explicit *input_file*,
-    # then fall back to certified.py (the flat single-file library).
+    Returns a list of absolute file paths.  Prefers:
+      1. An explicit *input_file*.
+      2. A monolithic ``certified.py`` (or legacy variants) in *project_dir*.
+      3. The modular ``py/`` package produced by ``reconstruct``.
+    """
     if input_file:
-        certified_file = (
+        path = (
             input_file
             if os.path.isabs(input_file)
             else os.path.join(project_dir, input_file)
         )
-    else:
-        cert_file = os.path.join(project_dir, "certified.py")
-        # Legacy fallback paths
-        lib_file = os.path.join(project_dir, "vakyume_lib.py")
-        old_cert = os.path.join(project_dir, "vakyume_certified.py")
-        if os.path.exists(cert_file):
-            certified_file = cert_file
-        elif os.path.exists(lib_file):
-            certified_file = lib_file
-        else:
-            certified_file = old_cert
+        if not os.path.exists(path):
+            return []
+        return [path]
+
+    # Monolithic certified file (preferred)
+    for name in ("certified.py", "vakyume_lib.py", "vakyume_certified.py"):
+        path = os.path.join(project_dir, name)
+        if os.path.exists(path):
+            return [path]
+
+    # Modular py/ package fallback
+    py_dir = os.path.join(project_dir, "py")
+    if os.path.isdir(py_dir):
+        skip = {"__init__.py", "harmony_checks.py"}
+        files = sorted(
+            os.path.join(py_dir, f)
+            for f in os.listdir(py_dir)
+            if f.endswith(".py") and f not in skip
+        )
+        if files:
+            return files
+
+    return []
+
+
+def main(project_dir=".", input_file=None):
+    project_dir = os.path.abspath(project_dir)
+
+    source_files = _collect_source_files(project_dir, input_file)
+
+    if not source_files:
+        # Show a helpful error pointing to what we looked for
+        py_dir = os.path.join(project_dir, "py")
+        print(
+            f"Error: No Python source found.\n"
+            f"  Looked for: certified.py, vakyume_lib.py, vakyume_certified.py\n"
+            f"  Also checked: {py_dir}/"
+        )
+        return
 
     # ── Output directories ───────────────────────────────────────────────
     cpp_dir = os.path.join(project_dir, "cpp")
@@ -465,21 +500,23 @@ def main(project_dir=".", input_file=None):
 
     test_binary_path = os.path.join(bin_dir, "vacuum_theory_binary")
 
-    if not os.path.exists(certified_file):
-        print(f"Error: {certified_file} not found.")
-        return
+    print(f"C++ source: {', '.join(source_files)}")
 
-    print(f"C++ source: {certified_file}")
-
-    classes_methods = get_methods_from_file(certified_file)
-
+    # ── Collect methods from all source files ────────────────────────────
     all_tasks = []
-    for class_name, methods in classes_methods.items():
-        for method in methods:
-            source = get_method_source(certified_file, method)
-            all_tasks.append(
-                (class_name, method.name, source, [arg.arg for arg in method.args.args])
-            )
+    for src_file in source_files:
+        classes_methods = get_methods_from_file(src_file)
+        for class_name, methods in classes_methods.items():
+            for method in methods:
+                source = get_method_source(src_file, method)
+                all_tasks.append(
+                    (
+                        class_name,
+                        method.name,
+                        source,
+                        [arg.arg for arg in method.args.args],
+                    )
+                )
 
     # Set a limit if you want to test on a subset first, e.g., limit = 10
     limit = None

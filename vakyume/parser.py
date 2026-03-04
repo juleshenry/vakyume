@@ -1,73 +1,73 @@
 """
-                                                :+ .x..
-                                           .:...x$   $+:x  $.
-                                       ..:. XX.  &    X.   xx$....
-                                       .:X . .             & . X.
-                                    .:;X+++xX&$X+:.   .    . .x  x..
-                                  .:$++++++++++x+......:;x$$X+..+..                         .
-                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
-                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
-                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
-                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
-                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
-                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
-                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
-                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
-                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
-                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
-                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
-                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
-                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
-                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
-   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
-.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
-.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
- .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
- .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
-     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
-   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
-   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
-    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
-         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
-                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
-              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
-          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
-       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
-      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
-      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
-     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
-    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
-     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
-      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
-      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
-      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
-       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
-        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
-        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
-         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
-          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
-          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
-           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
-            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
-               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
-                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
-                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
-                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
-                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
-                   .::x+++++++++++++++++++++++$...
-                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
-                      ..:X&&&&&&&$xX&&&&&&x:.
-                             ........   ...
-
-                                 ▐
-                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
-                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
-                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
-                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
-                                      ▞
-                                    ▝▘
-
-                             by Julian Henry
+                                                               :+ .x..                                                                        
+                                                          .:...x$   $+:x  $.                                                                  
+                                                      ..:. XX.  &    X.   xx$....                                                             
+                                                      .:X . .             & . X.                                                              
+                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
+                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
+                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
+                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
+                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
+                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
+                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
+                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
+                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
+                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
+                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
+                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
+                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
+                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
+                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
+                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
+                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
+               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
+               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
+                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
+                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
+                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
+                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
+                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
+                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
+                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
+                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
+                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
+                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
+                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
+                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
+                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
+                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
+                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
+                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
+                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
+                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
+                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
+                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
+                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
+                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
+                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
+                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
+                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
+                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
+                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
+                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
+                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
+                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
+                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
+                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
+                                  .::x+++++++++++++++++++++++$...                                                                             
+                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
+                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
+                                            ........   ...                      
+                                         
+                                                ▐                   
+                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
+                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
+                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
+                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
+                                                     ▞              
+                                                   ▝▘              
+                                        
+                                            by Julian Henry
 """
 
 """Equation parsing and shard generation.
@@ -76,6 +76,7 @@ Reads Python-like equation definitions from ``notes/*.py`` files and generates
 individual solver shards using SymPy for algebraic isolation.
 """
 
+import logging
 import os
 import py_compile
 import re
@@ -90,6 +91,8 @@ from .config import (
     FUNKTORZ,
     SHARD_IMPORT_HEADER,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def case_safe_name(name: str) -> str:
@@ -144,9 +147,32 @@ def case_unsafe_name(safe: str) -> str:
         >>> case_unsafe_name("P_cap_1")
         'P_1'
     """
-    import re
-
     return re.sub(r"([A-Z])_cap", r"\1", safe)
+
+
+def _find_existing_shard(family_dir: str, eqn_number: str, token: str) -> str | None:
+    """Check if a shard file already exists for *token*, regardless of naming convention.
+
+    Returns the full path if found, None otherwise.
+    """
+    method_name = f"eqn_{eqn_number}__{token}"
+    # Fast check: raw name first
+    raw_path = os.path.join(family_dir, f"{method_name}.py")
+    if os.path.exists(raw_path):
+        return raw_path
+    # Scan for any file that defines this function
+    try:
+        for fname in os.listdir(family_dir):
+            if not fname.endswith(".py") or "__" not in fname:
+                continue
+            fpath = os.path.join(family_dir, fname)
+            with open(fpath, "r") as fh:
+                for line in fh:
+                    if line.strip().startswith(f"def {method_name}("):
+                        return fpath
+    except OSError:
+        pass
+    return None
 
 
 class Solver:
@@ -159,10 +185,12 @@ class Solver:
         MAX_COMP_TIME_SECONDS,
         timeout_exception=timeout_decorator.timeout_decorator.TimeoutError,
     )
-    def get_solns_vanilla_nf(self, nf: str, symb: Symbol, tokens: list = None):
+    def get_solns_vanilla_nf(
+        self, nf: str, symb: Symbol, tokens: list[str] | None = None
+    ):
         try:
             local_dict = {t: Symbol(t) for t in tokens} if tokens else {}
-            expr = sympify(nf, locals=local_dict)
+            expr = sympify(nf, locals=local_dict)  # type: ignore
             solns = solve(expr, symb)
             if not solns:
                 raise UnsolvedException("Sympy solve returned empty")
@@ -213,15 +241,17 @@ class Solver:
         return "\n".join(code)
 
 
-def shard_from_chapters(ctx):
+def shard_from_chapters(ctx, overwrite_existing=False):
     """Parse equation notes and generate individual solver shard files.
 
     Parameters
     ----------
     ctx : PipelineContext
         Pipeline context with ``notes_dir`` and ``shards_dir`` paths.
+    overwrite_existing : bool, optional
+        Whether to overwrite existing shard files. Defaults to False.
     """
-    print(f"[INPUT] shard_from_chapters: ctx.notes_dir={ctx.notes_dir}")
+    logger.debug("shard_from_chapters: ctx.notes_dir=%s", ctx.notes_dir)
     solver = Solver()
 
     if not os.path.exists(ctx.notes_dir):
@@ -237,7 +267,7 @@ def shard_from_chapters(ctx):
             to_process.append(chapter_file)
 
     if not to_process:
-        print(f"[OUTPUT] shard_from_chapters: No chapters to process")
+        logger.debug("shard_from_chapters: No chapters to process")
         return
 
     import_header = SHARD_IMPORT_HEADER
@@ -285,11 +315,14 @@ def shard_from_chapters(ctx):
 
                 for token in tokes:
                     method_name = f"eqn_{eqn_number}__{token}"
-                    safe_token = case_safe_name(token)
-                    shard_name = f"eqn_{eqn_number}__{safe_token}.py"
+                    shard_name = f"eqn_{eqn_number}__{token}.py"
                     shard_path = os.path.join(family_dir, shard_name)
-                    if os.path.exists(shard_path):
+                    # Also check for existing shard under old naming conventions
+                    existing = _find_existing_shard(family_dir, eqn_number, token)
+                    if existing and not overwrite_existing:
                         continue
+                    if existing and overwrite_existing:
+                        shard_path = existing  # overwrite in-place
 
                     created_count += 1
                     shard_content = import_header
@@ -332,8 +365,7 @@ def shard_from_chapters(ctx):
                         sf.write("from vakyume.kwasak import kwasak\n")
                         for token in tokes:
                             method_name = f"eqn_{eqn_number}__{token}"
-                            safe_token = case_safe_name(token)
-                            file_name_no_ext = f"eqn_{eqn_number}__{safe_token}"
+                            file_name_no_ext = f"eqn_{eqn_number}__{token}"
                             sf.write(f"from .{file_name_no_ext} import {method_name}\n")
                         sf.write(f"\nclass {class_name}:\n")
                         for token in tokes:

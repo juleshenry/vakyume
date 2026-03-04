@@ -81,15 +81,11 @@ class LiquidRing:
         result.append(mu)
         return result
 
-    def eqn_10_10__rho(self, bhp: float, bhp_0: float, mu: float, **kwargs):
+    def eqn_10_10__rho(self, bhp, bhp_0, mu, **kwargs):
         # bhp = bhp_0 * (0.5 + 0.0155 * rho ** 0.84 * mu ** 0.16)
-        # Solve for rho:
-        # Step 1: bhp / bhp_0 = 0.5 + 0.0155 *rho ** 0.84* mu ** 0.16
-        # Step 2: (bhp / bhp_0 - 0.5) = 0.0155 * rho ** 0.84 * mu ** 0.16
-        # Step 3: rho ** 0.84 = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16))
-        # Step 4: rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu ** 0.16)) ** (1.0 / 0.84)
-        rho = ((bhp / bhp_0 - 0.5) / (0.0155 * mu**0.16)) ** (1.0 / 0.84)
-        return [rho]
+        result = []
+        term = log(bhp / bhp_0) - 0.5
+        result.append(pow(10, term))
 
     @kwasak
     def eqn_10_11(self, T_c=None, T_s=None):
@@ -581,27 +577,16 @@ class LiquidRing:
     ):
         return
 
-    def eqn_10_19__P(
-        self,
-        S_Th: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_19__P(self, S_Th, S_p, T_e, T_i, p_c, p_s, **kwargs):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Solve for P:
-        # Step 1: (S_p / S_Th) ** (1.666667) = (P - p_s)*(460 + T_i) / ( (P - p_c)*(460 + T_e) )
-        R = (S_p / (S_Th)) ** (1.666667)
-        # Step 2: R * ((460 + T_e)) * (P - p_c) = ((460 + T_i)) * (P - p_s)
-        # Step 3: P * (R * ((460 + T_e)) - ((460 + T_i))) = R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s
-        # Step 4: P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (R * ((460 + T_e)) - ((460 + T_i)))
-        P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (
-            R * ((460 + T_e)) - ((460 + T_i))
+        result = []
+        P = (S_p / S_Th * ((460 + T_i) * p_c - (460 + T_e) * p_s) ** (1 / 0.6)) ** (
+            5 / 3
         )
-        return [P]
+        if P == 0:
+            raise ValueError("P cannot be zero")
+        result.append(P)
+        return [result]
 
     def eqn_10_19__S_Th(
         self,
@@ -1030,50 +1015,14 @@ class LiquidRing:
     ):
         return
 
-    def eqn_10_20__P(
-        self,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__P(self, S_0, S_p, T_e, T_i, p_0, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # P appears 4 times — use numerical solver
-        from scipy.optimize import brentq
-
-        def _res(P_val):
-            return (
-                S_p
-                * (
-                    (P_val - p_0)
-                    * (460 + T_i)
-                    * (P_val - p_c)
-                    / (P_val * (P_val - p_s) * (460 + T_e))
-                )
-                ** 0.6
-                - S_0
-            )
-
-        lo, hi = None, None
-        prev = _res(0.01)
-        for i in range(1, 100000):
-            x = i * 0.01
-            try:
-                cur = _res(x)
-            except Exception:
-                continue
-            if prev * cur < 0:
-                lo, hi = x - 0.01, x
-                break
-            prev = cur
-        if lo is None:
-            raise UnsolvedException("No sign change found for P")
-        P = brentq(_res, lo, hi)
-        return [P]
+        result = []
+        numerator = (S_0 / S_p) * ((T_e + 460) * (p_s - P) * (P - p_c))
+        denominator = ((P - p_0) * (460 + T_i)) * (P * (P - p_s) * (460 + T_e))
+        P = pow(numerator / denominator, 1 / 0.6)
+        result.append(P)
+        return [result]
 
     def eqn_10_20__S_0(
         self,
@@ -1133,103 +1082,60 @@ class LiquidRing:
         result.append(S_p)
         return result
 
-    def eqn_10_20__T_e(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__T_e(self, P, S_0, S_p, T_i, p_0, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for T_e:
-        R = (S_0 / (S_p)) ** (1.666667)
-        # (460 + T_e) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s)))
-        # T_e = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
-        T_e = ((P - p_0) * (460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
-        return [T_e]
+        result = []
+        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_c))
+        denominator = P * (P - p_s) * (460 + log(P / (460 + T_i)))
+        result.append(pow(numerator / denominator, 1 / 0.6))
+        return [result]
 
-    def eqn_10_20__T_i(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        p_0: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__T_i(self, P, S_0, S_p, T_e, p_0, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for T_i:
-        R = (S_0 / (S_p)) ** (1.666667)
-        # (460 + T_i) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c))
-        # T_i = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c)) - 460
-        T_i = R * (P * (P - p_s) * (460 + T_e)) / ((P - p_0) * (P - p_c)) - 460
-        return [T_i]
+        result = []
+        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_e)) * (P - p_c)
+        denominator = P * (P - p_s) * (460 + T_e)
+        term1 = pow(numerator / denominator, 1 / 3)
+        term2 = ((P - p_0) * (460 + T_i) * (P - p_c)) / (P * (P - p_s) * (460 + T_e))
+        result.append(
+            (term1 ** (-5 / 3))
+            * (
+                (460 + T_i)
+                * ((P - p_0) * (460 + T_e) * (P - p_c) / (P * (P - p_s) * (460 + T_e)))
+            )
+            ** (-2 / 3)
+        )
+        return [result]
 
-    def eqn_10_20__p_0(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_c: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_0(self, P, S_0, S_p, T_e, T_i, p_c, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for p_0:
-        R = (S_0 / (S_p)) ** (1.666667)
-        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
-        # (P - p_0) = R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
-        # p_0 = P - R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
-        p_0 = P - R * (P * (P - p_s) * (460 + T_e)) / ((460 + T_i) * (P - p_c))
-        return [p_0]
+        result = []
+        numerator = S_0 / (S_p * ((P - p_c) / (P * (P - p_s))) ** (3 / 5))
+        denominator = 460 + T_i
+        p_0 = P - (numerator * denominator) / (
+            (460 + T_e) * (P - p_c) / (P * (P - p_s))
+        )
+        result.append(p_0)
+        return [result]
 
-    def eqn_10_20__p_c(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_s: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_c(self, P, S_0, S_p, T_e, T_i, p_0, p_s, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for p_c:
-        R = (S_0 / (S_p)) ** (1.666667)
-        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
-        # (P - p_c) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
-        # p_c = P - R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
-        p_c = P - R * (P * (P - p_s) * (460 + T_e)) / ((P - p_0) * (460 + T_i))
-        return [p_c]
+        result = []
+        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_s))
+        denominator = P * (P - T_e) * (460 + T_i)
+        term1 = ((P - p_0) * (460 + T_i) * (P - p_s)) / (P * (P - p_s) * (460 + T_e))
+        term2 = (numerator / denominator) ** (1 / 0.6)
+        result.append((term1 - 1) * p_c)
+        return [result[0]]
 
-    def eqn_10_20__p_s(
-        self,
-        P: float,
-        S_0: float,
-        S_p: float,
-        T_e: float,
-        T_i: float,
-        p_0: float,
-        p_c: float,
-        **kwargs,
-    ):
+    def eqn_10_20__p_s(self, P, S_0, S_p, T_e, T_i, p_0, p_c, **kwargs):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for p_s:
-        R = (S_0 / (S_p)) ** (1.666667)
-        # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
-        # (P - p_s) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-        # p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-        p_s = P - ((P - p_0) * (460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-        return [p_s]
+        result = []
+        numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_c))
+        denominator = P * (P - (p_0 * p_s / (460 + T_i))) * (460 + T_e)
+        p_s = ((numerator / denominator) ** (1 / 0.6) - (p_0 * p_c)) / (P - p_c)
+        result.append(p_s)
+        return [result]
 
     @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):

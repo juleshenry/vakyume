@@ -36,7 +36,7 @@ def _collect_families():
         return
     for family_name in sorted(os.listdir(SHARDS_DIR)):
         family_path = os.path.join(SHARDS_DIR, family_name)
-        if not os.path.isdir(family_path) or family_name == "subshards":
+        if not os.path.isdir(family_path) or family_name == "harmony_checks":
             continue
         # Only include families that have at least one variant file
         has_variants = any(

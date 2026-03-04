@@ -6,13 +6,13 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_6_11a__A_cap_d import eqn_6_11a__A_d
-from .eqn_6_11a__delta_T_cap import eqn_6_11a__delta_T
+from .eqn_6_11a__A_d import eqn_6_11a__A_d
+from .eqn_6_11a__delta_T import eqn_6_11a__delta_T
 from .eqn_6_11a__delta_h_i import eqn_6_11a__delta_h_i
 from .eqn_6_11a__delta_m import eqn_6_11a__delta_m
 from .eqn_6_11a__h_d import eqn_6_11a__h_d
 from .eqn_6_11a__m_b import eqn_6_11a__m_b
-from .eqn_6_11a__t_R_cap import eqn_6_11a__t_R
+from .eqn_6_11a__t_R import eqn_6_11a__t_R
 
 
 class ProcessApp2:

@@ -63,7 +63,7 @@ def repair_project(tmp_path):
     notes.mkdir()
     (notes / "01_basic.py").write_text(BASIC_NOTE)
 
-    for sub in ("shards", "reports", "repair_prompts", "subshards"):
+    for sub in ("shards", "reports", "repair_prompts", "harmony_checks"):
         (tmp_path / sub).mkdir()
 
     shard_dir = tmp_path / "shards" / "Basic_eqn_1_1"
@@ -110,6 +110,6 @@ class TestDummyEndToEnd:
             text=True,
             cwd=repo_root,
         )
-        assert (
-            result.returncode == 0
-        ), f"CLI failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+        assert result.returncode == 0, (
+            f"CLI failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+        )

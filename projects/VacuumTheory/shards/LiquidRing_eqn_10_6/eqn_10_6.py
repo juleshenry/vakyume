@@ -6,10 +6,10 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_10_6__P_cap_1 import eqn_10_6__P_1
-from .eqn_10_6__P_cap_2 import eqn_10_6__P_2
-from .eqn_10_6__S_cap_a import eqn_10_6__S_a
-from .eqn_10_6__V_cap import eqn_10_6__V
+from .eqn_10_6__P_1 import eqn_10_6__P_1
+from .eqn_10_6__P_2 import eqn_10_6__P_2
+from .eqn_10_6__S_a import eqn_10_6__S_a
+from .eqn_10_6__V import eqn_10_6__V
 from .eqn_10_6__t import eqn_10_6__t
 
 

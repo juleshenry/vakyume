@@ -6,22 +6,11 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 
-def eqn_10_20__p_s(
-    self,
-    P: float,
-    S_0: float,
-    S_p: float,
-    T_e: float,
-    T_i: float,
-    p_0: float,
-    p_c: float,
-    **kwargs,
-):
+def eqn_10_20__p_s(self, P, S_0, S_p, T_e, T_i, p_0, p_c, **kwargs):
     # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-    # Solve for p_s:
-    R = (S_0 / (S_p)) ** (1.666667)
-    # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
-    # (P - p_s) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-    # p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-    p_s = P - ((P - p_0) * (460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
-    return [p_s]
+    result = []
+    numerator = (S_0 / S_p) * ((P - p_0) * (460 + T_i) * (P - p_c))
+    denominator = P * (P - (p_0 * p_s / (460 + T_i))) * (460 + T_e)
+    p_s = ((numerator / denominator) ** (1 / 0.6) - (p_0 * p_c)) / (P - p_c)
+    result.append(p_s)
+    return [result]

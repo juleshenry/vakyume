@@ -6,12 +6,12 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_11_1__P_capS_cap import eqn_11_1__PS
-from .eqn_11_1__Q_cap_0 import eqn_11_1__Q_0
-from .eqn_11_1__Q_cap_external_gas_throughput import eqn_11_1__Q_external_gas_throughput
-from .eqn_11_1__V_cap import eqn_11_1__V
-from .eqn_11_1__dP_cap import eqn_11_1__dP
-from .eqn_11_1__dT_cap import eqn_11_1__dT
+from .eqn_11_1__PS import eqn_11_1__PS
+from .eqn_11_1__Q_0 import eqn_11_1__Q_0
+from .eqn_11_1__Q_external_gas_throughput import eqn_11_1__Q_external_gas_throughput
+from .eqn_11_1__V import eqn_11_1__V
+from .eqn_11_1__dP import eqn_11_1__dP
+from .eqn_11_1__dT import eqn_11_1__dT
 
 
 class RotaryPistonVane:

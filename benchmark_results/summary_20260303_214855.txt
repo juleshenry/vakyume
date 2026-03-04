@@ -1,0 +1,3 @@
+Vakyume LLM-raw benchmark (no scaffolds, max_rounds=5)
+Started: Tue Mar  3 21:48:55 CST 2026
+---

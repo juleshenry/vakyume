@@ -43,7 +43,7 @@ def tmp_project(tmp_path):
 
     Yields the path; cleaned up automatically by pytest's tmp_path.
     """
-    for sub in ("notes", "shards", "reports", "repair_prompts", "subshards"):
+    for sub in ("notes", "shards", "reports", "repair_prompts", "harmony_checks"):
         (tmp_path / sub).mkdir()
     return tmp_path
 

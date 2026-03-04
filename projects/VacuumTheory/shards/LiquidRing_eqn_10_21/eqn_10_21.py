@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_10_21__P_cap import eqn_10_21__P
-from .eqn_10_21__P_cap_d import eqn_10_21__P_d
-from .eqn_10_21__P_cap_prime import eqn_10_21__P_prime
+from .eqn_10_21__P import eqn_10_21__P
+from .eqn_10_21__P_d import eqn_10_21__P_d
+from .eqn_10_21__P_prime import eqn_10_21__P_prime
 
 
 class LiquidRing:

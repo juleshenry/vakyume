@@ -1,1 +1,0 @@
-V_c = Q_condensor_heat_duty / (U_v * del_T_LM)

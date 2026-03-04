@@ -40,13 +40,6 @@ class AirLeak:
         result.append(leakage)
         return result
 
-    def eqn_4_10__t(self, T: float, V: float, del_P: float, leakage: float, **kwargs):
-        # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
-        result = []
-        t = 3.127 * V * del_P / (T * leakage)
-        result.append(t)
-        return result
-
     @kwasak
     def eqn_4_7(self, W=None, W_T=None, sum_individual_leak_rates=None):
         return

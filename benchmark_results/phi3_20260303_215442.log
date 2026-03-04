@@ -1,0 +1,7 @@
+Starting Vakyume pipeline for project 'projects/VacuumTheory'...
+[INPUT] shard_from_chapters: ctx.notes_dir=/Users/enrique/Desktop/fun_repos/pypilibs/vakyume/projects/VacuumTheory/notes
+Scraped 637 new shards.
+
+--- Round 1 ---
+Verifying families...
+Verifying:   0%|          | 0/148 [00:00<?, ?family/s]Verifying:   7%|▋         | 11/148 [00:00<00:01, 106.71family/s]Verifying:  15%|█▍        | 22/148 [00:00<00:01, 101.47family/s]Verifying:  22%|██▏       | 33/148 [00:00<00:01, 94.41family/s] Verifying:  30%|██▉       | 44/148 [00:00<00:01, 93.08family/s]Verifying:  36%|███▋      | 54/148 [00:00<00:01, 51.52family/s]Verifying:  44%|████▍     | 65/148 [00:00<00:01, 62.87family/s]Verifying:  51%|█████▏    | 76/148 [00:01<00:00, 72.83family/s]Verifying:  61%|██████    | 90/148 [00:01<00:00, 88.30family/s]Verifying:  71%|███████   | 105/148 [00:01<00:00, 102.84family/s]Verifying:  80%|███████▉  | 118/148 [00:01<00:00, 108.80family/s]Verifying:  89%|████████▊ | 131/148 [00:01<00:00, 113.08family/s]Verifying:  99%|█████████▉| 147/148 [00:01<00:00, 125.44family/s]Verifying: 100%|██████████| 148/148 [00:01<00:00, 95.22family/s] 

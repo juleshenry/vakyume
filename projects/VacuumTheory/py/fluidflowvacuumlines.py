@@ -437,17 +437,17 @@ class FluidFlowVacuumLines:
         return result
 
     @kwasak
-    def eqn_2_17(self, L=None, d=None, delta_P=None, mu=None, v=None):
+    def eqn_2_17a(self, L=None, d=None, delta_P=None, mu=None, v=None):
         return
 
-    def eqn_2_17__L(self, d: float, delta_P: float, mu: float, v: float, **kwargs):
+    def eqn_2_17a__L(self, d: float, delta_P: float, mu: float, v: float, **kwargs):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
         L = 28.9855072463768 * d**2 * delta_P / (mu * v)
         result.append(L)
         return result
 
-    def eqn_2_17__d(self, L: float, delta_P: float, mu: float, v: float, **kwargs):
+    def eqn_2_17a__d(self, L: float, delta_P: float, mu: float, v: float, **kwargs):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
         d = -0.185741756210067 * sqrt(L * mu * v / delta_P)
@@ -456,32 +456,70 @@ class FluidFlowVacuumLines:
         result.append(d)
         return result
 
-    def eqn_2_17__delta_P(self, L: float, d: float, mu: float, v: float, **kwargs):
+    def eqn_2_17a__delta_P(self, L: float, d: float, mu: float, v: float, **kwargs):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
         delta_P = 0.0345 * L * mu * v / d**2
         result.append(delta_P)
         return result
 
-    def eqn_2_17__mu(self, L: float, d: float, delta_P: float, v: float, **kwargs):
+    def eqn_2_17a__mu(self, L: float, d: float, delta_P: float, v: float, **kwargs):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
         mu = 28.9855072463768 * d**2 * delta_P / (L * v)
         result.append(mu)
         return result
 
-    def eqn_2_17__q(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
-        # delta_P = 0.105 * mu * L * q / d**4
-        result = []
-        q = 9.52380952380952 * d**4 * delta_P / (L * mu)
-        result.append(q)
-        return result
-
-    def eqn_2_17__v(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+    def eqn_2_17a__v(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
         # delta_P = 0.0345* mu * L * v / d**2
         result = []
         v = 28.9855072463768 * d**2 * delta_P / (L * mu)
         result.append(v)
+        return result
+
+    @kwasak
+    def eqn_2_17b(self, L=None, d=None, delta_P=None, mu=None, q=None):
+        return
+
+    def eqn_2_17b__L(self, d: float, delta_P: float, mu: float, q: float, **kwargs):
+        # delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        L = 9.52380952380952 * d**4 * delta_P / (mu * q)
+        result.append(L)
+        return result
+
+    def eqn_2_17b__d(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
+        # delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        d = -0.569242509762222 * I * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = 0.569242509762222 * I * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = -0.569242509762222 * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = 0.569242509762222 * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        return result
+
+    def eqn_2_17b__delta_P(self, L: float, d: float, mu: float, q: float, **kwargs):
+        # delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        delta_P = 0.105 * L * mu * q / d**4
+        result.append(delta_P)
+        return result
+
+    def eqn_2_17b__mu(self, L: float, d: float, delta_P: float, q: float, **kwargs):
+        # delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        mu = 9.52380952380952 * d**4 * delta_P / (L * q)
+        result.append(mu)
+        return result
+
+    def eqn_2_17b__q(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+        # delta_P = 0.105 * mu * L * q / d**4
+        result = []
+        q = 9.52380952380952 * d**4 * delta_P / (L * mu)
+        result.append(q)
         return result
 
     @kwasak
@@ -1087,17 +1125,10 @@ class FluidFlowVacuumLines:
         **kwargs,
     ):
         # C = C_1 * (D ** 4 / (mu * L)) * P_p + C_2 * (D ** 3 / L)
-        # Solve for C by rearranging the equation
         result = []
-        try:
-            C = (mu * L) / ((D**4 / P_p) * C_1 + D**3 / L * C_2)
-            result.append(
-                float(C)
-            )  # Ensure that we return a float value, not complex numbers if any roots are imaginary
-        except ZeroDivisionError:
-            print("Error: Division by zero encountered")
-        else:
-            return [result]
+        C = D**3 * (C_1 * D * P_p + C_2 * mu) / (L * mu)
+        result.append(C)
+        return result
 
     def eqn_2_34__C_1(
         self, C: float, C_2: float, D: float, L: float, P_p: float, mu: float, **kwargs

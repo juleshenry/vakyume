@@ -1,6 +1,39 @@
-__pycache__/*
+# Python
 __pycache__/
-*.bak
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+
+# Linter / tool caches
+.ruff_cache/
+.mypy_cache/
 .pytest_cache/
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+
+# Reports (generated)
 reports/
+
+# Compiled binaries
+*.o
+*.so
+*.dylib
+projects/*/bin/
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp

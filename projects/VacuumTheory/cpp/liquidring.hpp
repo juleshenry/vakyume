@@ -80,9 +80,9 @@ LiquidRing_eqn_10_10__mu(double bhp, double bhp_0, double rho) {
 std::vector<double> LiquidRing_eqn_10_10__rho(double bhp, double bhp_0,
                                               double mu) {
   std::vector<double> result;
-  double rho = std::pow((((bhp / bhp_0) - 0.5) / (0.0155 * std::pow(mu, 0.16))),
-                        (1.0 / 0.84));
-  return {rho};
+  double term = (std::log((bhp / bhp_0)) - 0.5);
+  result.push_back(std::pow(10.0, term));
+  return result;
 }
 
 std::vector<double> LiquidRing_eqn_10_11__T_c(double T_s) {
@@ -448,11 +448,8 @@ std::vector<double> LiquidRing_eqn_10_18__p_s(double P, double S_Th, double S_p,
 std::vector<double> LiquidRing_eqn_10_19__P(double S_Th, double S_p, double T_e,
                                             double T_i, double p_c,
                                             double p_s) {
-  std::vector<double> result;
-  double R = std::pow((S_p / S_Th), 1.666667);
-  double P = ((((R * (460.0 + T_e)) * p_c) - ((460.0 + T_i) * p_s)) /
-              ((R * (460.0 + T_e)) - (460.0 + T_i)));
-  return {P};
+  throw std::runtime_error(
+      "LiquidRing_eqn_10_19__P: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> LiquidRing_eqn_10_19__S_Th(double P, double S_p, double T_e,
@@ -761,8 +758,13 @@ std::vector<double> LiquidRing_eqn_10_2__dt(double PS, double Q_gas, double V,
 std::vector<double> LiquidRing_eqn_10_20__P(double S_0, double S_p, double T_e,
                                             double T_i, double p_0, double p_c,
                                             double p_s) {
-  throw std::runtime_error(
-      "LiquidRing_eqn_10_20__P: requires numerical solver (not transpilable)");
+  std::vector<double> result;
+  double numerator = ((S_0 / S_p) * (((T_e + 460.0) * (p_s - P)) * (P - p_c)));
+  double denominator =
+      (((P - p_0) * (460.0 + T_i)) * ((P * (P - p_s)) * (460.0 + T_e)));
+  double P = std::pow((numerator / denominator), (1.0 / 0.6));
+  result.push_back(P);
+  return {result};
 }
 
 std::vector<double> LiquidRing_eqn_10_20__S_0(double P, double S_p, double T_e,
@@ -809,52 +811,68 @@ std::vector<double> LiquidRing_eqn_10_20__T_e(double P, double S_0, double S_p,
                                               double T_i, double p_0,
                                               double p_c, double p_s) {
   std::vector<double> result;
-  double R = std::pow((S_0 / S_p), 1.666667);
-  double T_e =
-      (((((P - p_0) * (460.0 + T_i)) * (P - p_c)) / (R * (P * (P - p_s)))) -
-       460.0);
-  return {T_e};
+  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_c)));
+  double denominator =
+      ((P * (P - p_s)) * (460.0 + std::log((P / (460.0 + T_i)))));
+  result.push_back(std::pow((numerator / denominator), (1.0 / 0.6)));
+  return {result};
 }
 
 std::vector<double> LiquidRing_eqn_10_20__T_i(double P, double S_0, double S_p,
                                               double T_e, double p_0,
                                               double p_c, double p_s) {
   std::vector<double> result;
-  double R = std::pow((S_0 / S_p), 1.666667);
-  double T_i =
-      (((R * ((P * (P - p_s)) * (460.0 + T_e))) / ((P - p_0) * (P - p_c))) -
-       460.0);
-  return {T_i};
+  double numerator = (((S_0 / S_p) * ((P - p_0) * (460.0 + T_e))) * (P - p_c));
+  double denominator = ((P * (P - p_s)) * (460.0 + T_e));
+  double term1 = std::pow((numerator / denominator), (1.0 / 3.0));
+  double term2 = ((((P - p_0) * (460.0 + T_i)) * (P - p_c)) /
+                  ((P * (P - p_s)) * (460.0 + T_e)));
+  result.push_back(
+      (std::pow(term1, ((-5.0) / 3.0)) *
+       std::pow(((460.0 + T_i) * ((((P - p_0) * (460.0 + T_e)) * (P - p_c)) /
+                                  ((P * (P - p_s)) * (460.0 + T_e)))),
+                ((-2.0) / 3.0))));
+  return {result};
 }
 
 std::vector<double> LiquidRing_eqn_10_20__p_0(double P, double S_0, double S_p,
                                               double T_e, double T_i,
                                               double p_c, double p_s) {
   std::vector<double> result;
-  double R = std::pow((S_0 / S_p), 1.666667);
-  double p_0 = (P - ((R * ((P * (P - p_s)) * (460.0 + T_e))) /
-                     ((460.0 + T_i) * (P - p_c))));
-  return {p_0};
+  double numerator =
+      (S_0 / (S_p * std::pow(((P - p_c) / (P * (P - p_s))), (3.0 / 5.0))));
+  double denominator = (460.0 + T_i);
+  double p_0 = (P - ((numerator * denominator) /
+                     (((460.0 + T_e) * (P - p_c)) / (P * (P - p_s)))));
+  result.push_back(p_0);
+  return {result};
 }
 
 std::vector<double> LiquidRing_eqn_10_20__p_c(double P, double S_0, double S_p,
                                               double T_e, double T_i,
                                               double p_0, double p_s) {
   std::vector<double> result;
-  double R = std::pow((S_0 / S_p), 1.666667);
-  double p_c = (P - ((R * ((P * (P - p_s)) * (460.0 + T_e))) /
-                     ((P - p_0) * (460.0 + T_i))));
-  return {p_c};
+  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_s)));
+  double denominator = ((P * (P - T_e)) * (460.0 + T_i));
+  double term1 = ((((P - p_0) * (460.0 + T_i)) * (P - p_s)) /
+                  ((P * (P - p_s)) * (460.0 + T_e)));
+  double term2 = std::pow((numerator / denominator), (1.0 / 0.6));
+  result.push_back(((term1 - 1.0) * p_c));
+  return {result[0.0]};
 }
 
 std::vector<double> LiquidRing_eqn_10_20__p_s(double P, double S_0, double S_p,
                                               double T_e, double T_i,
                                               double p_0, double p_c) {
   std::vector<double> result;
-  double R = std::pow((S_0 / S_p), 1.666667);
-  double p_s = (P - ((((P - p_0) * (460.0 + T_i)) * (P - p_c)) /
-                     (R * (P * (460.0 + T_e)))));
-  return {p_s};
+  double numerator = ((S_0 / S_p) * (((P - p_0) * (460.0 + T_i)) * (P - p_c)));
+  double denominator =
+      ((P * (P - ((p_0 * p_s) / (460.0 + T_i)))) * (460.0 + T_e));
+  double p_s =
+      ((std::pow((numerator / denominator), (1.0 / 0.6)) - (p_0 * p_c)) /
+       (P - p_c));
+  result.push_back(p_s);
+  return {result};
 }
 
 std::vector<double> LiquidRing_eqn_10_21__P(double P_d, double P_prime) {

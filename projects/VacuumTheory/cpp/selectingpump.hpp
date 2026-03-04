@@ -29,10 +29,11 @@ std::vector<double> SelectingPump_eqn_8_1__NS(double NC, double SCON,
 std::vector<double> SelectingPump_eqn_8_1__SCON(double NC, double NS,
                                                 double installation_cost) {
   std::vector<double> result;
-  double SCON =
-      (1000.0 * std::pow((installation_cost / (16000.0 * (NS + (2.0 * NC)))),
-                         (1.0 / 0.35)));
-  return {SCON};
+  double SCON = (std::pow((installation_cost / (16000.0 * (NS + (2.0 * NC)))),
+                          (1.0 / 0.35)) *
+                 1000.0);
+  result.push_back(SCON);
+  return {result};
 }
 
 std::vector<double>
@@ -60,8 +61,9 @@ std::vector<double> SelectingPump_eqn_8_2__installed_costs(double hp) {
 
 std::vector<double> SelectingPump_eqn_8_3__hp(double installed_costs) {
   std::vector<double> result;
-  double hp = (10.0 * std::pow((installed_costs / 38000.0), (1.0 / 0.45)));
-  return {hp};
+  double hp = std::pow((installed_costs / 38000.0), (1.0 / 0.45));
+  result.push_back(hp);
+  return {result};
 }
 
 std::vector<double> SelectingPump_eqn_8_3__installed_costs(double hp) {
@@ -203,17 +205,17 @@ std::vector<double> SelectingPump_eqn_8_6__w(double M, double P_1, double P_2,
 std::vector<double> SelectingPump_eqn_8_7__P_1(double P_2, double adiabatic_hp,
                                                double w) {
   std::vector<double> result;
-  double P_1 =
-      (P_2 / std::pow(((adiabatic_hp / (w / 20.0)) + 1.0), (1.0 / 0.286)));
-  return {P_1};
+  double p_1 = std::pow((((adiabatic_hp * 20.0) / w) + 1.0), (1.0 / 0.286));
+  result.push_back(p_1);
+  return {result};
 }
 
 std::vector<double> SelectingPump_eqn_8_7__P_2(double P_1, double adiabatic_hp,
                                                double w) {
   std::vector<double> result;
-  double P_2 =
-      (P_1 * std::pow(((adiabatic_hp / (w / 20.0)) + 1.0), (1.0 / 0.286)));
-  return {P_2};
+  double p_2 = std::pow((((adiabatic_hp * 20.0) / w) + 1.0), (1.0 / 0.286));
+  result.push_back(p_2);
+  return {result};
 }
 
 std::vector<double> SelectingPump_eqn_8_7__adiabatic_hp(double P_1, double P_2,
@@ -236,17 +238,21 @@ std::vector<double> SelectingPump_eqn_8_7__w(double P_1, double P_2,
 std::vector<double>
 SelectingPump_eqn_8_8__P_1(double P_2, double adiabatic_power_watts, double f) {
   std::vector<double> result;
-  double P_1 = (P_2 / std::pow(((adiabatic_power_watts / (f / 12.0)) + 1.0),
-                               (1.0 / 0.286)));
-  return {P_1};
+  double numerator = ((adiabatic_power_watts * 12.0) + 1.0);
+  double denominator = std::pow(P_2, 0.286);
+  double P_1 = std::pow(denominator, (1.0 / 0.286));
+  result.push_back(P_1);
+  return {result};
 }
 
 std::vector<double>
 SelectingPump_eqn_8_8__P_2(double P_1, double adiabatic_power_watts, double f) {
   std::vector<double> result;
-  double P_2 = (P_1 * std::pow(((adiabatic_power_watts / (f / 12.0)) + 1.0),
-                               (1.0 / 0.286)));
-  return {P_2};
+  double numerator = ((adiabatic_power_watts * 12.0) + 1.0);
+  double denominator = std::pow(P_1, 0.286);
+  double P_2 = (numerator / denominator);
+  result.push_back(P_2);
+  return {result};
 }
 
 std::vector<double>

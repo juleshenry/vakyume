@@ -270,14 +270,6 @@ std::vector<double> VacuumTheory_eqn_1_8__V(double M, double P, double R,
   return result;
 }
 
-std::vector<double> VacuumTheory_eqn_1_8__m(double M, double P, double R,
-                                            double T, double V) {
-  std::vector<double> result;
-  double m = (((M * P) * V) / (R * T));
-  result.push_back(m);
-  return result;
-}
-
 std::vector<double> VacuumTheory_eqn_1_9__M(double P, double R, double T,
                                             double rho) {
   std::vector<double> result;

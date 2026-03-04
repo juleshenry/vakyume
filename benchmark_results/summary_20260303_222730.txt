@@ -1,0 +1,5 @@
+Vakyume LLM-raw benchmark (no scaffolds, max_rounds=5)
+Started: Tue Mar  3 22:27:30 CST 2026
+---
+phi3 | Solved: 138 | Inconsistent: 8 | Failed: 2
+llama3.2 | Solved: 138 | Inconsistent: 8 | Failed: 2

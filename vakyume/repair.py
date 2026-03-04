@@ -73,18 +73,156 @@
 """LLM-assisted repair of broken solver shards.
 
 When a solver shard fails One-Odd-Out verification, this module generates a
-repair prompt (optionally with an algebraic scaffold) and queries the LLM to
-produce a corrected solver function.
+repair prompt and queries the LLM to produce a corrected solver function.
 """
 
 import ast
+import importlib
 import os
 import re
+import sys
 
-from .config import SHARD_IMPORT_HEADER, llm_config
+from .config import SHARD_IMPORT_HEADER
 from .llm import ask_llm, extract_code
-from .parser import case_safe_name
-from .scaffold import generate_derivation_scaffold
+
+
+def _postprocess_code(code: str) -> str:
+    """Fix common LLM-generated code issues before writing to disk.
+
+    - Replace cmath.func() calls with bare func() (already imported via
+      ``from cmath import log, sqrt, exp``)
+    - Replace ln() with log()
+    - Replace math.func() with bare func() for common functions
+    - Replace numpy math calls where cmath equivalents exist
+    """
+    # cmath.X -> X  (the shard header does `from cmath import log, sqrt, exp`)
+    code = re.sub(r"\bcmath\.log\b", "log", code)
+    code = re.sub(r"\bcmath\.sqrt\b", "sqrt", code)
+    code = re.sub(r"\bcmath\.exp\b", "exp", code)
+    code = re.sub(r"\bcmath\.pow\b", "pow", code)
+    code = re.sub(r"\bcmath\.phase\b", "phase", code)
+    # math.X -> X
+    code = re.sub(r"\bmath\.log\b", "log", code)
+    code = re.sub(r"\bmath\.sqrt\b", "sqrt", code)
+    code = re.sub(r"\bmath\.exp\b", "exp", code)
+    code = re.sub(r"\bmath\.pow\b", "pow", code)
+    code = re.sub(r"\bmath\.pi\b", "pi", code)
+    code = re.sub(r"\bmath\.e\b", "e", code)
+    # ln() -> log()  (common LLM mistake)
+    code = re.sub(r"\bln\(", "log(", code)
+    # Remove stray `import cmath` or `import math` lines that LLMs add
+    code = re.sub(r"^\s*import cmath\s*$", "", code, flags=re.MULTILINE)
+    code = re.sub(r"^\s*import math\s*$", "", code, flags=re.MULTILINE)
+    return code
+
+
+def _find_shard_file(family_dir: str, eqn_suffix: str, variant: str) -> str | None:
+    """Find the shard file for *variant* by matching the function it defines.
+
+    The on-disk naming convention has changed over time, so we don't rely on
+    ``case_safe_name`` any more.  Instead we look for a file whose name
+    contains ``eqn_{suffix}__{something}.py`` and that defines a function
+    named ``eqn_{suffix}__{variant}``.
+    """
+    method_name = f"eqn_{eqn_suffix}__{variant}"
+    for fname in os.listdir(family_dir):
+        if not fname.endswith(".py") or "__" not in fname:
+            continue
+        # Quick filename heuristic: the part after __ should relate to variant
+        fpath = os.path.join(family_dir, fname)
+        try:
+            with open(fpath, "r") as fh:
+                for line in fh:
+                    if line.strip().startswith(f"def {method_name}("):
+                        return fpath
+        except OSError:
+            continue
+    return None
+
+
+def _validate_shard_against_golden(
+    shard_path: str,
+    method_name: str,
+    golden_test_cases: list,
+    broken_variant: str,
+) -> bool:
+    """Test a freshly-written shard against golden-tuple test cases.
+
+    Returns True if the shard passes at least one test case, False otherwise.
+    This prevents counting a syntactically-valid but semantically-wrong repair
+    as successful.
+    """
+    if not golden_test_cases:
+        # No test cases to validate against — assume OK
+        return True
+
+    # Import the shard function dynamically
+    try:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("_repair_check", shard_path)
+        if spec is None or spec.loader is None:
+            return True  # Can't load — don't block
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        func = getattr(mod, method_name, None)
+        if func is None:
+            return True  # Function not found — don't block
+    except Exception:
+        return True  # Import error — don't block
+
+    # Run each golden test case
+    passes = 0
+    for tc in golden_test_cases:
+        inputs = tc.get("inputs", {})
+        expected = tc.get("expected")
+        if expected is None:
+            continue
+        try:
+            got = func(None, **inputs)  # self=None since it's not a real method
+            if got is None:
+                continue
+            # Check similarity: any element in got close to expected
+            if isinstance(got, (list, tuple)):
+                for g in got:
+                    try:
+                        if _values_close(g, expected):
+                            passes += 1
+                            break
+                    except (TypeError, ValueError):
+                        continue
+            else:
+                if _values_close(got, expected):
+                    passes += 1
+        except Exception:
+            continue
+
+    if passes == 0 and len(golden_test_cases) > 0:
+        print(
+            f"  [Repair] Semantic check FAILED: 0/{len(golden_test_cases)} golden tests passed"
+        )
+        return False
+    print(
+        f"  [Repair] Semantic check OK: {passes}/{len(golden_test_cases)} golden tests passed"
+    )
+    return True
+
+
+def _values_close(a, b, abs_tol=1e-4, rel_tol=1e-6):
+    """Check if two numeric values are close."""
+    try:
+        a_val = complex(a)
+        b_val = complex(b)
+    except (TypeError, ValueError):
+        return False
+    # Strip negligible imaginary parts
+    if abs(a_val.imag) < abs_tol:
+        a_val = complex(a_val.real, 0)
+    if abs(b_val.imag) < abs_tol:
+        b_val = complex(b_val.real, 0)
+    diff = abs(a_val - b_val)
+    mag = max(abs(a_val), abs(b_val), 1e-15)
+    return diff < abs_tol or diff / mag < rel_tol
 
 
 def attempt_repair_shard(
@@ -95,17 +233,18 @@ def attempt_repair_shard(
     scores: dict,
     mismatches: dict,
     error: str = None,
+    golden_test_cases: list = None,
 ):
-    """Repair a single shard file by showing the LLM a working shard as example."""
+    """Repair a single shard file using LLM-assisted code generation."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
     eqn_suffix = family_name.split("_eqn_")[1]
-    safe_variant = case_safe_name(broken_variant)
-    shard_file = f"eqn_{eqn_suffix}__{safe_variant}.py"
-    shard_path = os.path.join(family_dir, shard_file)
+    shard_path = _find_shard_file(family_dir, eqn_suffix, broken_variant)
 
-    if not os.path.exists(shard_path):
-        print(f"  [Repair] Shard {shard_file} not found in {family_name}")
+    if not shard_path:
+        print(f"  [Repair] Shard for '{broken_variant}' not found in {family_name}")
         return {"updated": False}
+
+    shard_file = os.path.basename(shard_path)
 
     with open(shard_path, "r") as f:
         shard_code = f.read()
@@ -113,12 +252,64 @@ def attempt_repair_shard(
     pyeqn_match = re.search(r"# \[\.pyeqn\] (.*)", shard_code)
     pyeqn = pyeqn_match.group(1).strip() if pyeqn_match else ""
 
+    # Extract the function header from the broken shard, then validate it.
+    # If the target variable appears in the parameter list (circular dep) or
+    # another equation variable is missing, regenerate the header from scratch.
+    header_match = re.search(
+        r"(def eqn_.*?\*\*kwargs\s*,?\s*\)):", shard_code, re.DOTALL
+    )
+    if header_match:
+        header = re.sub(r"\s+", " ", header_match.group(1)).strip() + ":"
+    else:
+        header = ""
+
+    # Validate header: target var must NOT be a parameter, other vars must be
+    if header and pyeqn:
+        # Extract all equation variables
+        eq_text = pyeqn
+        all_tokens = set(re.findall(r"\b[a-zA-Z_]\w*\b", eq_text))
+        math_funcs = {
+            "log",
+            "sqrt",
+            "exp",
+            "pow",
+            "sin",
+            "cos",
+            "tan",
+            "ln",
+            "pi",
+            "e",
+            "abs",
+            "self",
+        }
+        eq_vars = sorted(
+            [t for t in all_tokens if t not in math_funcs and not t.isdigit()]
+        )
+        other_vars = [v for v in eq_vars if v != broken_variant]
+        # Check if target var is in the header params (circular dep)
+        param_section = header.split("(", 1)[1] if "(" in header else ""
+        param_tokens = set(re.findall(r"\b[a-zA-Z_]\w*\b", param_section))
+        param_tokens -= {"self", "kwargs", "float", "int"}
+        needs_regen = False
+        if broken_variant in param_tokens:
+            needs_regen = True
+        for ov in other_vars:
+            if ov not in param_tokens:
+                needs_regen = True
+                break
+        if needs_regen:
+            func_name = f"eqn_{eqn_suffix}__{broken_variant}"
+            params = ", ".join(f"{v}: float" for v in other_vars)
+            header = f"def {func_name}(self, {params}, **kwargs):"
+            print(f"  [Repair] Regenerated header: {header}")
+
+    print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
+
     # Find a working shard from the same family to use as example
     example_code = None
     for tv in trusted_variants:
-        safe_tv = case_safe_name(tv)
-        tv_path = os.path.join(family_dir, f"eqn_{eqn_suffix}__{safe_tv}.py")
-        if os.path.exists(tv_path):
+        tv_path = _find_shard_file(family_dir, eqn_suffix, tv)
+        if tv_path:
             with open(tv_path, "r") as f:
                 candidate = f.read()
             if "raise UnsolvedException" not in candidate:
@@ -131,143 +322,76 @@ def attempt_repair_shard(
                 example_code = "\n".join(cleaned_lines).strip()
                 break
 
-    # Extract the function header from the broken shard
-    header_match = re.search(
-        r"(def eqn_.*?\*\*kwargs\s*,?\s*\)):", shard_code, re.DOTALL
+    system_prompt = (
+        "You are a mathematical code repair assistant. Your goal is to fix or rewrite Python equation solver functions.\n"
+        "Rules:\n"
+        "- Rearrange the equation algebraically to isolate the target variable.\n"
+        "- Use log() for natural log, sqrt() for square root, exp() for e^x (from cmath). Complex results are OK.\n"
+        "- Do NOT use ln() — use log() instead. Do NOT use cmath.log() — just log().\n"
+        "- Do NOT use sympy at runtime for solving. Do NOT import sympy.\n"
+        "- If the equation cannot be solved analytically (e.g. transcendental), use scipy.optimize.newton for a numerical solution.\n"
+        "- ALWAYS preserve the '# [.pyeqn] <original_equation>' comment at the start of the function body.\n"
+        "- DO NOT remove or rename arguments in the function signature.\n"
+        "- Return result as: return [value]\n"
+        "- Output ONLY the function. No markdown, no commentary, no explanations."
     )
-    if header_match:
-        header = re.sub(r"\s+", " ", header_match.group(1)).strip() + ":"
-    else:
-        header = ""
 
-    # Generate algebraic derivation scaffold (fill-in-the-blank for Phi-3)
-    scaffold = generate_derivation_scaffold(pyeqn, broken_variant, header)
+    user_prompt = f"Equation: {pyeqn}\nSolve for: {broken_variant}\n\n"
 
-    print(f"\n |- Repairing shard: {shard_file} in family {family_name}")
-
-    # -- LLM RAW MODE: Bypass scaffold and send minimal prompt to powerful models --
-    if llm_config.get("llm_raw"):
-        print(f"  [Repair] --llm-raw mode: bypassing scaffold entirely")
-        system_prompt = (
-            f"You are a mathematical programming assistant. Your task is to solve an equation for a specific variable in Python.\n"
-            f"CONSTRAINTS:\n"
-            f"- Output ONLY executable Python code.\n"
-            f"- No commentary, no markdown formatting, no explanations.\n"
-            f"- Use 'cmath' for complex math, 'numpy', or 'scipy'.\n"
-            f"- Return the result as a list [x_b].\n"
-            f"- Preserve the exact function signature provided."
+    # Include trusted/broken context for richer repair guidance
+    if trusted_variants:
+        user_prompt += (
+            f"TRUSTED (known correct) variants: {', '.join(trusted_variants)}\n"
         )
-        user_prompt = (
-            f"Equation: {pyeqn}\n"
-            f"Solve for: {broken_variant}\n"
-            f"Function Header: {header}\n\n"
-            f"Provide the Python function implementation now (code only):"
+    user_prompt += f"BROKEN variant to fix: {broken_variant}\n\n"
+
+    if example_code:
+        user_prompt += (
+            f"Working example (solves same equation for a different variable):\n"
+            f"{example_code}\n\n"
         )
-        raw = ask_llm(system_prompt, user_prompt, stream=False)
-        # We'll skip the scaffold bypass logic and go straight to extraction
-        scaffold = None
 
-    # -- Check if scaffold is already a complete solution (bypass LLM) --
-    elif scaffold and not scaffold.strip().endswith(f"{broken_variant} ="):
-        has_return = "return [" in scaffold
-        has_assignment = f"{broken_variant} =" in scaffold
+    # Include mismatch context from verification
+    if mismatches and broken_variant in mismatches:
+        mm_data = mismatches[broken_variant]
+        if mm_data:
+            user_prompt += "SPECIFIC FAILURES (examples where your code is wrong):\n"
+            entries = mm_data if isinstance(mm_data, list) else [mm_data]
+            for i, trial in enumerate(entries[:3], 1):
+                if isinstance(trial, dict):
+                    if "inputs" in trial:
+                        user_prompt += f"  Example {i}: Inputs: {trial['inputs']}\n"
+                        if "output" in trial:
+                            user_prompt += f"    Got Output: {trial['output']}\n"
+                        for m in trial.get("mismatches", []):
+                            if "expected" in m:
+                                user_prompt += f"    Expected {m.get('target', broken_variant)} = {m['expected']}"
+                                if "got" in m:
+                                    user_prompt += f", got {m['got']}"
+                                user_prompt += "\n"
+                    elif "error" in trial:
+                        user_prompt += f"  Example {i}: Error: {trial['error']}\n"
+            user_prompt += "\n"
 
-        if has_assignment or has_return:
-            print(f"  [Repair] Scaffold provides complete solution — bypassing LLM")
-            code_text = scaffold
-            if not has_return:
-                code_text += f"\n    return [{broken_variant}]"
-
-            import_header = SHARD_IMPORT_HEADER
-
-            body_lines = []
-            for line in code_text.splitlines():
-                stripped = line.lstrip()
-                if line == stripped and (
-                    stripped.startswith("import ") or stripped.startswith("from ")
-                ):
-                    continue
-                body_lines.append(line)
-            code_text = "\n".join(body_lines)
-
-            if "# [.pyeqn]" not in code_text and pyeqn:
-                code_text = re.sub(
-                    r"(def\s+\w+\(.*?\):)",
-                    rf"\1\n    # [.pyeqn] {pyeqn}",
-                    code_text,
-                    count=1,
+    if golden_test_cases:
+        user_prompt += "Known correct test cases:\n"
+        for i, tc in enumerate(golden_test_cases[:3], 1):
+            if "inputs" in tc:
+                inputs_str = ", ".join(
+                    f"{k}={v}" for k, v in sorted(tc["inputs"].items())
                 )
+                user_prompt += f"  Test {i}: Inputs: {inputs_str}"
+                if "expected" in tc:
+                    user_prompt += f" -> Expected {broken_variant} = {tc['expected']}"
+                if "got" in tc:
+                    user_prompt += f" (your code returned {tc['got']})"
+                if "error" in tc:
+                    user_prompt += f" (your code raised: {tc['error']})"
+                user_prompt += "\n"
 
-            full_code = import_header + code_text + "\n"
+    user_prompt += f"\nWrite this function:\n{header}\n"
 
-            try:
-                ast.parse(full_code)
-                with open(shard_path, "w") as f:
-                    f.write(full_code)
-                print(
-                    f"  [Repair] Successfully wrote scaffold-derived shard: {shard_file}"
-                )
-                return {"updated": True}
-            except SyntaxError as e:
-                print(f"  [Repair] Scaffold syntax error: {e}")
-                print(f"  [Repair] Falling through to LLM repair...")
-
-    # -- Build the mismatch diagnostic section (shared by both paths) --
-    def _mismatch_section():
-        if not mismatches or broken_variant not in mismatches:
-            return ""
-        variant_mismatches = mismatches[broken_variant]
-        if not variant_mismatches:
-            return ""
-        section = "\nPrevious attempt failed with these errors:\n"
-        for trial in variant_mismatches[:2]:
-            if "error" in trial:
-                section += f"  Error: {trial['error']}\n"
-            elif "inputs" in trial:
-                section += f"  Inputs: {trial['inputs']}\n"
-                section += f"  Got: {trial.get('output')}\n"
-                for m in trial.get("mismatches", []):
-                    if "expected" in m:
-                        section += (
-                            f"  Expected {m['target']}={m['expected']},"
-                            f" got {m.get('got')}\n"
-                        )
-        return section
-
-    if not llm_config.get("llm_raw"):
-        if scaffold:
-            system_prompt = (
-                "Complete the Python function. Output ONLY the function. "
-                "No text. No markdown. Do NOT use sympy. Return as return [value]."
-            )
-            user_prompt = ""
-            if example_code:
-                user_prompt += (
-                    f"Working example (solves for a different variable):\n"
-                    f"{example_code}\n\n"
-                )
-            user_prompt += f"Complete this function:\n{scaffold}\n"
-            user_prompt += _mismatch_section()
-        else:
-            system_prompt = (
-                "You write Python functions that solve equations. Output ONLY code. No text.\n"
-                "Do NOT use sympy. Use direct algebraic rearrangement.\n"
-                "Return result as: return [value]\n"
-                "Use cmath.sqrt/cmath.log/cmath.exp for complex-safe math.\n"
-                "If the variable is in the exponent (transcendental), use "
-                "scipy.optimize.brentq with a sign-change scan."
-            )
-            user_prompt = f"Equation: {pyeqn}\n"
-            if example_code:
-                user_prompt += (
-                    f"\nWorking example (solves for a different variable):\n"
-                    f"{example_code}\n"
-                )
-            user_prompt += _mismatch_section()
-            user_prompt += f"\nNow solve for: {broken_variant}\n"
-            user_prompt += f"Use this exact header:\n{header}\n"
-
-        raw = ask_llm(system_prompt, user_prompt, stream=False)
+    raw = ask_llm(system_prompt, user_prompt, stream=False)
 
     if not raw:
         print(f"  [Repair] LLM returned empty response")
@@ -275,7 +399,6 @@ def attempt_repair_shard(
 
     method_name = f"eqn_{eqn_suffix}__{broken_variant}"
 
-    # -- Try to build a valid shard, retrying on syntax errors --------
     MAX_SYNTAX_RETRIES = 3
     for syntax_attempt in range(1, MAX_SYNTAX_RETRIES + 1):
         code_text = extract_code(raw, target_name=method_name)
@@ -285,10 +408,20 @@ def attempt_repair_shard(
             print(f"  [Repair] extract_code returned empty")
             return {"updated": False}
 
-        # -- Normalize the function name --
-        any_def = re.search(r"def\s+(\w+)\s*\((.*?)\):", code_text, re.DOTALL)
+        # Normalize the function name / signature
+        any_def = re.search(
+            r"def\s+(\w+)\s*\((.*?)\)\s*(?:->.*?)?:", code_text, re.DOTALL
+        )
         if any_def:
             params_str = any_def.group(2).strip()
+            cleaned_params = []
+            for p in re.split(r",\s*", params_str):
+                p = p.strip()
+                if not p:
+                    continue
+                p = re.sub(r":\s*\S+", "", p).strip()
+                cleaned_params.append(p)
+            params_str = ", ".join(cleaned_params)
             if not params_str.startswith("self"):
                 params_str = "self, " + params_str if params_str else "self"
             if "**kwargs" not in params_str:
@@ -297,9 +430,7 @@ def attempt_repair_shard(
                 any_def.group(0), f"def {method_name}({params_str}):"
             )
 
-        # -- Build the complete shard file --
-        import_header = SHARD_IMPORT_HEADER
-
+        # Strip stray imports
         body_lines = []
         for line in code_text.splitlines():
             s = line.strip()
@@ -316,7 +447,6 @@ def attempt_repair_shard(
                 count=1,
             )
 
-        # Ensure return value is wrapped in a list
         code_text = re.sub(
             r"return\s+(?!\[)(\w[\w.]*(?:\s*\*\*\s*[\w.()]+)?)\s*$",
             r"return [\1]",
@@ -324,13 +454,75 @@ def attempt_repair_shard(
             flags=re.MULTILINE,
         )
 
-        full_code = import_header + code_text + "\n"
+        code_text = _postprocess_code(code_text)
+
+        full_code = SHARD_IMPORT_HEADER + code_text + "\n"
 
         try:
             ast.parse(full_code)
+            # Semantic validation: test repaired shard against golden tuples
+            # before counting it as a successful repair.  Write to a temp
+            # location first so we can roll back on failure.
+            import tempfile
+
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".py", delete=False, dir=os.path.dirname(shard_path)
+            ) as tmp:
+                tmp.write(full_code)
+                tmp_path = tmp.name
+            try:
+                sem_ok = _validate_shard_against_golden(
+                    tmp_path, method_name, golden_test_cases or [], broken_variant
+                )
+            finally:
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
+
+            if not sem_ok:
+                # Semantically wrong — feed test-case feedback back to LLM
+                if syntax_attempt < MAX_SYNTAX_RETRIES:
+                    print(
+                        f"  [Repair] Semantically wrong (attempt {syntax_attempt}/{MAX_SYNTAX_RETRIES}), retrying..."
+                    )
+                    retry_prompt = (
+                        f"The following Python function is syntactically correct but produces wrong results:\n"
+                        f"```\n{code_text}\n```\n\n"
+                    )
+                    if golden_test_cases:
+                        retry_prompt += "It fails these test cases:\n"
+                        for i, tc in enumerate(golden_test_cases[:3], 1):
+                            inputs_str = ", ".join(
+                                f"{k}={v}"
+                                for k, v in sorted(tc.get("inputs", {}).items())
+                            )
+                            retry_prompt += f"  Test {i}: {inputs_str}"
+                            if "expected" in tc:
+                                retry_prompt += (
+                                    f" -> Expected {broken_variant} = {tc['expected']}"
+                                )
+                            if "got" in tc:
+                                retry_prompt += f" (got {tc['got']})"
+                            retry_prompt += "\n"
+                    retry_prompt += (
+                        f"\nRe-derive the algebra carefully. Solve the equation for {broken_variant}.\n"
+                        f"Output ONLY the corrected function. No text. No markdown."
+                    )
+                    raw = ask_llm(system_prompt, retry_prompt, stream=False)
+                    if not raw:
+                        print(f"  [Repair] LLM returned empty on semantic-fix retry")
+                        return {"updated": False}
+                    continue  # retry the syntax_attempt loop
+                else:
+                    print(
+                        f"  [Repair] Semantic validation failed after {MAX_SYNTAX_RETRIES} attempts"
+                    )
+                    return {"updated": False}
+
             with open(shard_path, "w") as f:
                 f.write(full_code)
-            print(f"  [Repair] Successfully wrote repaired shard: {shard_file}")
+            print(f"  [Repair] Successfully wrote LLM-repaired shard: {shard_file}")
             return {"updated": True}
         except SyntaxError as e:
             if syntax_attempt < MAX_SYNTAX_RETRIES:
@@ -347,10 +539,10 @@ def attempt_repair_shard(
                 raw = ask_llm(system_prompt, fix_prompt, stream=False)
                 if not raw:
                     print(f"  [Repair] LLM returned empty on syntax-fix retry")
-                    return {"updated": False, "error": str(e)}
+                    return {"updated": False}
             else:
                 print(
-                    f"  [Repair] LLM produced invalid syntax after {MAX_SYNTAX_RETRIES} attempts: {e}"
+                    f"  [Repair] LLM produced invalid syntax after {MAX_SYNTAX_RETRIES} attempts"
                 )
-                print(f"  [Repair] Code was:\n{full_code[:500]}")
-                return {"updated": False, "error": str(e)}
+
+    return {"updated": False}

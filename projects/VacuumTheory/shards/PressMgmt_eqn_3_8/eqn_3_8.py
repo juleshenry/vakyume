@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_3_8__A_cap_C_cap import eqn_3_8__A_C
-from .eqn_3_8__H_cap_2 import eqn_3_8__H_2
-from .eqn_3_8__V_cap_P_cap import eqn_3_8__V_P
+from .eqn_3_8__A_C import eqn_3_8__A_C
+from .eqn_3_8__H_2 import eqn_3_8__H_2
+from .eqn_3_8__V_P import eqn_3_8__V_P
 
 
 class PressMgmt:

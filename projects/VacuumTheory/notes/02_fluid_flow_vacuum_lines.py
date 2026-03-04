@@ -114,8 +114,9 @@ f = 0.316 / Re ** (0.25)
 """
 f = 64 / Re
 """
-# 2-17 Laminar Flow
+# 2-17a Laminar Flow (velocity form)
 delta_P = 0.0345* mu * L * v / d**2
+# 2-17b Laminar Flow (volumetric flow form)
 delta_P = 0.105 * mu * L * q / d**4
 """
 

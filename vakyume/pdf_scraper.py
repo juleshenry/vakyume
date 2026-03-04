@@ -1,73 +1,73 @@
 """
-                                                :+ .x..
-                                           .:...x$   $+:x  $.
-                                       ..:. XX.  &    X.   xx$....
-                                       .:X . .             & . X.
-                                    .:;X+++xX&$X+:.   .    . .x  x..
-                                  .:$++++++++++x+......:;x$$X+..+..                         .
-                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
-                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
-                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
-                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
-                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
-                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
-                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
-                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
-                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
-                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
-                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
-                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
-                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
-                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
-   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
-.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
-.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
- .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
- .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
-     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
-   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
-   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
-    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
-         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
-                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
-              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
-          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
-       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
-      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
-      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
-     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
-    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
-     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
-      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
-      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
-      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
-       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
-        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
-        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
-         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
-          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
-          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
-           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
-            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
-               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
-                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
-                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
-                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
-                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
-                   .::x+++++++++++++++++++++++$...
-                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
-                      ..:X&&&&&&&$xX&&&&&&x:.
-                             ........   ...
-
-                                 ▐
-                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
-                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
-                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
-                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
-                                      ▞
-                                    ▝▘
-
-                             by Julian Henry
+                                                               :+ .x..                                                                        
+                                                          .:...x$   $+:x  $.                                                                  
+                                                      ..:. XX.  &    X.   xx$....                                                             
+                                                      .:X . .             & . X.                                                              
+                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
+                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
+                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
+                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
+                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
+                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
+                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
+                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
+                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
+                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
+                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
+                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
+                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
+                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
+                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
+                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
+                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
+               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
+               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
+                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
+                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
+                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
+                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
+                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
+                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
+                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
+                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
+                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
+                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
+                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
+                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
+                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
+                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
+                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
+                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
+                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
+                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
+                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
+                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
+                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
+                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
+                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
+                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
+                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
+                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
+                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
+                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
+                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
+                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
+                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
+                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
+                                  .::x+++++++++++++++++++++++$...                                                                             
+                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
+                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
+                                            ........   ...                      
+                                         
+                                                ▐                   
+                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
+                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
+                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
+                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
+                                                     ▞              
+                                                   ▝▘              
+                                        
+                                            by Julian Henry
 """
 
 """
@@ -116,7 +116,7 @@ SKIP_CHAPTERS = {
     "The Python programming language",
 }
 
-LLM_MODEL = "phi3:latest"
+LLM_MODEL = "llama3:latest"
 
 # ─── PDF text extraction ────────────────────────────────────────────────────
 
@@ -370,6 +370,9 @@ def _sanitize_equation(eq: str) -> str:
     # Remove function notation: x(t) -> x, v(t) -> v
     eq = re.sub(r"(\w+)\(t\)\s*=", r"\1 =", eq)
     eq = re.sub(r"(\w+)\(t\)", r"\1", eq)
+    # Fix broken variable names with trailing space before subscript
+    # e.g., "v_ M" -> "v_M", "v_ m" -> "v_m"
+    eq = re.sub(r"(\w+)_\s+(\w)", r"\1_\2", eq)
     # Remove unit annotations in parentheses after numbers, e.g. (15 m/s)
     eq = re.sub(r"\(\d+[\.\d]*\s+[a-zA-Z/^]+\)", "", eq)
     # Remove " N" or " kg" etc. unit suffixes at end of equation
@@ -395,7 +398,7 @@ def _is_valid_algebraic(eq: str) -> bool:
     Vakyume can only handle algebraic equations, not calculus expressions.
     Rejects narrative text, unicode junk, derivative notation, and numeric-only equations.
     """
-    # Reject derivative notation (d/dt, dp/dt, d_t, d(...)/dt)
+    # Reject derivative notation (d/dt, dp/dt, d_t, d(...)/dt, dp_x, etc.)
     if re.search(r"\bd\s*/\s*d[a-z]", eq):
         return False
     if re.search(r"\bd_t\b", eq):
@@ -408,8 +411,17 @@ def _is_valid_algebraic(eq: str) -> bool:
         return False
     if re.search(r"\bdv\b", eq) and "/" in eq:
         return False
+    # Reject differential-prefixed variables (dp_x, dv_y, etc.)
+    if re.search(r"\bd[pv]_[a-z]", eq):
+        return False
     # Reject integral notation
     if "∫" in eq or "integral" in eq.lower():
+        return False
+    # Reject summation notation — not algebraically solvable
+    if re.search(r"\bsum\s*\(", eq):
+        return False
+    # Reject array/index notation — not algebraically solvable
+    if "[" in eq:
         return False
     # Reject any remaining unicode symbols (arrows, accented, etc.)
     if re.search(r"[^\x00-\x7F]", eq):
@@ -524,20 +536,36 @@ def _is_valid_algebraic(eq: str) -> bool:
     rhs_full = "=".join(eq_parts[1:])  # handle case with extra = signs
     if re.match(r"^[\s\d\.\+\-\*/\(\)]+$", rhs_full):
         return False
+    # Reject tautologies where LHS == RHS (e.g., "v_M - v_m = v_M - v_m")
+    # This happens when sanitization collapses distinct variable names
+    if lhs == rhs:
+        return False
+    # Reject trivially reducible tautologies like "M * (v - v) * (v + v) = ..."
+    # where "(x - x)" always equals zero
+    if re.search(r"\(\s*(\w+)\s*-\s*\1\s*\)", eq):
+        return False
     return True
 
 
 def _dedup_equations(equations: list[dict]) -> list[dict]:
-    """Remove duplicate equations (same eq number extracted from overlapping chunks)."""
-    seen = set()
+    """Remove duplicate equations (same eq number or same equation body)."""
+    seen_ids = set()
+    seen_eqs = set()
     deduped = []
     for eq in equations:
         # Extract the equation number from the header
         match = re.search(r"#\s*(\d+[-\.]\d+)", eq["header"])
-        key = match.group(1) if match else eq["equation"]
-        if key not in seen:
-            seen.add(key)
-            deduped.append(eq)
+        key = match.group(1) if match else None
+        # Normalize equation body for dedup comparison
+        eq_body = re.sub(r"\s+", "", eq["equation"])
+        if key and key in seen_ids:
+            continue
+        if eq_body in seen_eqs:
+            continue
+        if key:
+            seen_ids.add(key)
+        seen_eqs.add(eq_body)
+        deduped.append(eq)
     return deduped
 
 
@@ -562,9 +590,20 @@ def _sanitize_docstring(doc: str) -> str:
         var_part = line.split(":=")[0].strip()
         if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", var_part):
             continue
-        # Reject lines where description contains $..$ LaTeX
+        # Reject index/loop variables (i, j, k, n used as indices)
         desc_part = line.split(":=")[1].strip()
+        if var_part in ("i", "j", "n") and re.search(
+            r"\b(index|loop|counter|iterator|summation)\b", desc_part, re.IGNORECASE
+        ):
+            continue
+        # Reject lines where description contains $..$ LaTeX
         desc_part = re.sub(r"\$[^$]*\$", "", desc_part).strip()
+        # Reject descriptions that look like code (contain sum(, *, **, /, [, etc.)
+        if re.search(r"(sum\(|\*|/|\[|\]|\*\*|\{|\})", desc_part):
+            continue
+        # Reject empty descriptions after cleanup
+        if not desc_part:
+            continue
         clean_lines.append(f"{var_part} := {desc_part}")
     return "\n".join(clean_lines)
 
@@ -611,7 +650,7 @@ def scrape_pdf(
         skip_chapters:  Chapter titles to skip (no extractable equations).
         verbose:        Print progress info.
         chapter_filter: If set, only process these chapter numbers (1-indexed).
-        model:          Ollama model name to use for extraction (default: phi3:latest).
+        model:          Ollama model name to use for extraction (default: llama3:latest).
 
     Returns:
         Summary dict with per-chapter equation counts.
@@ -753,13 +792,13 @@ def _wizard_select_model() -> str:
     available = _detect_ollama_models()
 
     if not available:
-        print("  Could not detect Ollama models. Using default: phi3:latest")
-        return "phi3:latest"
+        print("  Could not detect Ollama models. Using default: llama3:latest")
+        return "llama3:latest"
 
-    # Prefer phi3 as default, but show all options
+    # Prefer llama3 as default, but show all options
     default_idx = 0
     for i, name in enumerate(available):
-        if "phi3" in name:
+        if "llama3" in name and "llama3.2" not in name:
             default_idx = i
             break
 
@@ -797,9 +836,10 @@ def _wizard_select_model() -> str:
 def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
     """Interactive chapter selection. Returns list of chapter numbers or None for all."""
     chapters = _extract_chapter_map(pdf_path)
+    n = len(chapters)
 
     print("\n--- Chapter Selection ---")
-    print(f"  Found {len(chapters)} chapters in PDF:\n")
+    print(f"  Found {n} chapters in PDF:\n")
 
     for ch in chapters:
         skip = (
@@ -812,8 +852,7 @@ def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
     print(f"    - Enter chapter numbers separated by commas (e.g., 3,5,9)")
     print(f"    - Enter a range with a dash (e.g., 3-9)")
     print(f"    - Press Enter to process ALL chapters")
-    print(f"    - Type 'physics' for core physics chapters (3-15)")
-    print(f"    - Type 'em' for electromagnetism chapters (16-23)")
+    print(f"    - Type 'one' to pick a single chapter (good for testing)")
 
     choice = input("\n  Chapters to process: ").strip()
 
@@ -821,15 +860,19 @@ def _wizard_select_chapters(pdf_path: str) -> list[int] | None:
         print("  -> Processing ALL chapters")
         return None
 
-    if choice.lower() == "physics":
-        selected = list(range(3, 16))
-        print(f"  -> Core physics: chapters 3-15")
-        return selected
-
-    if choice.lower() == "em":
-        selected = list(range(16, 24))
-        print(f"  -> Electromagnetism: chapters 16-23")
-        return selected
+    if choice.lower() == "one":
+        ch_input = input("  Enter chapter number: ").strip()
+        try:
+            ch_num = int(ch_input)
+            if 1 <= ch_num <= n:
+                print(f"  -> Selected chapter {ch_num}")
+                return [ch_num]
+            else:
+                print(f"  Invalid chapter number. Processing ALL chapters.")
+                return None
+        except ValueError:
+            print(f"  Invalid input. Processing ALL chapters.")
+            return None
 
     # Parse comma-separated and ranges
     selected = []
@@ -878,15 +921,20 @@ def _wizard_confirm(
     return confirm in ("", "y", "yes")
 
 
-def run_wizard(pdf_path: str, output_dir: str | None = None) -> dict | None:
+def run_wizard(
+    pdf_path: str,
+    output_dir: str | None = None,
+    model_override: str | None = None,
+) -> dict | None:
     """Interactive wizard for PDF equation extraction.
 
     Walks the user through model selection, chapter selection, and confirmation
     before running the extraction.
 
     Args:
-        pdf_path:   Path to the PDF file.
-        output_dir: Output directory (default: notes/ next to PDF).
+        pdf_path:       Path to the PDF file.
+        output_dir:     Output directory (default: notes/ next to PDF).
+        model_override: If set, skip model selection and use this model.
 
     Returns:
         Extraction summary dict, or None if the user cancelled.
@@ -899,8 +947,12 @@ def run_wizard(pdf_path: str, output_dir: str | None = None) -> dict | None:
     if output_dir is None:
         output_dir = os.path.join(os.path.dirname(pdf_path), "notes")
 
-    # Step 1: Model selection
-    model = _wizard_select_model()
+    # Step 1: Model selection (skip if caller already chose)
+    if model_override:
+        model = model_override
+        print(f"\n  Model: {model} (from --model flag)")
+    else:
+        model = _wizard_select_model()
 
     # Step 2: Chapter selection
     chapters = _wizard_select_chapters(pdf_path)
@@ -980,7 +1032,11 @@ def main():
         output_dir = os.path.join(os.path.dirname(args.pdf), "notes")
 
     if args.wizard:
-        run_wizard(pdf_path=args.pdf, output_dir=output_dir)
+        run_wizard(
+            pdf_path=args.pdf,
+            output_dir=output_dir,
+            model_override=args.model if args.model != LLM_MODEL else None,
+        )
     else:
         scrape_pdf(
             pdf_path=args.pdf,
