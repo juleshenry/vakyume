@@ -125,7 +125,7 @@ class VakyumeEncoder(json.JSONEncoder):
                         return str(o)
                     return float(o.evalf())
                 return str(o)
-            except:
+            except (TypeError, ValueError, AttributeError):
                 return str(o)
         if isinstance(o, (set, tuple)):
             return list(o)
@@ -134,10 +134,10 @@ class VakyumeEncoder(json.JSONEncoder):
                 return o.tolist()
             try:
                 return float(o)
-            except:
+            except (TypeError, ValueError):
                 try:
                     return int(o)
-                except:
+                except (TypeError, ValueError):
                     return str(o)
         return str(o)
 
@@ -151,7 +151,6 @@ class PipelineContext:
         self.notes_dir = os.path.join(self.project_dir, "notes")
         self.shards_dir = os.path.join(self.project_dir, "shards")
         self.reports_dir = os.path.join(self.project_dir, "reports")
-        self.notes_dir = os.path.join(self.project_dir, "notes")
 
         for d in [
             self.shards_dir,

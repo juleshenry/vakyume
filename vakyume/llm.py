@@ -70,10 +70,13 @@
                              by Julian Henry
 """
 
+import logging
 import re
 import time
 from .config import llm_config
 from .openrouter import openrouter_chat
+
+logger = logging.getLogger(__name__)
 
 LLM_COOLDOWN_SECONDS = 5
 
@@ -92,8 +95,12 @@ def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=Fals
             # Fallback for other providers if needed, or leave to them
             model = "gpt-4o"  # Sensible default for OpenRouter
 
-    print(
-        f"[INPUT] ask_llm: provider={provider}, model={model}, system_prompt_len={len(system_prompt)}, user_prompt_len={len(user_prompt)}"
+    logger.debug(
+        "ask_llm: provider=%s, model=%s, system_prompt_len=%d, user_prompt_len=%d",
+        provider,
+        model,
+        len(system_prompt),
+        len(user_prompt),
     )
 
     if provider == "ollama":
@@ -131,7 +138,7 @@ def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=Fals
             temperature=llm_config.get("temperature", 0),
         )
 
-    print(f"[OUTPUT] ask_llm: content_len={len(content)}")
+    logger.debug("ask_llm: content_len=%d", len(content))
     time.sleep(LLM_COOLDOWN_SECONDS)
     return content
 
@@ -188,8 +195,12 @@ def repair_codigo(
     **kwargs,
 ):
     """Refined prompt for Phi-3 to repair existing code with majority context."""
-    print(
-        f"[INPUT] repair_codigo: shard_file={shard_file}, broken={broken_variants}, trusted={trusted_variants}, is_subshard={is_subshard}"
+    logger.debug(
+        "repair_codigo: shard_file=%s, broken=%s, trusted=%s, is_subshard=%s",
+        shard_file,
+        broken_variants,
+        trusted_variants,
+        is_subshard,
     )
 
     if is_subshard:

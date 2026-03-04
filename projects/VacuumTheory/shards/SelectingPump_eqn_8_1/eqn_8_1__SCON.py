@@ -5,7 +5,10 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
+def eqn_8_1__SCON(self, NC, NS, installation_cost, **kwargs):
     # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
-    # Placeholder for numerical solver
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    SCON = ((installation_cost / (NC * 2) / 16000 - NS) / log((NS + self.__class__.eneral_constants.log(NC + 2 * NC)) / 10**(7/35)))
+    result = []
+    SCON_value = eval(SCON)
+    result.append(SCON_value)
+    return [result]

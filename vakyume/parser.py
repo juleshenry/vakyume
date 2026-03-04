@@ -76,6 +76,7 @@ Reads Python-like equation definitions from ``notes/*.py`` files and generates
 individual solver shards using SymPy for algebraic isolation.
 """
 
+import logging
 import os
 import py_compile
 import re
@@ -90,6 +91,8 @@ from .config import (
     FUNKTORZ,
     SHARD_IMPORT_HEADER,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def case_safe_name(name: str) -> str:
@@ -144,8 +147,6 @@ def case_unsafe_name(safe: str) -> str:
         >>> case_unsafe_name("P_cap_1")
         'P_1'
     """
-    import re
-
     return re.sub(r"([A-Z])_cap", r"\1", safe)
 
 
@@ -250,7 +251,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
     overwrite_existing : bool, optional
         Whether to overwrite existing shard files. Defaults to False.
     """
-    print(f"[INPUT] shard_from_chapters: ctx.notes_dir={ctx.notes_dir}")
+    logger.debug("shard_from_chapters: ctx.notes_dir=%s", ctx.notes_dir)
     solver = Solver()
 
     if not os.path.exists(ctx.notes_dir):
@@ -266,7 +267,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
             to_process.append(chapter_file)
 
     if not to_process:
-        print(f"[OUTPUT] shard_from_chapters: No chapters to process")
+        logger.debug("shard_from_chapters: No chapters to process")
         return
 
     import_header = SHARD_IMPORT_HEADER

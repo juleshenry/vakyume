@@ -74,7 +74,6 @@ from cmath import log, sqrt, exp
 from math import e, pi
 from sympy import I, Piecewise, LambertW, Eq, symbols, solve, Basic
 from scipy.optimize import newton
-from itertools import product
 import random
 import inspect
 import re

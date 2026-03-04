@@ -5,7 +5,6 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_8_8__P_2(self, P_1: float, adiabatic_power_watts: float, f: float, **kwargs):
+def eqn_8_8__P_2(self, P_1, adiabatic_power_watts, f, **kwargs):
     # [.pyeqn] adiabatic_power_watts = f / 12 * ((P_2 / P_1) ** 0.286 - 1)
-    # Placeholder for numerical solver
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    return (f / (adiabatic_power_watts + 1) * pow((12/0.286), 500/143)) * P_1
