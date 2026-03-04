@@ -1,73 +1,73 @@
 """
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
 """
 
 from cmath import log, sqrt, exp
@@ -564,7 +564,7 @@ class Verify:
     # ------------------------------------------------------------------
     #  Golden-tuple round-robin verification
     # ------------------------------------------------------------------
-    def verify_equation_golden(self, base_eq, num_tuples=5):
+    def verify_equation_golden(self, base_eq, num_tuples=5, pinned_tuples=None):
         """Verify shards using golden-tuple round-robin cross-validation.
 
         For each shard (the "oracle"), we:
@@ -572,6 +572,10 @@ class Verify:
           2. Validate the golden tuple against the harmony function
           3. Feed the golden tuple (minus each other shard's variable) to
              each other shard and check if it recovers the correct value
+
+        If *pinned_tuples* is provided (a list of (oracle_var, full_value_dict)
+        from a previous round), those tuples are reused instead of generating
+        new random ones.  This ensures deterministic verification across rounds.
 
         Returns a dict with:
           - scores:  {var: num_passes}  (max = num_tuples * (num_shards - 1))
@@ -602,62 +606,66 @@ class Verify:
 
         num_v = len(all_variants)
 
-        # Collect golden tuples from each oracle
-        golden_tuples = []  # list of (oracle_var, full_value_dict)
-        for oracle_var in variants:
-            method = getattr(self.lib_instance, f"{base_eq}__{oracle_var}")
-            for _ in range(num_tuples):
-                inputs = {p: self.make_rand() for p in params if p != oracle_var}
-                try:
-                    result = method(**inputs.copy())
-                    if not result:
-                        continue
-                    # Pick the best numeric value — prefer non-zero to avoid
-                    # degenerate equation tuples (e.g., L_0=0 makes 0=0)
-                    val = None
-                    first_val = None
-                    for v in result:
-                        if isinstance(v, (int, float, complex)):
-                            if first_val is None:
-                                first_val = v
-                            real_part = v.real if isinstance(v, complex) else v
-                            if abs(real_part) > 1e-12:
-                                val = v
-                                break
-                    if val is None:
-                        val = first_val  # fall back to zero if that's all we have
-                    if val is None:
-                        continue
-
-                    full_set = dict(inputs)
-                    full_set[oracle_var] = val
-
-                    # Reject golden tuples where the oracle value is
-                    # significantly complex — this indicates the random inputs
-                    # land outside the equation's physical domain
-                    if isinstance(val, complex):
-                        if abs(val.imag) > 1e-6:
+        # Reuse pinned tuples if provided, otherwise generate fresh ones
+        if pinned_tuples is not None:
+            golden_tuples = list(pinned_tuples)
+        else:
+            # Collect golden tuples from each oracle
+            golden_tuples = []  # list of (oracle_var, full_value_dict)
+            for oracle_var in variants:
+                method = getattr(self.lib_instance, f"{base_eq}__{oracle_var}")
+                for _ in range(num_tuples):
+                    inputs = {p: self.make_rand() for p in params if p != oracle_var}
+                    try:
+                        result = method(**inputs.copy())
+                        if not result:
                             continue
-                        # Negligible imaginary part — use real
-                        val = val.real
+                        # Pick the best numeric value — prefer non-zero to avoid
+                        # degenerate equation tuples (e.g., L_0=0 makes 0=0)
+                        val = None
+                        first_val = None
+                        for v in result:
+                            if isinstance(v, (int, float, complex)):
+                                if first_val is None:
+                                    first_val = v
+                                real_part = v.real if isinstance(v, complex) else v
+                                if abs(real_part) > 1e-12:
+                                    val = v
+                                    break
+                        if val is None:
+                            val = first_val  # fall back to zero if that's all we have
+                        if val is None:
+                            continue
+
+                        full_set = dict(inputs)
                         full_set[oracle_var] = val
 
-                    # Validate against harmony function (equation residual)
-                    if self.pyeqn:
-                        harmony_res = self._check_pyeqn_harmony(
-                            self.pyeqn, full_set, log_lines=log_lines
-                        )
-                        if harmony_res is False:
-                            # Oracle produced a value that doesn't satisfy the equation
-                            continue
-                        if harmony_res is None:
-                            # Inconclusive (domain error) — skip
-                            continue
+                        # Reject golden tuples where the oracle value is
+                        # significantly complex — this indicates the random inputs
+                        # land outside the equation's physical domain
+                        if isinstance(val, complex):
+                            if abs(val.imag) > 1e-6:
+                                continue
+                            # Negligible imaginary part — use real
+                            val = val.real
+                            full_set[oracle_var] = val
 
-                    golden_tuples.append((oracle_var, full_set))
-                except Exception:
-                    # Oracle couldn't solve for these random inputs — skip
-                    continue
+                        # Validate against harmony function (equation residual)
+                        if self.pyeqn:
+                            harmony_res = self._check_pyeqn_harmony(
+                                self.pyeqn, full_set, log_lines=log_lines
+                            )
+                            if harmony_res is False:
+                                # Oracle produced a value that doesn't satisfy the equation
+                                continue
+                            if harmony_res is None:
+                                # Inconclusive (domain error) — skip
+                                continue
+
+                        golden_tuples.append((oracle_var, full_set))
+                    except Exception:
+                        # Oracle couldn't solve for these random inputs — skip
+                        continue
 
         if not golden_tuples:
             # No oracle could produce valid golden tuples — give benefit of doubt
@@ -870,9 +878,19 @@ class Verify:
             overall_results[base_eq] = self.verify_equation(base_eq)
         return overall_results
 
-    def verify_golden(self):
-        """Verify all equations using golden-tuple round-robin."""
+    def verify_golden(self, pinned_tuples_map=None):
+        """Verify all equations using golden-tuple round-robin.
+
+        *pinned_tuples_map* is an optional dict mapping ``base_eq`` to a list
+        of ``(oracle_var, full_value_dict)`` tuples from a previous round.
+        When provided, these tuples are reused for deterministic verification.
+        """
         overall_results = {}
         for base_eq in self.base_equations:
-            overall_results[base_eq] = self.verify_equation_golden(base_eq)
+            pinned = None
+            if pinned_tuples_map and base_eq in pinned_tuples_map:
+                pinned = pinned_tuples_map[base_eq]
+            overall_results[base_eq] = self.verify_equation_golden(
+                base_eq, pinned_tuples=pinned
+            )
         return overall_results

@@ -1,73 +1,73 @@
 """
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
 """
 
 """LLM-assisted repair of broken solver shards.
@@ -77,8 +77,10 @@ repair prompt and queries the LLM to produce a corrected solver function.
 """
 
 import ast
+import importlib
 import os
 import re
+import sys
 
 from .config import SHARD_IMPORT_HEADER
 from .llm import ask_llm, extract_code
@@ -136,6 +138,91 @@ def _find_shard_file(family_dir: str, eqn_suffix: str, variant: str) -> str | No
         except OSError:
             continue
     return None
+
+
+def _validate_shard_against_golden(
+    shard_path: str,
+    method_name: str,
+    golden_test_cases: list,
+    broken_variant: str,
+) -> bool:
+    """Test a freshly-written shard against golden-tuple test cases.
+
+    Returns True if the shard passes at least one test case, False otherwise.
+    This prevents counting a syntactically-valid but semantically-wrong repair
+    as successful.
+    """
+    if not golden_test_cases:
+        # No test cases to validate against — assume OK
+        return True
+
+    # Import the shard function dynamically
+    try:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("_repair_check", shard_path)
+        if spec is None or spec.loader is None:
+            return True  # Can't load — don't block
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        func = getattr(mod, method_name, None)
+        if func is None:
+            return True  # Function not found — don't block
+    except Exception:
+        return True  # Import error — don't block
+
+    # Run each golden test case
+    passes = 0
+    for tc in golden_test_cases:
+        inputs = tc.get("inputs", {})
+        expected = tc.get("expected")
+        if expected is None:
+            continue
+        try:
+            got = func(None, **inputs)  # self=None since it's not a real method
+            if got is None:
+                continue
+            # Check similarity: any element in got close to expected
+            if isinstance(got, (list, tuple)):
+                for g in got:
+                    try:
+                        if _values_close(g, expected):
+                            passes += 1
+                            break
+                    except (TypeError, ValueError):
+                        continue
+            else:
+                if _values_close(got, expected):
+                    passes += 1
+        except Exception:
+            continue
+
+    if passes == 0 and len(golden_test_cases) > 0:
+        print(
+            f"  [Repair] Semantic check FAILED: 0/{len(golden_test_cases)} golden tests passed"
+        )
+        return False
+    print(
+        f"  [Repair] Semantic check OK: {passes}/{len(golden_test_cases)} golden tests passed"
+    )
+    return True
+
+
+def _values_close(a, b, abs_tol=1e-4, rel_tol=1e-6):
+    """Check if two numeric values are close."""
+    try:
+        a_val = complex(a)
+        b_val = complex(b)
+    except (TypeError, ValueError):
+        return False
+    # Strip negligible imaginary parts
+    if abs(a_val.imag) < abs_tol:
+        a_val = complex(a_val.real, 0)
+    if abs(b_val.imag) < abs_tol:
+        b_val = complex(b_val.real, 0)
+    diff = abs(a_val - b_val)
+    mag = max(abs(a_val), abs(b_val), 1e-15)
+    return diff < abs_tol or diff / mag < rel_tol
 
 
 def attempt_repair_shard(
@@ -236,22 +323,55 @@ def attempt_repair_shard(
                 break
 
     system_prompt = (
-        "You solve equations algebraically in Python. Output ONLY the function body.\n"
+        "You are a mathematical code repair assistant. Your goal is to fix or rewrite Python equation solver functions.\n"
         "Rules:\n"
-        "- Rearrange the equation to isolate the target variable.\n"
+        "- Rearrange the equation algebraically to isolate the target variable.\n"
         "- Use log() for natural log, sqrt() for square root, exp() for e^x (from cmath). Complex results are OK.\n"
         "- Do NOT use ln() — use log() instead. Do NOT use cmath.log() — just log().\n"
-        "- Do NOT use sympy at runtime. Do NOT use scipy or numerical solvers.\n"
+        "- Do NOT use sympy at runtime for solving. Do NOT import sympy.\n"
+        "- If the equation cannot be solved analytically (e.g. transcendental), use scipy.optimize.newton for a numerical solution.\n"
+        "- ALWAYS preserve the '# [.pyeqn] <original_equation>' comment at the start of the function body.\n"
+        "- DO NOT remove or rename arguments in the function signature.\n"
         "- Return result as: return [value]\n"
-        "- No markdown, no commentary, no explanations."
+        "- Output ONLY the function. No markdown, no commentary, no explanations."
     )
 
     user_prompt = f"Equation: {pyeqn}\nSolve for: {broken_variant}\n\n"
+
+    # Include trusted/broken context for richer repair guidance
+    if trusted_variants:
+        user_prompt += (
+            f"TRUSTED (known correct) variants: {', '.join(trusted_variants)}\n"
+        )
+    user_prompt += f"BROKEN variant to fix: {broken_variant}\n\n"
+
     if example_code:
         user_prompt += (
             f"Working example (solves same equation for a different variable):\n"
             f"{example_code}\n\n"
         )
+
+    # Include mismatch context from verification
+    if mismatches and broken_variant in mismatches:
+        mm_data = mismatches[broken_variant]
+        if mm_data:
+            user_prompt += "SPECIFIC FAILURES (examples where your code is wrong):\n"
+            entries = mm_data if isinstance(mm_data, list) else [mm_data]
+            for i, trial in enumerate(entries[:3], 1):
+                if isinstance(trial, dict):
+                    if "inputs" in trial:
+                        user_prompt += f"  Example {i}: Inputs: {trial['inputs']}\n"
+                        if "output" in trial:
+                            user_prompt += f"    Got Output: {trial['output']}\n"
+                        for m in trial.get("mismatches", []):
+                            if "expected" in m:
+                                user_prompt += f"    Expected {m.get('target', broken_variant)} = {m['expected']}"
+                                if "got" in m:
+                                    user_prompt += f", got {m['got']}"
+                                user_prompt += "\n"
+                    elif "error" in trial:
+                        user_prompt += f"  Example {i}: Error: {trial['error']}\n"
+            user_prompt += "\n"
 
     if golden_test_cases:
         user_prompt += "Known correct test cases:\n"
@@ -340,6 +460,66 @@ def attempt_repair_shard(
 
         try:
             ast.parse(full_code)
+            # Semantic validation: test repaired shard against golden tuples
+            # before counting it as a successful repair.  Write to a temp
+            # location first so we can roll back on failure.
+            import tempfile
+
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".py", delete=False, dir=os.path.dirname(shard_path)
+            ) as tmp:
+                tmp.write(full_code)
+                tmp_path = tmp.name
+            try:
+                sem_ok = _validate_shard_against_golden(
+                    tmp_path, method_name, golden_test_cases or [], broken_variant
+                )
+            finally:
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
+
+            if not sem_ok:
+                # Semantically wrong — feed test-case feedback back to LLM
+                if syntax_attempt < MAX_SYNTAX_RETRIES:
+                    print(
+                        f"  [Repair] Semantically wrong (attempt {syntax_attempt}/{MAX_SYNTAX_RETRIES}), retrying..."
+                    )
+                    retry_prompt = (
+                        f"The following Python function is syntactically correct but produces wrong results:\n"
+                        f"```\n{code_text}\n```\n\n"
+                    )
+                    if golden_test_cases:
+                        retry_prompt += "It fails these test cases:\n"
+                        for i, tc in enumerate(golden_test_cases[:3], 1):
+                            inputs_str = ", ".join(
+                                f"{k}={v}"
+                                for k, v in sorted(tc.get("inputs", {}).items())
+                            )
+                            retry_prompt += f"  Test {i}: {inputs_str}"
+                            if "expected" in tc:
+                                retry_prompt += (
+                                    f" -> Expected {broken_variant} = {tc['expected']}"
+                                )
+                            if "got" in tc:
+                                retry_prompt += f" (got {tc['got']})"
+                            retry_prompt += "\n"
+                    retry_prompt += (
+                        f"\nRe-derive the algebra carefully. Solve the equation for {broken_variant}.\n"
+                        f"Output ONLY the corrected function. No text. No markdown."
+                    )
+                    raw = ask_llm(system_prompt, retry_prompt, stream=False)
+                    if not raw:
+                        print(f"  [Repair] LLM returned empty on semantic-fix retry")
+                        return {"updated": False}
+                    continue  # retry the syntax_attempt loop
+                else:
+                    print(
+                        f"  [Repair] Semantic validation failed after {MAX_SYNTAX_RETRIES} attempts"
+                    )
+                    return {"updated": False}
+
             with open(shard_path, "w") as f:
                 f.write(full_code)
             print(f"  [Repair] Successfully wrote LLM-repaired shard: {shard_file}")

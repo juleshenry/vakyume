@@ -1,73 +1,73 @@
 """
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
 """
 
 """Pipeline orchestrator: scraping, verification, repair, and certification.
@@ -223,8 +223,15 @@ def _load_family_class(ctx: PipelineContext, family_name: str):
     return cls, eqn_number, pyeqn
 
 
-def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
-    """Verify all shards in an equation family using golden-tuple cross-validation."""
+def verify_family(
+    ctx: PipelineContext, family_name: str, verbose=False, pinned_tuples_map=None
+):
+    """Verify all shards in an equation family using golden-tuple cross-validation.
+
+    *pinned_tuples_map* is an optional dict mapping ``base_eq`` to a list of
+    ``(oracle_var, full_value_dict)`` tuples from a previous round.  When
+    provided, these tuples are reused for deterministic verification.
+    """
     try:
         cls, eqn_number, pyeqn = _load_family_class(ctx, family_name)
     except Exception as e:
@@ -236,7 +243,7 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
 
     try:
         v = Verify(cls, pyeqn=pyeqn, harmony_checks_dir=subshards_dir, verbose=verbose)
-        raw_results = v.verify_golden()
+        raw_results = v.verify_golden(pinned_tuples_map=pinned_tuples_map)
 
         # Clean up harmony_checks/ folder
         if os.path.exists(subshards_dir):
@@ -272,9 +279,19 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
 
 
 def verify_all_shards(
-    ctx: PipelineContext, verbose=False, skip_families=None, include_families=None
+    ctx: PipelineContext,
+    verbose=False,
+    skip_families=None,
+    include_families=None,
+    pinned_tuples=None,
 ):
-    """Verify every equation family in the shards directory."""
+    """Verify every equation family in the shards directory.
+
+    *pinned_tuples* is an optional dict mapping ``family_name`` to a dict
+    mapping ``base_eq`` to a list of ``(oracle_var, full_value_dict)`` tuples.
+    When provided for a family, those tuples are reused for deterministic
+    verification across rounds.
+    """
     if include_families:
         to_verify = include_families
         print(f"Verifying specific families: {', '.join(include_families)}")
@@ -305,7 +322,12 @@ def verify_all_shards(
         tqdm(to_verify, desc="Verifying", unit="family") if use_tqdm else to_verify
     )
     for family_name in iterator:
-        all_results[family_name] = verify_family(ctx, family_name, verbose=verbose)
+        family_pinned = None
+        if pinned_tuples and family_name in pinned_tuples:
+            family_pinned = pinned_tuples[family_name]
+        all_results[family_name] = verify_family(
+            ctx, family_name, verbose=verbose, pinned_tuples_map=family_pinned
+        )
 
     if skip_families:
         for family_name in family_names:
@@ -534,6 +556,10 @@ def run_pipeline(
         shard_from_chapters(ctx)
 
     analysis = None
+    # Pinned golden tuples: generated in round 1, reused in subsequent rounds
+    # for deterministic verification.  Structure:
+    #   { family_name: { base_eq: [(oracle_var, full_value_dict), ...] } }
+    pinned_golden_tuples = {}
     for round_idx in range(1, max_rounds + 1):
         print(f"\n--- Round {round_idx} ---")
         all_results = verify_all_shards(
@@ -541,7 +567,30 @@ def run_pipeline(
             verbose=verbose,
             skip_families=previously_solved,
             include_families=include_families,
+            pinned_tuples=pinned_golden_tuples if round_idx > 1 else None,
         )
+
+        # After round 1, extract and pin the golden tuples for reuse
+        if round_idx == 1:
+            for family_name, family_res in all_results.items():
+                if not isinstance(family_res, dict) or "golden_data" not in family_res:
+                    continue
+                golden_data = family_res.get("golden_data", {})
+                family_tuples = {}
+                for base_eq, eq_data in golden_data.items():
+                    raw_tuples = eq_data.get("golden_tuples", [])
+                    # Convert from serialised format back to (oracle, values) pairs
+                    pinned = []
+                    for gt in raw_tuples:
+                        if isinstance(gt, dict) and "oracle" in gt and "values" in gt:
+                            pinned.append((gt["oracle"], dict(gt["values"])))
+                        elif isinstance(gt, (list, tuple)) and len(gt) == 2:
+                            pinned.append((gt[0], dict(gt[1])))
+                    if pinned:
+                        family_tuples[base_eq] = pinned
+                if family_tuples:
+                    pinned_golden_tuples[family_name] = family_tuples
+
         analysis = analyze_results(ctx, all_results)
 
         inconsistent = analysis.get("inconsistent", {})
@@ -610,7 +659,7 @@ def run_pipeline(
                         SHARD_IMPORT_HEADER
                         + f"def {func_name}(self, {params}, **kwargs):\n"
                         + (f"    {pyeqn_comment}\n" if pyeqn_comment else "")
-                        + f"    raise UnsolvedException('{v}')\n"
+                        + f'    raise UnsolvedException("Pending LLM/Manual Repair for {v}")\n'
                     )
                     print(f"\n |- Resetting swapped shard {v} to stub in {family_name}")
                     with open(p, "w") as fh:
@@ -648,6 +697,27 @@ def run_pipeline(
                 )
                 if result.get("updated"):
                     any_repaired = True
+                    # Re-verify the family immediately to update broken/trusted
+                    # lists so subsequent repairs in this round use fresh info.
+                    family_pinned = pinned_golden_tuples.get(family_name)
+                    re_res = verify_family(
+                        ctx,
+                        family_name,
+                        verbose=verbose,
+                        pinned_tuples_map=family_pinned,
+                    )
+                    if re_res and isinstance(re_res, dict) and "golden_data" in re_res:
+                        re_golden = re_res.get("golden_data", {})
+                        for _beq, _eqd in re_golden.items():
+                            re_broken = _eqd.get("broken", [])
+                            re_trusted = _eqd.get("trusted", [])
+                            re_failures = _eqd.get("failures", {})
+                            if re_broken is not None:
+                                # Update live lists for remaining repairs
+                                trusted = list(re_trusted) if re_trusted else trusted
+                                golden_failures = (
+                                    re_failures if re_failures else golden_failures
+                                )
 
         if not any_repaired:
             print(f"  No repairs were made in round {round_idx} — stopping early.")
