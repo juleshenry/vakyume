@@ -14,7 +14,7 @@ graph TD
     B -->|SymPy| C{Initial Solvers}
     C -->|Fail/Inconsistent| D[LLM Repair]
     D -->|Verify| E{OOO Check}
-    E -->|Pass|     F[Certified Shards]
+    E -->|Pass| F[Certified Shards]
     F -->|Reconstruct| G[Modular Python Package]
     G -->|Transpile| H[C++ Library]
 
