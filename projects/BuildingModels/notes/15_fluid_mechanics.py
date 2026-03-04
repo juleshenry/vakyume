@@ -8,4 +8,3 @@ P := pressure difference
 Q := flow rate
 """
 R = R1 + R2
-

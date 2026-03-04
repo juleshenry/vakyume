@@ -17,4 +17,3 @@ M := total mass
 a_CM := acceleration of the centre of mass
 """
 F_ext = M * a_CM
-

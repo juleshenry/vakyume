@@ -22,5 +22,4 @@ F := force
 k := spring constant
 x := displacement from rest length
 """
-F = * x
-
+F = *x

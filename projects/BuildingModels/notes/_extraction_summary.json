@@ -1,1 +1,102 @@
-{}
+{
+  "Electric potential": {
+    "file": "18_electric_potential.py",
+    "equations": 8,
+    "eq_ids": [
+      "# 18-1 Electric potential energy",
+      "# 18-2 Work done on third charge",
+      "# 18-3 Total electrostatic energy",
+      "# 18-4 Change in potential energy of the electron",
+      "# 18-5 Electric potential difference between points on a wire",
+      "# 18-6 Electric potential between two parallel plates",
+      "# 18-7 Charge stored in a capacitor",
+      "# 18-8 Energy stored in a capacitor"
+    ]
+  },
+  "Electric current": {
+    "file": "19_electric_current.py",
+    "equations": 7,
+    "eq_ids": [
+      "# 19-1 Current",
+      "# 19-2 Current density",
+      "# 19-3 Current through a surface",
+      "# 19-4 Integral of current density",
+      "# 19-5 Resistance and resistivity",
+      "# 19-7.3 Current density",
+      "# 19-6 Parallel resistors"
+    ]
+  },
+  "Electric circuits": {
+    "file": "20_electric_circuits.py",
+    "equations": 5,
+    "eq_ids": [
+      "# 20-1 Ohm's Law for the resistor",
+      "# 20-2 Current calculation",
+      "# 20-3 Junction equation",
+      "# 20-4 Voltage measurement with a voltmeter (solution)",
+      "# 20-5.1 Kirchhoff's loop rule"
+    ]
+  },
+  "The magnetic force": {
+    "file": "21_the_magnetic_force.py",
+    "equations": 6,
+    "eq_ids": [
+      "# 21-2 Magnetic force on a moving charge",
+      "# 21-3 Cyclotron radius",
+      "# 21-4 Ratio of charge to mass",
+      "# 21-5 Magnetic force on a current-carrying wire",
+      "# 21-1 Magnetic force on a straight section of wire",
+      "# 21-7 Magnetic force on a moving charge"
+    ]
+  },
+  "Sources of magnetic field": {
+    "file": "22_sources_of_magnetic_field.py",
+    "equations": 8,
+    "eq_ids": [
+      "# 22-1 Biot-Savart Law",
+      "# 22-2 Magnetic Field",
+      "# 22-3 Magnetic Field (finite wire)",
+      "# 22-4 Electric field using Gauss's Law",
+      "# 22-5 Magnetic field using Ampere's Law",
+      "# 22-6 Magnetic Field from an Infinitely Long Wire",
+      "# 22-7 Magnetic Field from a Circular Loop",
+      "# 22-8 Force between Two Parallel Wires"
+    ]
+  },
+  "Electromagnetic induction": {
+    "file": "23_electromagnetic_induction.py",
+    "equations": 9,
+    "eq_ids": [
+      "# 23-1 Faraday's Law",
+      "# 23-2 Induced voltage",
+      "# 23-3 Induced current",
+      "# 23-4 Energy dissipation",
+      "# 23-5 Force on the bar",
+      "# 23-6 Hall potential difference",
+      "# 23-? Induced Electric Field and Eddy Currents",
+      "# 23-? Induced Electric Field and Eddy Currents",
+      "# 23-7-1 Faraday's law"
+    ]
+  },
+  "The Theory of Special Relativity": {
+    "file": "24_the_theory_of_special_relativity.py",
+    "equations": 15,
+    "eq_ids": [
+      "# 24-1 Speed of light in vacuum",
+      "# 24-2 Force per unit length",
+      "# 24-3 Current",
+      "# 24-4 Magnetic force per unit length",
+      "# 24-? Lorentz Transformations",
+      "# 24-? Inverse Lorentz Transformations",
+      "# 24-? Lorentz addition of velocities",
+      "# 24-? Velocity transformations for all components",
+      "# 24-6.1 Lorentz Transformations for Velocity",
+      "# 24-7.1 Relativistic Momentum",
+      "# 24-5 Time over which force must be applied (relativistic)",
+      "# 24-8 Relativistic energy",
+      "# 24-9 Relativistic kinetic energy",
+      "# 24-10 Newton's Second Law",
+      "# 24-11 Energy-momentum relation"
+    ]
+  }
+}

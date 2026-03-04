@@ -42,4 +42,3 @@ W_g := work done by force of gravity
 W_f := work done by force of friction
 """
 W_net = W_F + W_g + W_f
-

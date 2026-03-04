@@ -193,6 +193,20 @@ python3 vakyume.py scrape textbook.pdf -c 10 -q
 ---
 
 ## Conclusion
-Vakyume bridges the gap between static textbook theory and verified, executable code. By combining symbolic math, OOO cross-validation, and LLM-assisted repair, it provides a scalable blueprint for preserving and digitizing complex engineering knowledge.
+
+Vakyume is a proof of concept that is, at this point, anachronistic to the
+wonders of modern LLMs. I started building it when Phi-3 first came out,
+stitching together SymPy solvers with small local models to get from PDF
+equations to working code. In the end, this kind of manual hybrid pipeline
+doesn't work very well -- too many failure modes, too much glue code, and
+too brittle to scale gracefully.
+
+That said, I learned a tremendous amount about coding and life through making
+this. Symbolic math, AST manipulation, C++ transpilation, OOO verification --
+it was a fun journey and a genuine education.
+
+Today, a free tool like the Gemini CLI could vastly outshine this entire
+pipeline in a single prompt. The world moved fast, and Vakyume is a snapshot
+of what it took to do this the hard way before it became easy.
 
 

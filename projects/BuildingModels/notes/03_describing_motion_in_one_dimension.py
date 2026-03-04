@@ -25,7 +25,7 @@ v_0x := initial velocity
 ax := acceleration
 t := time
 """
-x = x_0 + v_0x * t + 0.5 * ax * t ** 2
+x = x_0 + v_0x * t + 0.5 * ax * t**2
 
 # 3-4 Instantaneous velocity
 """
@@ -61,4 +61,3 @@ v_A := velocity of the passenger
 t := time
 """
 v = (v_B + v_A) * t
-
