@@ -531,13 +531,11 @@ class LiquidRing:
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
         # Solve for P:
         # Step 1: (S_p / S_Th) ** (1.666667) = (P - p_s)*(460 + T_i) / ( (P - p_c)*(460 + T_e) )
-        R = (S_p / (S_Th)) ** (1.666667)
+        R = (S_p / (S_Th)) ** (5 / 3)
         # Step 2: R * ((460 + T_e)) * (P - p_c) = ((460 + T_i)) * (P - p_s)
         # Step 3: P * (R * ((460 + T_e)) - ((460 + T_i))) = R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s
         # Step 4: P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (R * ((460 + T_e)) - ((460 + T_i)))
-        P = (R * ((460 + T_e)) * p_c - ((460 + T_i)) * p_s) / (
-            R * ((460 + T_e)) - ((460 + T_i))
-        )
+        P = (R * (460 + T_e) * p_c - (460 + T_i) * p_s) / (R * (460 + T_e) - (460 + T_i))
         return [P]
     def eqn_10_19__S_Th(
         self, P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs
@@ -1073,7 +1071,7 @@ class LiquidRing:
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # Solve for T_e:
-        R = (S_0 / (S_p)) ** (1.666667)
+        R = (S_0 / (S_p)) ** (1.666666666666667)
         # (460 + T_e) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s)))
         # T_e = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
         T_e = ((P - p_0) * (460 + T_i) * (P - p_c)) / (R * (P * (P - p_s))) - 460
@@ -1091,7 +1089,7 @@ class LiquidRing:
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # Solve for T_i:
-        R = (S_0 / (S_p)) ** (1.666667)
+        R = (S_0 / (S_p)) ** (1.666666666666667)
         # (460 + T_i) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c))
         # T_i = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(P - p_c)) - 460
         T_i = R * (P * (P - p_s) * (460 + T_e)) / ((P - p_0) * (P - p_c)) - 460
@@ -1109,7 +1107,7 @@ class LiquidRing:
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # Solve for p_0:
-        R = (S_0 / (S_p)) ** (1.666667)
+        R = (S_0 / (S_p)) ** (5 / 3)
         # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
         # (P - p_0) = R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
         # p_0 = P - R * (P * (P - p_s)*(460 + T_e) ) / ((460 + T_i) * (P - p_c))
@@ -1128,7 +1126,7 @@ class LiquidRing:
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # Solve for p_c:
-        R = (S_0 / (S_p)) ** (1.666667)
+        R = (S_0 / (S_p)) ** (5 / 3)
         # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
         # (P - p_c) = R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
         # p_c = P - R * (P * (P - p_s)*(460 + T_e) ) / ((P - p_0)*(460 + T_i))
@@ -1147,7 +1145,7 @@ class LiquidRing:
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # Solve for p_s:
-        R = (S_0 / (S_p)) ** (1.666667)
+        R = (S_0 / (S_p)) ** (5 / 3)
         # After clearing **0.6: R = (P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) )
         # (P - p_s) = ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))
         # p_s = P - ((P - p_0)*(460 + T_i) * (P - p_c)) / (R * (P * (460 + T_e)))

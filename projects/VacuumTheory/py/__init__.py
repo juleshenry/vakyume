@@ -12,6 +12,5 @@ from .selectingpump import SelectingPump
 from .steamjetinjectors import SteamJetInjectors
 from .vacuumtheory import VacuumTheory
 from .harmony_checks import harmony_checks
-from .subshards import subshards
 
-__all__ = ["AirLeak", "FluidFlowVacuumLines", "LiquidRing", "Precondensors", "PressMgmt", "ProcessApp1", "ProcessApp2", "RotaryPistonVane", "SelectingPump", "SteamJetInjectors", "VacuumTheory", "harmony_checks", "subshards"]
+__all__ = ["AirLeak", "FluidFlowVacuumLines", "LiquidRing", "Precondensors", "PressMgmt", "ProcessApp1", "ProcessApp2", "RotaryPistonVane", "SelectingPump", "SteamJetInjectors", "VacuumTheory", "harmony_checks"]

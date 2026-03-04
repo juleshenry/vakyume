@@ -567,7 +567,7 @@ def _scaffold_frac_exp_multi_diff(
         return None
 
     exp_val = exp_match.group(1)
-    inv_exp = str(round(1.0 / float(exp_val), 6))
+    inv_exp = str(round(1.0 / float(exp_val), 15))
 
     diff_terms = re.findall(
         r"\(" + re.escape(target_var) + r"\s*-\s*(\w+)\)",
@@ -656,7 +656,7 @@ def _scaffold_frac_exp_single_occurrence(
         return None
 
     exp_val = exp_match.group(1)
-    inv_exp = str(round(1.0 / float(exp_val), 6))
+    inv_exp = str(round(1.0 / float(exp_val), 15))
 
     inner_expr = _extract_inner_expr(eq, exp_val)
     if not inner_expr:

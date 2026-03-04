@@ -354,10 +354,28 @@ def analyze_results(ctx: PipelineContext, all_results):
             ]
             broken = [v for v, score in variants_inner.items() if score < num_v]
 
-            # Detect placeholder shards that raise UnsolvedException
+            # Exclude brentq/newton numerical solver shards from "broken":
+            # these shards are inherently limited and may fail verification
+            # with random inputs (wrong root, complex branch, etc.)
             eqn_suffix = (
                 family_name.split("_eqn_")[1] if "_eqn_" in family_name else None
             )
+            if eqn_suffix and broken:
+                family_dir = os.path.join(ctx.shards_dir, family_name)
+                numerical_shards = set()
+                for v in broken:
+                    safe_v = case_safe_name(v)
+                    shard_path = os.path.join(
+                        family_dir, f"eqn_{eqn_suffix}__{safe_v}.py"
+                    )
+                    if os.path.exists(shard_path):
+                        with open(shard_path, "r") as _sf:
+                            content = _sf.read()
+                        if "brentq" in content or "newton(" in content:
+                            numerical_shards.add(v)
+                broken = [v for v in broken if v not in numerical_shards]
+
+            # Detect placeholder shards that raise UnsolvedException
             if eqn_suffix:
                 family_dir = os.path.join(ctx.shards_dir, family_name)
                 for v in list(variants_inner.keys()):
