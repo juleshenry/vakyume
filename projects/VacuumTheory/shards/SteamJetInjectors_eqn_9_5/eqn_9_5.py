@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_9_5__V_cap import eqn_9_5__V
+from .eqn_9_5__V import eqn_9_5__V
 from .eqn_9_5__r_h import eqn_9_5__r_h
 from .eqn_9_5__t_h import eqn_9_5__t_h
 from .eqn_9_5__w_h import eqn_9_5__w_h
@@ -20,4 +20,10 @@ class SteamJetInjectors:
 
     @kwasak
     def eqn_9_5(self, V=None, r_h=None, t_h=None, w_h=None):
+        """
+        w_h:= motive steam hogging
+        r_h:=pounds of 100-psig stream required per cubic foot
+        V:= process system free volume, ft^3
+        t_h := time permitted for evatuation, hr
+        """
         return

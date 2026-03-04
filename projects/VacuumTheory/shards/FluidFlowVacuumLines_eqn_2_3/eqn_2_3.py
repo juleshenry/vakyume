@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_3__D_cap import eqn_2_3__D
+from .eqn_2_3__D import eqn_2_3__D
 from .eqn_2_3__kn import eqn_2_3__kn
 from .eqn_2_3__lambd import eqn_2_3__lambd
 
@@ -18,4 +18,8 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_3(self, D=None, kn=None, lambd=None):
+        """
+        D:= inside diameter, in
+        lambd:=avg. mean free path, in
+        """
         return

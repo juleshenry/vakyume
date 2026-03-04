@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_7_4ac__P_c_cap import eqn_7_4ac__P_c
+from .eqn_7_4ac__P_c import eqn_7_4ac__P_c
 from .eqn_7_4ac__n_i import eqn_7_4ac__n_i
 from .eqn_7_4ac__n_nc import eqn_7_4ac__n_nc
 from .eqn_7_4ac__p import eqn_7_4ac__p

@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_14__M_cap import eqn_2_14__M
-from .eqn_2_14__R_cap import eqn_2_14__R
-from .eqn_2_14__T_cap import eqn_2_14__T
+from .eqn_2_14__M import eqn_2_14__M
+from .eqn_2_14__R import eqn_2_14__R
+from .eqn_2_14__T import eqn_2_14__T
 from .eqn_2_14__g_c import eqn_2_14__g_c
 from .eqn_2_14__k import eqn_2_14__k
 from .eqn_2_14__v_s import eqn_2_14__v_s
@@ -24,4 +24,8 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
+        """
+        v_s := sonic_velocity
+        k:=ratio of specific heat at constant temp to the specific heat at constant volume
+        """
         return

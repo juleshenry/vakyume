@@ -18,4 +18,7 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_4(self, _beta=None, mu=None, vel_grad=None):
+        """
+        mu:=coefficient of viscosity
+        """
         return

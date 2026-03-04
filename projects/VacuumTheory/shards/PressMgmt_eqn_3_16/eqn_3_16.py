@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_3_16__V_div_V_P_MAX_cap import eqn_3_16__V_div_V_P_MAX
+from .eqn_3_16__V_div_V_P_MAX import eqn_3_16__V_div_V_P_MAX
 
 
 class PressMgmt:

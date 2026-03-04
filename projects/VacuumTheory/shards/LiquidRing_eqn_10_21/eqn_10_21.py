@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_10_21__P_cap import eqn_10_21__P
-from .eqn_10_21__P_d_cap import eqn_10_21__P_d
-from .eqn_10_21__P_prime_cap import eqn_10_21__P_prime
+from .eqn_10_21__P import eqn_10_21__P
+from .eqn_10_21__P_d import eqn_10_21__P_d
+from .eqn_10_21__P_prime import eqn_10_21__P_prime
 
 
 class LiquidRing:
@@ -18,4 +18,8 @@ class LiquidRing:
 
     @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
+        """
+        P_prime := pseudo suction pressure
+        P_d := actual pump discharge pressure
+        """
         return

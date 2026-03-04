@@ -257,6 +257,7 @@ def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
                 "trusted": data.get("trusted", []),
                 "golden_tuples": data.get("golden_tuples", []),
                 "failures": data.get("failures", {}),
+                "swapped_pairs": data.get("swapped_pairs", []),
             }
 
         return {
@@ -410,6 +411,7 @@ def analyze_results(ctx: PipelineContext, all_results):
                 # Include golden-tuple failures for targeted repair
                 golden_failures = eq_golden.get("failures", {})
                 golden_tuples = eq_golden.get("golden_tuples", [])
+                swapped_pairs = eq_golden.get("swapped_pairs", [])
                 analysis["inconsistent"][family_name] = {
                     "broken": broken,
                     "trusted": trusted,
@@ -421,6 +423,7 @@ def analyze_results(ctx: PipelineContext, all_results):
                     },
                     "golden_failures": golden_failures,
                     "golden_tuples": golden_tuples,
+                    "swapped_pairs": swapped_pairs,
                 }
                 break
 
@@ -565,6 +568,61 @@ def run_pipeline(
             mismatches = data.get("mismatches", {})
             golden_failures = data.get("golden_failures", {})
             golden_tuples = data.get("golden_tuples", [])
+            swapped_pairs = data.get("swapped_pairs", [])
+
+            # --- Handle swapped variable pairs by resetting to stubs ---
+            # When the verifier detects that two shards are swapped (each
+            # computes the other's answer), the cleanest fix is to reset both
+            # to stubs so the scaffold regenerates them from the equation.
+            # Simply swapping file contents doesn't work because the parameter
+            # signatures and body variable references would still be wrong.
+            already_swapped = set()
+            for va, vb in swapped_pairs:
+                if va in already_swapped or vb in already_swapped:
+                    continue
+                eqn_suffix = (
+                    family_name.split("_eqn_")[1] if "_eqn_" in family_name else None
+                )
+                if not eqn_suffix:
+                    continue
+                family_dir = os.path.join(ctx.shards_dir, family_name)
+                # Extract pyeqn comment from either shard
+                pyeqn_comment = ""
+                for v in (va, vb):
+                    p = _find_shard_file(family_dir, eqn_suffix, v)
+                    if p:
+                        with open(p, "r") as fh:
+                            for line in fh:
+                                if "[.pyeqn]" in line:
+                                    pyeqn_comment = line.rstrip()
+                                    break
+                        if pyeqn_comment:
+                            break
+                # Determine all other variables in the family (inputs for each solver)
+                all_vars = set(scores.keys())
+                for v in (va, vb):
+                    p = _find_shard_file(family_dir, eqn_suffix, v)
+                    if not p:
+                        continue
+                    other_vars = sorted(all_vars - {v})
+                    params = ", ".join(other_vars)
+                    func_name = f"eqn_{eqn_suffix}__{v}"
+                    stub = (
+                        SHARD_IMPORT_HEADER
+                        + f"def {func_name}(self, {params}, **kwargs):\n"
+                        + (f"    {pyeqn_comment}\n" if pyeqn_comment else "")
+                        + f"    raise UnsolvedException('{v}')\n"
+                    )
+                    print(f"\n |- Resetting swapped shard {v} to stub in {family_name}")
+                    with open(p, "w") as fh:
+                        fh.write(stub)
+                already_swapped.add(va)
+                already_swapped.add(vb)
+                # Add swapped vars to broken so they get repaired below
+                for v in (va, vb):
+                    if v not in broken:
+                        broken.append(v)
+                any_repaired = True
 
             for b_var in broken:
                 # Build golden-tuple test cases for the repair prompt

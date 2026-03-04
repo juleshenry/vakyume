@@ -8,7 +8,7 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_10_8__bhp import eqn_10_8__bhp
 from .eqn_10_8__c_p import eqn_10_8__c_p
-from .eqn_10_8__delta_T_cap import eqn_10_8__delta_T
+from .eqn_10_8__delta_T import eqn_10_8__delta_T
 from .eqn_10_8__delta_h_i import eqn_10_8__delta_h_i
 from .eqn_10_8__f_a import eqn_10_8__f_a
 from .eqn_10_8__rho import eqn_10_8__rho

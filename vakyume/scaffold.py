@@ -213,6 +213,9 @@ def _build_brentq_scaffold(
         target_var + "_val",
         rhs,
     )
+    # Replace ln() with log() in equation text used as code
+    rhs_sub = re.sub(r"\bln\(", "log(", rhs_sub)
+    lhs = re.sub(r"\bln\(", "log(", lhs)
     lines = [header]
     lines.append(f"    # [.pyeqn] {pyeqn}")
     lines.append(f"    # {comment}")
@@ -906,6 +909,9 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
             if result is not None:
                 # Basic validation: ensure the target_var is actually assigned
                 if f"{target_var} =" in result or f"return [" in result:
+                    # Post-process: replace ln() with log() since cmath
+                    # provides log() not ln()
+                    result = re.sub(r"\bln\(", "log(", result)
                     return result
         except Exception:
             pass
@@ -916,8 +922,77 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
         if lhs.strip() == target_var:
             lines = [header]
             lines.append(f"    # [.pyeqn] {pyeqn}")
-            lines.append(f"    return [{rhs}]")
+            # Replace ln() with log() in the RHS expression
+            rhs_fixed = re.sub(r"\bln\(", "log(", rhs)
+            lines.append(f"    return [{rhs_fixed}]")
             return "\n".join(lines)
+
+        # Try SymPy symbolic solver for single-occurrence cases
+        try:
+            from sympy import symbols as sym_symbols, solve as sym_solve
+            from sympy.parsing.sympy_parser import (
+                parse_expr,
+                standard_transformations,
+                implicit_multiplication_application,
+                convert_xor,
+            )
+
+            # Collect all variable names from the equation
+            all_tokens = set(re.findall(r"\b[a-zA-Z_]\w*\b", eq))
+            math_funcs = {
+                "log",
+                "sqrt",
+                "exp",
+                "pow",
+                "sin",
+                "cos",
+                "tan",
+                "ln",
+                "pi",
+                "e",
+                "abs",
+            }
+            var_names = sorted(
+                [t for t in all_tokens if t not in math_funcs and not t.isdigit()]
+            )
+
+            sym_vars = {name: sym_symbols(name) for name in var_names}
+
+            transformations = standard_transformations + (
+                implicit_multiplication_application,
+                convert_xor,
+            )
+
+            # Replace ln with log for SymPy parsing
+            lhs_sympy = re.sub(r"\bln\(", "log(", lhs)
+            rhs_sympy = re.sub(r"\bln\(", "log(", rhs)
+
+            lhs_expr = parse_expr(
+                lhs_sympy, local_dict=sym_vars, transformations=transformations
+            )
+            rhs_expr = parse_expr(
+                rhs_sympy, local_dict=sym_vars, transformations=transformations
+            )
+
+            solutions = sym_solve(lhs_expr - rhs_expr, sym_vars[target_var])
+            if solutions:
+                sol_strs = []
+                for sol in solutions:
+                    s = str(sol)
+                    # Convert SymPy syntax to Python
+                    s = re.sub(r"\bln\(", "log(", s)
+                    sol_strs.append(s)
+
+                lines = [header]
+                lines.append(f"    # [.pyeqn] {pyeqn}")
+                lines.append(f"    # Solved symbolically for {target_var}")
+                lines.append(f"    result = []")
+                for sol_s in sol_strs:
+                    lines.append(f"    result.append({sol_s})")
+                lines.append(f"    return result")
+                return "\n".join(lines)
+        except Exception:
+            pass
 
         lines = [header]
         lines.append(f"    # [.pyeqn] {pyeqn}")
@@ -925,9 +1000,68 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
         lines.append(f"    {target_var} =")
         return "\n".join(lines)
 
-    # -- Fallback: multiple occurrences -> brentq numerical --
+    # -- Fallback: multiple occurrences --
+    # Try SymPy symbolic solver first (even for multi-occurrence cases)
     if total >= 2:
-        return _build_brentq_scaffold(
+        try:
+            from sympy import symbols as sym_symbols, solve as sym_solve
+            from sympy.parsing.sympy_parser import (
+                parse_expr,
+                standard_transformations,
+                implicit_multiplication_application,
+                convert_xor,
+            )
+
+            all_tokens = set(re.findall(r"\b[a-zA-Z_]\w*\b", eq))
+            math_funcs = {
+                "log",
+                "sqrt",
+                "exp",
+                "pow",
+                "sin",
+                "cos",
+                "tan",
+                "ln",
+                "pi",
+                "e",
+                "abs",
+            }
+            var_names = sorted(
+                [t for t in all_tokens if t not in math_funcs and not t.isdigit()]
+            )
+            sym_vars = {name: sym_symbols(name) for name in var_names}
+            transformations = standard_transformations + (
+                implicit_multiplication_application,
+                convert_xor,
+            )
+            lhs_sympy = re.sub(r"\bln\(", "log(", lhs)
+            rhs_sympy = re.sub(r"\bln\(", "log(", rhs)
+            lhs_expr = parse_expr(
+                lhs_sympy, local_dict=sym_vars, transformations=transformations
+            )
+            rhs_expr = parse_expr(
+                rhs_sympy, local_dict=sym_vars, transformations=transformations
+            )
+            solutions = sym_solve(lhs_expr - rhs_expr, sym_vars[target_var])
+            if solutions:
+                sol_strs = []
+                for sol in solutions:
+                    s = str(sol)
+                    s = re.sub(r"\bln\(", "log(", s)
+                    sol_strs.append(s)
+                lines = [header]
+                lines.append(f"    # [.pyeqn] {pyeqn}")
+                lines.append(f"    # Solved symbolically for {target_var}")
+                lines.append(f"    result = []")
+                for sol_s in sol_strs:
+                    lines.append(f"    result.append({sol_s})")
+                lines.append(f"    return result")
+                return "\n".join(lines)
+        except Exception:
+            pass
+
+        # SymPy couldn't solve it — fall back to brentq numerical solver
+        result = _build_brentq_scaffold(
             header,
             pyeqn,
             target_var,
@@ -936,5 +1070,9 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
             total,
             f"{target_var} appears {total} times — use numerical solver",
         )
+        # Post-process: replace ln() with log()
+        if result:
+            result = re.sub(r"\bln\(", "log(", result)
+        return result
 
     return ""

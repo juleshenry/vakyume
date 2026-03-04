@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 
-def eqn_1_8__m(self, M: float, P: float, R: float, T: float, V: float, **kwargs):
+def eqn_1_8__M(self, P: float, R: float, T: float, V: float, m: float, **kwargs):
     # [.pyeqn] P * V = m / M * R * T
     result = []
-    m = M * P * V / (R * T)
-    result.append(m)
+    M = R * T * m / (P * V)
+    result.append(M)
     return result

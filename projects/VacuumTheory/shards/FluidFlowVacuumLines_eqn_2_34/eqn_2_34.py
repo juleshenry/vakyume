@@ -6,13 +6,14 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_34__C_cap import eqn_2_34__C
-from .eqn_2_34__C_1_cap import eqn_2_34__C_1
-from .eqn_2_34__C_2_cap import eqn_2_34__C_2
-from .eqn_2_34__D_cap import eqn_2_34__D
-from .eqn_2_34__L_cap import eqn_2_34__L
-from .eqn_2_34__P_p_cap import eqn_2_34__P_p
+from .eqn_2_34__C import eqn_2_34__C
+from .eqn_2_34__C_1 import eqn_2_34__C_1
+from .eqn_2_34__C_2 import eqn_2_34__C_2
+from .eqn_2_34__D import eqn_2_34__D
+from .eqn_2_34__L import eqn_2_34__L
+from .eqn_2_34__P_p import eqn_2_34__P_p
 from .eqn_2_34__mu import eqn_2_34__mu
+
 
 class FluidFlowVacuumLines:
     eqn_2_34__C = eqn_2_34__C

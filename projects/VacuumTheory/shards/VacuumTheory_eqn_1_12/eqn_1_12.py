@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_1_12__Total_P_cap import eqn_1_12__Total_P
+from .eqn_1_12__Total_P import eqn_1_12__Total_P
 from .eqn_1_12__sum_partial_pressures import eqn_1_12__sum_partial_pressures
 
 

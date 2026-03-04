@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_32__C_series_cap import eqn_2_32__C_series
-from .eqn_2_32__geometric_sum_C_cap import eqn_2_32__geometric_sum_C
+from .eqn_2_32__C_series import eqn_2_32__C_series
+from .eqn_2_32__geometric_sum_C import eqn_2_32__geometric_sum_C
 
 
 class FluidFlowVacuumLines:

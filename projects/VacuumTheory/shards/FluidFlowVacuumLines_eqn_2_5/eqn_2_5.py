@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_5__D_cap import eqn_2_5__D
-from .eqn_2_5__L_cap import eqn_2_5__L
-from .eqn_2_5__delta_P_cap import eqn_2_5__delta_P
+from .eqn_2_5__D import eqn_2_5__D
+from .eqn_2_5__L import eqn_2_5__L
+from .eqn_2_5__delta_P import eqn_2_5__delta_P
 from .eqn_2_5__mu import eqn_2_5__mu
 from .eqn_2_5__q import eqn_2_5__q
 
@@ -22,4 +22,11 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
+        """
+        q:=volumetric flow cm^3/s
+        D:= pipe diam.,cm
+        delta_P := upstream-downstream pressure, dyne/cm^3
+        L:=length, cm
+        mu:= coef. of visco., poise
+        """
         return

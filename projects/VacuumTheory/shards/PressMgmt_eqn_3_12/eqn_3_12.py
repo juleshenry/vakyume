@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_3_12__H_2_cap import eqn_3_12__H_2
-from .eqn_3_12__KAPPA_1_cap import eqn_3_12__KAPPA_1
-from .eqn_3_12__P_cap import eqn_3_12__P
+from .eqn_3_12__H_2 import eqn_3_12__H_2
+from .eqn_3_12__KAPPA_1 import eqn_3_12__KAPPA_1
+from .eqn_3_12__P import eqn_3_12__P
 
 
 class PressMgmt:
@@ -18,4 +18,7 @@ class PressMgmt:
 
     @kwasak
     def eqn_3_12(self, H_2=None, KAPPA_1=None, P=None):
+        """
+        KAPPA := A_C / V, THE `GAUGE CONSTANT`
+        """
         return

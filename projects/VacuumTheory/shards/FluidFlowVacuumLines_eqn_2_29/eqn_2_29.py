@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_29__C_cap import eqn_2_29__C
-from .eqn_2_29__S_1_cap import eqn_2_29__S_1
-from .eqn_2_29__S_2_cap import eqn_2_29__S_2
+from .eqn_2_29__C import eqn_2_29__C
+from .eqn_2_29__S_1 import eqn_2_29__S_1
+from .eqn_2_29__S_2 import eqn_2_29__S_2
 
 
 class FluidFlowVacuumLines:

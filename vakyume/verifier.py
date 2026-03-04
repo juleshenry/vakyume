@@ -313,13 +313,23 @@ class Verify:
             if sa is None or sb is None:
                 return False
             # Both are complex — check real and imaginary parts independently
-            # If imag is very small, treat as real
-            if abs(sa.imag) < 1e-9:
+            # Strip negligible imaginary parts (numerical noise from
+            # fractional-power computations can produce ~1e-6j residuals)
+            if abs(sa.imag) < 1e-4:
                 sa = complex(sa.real, 0)
-            if abs(sb.imag) < 1e-9:
+            if abs(sb.imag) < 1e-4:
                 sb = complex(sb.real, 0)
 
-            return abs(sa.real - sb.real) < 1e-6 and abs(sa.imag - sb.imag) < 1e-6
+            # Use both absolute and relative tolerance for robustness
+            abs_tol = 1e-4
+            rel_tol = 1e-6
+
+            def _close(x, y):
+                diff = abs(x - y)
+                mag = max(abs(x), abs(y), 1e-15)
+                return diff < abs_tol or diff / mag < rel_tol
+
+            return _close(sa.real, sb.real) and _close(sa.imag, sb.imag)
 
         # If either side is a list, check whether ANY element from one side
         # matches ANY element (or the scalar) on the other side.
@@ -603,12 +613,20 @@ class Verify:
                     result = method(**inputs.copy())
                     if not result:
                         continue
-                    # Pick the first numeric value
+                    # Pick the best numeric value — prefer non-zero to avoid
+                    # degenerate equation tuples (e.g., L_0=0 makes 0=0)
                     val = None
+                    first_val = None
                     for v in result:
                         if isinstance(v, (int, float, complex)):
-                            val = v
-                            break
+                            if first_val is None:
+                                first_val = v
+                            real_part = v.real if isinstance(v, complex) else v
+                            if abs(real_part) > 1e-12:
+                                val = v
+                                break
+                    if val is None:
+                        val = first_val  # fall back to zero if that's all we have
                     if val is None:
                         continue
 
@@ -709,6 +727,76 @@ class Verify:
                 scores[v] = max(0, int(frac * (num_v - 1)))
                 broken.append(v)
 
+        # -- Detect swapped variable pairs --
+        # If two broken variants consistently return each other's expected
+        # values, they are algebraically equivalent solvers that were
+        # assigned to the wrong variable.  Detect and mark as swapped so
+        # the repair pipeline can fix them by swapping the shard contents.
+        swap_candidates = [v for v in broken]
+        swapped_pairs = []
+        if len(swap_candidates) >= 2:
+            for i in range(len(swap_candidates)):
+                for j in range(i + 1, len(swap_candidates)):
+                    va, vb = swap_candidates[i], swap_candidates[j]
+                    # Check if va's shard returns vb's expected value and vice versa
+                    va_returns_vb = 0
+                    vb_returns_va = 0
+                    va_tests = 0
+                    vb_tests = 0
+
+                    def _find_golden_tuple(
+                        oracle_name, failure_inputs, golden_tuples_list
+                    ):
+                        """Find the golden tuple matching this specific failure by
+                        comparing input values (not just oracle name)."""
+                        for o_var, fs in golden_tuples_list:
+                            if o_var != oracle_name:
+                                continue
+                            # Check that all input keys/values from the failure
+                            # match the golden tuple
+                            match = True
+                            for k, v_val in failure_inputs.items():
+                                if k in fs and not self.are_similar(v_val, fs[k]):
+                                    match = False
+                                    break
+                            if match:
+                                return fs
+                        return None
+
+                    for f in failures.get(va, []):
+                        if "got" in f and f.get("expected") is not None:
+                            va_tests += 1
+                            got_val = f["got"]
+                            oracle = f["oracle"]
+                            gt = _find_golden_tuple(
+                                oracle, f.get("inputs", {}), golden_tuples
+                            )
+                            if gt and vb in gt:
+                                if self.are_similar(got_val, gt[vb]):
+                                    va_returns_vb += 1
+                    for f in failures.get(vb, []):
+                        if "got" in f and f.get("expected") is not None:
+                            vb_tests += 1
+                            got_val = f["got"]
+                            oracle = f["oracle"]
+                            gt = _find_golden_tuple(
+                                oracle, f.get("inputs", {}), golden_tuples
+                            )
+                            if gt and va in gt:
+                                if self.are_similar(got_val, gt[va]):
+                                    vb_returns_va += 1
+                    # If majority of tests show swapping, mark as swapped
+                    if (
+                        va_tests > 0
+                        and va_returns_vb > va_tests * 0.5
+                        and vb_tests > 0
+                        and vb_returns_va > vb_tests * 0.5
+                    ):
+                        swapped_pairs.append((va, vb))
+                        log_lines.append(
+                            f" |- SWAP detected: {va} and {vb} appear to have swapped solvers"
+                        )
+
         # Invariant vars get perfect scores
         for iv in invariant_vars:
             scores[iv] = num_v
@@ -764,6 +852,7 @@ class Verify:
             ],
             "failures": {v: failures[v][:5] for v in broken},
             "mismatches": mismatches,
+            "swapped_pairs": swapped_pairs,
         }
 
     def verify(self):

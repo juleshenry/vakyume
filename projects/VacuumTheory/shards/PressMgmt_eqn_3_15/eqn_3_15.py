@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_3_15__V_PMIN_cap import eqn_3_15__V_PMIN
+from .eqn_3_15__V_PMIN import eqn_3_15__V_PMIN
 
 
 class PressMgmt:
@@ -14,4 +14,7 @@ class PressMgmt:
 
     @kwasak
     def eqn_3_15(self, V_PMIN=None):
+        """
+        V_PMIN := `PRACTICAL MIN, 1982`
+        """
         return

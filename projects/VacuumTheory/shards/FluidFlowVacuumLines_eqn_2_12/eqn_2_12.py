@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_12__L_cap import eqn_2_12__L
+from .eqn_2_12__L import eqn_2_12__L
 from .eqn_2_12__d import eqn_2_12__d
-from .eqn_2_12__delta_P_cap import eqn_2_12__delta_P
+from .eqn_2_12__delta_P import eqn_2_12__delta_P
 from .eqn_2_12__f import eqn_2_12__f
 from .eqn_2_12__g import eqn_2_12__g
 from .eqn_2_12__rho import eqn_2_12__rho
@@ -26,4 +26,9 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
+        """
+        rho:= density, lb/ft^3
+        d:= pipe inside diameter, in
+        q:= vol. flow rate, ft^3/min
+        """
         return

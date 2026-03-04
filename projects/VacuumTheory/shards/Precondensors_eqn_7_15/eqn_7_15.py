@@ -6,8 +6,8 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_7_15__U_cap import eqn_7_15__U
-from .eqn_7_15__sum_R_cap import eqn_7_15__sum_R
+from .eqn_7_15__U import eqn_7_15__U
+from .eqn_7_15__sum_R import eqn_7_15__sum_R
 
 
 class Precondensors:

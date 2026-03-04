@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_7_10__L_c_P_cap import eqn_7_10__L_c_P
-from .eqn_7_10__Q_condensor_heat_duty_cap import eqn_7_10__Q_condensor_heat_duty
-from .eqn_7_10__del_T_cap import eqn_7_10__del_T
+from .eqn_7_10__L_c_P import eqn_7_10__L_c_P
+from .eqn_7_10__Q_condensor_heat_duty import eqn_7_10__Q_condensor_heat_duty
+from .eqn_7_10__del_T import eqn_7_10__del_T
 
 
 class Precondensors:
