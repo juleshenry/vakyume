@@ -1,4 +1,4 @@
-# Vakyume: Automated Engineering Library Synthesis
+# Vakyume: PDF to C++ Library Pipeline
 
 Vakyume is a pipeline for transforming legacy engineering knowledge—specifically vacuum system design—into verified, high-performance Python and C++ libraries. Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by Ryans and Roper, the project uses a "One-Odd-Out" (OOO) verification methodology to ensure mathematical consistency across all generated solvers.
 
