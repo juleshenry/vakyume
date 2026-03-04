@@ -24,6 +24,10 @@ venv/
 # Reports (generated)
 reports/
 
+# Harmony checks (generated)
+harmony_checks.py
+harmony_checks/
+
 # Compiled binaries
 *.o
 *.so

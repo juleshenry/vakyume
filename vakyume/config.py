@@ -70,19 +70,9 @@
                              by Julian Henry
 """
 
+"""Vakyume configuration: constants, exceptions, and LLM provider settings."""
+
 import os
-
-
-class IntractableSolution(Exception):
-    """Exception raised when only numerical methods are allowed."""
-
-    pass
-
-
-class OllamaOffline(Exception):
-    """Exception raised when the Ollama is offline."""
-
-    pass
 
 
 class UnsolvedException(Exception):
@@ -96,10 +86,14 @@ def safe_brentq(f, lo=1e-10, hi=1e10):
     import math
     from scipy.optimize import brentq
 
+    IMAG_TOLERANCE = 1e-10
+    SUBDIVISION_COUNT = 50
+    DEDUP_PRECISION = 10
+
     def _real_finite(v):
         """Return real part if finite, else None."""
         if isinstance(v, complex):
-            if abs(v.imag) > 1e-10:
+            if abs(v.imag) > IMAG_TOLERANCE:
                 return None
             v = v.real
         try:
@@ -134,12 +128,11 @@ def safe_brentq(f, lo=1e-10, hi=1e10):
     for a, b in brackets:
         # Subdivide each bracket into sub-intervals to catch
         # non-monotone functions that cross zero in narrow windows.
-        N = 50
         try:
-            step = (b - a) / N
+            step = (b - a) / SUBDIVISION_COUNT
         except (OverflowError, ZeroDivisionError):
             continue
-        for j in range(N):
+        for j in range(SUBDIVISION_COUNT):
             sub_a = a + j * step
             sub_b = a + (j + 1) * step
             try:
@@ -155,7 +148,7 @@ def safe_brentq(f, lo=1e-10, hi=1e10):
     if not roots:
         raise ValueError("safe_brentq: no bracket found with sign change")
     # Deduplicate and return the largest positive root
-    unique_roots = list(set(round(r, 10) for r in roots))
+    unique_roots = list(set(round(r, DEDUP_PRECISION) for r in roots))
     positive = [r for r in unique_roots if r > 0]
     if positive:
         return max(positive)
@@ -166,7 +159,31 @@ def safe_brentq(f, lo=1e-10, hi=1e10):
 TAB = " " * 4
 MAX_COMP_TIME_SECONDS = 1
 COOLDOWN_SECONDS = 2
-FUNKTORZ = "*()/-+"
+OPERATORS = "*()/-+"
+FUNKTORZ = OPERATORS  # backward-compat alias (deprecated)
+
+# ── Shared math-function names ──────────────────────────────────────────────
+# Used by parser, verifier, and repair modules to distinguish equation
+# variables from function calls when tokenising equations.
+MATH_FUNC_NAMES = frozenset(
+    {
+        "log",
+        "sqrt",
+        "exp",
+        "pow",
+        "sin",
+        "cos",
+        "tan",
+        "ln",
+        "pi",
+        "e",
+        "abs",
+    }
+)
+
+# Extended set that also excludes "self" — used in repair contexts where
+# the function signature variable must be filtered out.
+MATH_FUNC_NAMES_WITH_SELF = MATH_FUNC_NAMES | {"self"}
 
 # ── Shared import headers for generated code ────────────────────────────────
 # SHARD_IMPORT_HEADER:  used for individual solver shard files (no kwasak).

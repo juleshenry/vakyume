@@ -70,7 +70,7 @@
                              by Julian Henry
 """
 
-"""Pipeline orchestrator: scraping, verification, repair, and certification.
+"""Vakyume pipeline orchestrator: shard generation, verification, repair, and certification.
 
 Coordinates the full Vakyume workflow — generating solver shards from textbook
 equations, verifying them via One-Odd-Out cross-validation, repairing broken
@@ -474,6 +474,266 @@ def format_project(project_dir):
 
 
 # ---------------------------------------------------------------------------
+#  Pipeline helpers
+# ---------------------------------------------------------------------------
+
+
+def _load_previously_solved(ctx: PipelineContext) -> tuple[set, bool]:
+    """Load families already solved in a prior run, excluding placeholder shards.
+
+    Returns ``(previously_solved, should_continue_repair_only)``.  The second
+    element is False when no prior analysis exists (caller should fall back to
+    full pipeline).
+    """
+    analysis_path = os.path.join(ctx.reports_dir, "analysis.json")
+    if not os.path.exists(analysis_path):
+        print("Warning: No prior analysis.json found. Falling back to full pipeline.")
+        return set(), False
+
+    with open(analysis_path, "r") as af:
+        prior_analysis = json.load(af)
+    previously_solved = set(prior_analysis.get("solved", []))
+
+    # Remove families that still have placeholder shards
+    placeholder_families = set()
+    for fam in list(previously_solved):
+        if "_eqn_" not in fam:
+            continue
+        fam_dir = os.path.join(ctx.shards_dir, fam)
+        if not os.path.isdir(fam_dir):
+            continue
+        for fname in os.listdir(fam_dir):
+            if not fname.endswith(".py") or "__" not in fname:
+                continue
+            fpath = os.path.join(fam_dir, fname)
+            with open(fpath, "r") as _pf:
+                if 'raise UnsolvedException("Pending' in _pf.read():
+                    placeholder_families.add(fam)
+                    break
+    if placeholder_families:
+        previously_solved -= placeholder_families
+        print(
+            f"  {len(placeholder_families)} 'solved' families have placeholder "
+            f"shards and will be re-verified."
+        )
+
+    num_broken = len(prior_analysis.get("inconsistent", {})) + len(
+        prior_analysis.get("failed", [])
+    )
+    print(
+        f"Repair-only mode: {len(previously_solved)} families previously solved, "
+        f"{num_broken} to repair."
+    )
+    return previously_solved, True
+
+
+def _extract_trusted_tuples(raw_tuples: list, trusted_vars: set) -> list:
+    """Convert serialised golden tuples to ``(oracle, values)`` pairs,
+    keeping only tuples whose oracle is currently trusted."""
+    pinned = []
+    for gt in raw_tuples:
+        if isinstance(gt, dict) and "oracle" in gt and "values" in gt:
+            if gt["oracle"] in trusted_vars:
+                pinned.append((gt["oracle"], dict(gt["values"])))
+        elif isinstance(gt, (list, tuple)) and len(gt) == 2:
+            if gt[0] in trusted_vars:
+                pinned.append((gt[0], dict(gt[1])))
+    return pinned
+
+
+def _update_pinned_tuples(all_results: dict, pinned_golden_tuples: dict) -> None:
+    """Refresh *pinned_golden_tuples* in-place from the latest verification results."""
+    for family_name, family_res in all_results.items():
+        if not isinstance(family_res, dict) or "golden_data" not in family_res:
+            continue
+        golden_data = family_res.get("golden_data", {})
+        family_tuples = {}
+        for base_eq, eq_data in golden_data.items():
+            trusted_vars = set(eq_data.get("trusted", []))
+            pinned = _extract_trusted_tuples(
+                eq_data.get("golden_tuples", []), trusted_vars
+            )
+            if pinned:
+                family_tuples[base_eq] = pinned
+        if family_tuples:
+            pinned_golden_tuples[family_name] = family_tuples
+        elif family_name in pinned_golden_tuples:
+            del pinned_golden_tuples[family_name]
+
+
+def _reset_swapped_shards(
+    ctx: PipelineContext,
+    family_name: str,
+    swapped_pairs: list,
+    scores: dict,
+    broken: list,
+) -> bool:
+    """Reset swapped shard pairs to stubs so repair regenerates them.
+
+    Mutates *broken* in-place (adds swapped vars).  Returns True if any
+    shards were reset.
+    """
+    if not swapped_pairs:
+        return False
+
+    any_reset = False
+    already_swapped = set()
+    eqn_suffix = family_name.split("_eqn_")[1] if "_eqn_" in family_name else None
+    if not eqn_suffix:
+        return False
+
+    family_dir = os.path.join(ctx.shards_dir, family_name)
+
+    for va, vb in swapped_pairs:
+        if va in already_swapped or vb in already_swapped:
+            continue
+
+        # Extract pyeqn comment from either shard
+        pyeqn_comment = ""
+        for v in (va, vb):
+            p = _find_shard_file(family_dir, eqn_suffix, v)
+            if p:
+                with open(p, "r") as fh:
+                    for line in fh:
+                        if "[.pyeqn]" in line:
+                            pyeqn_comment = line.rstrip()
+                            break
+                if pyeqn_comment:
+                    break
+
+        all_vars = set(scores.keys())
+        for v in (va, vb):
+            p = _find_shard_file(family_dir, eqn_suffix, v)
+            if not p:
+                continue
+            other_vars = sorted(all_vars - {v})
+            params = ", ".join(other_vars)
+            func_name = f"eqn_{eqn_suffix}__{v}"
+            stub = (
+                SHARD_IMPORT_HEADER
+                + f"def {func_name}(self, {params}, **kwargs):\n"
+                + (f"    {pyeqn_comment}\n" if pyeqn_comment else "")
+                + f'    raise UnsolvedException("Pending LLM/Manual Repair for {v}")\n'
+            )
+            print(f"\n |- Resetting swapped shard {v} to stub in {family_name}")
+            with open(p, "w") as fh:
+                fh.write(stub)
+
+        already_swapped.add(va)
+        already_swapped.add(vb)
+        for v in (va, vb):
+            if v not in broken:
+                broken.append(v)
+        any_reset = True
+
+    return any_reset
+
+
+def _refresh_pinned_after_repair(
+    re_res: dict,
+    family_name: str,
+    pinned_golden_tuples: dict,
+) -> tuple[list, list, dict]:
+    """After re-verifying a family post-repair, update pinned tuples and
+    return the refreshed ``(broken, trusted, golden_failures)``."""
+    re_golden = re_res.get("golden_data", {})
+    broken = []
+    trusted = []
+    golden_failures = {}
+
+    for _beq, _eqd in re_golden.items():
+        re_broken = _eqd.get("broken", [])
+        re_trusted = _eqd.get("trusted", [])
+        re_failures = _eqd.get("failures", {})
+        if re_broken is not None and re_trusted is not None:
+            broken = list(re_broken)
+            trusted = list(re_trusted)
+            golden_failures = re_failures if re_failures else golden_failures
+
+            refreshed = _extract_trusted_tuples(
+                _eqd.get("golden_tuples", []), set(re_trusted)
+            )
+            if refreshed:
+                if family_name not in pinned_golden_tuples:
+                    pinned_golden_tuples[family_name] = {}
+                pinned_golden_tuples[family_name][_beq] = refreshed
+
+    return broken, trusted, golden_failures
+
+
+def _repair_inconsistent_families(
+    ctx: PipelineContext,
+    inconsistent: dict,
+    pinned_golden_tuples: dict,
+    verbose: bool,
+) -> bool:
+    """Attempt repair on every inconsistent family.  Returns True if any were repaired."""
+    any_repaired = False
+
+    for family_name, data in inconsistent.items():
+        broken = data.get("broken", [])
+        trusted = data.get("trusted", [])
+        scores = data.get("scores", {})
+        mismatches = data.get("mismatches", {})
+        golden_failures = data.get("golden_failures", {})
+        swapped_pairs = data.get("swapped_pairs", [])
+
+        # Handle swapped variable pairs
+        if _reset_swapped_shards(ctx, family_name, swapped_pairs, scores, broken):
+            any_repaired = True
+
+        for b_var in broken:
+            # Build golden-tuple test cases for the repair prompt
+            golden_test_cases = []
+            if golden_failures and b_var in golden_failures:
+                for f in golden_failures[b_var][:3]:
+                    tc = {"inputs": f.get("inputs", {})}
+                    if "expected" in f:
+                        tc["expected"] = f["expected"]
+                    if "got" in f:
+                        tc["got"] = f["got"]
+                    if "error" in f:
+                        tc["error"] = f["error"]
+                    golden_test_cases.append(tc)
+
+            result = attempt_repair_shard(
+                ctx,
+                family_name,
+                b_var,
+                trusted,
+                scores,
+                mismatches,
+                golden_test_cases=golden_test_cases,
+            )
+            if result.get("updated"):
+                any_repaired = True
+                # Invalidate pinned tuples from the repaired oracle
+                if family_name in pinned_golden_tuples:
+                    for _beq in list(pinned_golden_tuples[family_name].keys()):
+                        pinned_golden_tuples[family_name][_beq] = [
+                            (o, v)
+                            for o, v in pinned_golden_tuples[family_name][_beq]
+                            if o != b_var
+                        ]
+                # Re-verify the family to update broken/trusted lists
+                family_pinned = pinned_golden_tuples.get(family_name)
+                re_res = verify_family(
+                    ctx,
+                    family_name,
+                    verbose=verbose,
+                    pinned_tuples_map=family_pinned,
+                )
+                if re_res and isinstance(re_res, dict) and "golden_data" in re_res:
+                    broken, trusted, golden_failures = _refresh_pinned_after_repair(
+                        re_res,
+                        family_name,
+                        pinned_golden_tuples,
+                    )
+
+    return any_repaired
+
+
+# ---------------------------------------------------------------------------
 #  Main pipeline
 # ---------------------------------------------------------------------------
 def run_pipeline(
@@ -508,44 +768,8 @@ def run_pipeline(
     # Load previously solved families when in repair-only mode
     previously_solved = set()
     if repair_only and not include_families:
-        analysis_path = os.path.join(ctx.reports_dir, "analysis.json")
-        if os.path.exists(analysis_path):
-            with open(analysis_path, "r") as af:
-                prior_analysis = json.load(af)
-            previously_solved = set(prior_analysis.get("solved", []))
-
-            # Remove families that still have placeholder shards
-            placeholder_families = set()
-            for fam in list(previously_solved):
-                if "_eqn_" not in fam:
-                    continue
-                fam_dir = os.path.join(ctx.shards_dir, fam)
-                if not os.path.isdir(fam_dir):
-                    continue
-                for fname in os.listdir(fam_dir):
-                    if not fname.endswith(".py") or "__" not in fname:
-                        continue
-                    fpath = os.path.join(fam_dir, fname)
-                    with open(fpath, "r") as _pf:
-                        if 'raise UnsolvedException("Pending' in _pf.read():
-                            placeholder_families.add(fam)
-                            break
-            if placeholder_families:
-                previously_solved -= placeholder_families
-                print(
-                    f"  {len(placeholder_families)} 'solved' families have placeholder shards and will be re-verified."
-                )
-
-            num_broken = len(prior_analysis.get("inconsistent", {})) + len(
-                prior_analysis.get("failed", [])
-            )
-            print(
-                f"Repair-only mode: {len(previously_solved)} families previously solved, {num_broken} to repair."
-            )
-        else:
-            print(
-                "Warning: No prior analysis.json found. Falling back to full pipeline."
-            )
+        previously_solved, ok = _load_previously_solved(ctx)
+        if not ok:
             repair_only = False
 
     if not repair_only:
@@ -556,11 +780,8 @@ def run_pipeline(
         shard_from_chapters(ctx)
 
     analysis = None
-    # Pinned golden tuples: generated fresh each round, but only from
-    # *trusted* oracles.  After a repair, tuples from the repaired oracle
-    # are invalidated so re-verification uses fresh data.  Structure:
-    #   { family_name: { base_eq: [(oracle_var, full_value_dict), ...] } }
     pinned_golden_tuples = {}
+
     for round_idx in range(1, max_rounds + 1):
         print(f"\n--- Round {round_idx} ---")
         all_results = verify_all_shards(
@@ -571,34 +792,7 @@ def run_pipeline(
             pinned_tuples=pinned_golden_tuples if pinned_golden_tuples else None,
         )
 
-        # Extract and update pinned golden tuples every round, keeping
-        # only tuples from oracles that are currently trusted.
-        for family_name, family_res in all_results.items():
-            if not isinstance(family_res, dict) or "golden_data" not in family_res:
-                continue
-            golden_data = family_res.get("golden_data", {})
-            family_tuples = {}
-            for base_eq, eq_data in golden_data.items():
-                trusted_vars = set(eq_data.get("trusted", []))
-                raw_tuples = eq_data.get("golden_tuples", [])
-                # Convert from serialised format back to (oracle, values) pairs
-                # but ONLY keep tuples whose oracle is currently trusted
-                pinned = []
-                for gt in raw_tuples:
-                    if isinstance(gt, dict) and "oracle" in gt and "values" in gt:
-                        if gt["oracle"] in trusted_vars:
-                            pinned.append((gt["oracle"], dict(gt["values"])))
-                    elif isinstance(gt, (list, tuple)) and len(gt) == 2:
-                        if gt[0] in trusted_vars:
-                            pinned.append((gt[0], dict(gt[1])))
-                if pinned:
-                    family_tuples[base_eq] = pinned
-            if family_tuples:
-                pinned_golden_tuples[family_name] = family_tuples
-            elif family_name in pinned_golden_tuples:
-                # All oracles were broken — clear stale tuples entirely
-                del pinned_golden_tuples[family_name]
-
+        _update_pinned_tuples(all_results, pinned_golden_tuples)
         analysis = analyze_results(ctx, all_results)
 
         inconsistent = analysis.get("inconsistent", {})
@@ -615,149 +809,12 @@ def run_pipeline(
             print("!!! SUCCESS: All shards verified successfully!")
             break
 
-        # Attempt repair on each inconsistent family
-        any_repaired = False
-        for family_name, data in inconsistent.items():
-            broken = data.get("broken", [])
-            trusted = data.get("trusted", [])
-            scores = data.get("scores", {})
-            mismatches = data.get("mismatches", {})
-            golden_failures = data.get("golden_failures", {})
-            golden_tuples = data.get("golden_tuples", [])
-            swapped_pairs = data.get("swapped_pairs", [])
-
-            # --- Handle swapped variable pairs by resetting to stubs ---
-            # When the verifier detects that two shards are swapped (each
-            # computes the other's answer), the cleanest fix is to reset both
-            # to stubs so the repair pipeline regenerates them from the equation.
-            # Simply swapping file contents doesn't work because the parameter
-            # signatures and body variable references would still be wrong.
-            already_swapped = set()
-            for va, vb in swapped_pairs:
-                if va in already_swapped or vb in already_swapped:
-                    continue
-                eqn_suffix = (
-                    family_name.split("_eqn_")[1] if "_eqn_" in family_name else None
-                )
-                if not eqn_suffix:
-                    continue
-                family_dir = os.path.join(ctx.shards_dir, family_name)
-                # Extract pyeqn comment from either shard
-                pyeqn_comment = ""
-                for v in (va, vb):
-                    p = _find_shard_file(family_dir, eqn_suffix, v)
-                    if p:
-                        with open(p, "r") as fh:
-                            for line in fh:
-                                if "[.pyeqn]" in line:
-                                    pyeqn_comment = line.rstrip()
-                                    break
-                        if pyeqn_comment:
-                            break
-                # Determine all other variables in the family (inputs for each solver)
-                all_vars = set(scores.keys())
-                for v in (va, vb):
-                    p = _find_shard_file(family_dir, eqn_suffix, v)
-                    if not p:
-                        continue
-                    other_vars = sorted(all_vars - {v})
-                    params = ", ".join(other_vars)
-                    func_name = f"eqn_{eqn_suffix}__{v}"
-                    stub = (
-                        SHARD_IMPORT_HEADER
-                        + f"def {func_name}(self, {params}, **kwargs):\n"
-                        + (f"    {pyeqn_comment}\n" if pyeqn_comment else "")
-                        + f'    raise UnsolvedException("Pending LLM/Manual Repair for {v}")\n'
-                    )
-                    print(f"\n |- Resetting swapped shard {v} to stub in {family_name}")
-                    with open(p, "w") as fh:
-                        fh.write(stub)
-                already_swapped.add(va)
-                already_swapped.add(vb)
-                # Add swapped vars to broken so they get repaired below
-                for v in (va, vb):
-                    if v not in broken:
-                        broken.append(v)
-                any_repaired = True
-
-            for b_var in broken:
-                # Build golden-tuple test cases for the repair prompt
-                golden_test_cases = []
-                if golden_failures and b_var in golden_failures:
-                    for f in golden_failures[b_var][:3]:
-                        tc = {"inputs": f.get("inputs", {})}
-                        if "expected" in f:
-                            tc["expected"] = f["expected"]
-                        if "got" in f:
-                            tc["got"] = f["got"]
-                        if "error" in f:
-                            tc["error"] = f["error"]
-                        golden_test_cases.append(tc)
-
-                result = attempt_repair_shard(
-                    ctx,
-                    family_name,
-                    b_var,
-                    trusted,
-                    scores,
-                    mismatches,
-                    golden_test_cases=golden_test_cases,
-                )
-                if result.get("updated"):
-                    any_repaired = True
-                    # Invalidate pinned tuples from the repaired oracle so
-                    # re-verification generates fresh ones from trusted oracles.
-                    if family_name in pinned_golden_tuples:
-                        for _beq in list(pinned_golden_tuples[family_name].keys()):
-                            pinned_golden_tuples[family_name][_beq] = [
-                                (o, v)
-                                for o, v in pinned_golden_tuples[family_name][_beq]
-                                if o != b_var
-                            ]
-                    # Re-verify the family with fresh tuples to update
-                    # broken/trusted lists for subsequent repairs this round.
-                    family_pinned = pinned_golden_tuples.get(family_name)
-                    re_res = verify_family(
-                        ctx,
-                        family_name,
-                        verbose=verbose,
-                        pinned_tuples_map=family_pinned,
-                    )
-                    if re_res and isinstance(re_res, dict) and "golden_data" in re_res:
-                        re_golden = re_res.get("golden_data", {})
-                        for _beq, _eqd in re_golden.items():
-                            re_broken = _eqd.get("broken", [])
-                            re_trusted = _eqd.get("trusted", [])
-                            re_failures = _eqd.get("failures", {})
-                            if re_broken is not None and re_trusted is not None:
-                                # Update live lists for remaining repairs
-                                broken = list(re_broken)
-                                trusted = list(re_trusted)
-                                golden_failures = (
-                                    re_failures if re_failures else golden_failures
-                                )
-                                # Also refresh pinned tuples for this family
-                                # with only trusted-oracle tuples
-                                raw_tuples = _eqd.get("golden_tuples", [])
-                                trusted_set = set(re_trusted)
-                                refreshed = []
-                                for gt in raw_tuples:
-                                    if (
-                                        isinstance(gt, dict)
-                                        and "oracle" in gt
-                                        and "values" in gt
-                                    ):
-                                        if gt["oracle"] in trusted_set:
-                                            refreshed.append(
-                                                (gt["oracle"], dict(gt["values"]))
-                                            )
-                                    elif isinstance(gt, (list, tuple)) and len(gt) == 2:
-                                        if gt[0] in trusted_set:
-                                            refreshed.append((gt[0], dict(gt[1])))
-                                if refreshed:
-                                    if family_name not in pinned_golden_tuples:
-                                        pinned_golden_tuples[family_name] = {}
-                                    pinned_golden_tuples[family_name][_beq] = refreshed
+        any_repaired = _repair_inconsistent_families(
+            ctx,
+            inconsistent,
+            pinned_golden_tuples,
+            verbose,
+        )
 
         if not any_repaired:
             print(f"  No repairs were made in round {round_idx} — stopping early.")

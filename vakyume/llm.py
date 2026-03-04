@@ -70,6 +70,8 @@
                              by Julian Henry
 """
 
+"""Vakyume LLM integration: prompt dispatch, code generation, and response parsing."""
+
 import logging
 import re
 import time
@@ -142,86 +144,6 @@ def ask_llm(system_prompt: str, user_prompt: str, model: str = None, stream=Fals
     logger.debug("ask_llm: content_len=%d", len(content))
     time.sleep(LLM_COOLDOWN_SECONDS)
     return content
-
-
-def escribir_codigo(
-    eqn: str,
-    lang: str = "Python",
-    single_variable=None,
-    header=None,
-    stream=False,
-    **kwargs,
-):
-    """Refined prompt for Phi-3 to solve vacuum equations from scratch."""
-
-    target = single_variable or "result"
-    knowns = ""
-    if header and "(" in header:
-        knowns = header.split("(")[1].split(")")[0]
-
-    system_prompt = (
-        "Write a Python function. Output ONLY code. No markdown.\n"
-        "Use log/sqrt/exp from cmath. Return result as [value]."
-    )
-
-    user_prompt = (
-        f"{eqn}\nSolve for {target}.\n"
-        f"{header if header else f'def solve_for_{target}({knowns}):'}\n"
-    )
-
-    return ask_llm(system_prompt, user_prompt, stream=stream)
-
-
-def repair_codigo(
-    shard_file,
-    shard_code,
-    error=None,
-    broken_variants=None,
-    trusted_variants=None,
-    scores=None,
-    mismatches=None,
-    pyeqn=None,
-    stream=False,
-    is_subshard=True,
-    **kwargs,
-):
-    """Refined prompt for Phi-3 to repair existing code with majority context."""
-    logger.debug(
-        "repair_codigo: shard_file=%s, broken=%s, trusted=%s, is_subshard=%s",
-        shard_file,
-        broken_variants,
-        trusted_variants,
-        is_subshard,
-    )
-
-    if is_subshard:
-        system_prompt = (
-            "Fix Python equation solver functions. Output ONLY corrected code.\n"
-            "No markdown. No classes. No decorators. Keep signatures and # [.pyeqn] comments.\n"
-            "Return result as [value]."
-        )
-    else:
-        system_prompt = (
-            "Fix Python equation solver class. Output ONLY corrected code.\n"
-            "No markdown. Keep @staticmethod. Keep signatures and # [.pyeqn] comments.\n"
-            "Return result as [value]."
-        )
-
-    context = f"Equation: {pyeqn}\n" if pyeqn else ""
-
-    if error:
-        user_prompt = f"{context}Error: {error}\n\nCODE:\n{shard_code}\n\nFix it."
-    elif trusted_variants:
-        user_prompt = (
-            f"{context}Trusted: {trusted_variants}\nBroken: {broken_variants}\n\n"
-            f"CODE:\n{shard_code}\n\nFix the broken variants."
-        )
-    else:
-        user_prompt = (
-            f"{context}Broken: {broken_variants}\n\nCODE:\n{shard_code}\n\nFix them."
-        )
-
-    return ask_llm(system_prompt, user_prompt, stream=stream)
 
 
 def extract_code(text, target_name=None):

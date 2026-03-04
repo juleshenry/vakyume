@@ -1,80 +1,79 @@
 """
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+                                                :+ .x..
+                                           .:...x$   $+:x  $.
+                                       ..:. XX.  &    X.   xx$....
+                                       .:X . .             & . X.
+                                    .:;X+++xX&$X+:.   .    . .x  x..
+                                  .:$++++++++++x+......:;x$$X+..+..                         .
+                                .:$x+x++++++++++x$...............&..                      .:&xxx&X.
+                               .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+
+                               :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.
+                       ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.
+                      .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.
+                          .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;
+                              .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX
+                               .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$
+                                :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .
+                                 .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX
+                                 . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.
+                             .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+
+                                ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.
+                               ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.
+   .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+
+.$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::
+.x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+
+ .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:
+ .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.
+     .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.
+   .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.
+   .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.
+    :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.
+         .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.
+                 .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.
+              . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..
+          .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..
+       ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..
+      .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..
+      :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..
+     .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..
+    ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.
+     .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..
+      :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..
+      .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..
+      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..
+       .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..
+        :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..
+        .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..
+         .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...
+          .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..
+          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..
+           .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..
+            ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...
+               .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...
+                        ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...
+                          .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...
+                       ..+xx+++++++++++++Xx....               .:.$..     :x$....
+                    .::x+++++++++++++++++++++X..               ...+&xXXXx...
+                   .::x+++++++++++++++++++++++$...
+                    ..;;$&&&&&$$XXX$XXX$$$$$XX$x..
+                      ..:X&&&&&&&$xX&&&&&&x:.
+                             ........   ...
+
+                                 ▐
+                         ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖
+                         ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐
+                          ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀
+                          ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞
+                                      ▞
+                                    ▝▘
+
+                             by Julian Henry
 """
 
-"""
-Shard Reconstruction CLI
+"""Vakyume shard reconstruction: assembles certified shards into a single importable library.
 
 Rebuilds chapter-libraries (shards/) back into a coherent, importable Python
-module so that downstream code can do:
+module so that downstream code can do::
 
     from vakyume import LiquidRing
     pump = LiquidRing()
@@ -85,14 +84,7 @@ import ast
 import os
 import re
 import sys
-import textwrap
-
 from .config import TAB, LIBRARY_IMPORT_HEADER
-
-
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
-IMPORT_HEADER = LIBRARY_IMPORT_HEADER
 
 
 def _family_class_name(family_dir_name: str) -> str:
@@ -269,7 +261,7 @@ def reconstruct_from_shards(shards_dir: str) -> str:
 
     # ── Assemble output ──────────────────────────────────────────────────
 
-    out_lines = [IMPORT_HEADER, ""]
+    out_lines = [LIBRARY_IMPORT_HEADER, ""]
 
     # Sort classes by their first-seen family name (gives chapter ordering)
     sorted_classes = sorted(class_methods.keys(), key=lambda c: class_order[c])
@@ -281,39 +273,8 @@ def reconstruct_from_shards(shards_dir: str) -> str:
 
         out_lines.append(f"class {class_name}:")
 
-        # Separate kwasak dispatchers, attribute assignments, and solver methods.
-        # We want a clean ordering:
-        #   1. @kwasak dispatcher + attribute assignments for that equation
-        #   2. solver methods (__var)
-        # grouped by equation number.
-
-        # Group methods by equation family
-        eqn_groups: dict[str, dict[str, str]] = {}
-        for method_name, method_src in methods.items():
-            # Extract equation identifier: eqn_X_Y from eqn_X_Y or eqn_X_Y__var
-            m = re.match(r"(eqn_\d+_\d+\w*?)(?:__.*)?$", method_name)
-            if m:
-                eqn_key = m.group(1)
-            else:
-                eqn_key = "__other__"
-            if eqn_key not in eqn_groups:
-                eqn_groups[eqn_key] = {}
-            eqn_groups[eqn_key][method_name] = method_src
-
-        for eqn_key in sorted(eqn_groups.keys()):
-            group = eqn_groups[eqn_key]
-
-            # Emit the @kwasak dispatcher first (the bare eqn_X_Y method)
-            if eqn_key in group:
-                src = group[eqn_key]
-                out_lines.append(_indent_method(src))
-
-            # Then solver methods (eqn_X_Y__var), sorted
-            for mname in sorted(group.keys()):
-                if mname == eqn_key:
-                    continue
-                src = group[mname]
-                out_lines.append(_indent_method(src))
+        eqn_groups = _group_methods_by_equation(methods)
+        out_lines.extend(_emit_grouped_methods(eqn_groups))
 
         out_lines.append("")  # blank line between classes
 
@@ -327,6 +288,46 @@ def _cleanup_source(source: str) -> str:
     """
     source = re.sub(r"# \[\.pyeqn\] ", "# ", source)
     return source
+
+
+def _group_methods_by_equation(
+    methods: dict[str, str],
+) -> dict[str, dict[str, str]]:
+    """Group method sources by their equation family.
+
+    Returns ``{ eqn_key: { method_name: method_source } }`` where *eqn_key*
+    is the bare equation identifier (e.g. ``eqn_10_1``) and ``__other__`` is
+    the catch-all for methods that don't follow the naming convention.
+    """
+    eqn_groups: dict[str, dict[str, str]] = {}
+    for method_name, method_src in methods.items():
+        m = re.match(r"(eqn_\d+_\d+\w*?)(?:__.*)?$", method_name)
+        eqn_key = m.group(1) if m else "__other__"
+        if eqn_key not in eqn_groups:
+            eqn_groups[eqn_key] = {}
+        eqn_groups[eqn_key][method_name] = method_src
+    return eqn_groups
+
+
+def _emit_grouped_methods(eqn_groups: dict[str, dict[str, str]]) -> list[str]:
+    """Emit indented method sources, ordered by equation group.
+
+    Within each group the ``@kwasak`` dispatcher (the bare ``eqn_X_Y`` method)
+    is emitted first, followed by solver methods (``eqn_X_Y__var``) in sorted
+    order.
+    """
+    out: list[str] = []
+    for eqn_key in sorted(eqn_groups.keys()):
+        group = eqn_groups[eqn_key]
+        # Emit the @kwasak dispatcher first (the bare eqn_X_Y method)
+        if eqn_key in group:
+            out.append(_indent_method(group[eqn_key]))
+        # Then solver methods (eqn_X_Y__var), sorted
+        for mname in sorted(group.keys()):
+            if mname == eqn_key:
+                continue
+            out.append(_indent_method(group[mname]))
+    return out
 
 
 def _indent_method(source: str) -> str:
@@ -362,29 +363,11 @@ def _indent_method(source: str) -> str:
 
 def _build_class_module(class_name: str, methods: dict[str, str]) -> str:
     """Build the source for a single-class Python module."""
-    lines = [IMPORT_HEADER, ""]
+    lines = [LIBRARY_IMPORT_HEADER, ""]
     lines.append(f"class {class_name}:")
 
-    # Group methods by equation family
-    eqn_groups: dict[str, dict[str, str]] = {}
-    for method_name, method_src in methods.items():
-        m = re.match(r"(eqn_\d+_\d+\w*?)(?:__.*)?$", method_name)
-        if m:
-            eqn_key = m.group(1)
-        else:
-            eqn_key = "__other__"
-        if eqn_key not in eqn_groups:
-            eqn_groups[eqn_key] = {}
-        eqn_groups[eqn_key][method_name] = method_src
-
-    for eqn_key in sorted(eqn_groups.keys()):
-        group = eqn_groups[eqn_key]
-        if eqn_key in group:
-            lines.append(_indent_method(group[eqn_key]))
-        for mname in sorted(group.keys()):
-            if mname == eqn_key:
-                continue
-            lines.append(_indent_method(group[mname]))
+    eqn_groups = _group_methods_by_equation(methods)
+    lines.extend(_emit_grouped_methods(eqn_groups))
 
     lines.append("")
     return _cleanup_source("\n".join(lines))

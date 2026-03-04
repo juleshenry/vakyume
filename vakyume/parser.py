@@ -70,7 +70,7 @@
                              by Julian Henry
 """
 
-"""Equation parsing and shard generation.
+"""Vakyume equation parser: notes parsing, token extraction, and shard generation.
 
 Reads Python-like equation definitions from ``notes/*.py`` files and generates
 individual solver shards using SymPy for algebraic isolation.
@@ -88,7 +88,7 @@ from .config import (
     TAB,
     UnsolvedException,
     MAX_COMP_TIME_SECONDS,
-    FUNKTORZ,
+    OPERATORS,
     SHARD_IMPORT_HEADER,
 )
 
@@ -150,7 +150,7 @@ def case_unsafe_name(safe: str) -> str:
     return re.sub(r"([A-Z])_cap", r"\1", safe)
 
 
-def _find_existing_shard(family_dir: str, eqn_number: str, token: str) -> str | None:
+def find_shard_file(family_dir: str, eqn_number: str, token: str) -> str | None:
     """Check if a shard file already exists for *token*, regardless of naming convention.
 
     Returns the full path if found, None otherwise.
@@ -194,7 +194,7 @@ class Solver:
     """SymPy-based equation solver with tokenizer and normal-form builder."""
 
     def __init__(self):
-        self.funktors = FUNKTORZ
+        self.operators = OPERATORS
 
     @timeout_decorator.timeout(
         MAX_COMP_TIME_SECONDS,
@@ -214,8 +214,8 @@ class Solver:
             raise UnsolvedException(f"Sympy solve failed: {e}")
 
     def tokenize(self, eqn):
-        malos = {"ln", "log"}
-        for m in malos:
+        excluded_funcs = {"ln", "log"}
+        for m in excluded_funcs:
             eqn = f"{m}".join([o.strip() for o in eqn.split(m)])
 
         eqn = eqn.split("#")[0]
@@ -225,21 +225,21 @@ class Solver:
                 0 < i < len(eqn) - 1
                 and eqn[i + 1] != "*"
                 and eqn[i - 1] != "*"
-                and f in self.funktors
+                and f in self.operators
             ):
                 dilated += f" {f} "
             else:
                 dilated += f
         return dilated.split()
 
-    def get_tokes(self, eqn):
-        tokes = set()
-        malos = {"ln", "log"}
+    def get_tokens(self, eqn):
+        tokens = set()
+        excluded_funcs = {"ln", "log"}
         for t in self.tokenize(eqn):
             clean = t.strip().replace("(", "").replace(")", "").split("**")[0].strip()
-            if clean.isidentifier() and clean not in malos:
-                tokes.add(clean)
-        return sorted(list(tokes))
+            if clean.isidentifier() and clean not in excluded_funcs:
+                tokens.add(clean)
+        return sorted(list(tokens))
 
     def make_normal_form(self, eqn):
         parts = eqn.split("=")
@@ -318,7 +318,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                 and not stripped.startswith("#")
                 and not stripped.startswith('"""')
             ):
-                tokes = solver.get_tokes(line)
+                eq_tokens = solver.get_tokens(line)
                 nf = solver.make_normal_form(line)
                 if not nf:
                     continue
@@ -328,13 +328,13 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                 if not os.path.exists(family_dir):
                     os.makedirs(family_dir)
 
-                for token in tokes:
+                for token in eq_tokens:
                     method_name = f"eqn_{eqn_number}__{token}"
                     safe_token = case_safe_name(token)
                     shard_name = f"eqn_{eqn_number}__{safe_token}.py"
                     shard_path = os.path.join(family_dir, shard_name)
                     # Also check for existing shard under old naming conventions
-                    existing = _find_existing_shard(family_dir, eqn_number, token)
+                    existing = find_shard_file(family_dir, eqn_number, token)
                     if existing:
                         # Rename to case-safe form if the filename doesn't match
                         if os.path.basename(existing) != shard_name:
@@ -347,7 +347,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
 
                     created_count += 1
                     shard_content = import_header
-                    other_args = [t for t in tokes if t != token]
+                    other_args = [t for t in eq_tokens if t != token]
                     args_str = ", ".join(f"{t}: float" for t in other_args)
                     if args_str:
                         args_str = f", {args_str}"
@@ -357,7 +357,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
 
                     try:
                         solns = solver.get_solns_vanilla_nf(
-                            nf, Symbol(token), tokens=tokes
+                            nf, Symbol(token), tokens=eq_tokens
                         )
                         if solns:
                             shard_content += f"{TAB}result = []\n"
@@ -385,18 +385,18 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                 with open(main_shard_path, "w") as sf:
                     sf.write(import_header)
                     sf.write("from vakyume.kwasak import kwasak\n")
-                    for token in tokes:
+                    for token in eq_tokens:
                         method_name = f"eqn_{eqn_number}__{token}"
                         safe_token = case_safe_name(token)
                         file_name_no_ext = f"eqn_{eqn_number}__{safe_token}"
                         sf.write(f"from .{file_name_no_ext} import {method_name}\n")
                     sf.write(f"\nclass {class_name}:\n")
-                    for token in tokes:
+                    for token in eq_tokens:
                         method_name = f"eqn_{eqn_number}__{token}"
                         sf.write(f"{TAB}{method_name} = {method_name}\n")
                     sf.write(f"\n{TAB}@kwasak\n")
-                    tokes_str = ", ".join(f"{t}=None" for t in tokes)
-                    sf.write(f"{TAB}def eqn_{eqn_number}(self, {tokes_str}):\n")
+                    tokens_str = ", ".join(f"{t}=None" for t in eq_tokens)
+                    sf.write(f"{TAB}def eqn_{eqn_number}(self, {tokens_str}):\n")
                     if var_notes:
                         sf.write(f'{TAB * 2}"""\n')
                         for note in var_notes:
