@@ -216,45 +216,119 @@ def _build_brentq_scaffold(
     # Replace ln() with log() in equation text used as code
     rhs_sub = re.sub(r"\bln\(", "log(", rhs_sub)
     lhs = re.sub(r"\bln\(", "log(", lhs)
+
+    # Decide evaluation mode: if equation contains log() or sqrt(),
+    # use real math to naturally reject unphysical domains.
+    # Otherwise use complex math to handle fractional powers of negative bases.
+    has_log_or_sqrt = bool(re.search(r"\blog\(", rhs_sub)) or bool(
+        re.search(r"\blog\(", lhs)
+    )
+
     lines = [header]
     lines.append(f"    # [.pyeqn] {pyeqn}")
     lines.append(f"    # {comment}")
     lines.append(f"    from scipy.optimize import brentq")
     lines.append(f"    import numpy as np")
-    lines.append(f"    def _res({target_var}_val):")
-    lines.append(f"        try:")
-    lines.append(
-        f"            # Force complex evaluation to handle negative bases in fractional powers"
-    )
-    lines.append(f"            target_var_complex = complex({target_var}_val, 0)")
-    rhs_complex = rhs_sub.replace(target_var + "_val", "target_var_complex")
-    lines.append(f"            val = {rhs_complex} - {lhs}")
-    lines.append(f"            return val.real if hasattr(val, 'real') else val")
-    lines.append(f"        except Exception:")
-    lines.append(f"            return float('nan')")
+    if has_log_or_sqrt:
+        # Use real math — log of negative argument raises ValueError -> NaN
+        # Override cmath.log with math.log inside the residual to enforce domain
+        lines.append(f"    import math as _math")
+        lines.append(f"    def _res({target_var}_val):")
+        lines.append(f"        try:")
+        lines.append(f"            log = _math.log")
+        lines.append(f"            sqrt = _math.sqrt")
+        lines.append(f"            exp = _math.exp")
+        # Use the target_var_val directly (no complex conversion)
+        lines.append(f"            val = {rhs_sub} - {lhs}")
+        lines.append(f"            return float(val)")
+        lines.append(f"        except Exception:")
+        lines.append(f"            return float('nan')")
+    else:
+        lines.append(f"    def _res({target_var}_val):")
+        lines.append(f"        try:")
+        lines.append(
+            f"            # Force complex evaluation to handle negative bases in fractional powers"
+        )
+        lines.append(f"            target_var_complex = complex({target_var}_val, 0)")
+        rhs_complex = rhs_sub.replace(target_var + "_val", "target_var_complex")
+        lines.append(f"            val = {rhs_complex} - {lhs}")
+        lines.append(f"            return val.real if hasattr(val, 'real') else val")
+        lines.append(f"        except Exception:")
+        lines.append(f"            return float('nan')")
+    # Build search points covering both negative and positive, plus fine steps near zero
+    # Also add parameter-aware offsets for better singularity avoidance
     lines.append(f"    lo, hi = None, None")
-    lines.append(
-        f"    # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps"
-    )
-    lines.append(f"    search_points = np.logspace(-6, 6, 500)")
-    lines.append(f"    for i in range(len(search_points)-1):")
-    lines.append(f"        p1, p2 = search_points[i], search_points[i+1]")
-    lines.append(f"        r1, r2 = _res(p1), _res(p2)")
-    lines.append(f"        if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:")
-    lines.append(f"            lo, hi = p1, p2")
-    lines.append(f"            break")
+    lines.append(f"    # Build search points: logspace + offsets from parameter values")
+    lines.append(f"    pos_pts = list(np.logspace(-6, 7, 600))")
+    lines.append(f"    neg_pts = [-x for x in reversed(pos_pts)]")
+
+    # Extract parameter names from the header (everything in the function signature)
+    param_names = re.findall(r"\b(\w+)\s*:\s*float", header)
+    # Remove the target_var if it somehow appeared
+    param_names = [p for p in param_names if p != target_var]
+
+    if param_names:
+        lines.append(
+            f"    # Add parameter-based offsets to catch roots near param values"
+        )
+        lines.append(f"    param_vals = [{', '.join(param_names)}]")
+        lines.append(f"    extra_pts = []")
+        lines.append(f"    for pv in param_vals:")
+        lines.append(
+            f"        for off in [-100, -10, -1, -0.1, -0.01, 0.01, 0.1, 0.5, 1, 1.01, 2, 10, 100, 1000, 10000]:"
+        )
+        lines.append(f"            extra_pts.append(pv + off)")
+        lines.append(
+            f"    search_points = sorted(set(neg_pts + [0.0] + pos_pts + extra_pts))"
+        )
+    else:
+        lines.append(f"    search_points = sorted(neg_pts + [0.0] + pos_pts)")
+
+    lines.append(f"    best_lo, best_hi, best_width = None, None, float('inf')")
+    lines.append(f"    prev_r = None")
+    lines.append(f"    for pt in search_points:")
+    lines.append(f"        r = _res(pt)")
+    lines.append(f"        if not np.isfinite(r):")
+    lines.append(f"            prev_r = None")
+    lines.append(f"            continue")
+    lines.append(f"        if prev_r is not None and prev_r * r <= 0:")
+    lines.append(f"            width = abs(pt - prev_pt)")
+    lines.append(f"            if width < best_width:")
+    lines.append(f"                best_lo, best_hi, best_width = prev_pt, pt, width")
+    lines.append(f"        prev_r, prev_pt = r, pt")
+    lines.append(f"    if best_lo is not None:")
+    lines.append(f"        lo, hi = best_lo, best_hi")
     lines.append(f"    if lo is None:")
-    lines.append(f"        # Fallback to a wider linear search if logspace fails")
-    lines.append(f"        for x in np.linspace(0.001, 10000, 1000):")
-    lines.append(f"            r = _res(x)")
-    lines.append(f"            if np.isfinite(r):")
-    lines.append(f"                if lo is None: lo_val, lo = r, x")
-    lines.append(f"                if r * lo_val <= 0:")
-    lines.append(f"                    hi = x")
-    lines.append(f"                    break")
-    lines.append(f"    if lo is None or hi is None:")
     lines.append(
         f'        raise UnsolvedException("No sign change found for {target_var} in expanded range")'
+    )
+    # Validate bracket: check midpoint is finite (not a pole/discontinuity)
+    lines.append(f"    mid = (lo + hi) / 2.0")
+    lines.append(f"    mid_r = _res(mid)")
+    lines.append(f"    if not np.isfinite(mid_r):")
+    lines.append(
+        f"        # Bracket spans a discontinuity; search for a valid sub-bracket"
+    )
+    lines.append(f"        found_sub = False")
+    lines.append(
+        f"        for sub_pts in [np.linspace(lo, mid, 50), np.linspace(mid, hi, 50)]:"
+    )
+    lines.append(f"            sub_prev_r, sub_prev_pt = None, None")
+    lines.append(f"            for sp in sub_pts:")
+    lines.append(f"                sr = _res(sp)")
+    lines.append(f"                if not np.isfinite(sr):")
+    lines.append(f"                    sub_prev_r = None")
+    lines.append(f"                    continue")
+    lines.append(f"                if sub_prev_r is not None and sub_prev_r * sr <= 0:")
+    lines.append(f"                    lo, hi = sub_prev_pt, sp")
+    lines.append(f"                    found_sub = True")
+    lines.append(f"                    break")
+    lines.append(f"                sub_prev_r, sub_prev_pt = sr, sp")
+    lines.append(f"            if found_sub:")
+    lines.append(f"                break")
+    lines.append(f"        if not found_sub:")
+    lines.append(
+        f'            raise UnsolvedException("Bracket spans discontinuity for {target_var}")'
     )
     lines.append(f"    {target_var} = brentq(_res, lo, hi)")
     lines.append(f"    return [{target_var}]")
@@ -983,14 +1057,18 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
                     s = re.sub(r"\bln\(", "log(", s)
                     sol_strs.append(s)
 
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solved symbolically for {target_var}")
-                lines.append(f"    result = []")
-                for sol_s in sol_strs:
-                    lines.append(f"    result.append({sol_s})")
-                lines.append(f"    return result")
-                return "\n".join(lines)
+                # Reject solutions containing LambertW — they have
+                # multiple branches and produce complex values
+                has_lambertw = any("LambertW" in s for s in sol_strs)
+                if not has_lambertw:
+                    lines = [header]
+                    lines.append(f"    # [.pyeqn] {pyeqn}")
+                    lines.append(f"    # Solved symbolically for {target_var}")
+                    lines.append(f"    result = []")
+                    for sol_s in sol_strs:
+                        lines.append(f"    result.append({sol_s})")
+                    lines.append(f"    return result")
+                    return "\n".join(lines)
         except Exception:
             pass
 
@@ -1049,14 +1127,21 @@ def generate_derivation_scaffold(pyeqn: str, target_var: str, header: str) -> st
                     s = str(sol)
                     s = re.sub(r"\bln\(", "log(", s)
                     sol_strs.append(s)
-                lines = [header]
-                lines.append(f"    # [.pyeqn] {pyeqn}")
-                lines.append(f"    # Solved symbolically for {target_var}")
-                lines.append(f"    result = []")
-                for sol_s in sol_strs:
-                    lines.append(f"    result.append({sol_s})")
-                lines.append(f"    return result")
-                return "\n".join(lines)
+                # Skip if any solution is excessively long (e.g. quartic radical
+                # Piecewise) — brentq will be more reliable for those.
+                # Also skip solutions containing LambertW — they have multiple
+                # branches and produce complex values for some input domains.
+                total_len = sum(len(s) for s in sol_strs)
+                has_lambertw = any("LambertW" in s for s in sol_strs)
+                if total_len <= 2000 and not has_lambertw:
+                    lines = [header]
+                    lines.append(f"    # [.pyeqn] {pyeqn}")
+                    lines.append(f"    # Solved symbolically for {target_var}")
+                    lines.append(f"    result = []")
+                    for sol_s in sol_strs:
+                        lines.append(f"    result.append({sol_s})")
+                    lines.append(f"    return result")
+                    return "\n".join(lines)
         except Exception:
             pass
 
