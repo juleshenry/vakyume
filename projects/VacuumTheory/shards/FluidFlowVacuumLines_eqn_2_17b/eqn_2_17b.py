@@ -12,6 +12,7 @@ from .eqn_2_17b__delta_P import eqn_2_17b__delta_P
 from .eqn_2_17b__mu import eqn_2_17b__mu
 from .eqn_2_17b__q import eqn_2_17b__q
 
+
 class FluidFlowVacuumLines:
     eqn_2_17b__L = eqn_2_17b__L
     eqn_2_17b__d = eqn_2_17b__d

@@ -10,6 +10,7 @@ from .eqn_7_4a__P import eqn_7_4a__P
 from .eqn_7_4a__p_c import eqn_7_4a__p_c
 from .eqn_7_4a__p_nc import eqn_7_4a__p_nc
 
+
 class Precondensors:
     eqn_7_4a__P = eqn_7_4a__P
     eqn_7_4a__p_c = eqn_7_4a__p_c

@@ -9,6 +9,7 @@ from vakyume.kwasak import kwasak
 from .eqn_1_12__Total_P import eqn_1_12__Total_P
 from .eqn_1_12__sum_partial_pressures import eqn_1_12__sum_partial_pressures
 
+
 class VacuumTheory:
     eqn_1_12__Total_P = eqn_1_12__Total_P
     eqn_1_12__sum_partial_pressures = eqn_1_12__sum_partial_pressures

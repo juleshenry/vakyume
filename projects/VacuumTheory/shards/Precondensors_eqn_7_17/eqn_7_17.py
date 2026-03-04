@@ -10,6 +10,7 @@ from .eqn_7_17__R_0 import eqn_7_17__R_0
 from .eqn_7_17__R_nc import eqn_7_17__R_nc
 from .eqn_7_17__h_c import eqn_7_17__h_c
 
+
 class Precondensors:
     eqn_7_17__R_0 = eqn_7_17__R_0
     eqn_7_17__R_nc = eqn_7_17__R_nc

@@ -11,6 +11,7 @@ from .eqn_7_12__Q_condensor_heat_duty import eqn_7_12__Q_condensor_heat_duty
 from .eqn_7_12__U import eqn_7_12__U
 from .eqn_7_12__del_T import eqn_7_12__del_T
 
+
 class Precondensors:
     eqn_7_12__A = eqn_7_12__A
     eqn_7_12__Q_condensor_heat_duty = eqn_7_12__Q_condensor_heat_duty

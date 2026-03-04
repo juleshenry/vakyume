@@ -11,6 +11,7 @@ from .eqn_8_7__P_2 import eqn_8_7__P_2
 from .eqn_8_7__adiabatic_hp import eqn_8_7__adiabatic_hp
 from .eqn_8_7__w import eqn_8_7__w
 
+
 class SelectingPump:
     eqn_8_7__P_1 = eqn_8_7__P_1
     eqn_8_7__P_2 = eqn_8_7__P_2

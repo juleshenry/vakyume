@@ -10,6 +10,7 @@ from .eqn_5_11__B import eqn_5_11__B
 from .eqn_5_11__L_N import eqn_5_11__L_N
 from .eqn_5_11__V_0 import eqn_5_11__V_0
 
+
 class ProcessApp1:
     eqn_5_11__B = eqn_5_11__B
     eqn_5_11__L_N = eqn_5_11__L_N

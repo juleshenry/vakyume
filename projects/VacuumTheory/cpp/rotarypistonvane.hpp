@@ -182,20 +182,27 @@ std::vector<double> RotaryPistonVane_eqn_11_3__t_c(double F_s, double t) {
   return result;
 }
 
-std::vector<double> RotaryPistonVane_eqn_11_4__p_g(double p_v, double __knots,
-                                                   double p_s) {
-  throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_g: requires numerical "
-                           "solver (not transpilable)");
+std::vector<double> RotaryPistonVane_eqn_11_4__p_g(double p_s, double p_v) {
+  std::vector<double> result;
+  double p_g = (p_s - p_v);
+  result.push_back(p_g);
+  return result;
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_4__p_s(double p_g, double p_v) {
-  throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_s: requires numerical "
-                           "solver (not transpilable)");
+  std::vector<double> result;
+  double p_s = (p_g + p_v);
+  result.push_back(p_s);
+  return result;
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_4__p_v(double p_g, double p_s) {
-  throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_v: requires numerical "
-                           "solver (not transpilable)");
+  std::vector<double> result;
+  double p_v = 0.0;
+  result.push_back(p_v);
+  p_v = ((-p_g) + p_s);
+  result.push_back(p_v);
+  return result;
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_5__P_0_v(double P_D, double p_g,

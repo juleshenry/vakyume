@@ -5,7 +5,18 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-def eqn_8_6__k(self, M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, w: float, **kwargs):
+
+def eqn_8_6__k(self, M, P_1, P_2, R, T, adiabatic_hp, w, **kwargs):
     # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
-    # Placeholder for numerical solver
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    result = []
+    k = (
+        M
+        * 1980000
+        * adiabatic_hp
+        * (k - 1)
+        / (R * T * w * ((P_2 / P_1) ** ((k - 1) / k) - 1))
+    )
+    if k == 0:
+        return [None]
+    result.append(k)
+    return [result]

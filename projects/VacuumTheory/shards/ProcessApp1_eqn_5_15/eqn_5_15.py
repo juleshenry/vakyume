@@ -12,6 +12,7 @@ from .eqn_5_15__P_0_1 import eqn_5_15__P_0_1
 from .eqn_5_15__P_0_2 import eqn_5_15__P_0_2
 from .eqn_5_15__a_M_12 import eqn_5_15__a_M_12
 
+
 class ProcessApp1:
     eqn_5_15__M_1 = eqn_5_15__M_1
     eqn_5_15__M_2 = eqn_5_15__M_2

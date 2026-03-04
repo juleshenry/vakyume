@@ -13,6 +13,7 @@ from .eqn_1_8__T import eqn_1_8__T
 from .eqn_1_8__V import eqn_1_8__V
 from .eqn_1_8__m import eqn_1_8__m
 
+
 class VacuumTheory:
     eqn_1_8__M = eqn_1_8__M
     eqn_1_8__P = eqn_1_8__P

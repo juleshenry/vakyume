@@ -8,6 +8,7 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_3_17__P_MIN import eqn_3_17__P_MIN
 
+
 class PressMgmt:
     eqn_3_17__P_MIN = eqn_3_17__P_MIN
 

@@ -10,6 +10,7 @@ from .eqn_2_31__C import eqn_2_31__C
 from .eqn_2_31__S_p import eqn_2_31__S_p
 from .eqn_2_31__S_pump_speed import eqn_2_31__S_pump_speed
 
+
 class FluidFlowVacuumLines:
     eqn_2_31__C = eqn_2_31__C
     eqn_2_31__S_p = eqn_2_31__S_p

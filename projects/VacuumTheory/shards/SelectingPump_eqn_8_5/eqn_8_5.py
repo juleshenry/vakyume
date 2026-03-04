@@ -8,15 +8,25 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_8_5__Eff import eqn_8_5__Eff
 from .eqn_8_5__actual_brake_horsepower import eqn_8_5__actual_brake_horsepower
-from .eqn_8_5__theoretical_adiabatic_horsepower import eqn_8_5__theoretical_adiabatic_horsepower
+from .eqn_8_5__theoretical_adiabatic_horsepower import (
+    eqn_8_5__theoretical_adiabatic_horsepower,
+)
+
 
 class SelectingPump:
     eqn_8_5__Eff = eqn_8_5__Eff
     eqn_8_5__actual_brake_horsepower = eqn_8_5__actual_brake_horsepower
-    eqn_8_5__theoretical_adiabatic_horsepower = eqn_8_5__theoretical_adiabatic_horsepower
+    eqn_8_5__theoretical_adiabatic_horsepower = (
+        eqn_8_5__theoretical_adiabatic_horsepower
+    )
 
     @kwasak
-    def eqn_8_5(self, Eff=None, actual_brake_horsepower=None, theoretical_adiabatic_horsepower=None):
+    def eqn_8_5(
+        self,
+        Eff=None,
+        actual_brake_horsepower=None,
+        theoretical_adiabatic_horsepower=None,
+    ):
         """
         Eff:= thermal efficiency
         """

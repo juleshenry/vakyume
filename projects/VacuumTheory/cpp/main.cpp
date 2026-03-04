@@ -6420,7 +6420,7 @@ int main() {
   }
   std::cout << "Testing RotaryPistonVane_eqn_11_4__p_g... ";
   try {
-    auto r = RotaryPistonVane_eqn_11_4__p_g(1.0, 1.0, 1.0);
+    auto r = RotaryPistonVane_eqn_11_4__p_g(1.0, 1.0);
     std::cout << "OK (" << r.size() << " results)" << std::endl;
     pass++;
   } catch (std::exception &e) {

@@ -10,6 +10,7 @@ from .eqn_7_2__P_i_0 import eqn_7_2__P_i_0
 from .eqn_7_2__p_i import eqn_7_2__p_i
 from .eqn_7_2__x_i import eqn_7_2__x_i
 
+
 class Precondensors:
     eqn_7_2__P_i_0 = eqn_7_2__P_i_0
     eqn_7_2__p_i = eqn_7_2__p_i

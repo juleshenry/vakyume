@@ -1,0 +1,31 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+from vakyume.kwasak import kwasak
+from .eqn_10_19__P import eqn_10_19__P
+from .eqn_10_19__S_Th import eqn_10_19__S_Th
+from .eqn_10_19__S_p import eqn_10_19__S_p
+from .eqn_10_19__T_e import eqn_10_19__T_e
+from .eqn_10_19__T_i import eqn_10_19__T_i
+from .eqn_10_19__p_c import eqn_10_19__p_c
+from .eqn_10_19__p_s import eqn_10_19__p_s
+
+
+class LiquidRing:
+    eqn_10_19__P = eqn_10_19__P
+    eqn_10_19__S_Th = eqn_10_19__S_Th
+    eqn_10_19__S_p = eqn_10_19__S_p
+    eqn_10_19__T_e = eqn_10_19__T_e
+    eqn_10_19__T_i = eqn_10_19__T_i
+    eqn_10_19__p_c = eqn_10_19__p_c
+    eqn_10_19__p_s = eqn_10_19__p_s
+
+    @kwasak
+    def eqn_10_19(
+        self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None
+    ):
+        return

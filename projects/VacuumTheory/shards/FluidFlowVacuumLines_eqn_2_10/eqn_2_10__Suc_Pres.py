@@ -5,6 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_2_10__Suc_Pres(self, delta_P: float, oper_press: float, **kwargs):
     # [.pyeqn] Suc_Pres = oper_press - delta_P
     result = []

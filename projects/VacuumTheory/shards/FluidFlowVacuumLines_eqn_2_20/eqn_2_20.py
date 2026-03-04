@@ -10,6 +10,7 @@ from .eqn_2_20__L import eqn_2_20__L
 from .eqn_2_20__sum_equivalent_length import eqn_2_20__sum_equivalent_length
 from .eqn_2_20__sum_pipe import eqn_2_20__sum_pipe
 
+
 class FluidFlowVacuumLines:
     eqn_2_20__L = eqn_2_20__L
     eqn_2_20__sum_equivalent_length = eqn_2_20__sum_equivalent_length

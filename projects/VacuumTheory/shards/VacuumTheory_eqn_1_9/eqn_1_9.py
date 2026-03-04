@@ -12,6 +12,7 @@ from .eqn_1_9__R import eqn_1_9__R
 from .eqn_1_9__T import eqn_1_9__T
 from .eqn_1_9__rho import eqn_1_9__rho
 
+
 class VacuumTheory:
     eqn_1_9__M = eqn_1_9__M
     eqn_1_9__P = eqn_1_9__P

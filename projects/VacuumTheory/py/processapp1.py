@@ -44,9 +44,9 @@ class ProcessApp1:
 
     def eqn_5_10a__D(self, L_0: float, V_1: float, **kwargs):
         # L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
-        # Solved symbolically for D
         result = []
-        result.append(-L_0 + V_1)
+        D = -L_0 + V_1
+        result.append(D)
         return result
 
     def eqn_5_10a__L_0(self, D: float, V_1: float, **kwargs):
@@ -60,11 +60,10 @@ class ProcessApp1:
 
     def eqn_5_10a__V_1(self, D: float, L_0: float, **kwargs):
         # L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
-        # Solved symbolically for V_1
         result = []
-        result.append(D + L_0)
+        V_1 = D + L_0
+        result.append(V_1)
         return result
-        return [V_1]
 
     @kwasak
     def eqn_5_10b(self, L_0=None, R=None, V_1=None):
@@ -663,11 +662,11 @@ class ProcessApp1:
     def eqn_5_9(self, D=None, L_0=None, V_1=None):
         return
 
-    def eqn_5_9__D(self, L_0, V_1, **kwargs):
+    def eqn_5_9__D(self, L_0: float, V_1: float, **kwargs):
         # L_0 / V_1 = L_0 / (L_0 + D)
-        # Solved symbolically for D
         result = []
-        result.append(-L_0 + V_1)
+        D = -L_0 + V_1
+        result.append(D)
         return result
 
     def eqn_5_9__L_0(self, D: float, V_1: float, **kwargs):
@@ -681,8 +680,7 @@ class ProcessApp1:
 
     def eqn_5_9__V_1(self, D: float, L_0: float, **kwargs):
         # L_0 / V_1 = L_0 / (L_0 + D)
-        # Solved symbolically for V_1
         result = []
-        result.append(D + L_0)
+        V_1 = D + L_0
+        result.append(V_1)
         return result
-        return [V_1]

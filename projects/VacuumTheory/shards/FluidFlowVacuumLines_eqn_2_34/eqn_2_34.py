@@ -14,6 +14,7 @@ from .eqn_2_34__L import eqn_2_34__L
 from .eqn_2_34__P_p import eqn_2_34__P_p
 from .eqn_2_34__mu import eqn_2_34__mu
 
+
 class FluidFlowVacuumLines:
     eqn_2_34__C = eqn_2_34__C
     eqn_2_34__C_1 = eqn_2_34__C_1

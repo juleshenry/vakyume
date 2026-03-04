@@ -1,0 +1,16 @@
+from cmath import log, sqrt, exp
+from math import e, pi
+from sympy import I, Piecewise, LambertW, Eq, symbols, solve, powsimp
+from scipy.optimize import newton
+import numpy as np
+from vakyume.config import UnsolvedException
+
+
+def eqn_10_20__p_0(self, P, S_0, S_p, T_e, T_i, p_c, p_s, **kwargs):
+    # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
+    result = []
+    numerator = S_0 / (S_p * ((P - p_c) / (P * (P - p_s))) ** (3 / 5))
+    denominator = 460 + T_i
+    p_0 = P - (numerator * denominator) / ((460 + T_e) * (P - p_c) / (P * (P - p_s)))
+    result.append(p_0)
+    return [result]

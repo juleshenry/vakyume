@@ -31,7 +31,8 @@ std::vector<double> ProcessApp1_eqn_5_1__y_i(double K_i, double x_i) {
 
 std::vector<double> ProcessApp1_eqn_5_10a__D(double L_0, double V_1) {
   std::vector<double> result;
-  result.push_back(((-L_0) + V_1));
+  double D = ((-L_0) + V_1);
+  result.push_back(D);
   return result;
 }
 
@@ -46,9 +47,9 @@ std::vector<double> ProcessApp1_eqn_5_10a__L_0(double D, double V_1) {
 
 std::vector<double> ProcessApp1_eqn_5_10a__V_1(double D, double L_0) {
   std::vector<double> result;
-  result.push_back((D + L_0));
+  double V_1 = (D + L_0);
+  result.push_back(V_1);
   return result;
-  return {V_1};
 }
 
 std::vector<double> ProcessApp1_eqn_5_10b__L_0(double R, double V_1) {
@@ -571,7 +572,8 @@ std::vector<double> ProcessApp1_eqn_5_8__gamma_2(double P_0_1, double P_0_2,
 
 std::vector<double> ProcessApp1_eqn_5_9__D(double L_0, double V_1) {
   std::vector<double> result;
-  result.push_back(((-L_0) + V_1));
+  double D = ((-L_0) + V_1);
+  result.push_back(D);
   return result;
 }
 
@@ -586,9 +588,9 @@ std::vector<double> ProcessApp1_eqn_5_9__L_0(double D, double V_1) {
 
 std::vector<double> ProcessApp1_eqn_5_9__V_1(double D, double L_0) {
   std::vector<double> result;
-  result.push_back((D + L_0));
+  double V_1 = (D + L_0);
+  result.push_back(V_1);
   return result;
-  return {V_1};
 }
 
 #endif // VAKYUME_PROCESSAPP1_HPP

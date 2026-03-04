@@ -15,6 +15,7 @@ from .eqn_7_7__epsilon_i import eqn_7_7__epsilon_i
 from .eqn_7_7__p_c import eqn_7_7__p_c
 from .eqn_7_7__x_i import eqn_7_7__x_i
 
+
 class Precondensors:
     eqn_7_7__M = eqn_7_7__M
     eqn_7_7__P = eqn_7_7__P
@@ -26,5 +27,15 @@ class Precondensors:
     eqn_7_7__x_i = eqn_7_7__x_i
 
     @kwasak
-    def eqn_7_7(self, M=None, P=None, P_i_0=None, W_air=None, W_i=None, epsilon_i=None, p_c=None, x_i=None):
+    def eqn_7_7(
+        self,
+        M=None,
+        P=None,
+        P_i_0=None,
+        W_air=None,
+        W_i=None,
+        epsilon_i=None,
+        p_c=None,
+        x_i=None,
+    ):
         return

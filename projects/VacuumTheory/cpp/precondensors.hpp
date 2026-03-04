@@ -8,6 +8,8 @@
 
 using namespace std::complex_literals;
 
+#include "lambertw.hpp"
+
 std::vector<double> Precondensors_eqn_7_1__P(double p_i, double y_i) {
   std::vector<double> result;
   double P = (p_i / y_i);
@@ -190,15 +192,21 @@ std::vector<double> Precondensors_eqn_7_14b__U(double A,
 std::vector<double>
 Precondensors_eqn_7_14b__del_T_1(double A, double Q_condensor_heat_duty,
                                  double U, double del_T_2) {
-  throw std::runtime_error("Precondensors_eqn_7_14b__del_T_1: requires "
-                           "numerical solver (not transpilable)");
+  std::vector<double> result;
+  double del_T_1 =
+      (del_T_2 + std::exp(_lambertW((Q_condensor_heat_duty / (A * U)))));
+  result.push_back(del_T_1);
+  return result;
 }
 
 std::vector<double>
 Precondensors_eqn_7_14b__del_T_2(double A, double Q_condensor_heat_duty,
                                  double U, double del_T_1) {
-  throw std::runtime_error("Precondensors_eqn_7_14b__del_T_2: requires "
-                           "numerical solver (not transpilable)");
+  std::vector<double> result;
+  double del_T_2 =
+      (del_T_1 - std::exp(_lambertW((Q_condensor_heat_duty / (A * U)))));
+  result.push_back(del_T_2);
+  return result;
 }
 
 std::vector<double> Precondensors_eqn_7_15__U(double sum_R) {

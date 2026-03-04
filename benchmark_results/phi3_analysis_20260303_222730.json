@@ -1,0 +1,1407 @@
+{
+    "solved": [
+        "AirLeak_eqn_4_7",
+        "FluidFlowVacuumLines_eqn_2_1",
+        "FluidFlowVacuumLines_eqn_2_10",
+        "FluidFlowVacuumLines_eqn_2_11",
+        "FluidFlowVacuumLines_eqn_2_12",
+        "FluidFlowVacuumLines_eqn_2_13",
+        "FluidFlowVacuumLines_eqn_2_14",
+        "FluidFlowVacuumLines_eqn_2_15",
+        "FluidFlowVacuumLines_eqn_2_16",
+        "FluidFlowVacuumLines_eqn_2_17a",
+        "FluidFlowVacuumLines_eqn_2_17b",
+        "FluidFlowVacuumLines_eqn_2_18a",
+        "FluidFlowVacuumLines_eqn_2_18b",
+        "FluidFlowVacuumLines_eqn_2_19a",
+        "FluidFlowVacuumLines_eqn_2_19b",
+        "FluidFlowVacuumLines_eqn_2_2",
+        "FluidFlowVacuumLines_eqn_2_20",
+        "FluidFlowVacuumLines_eqn_2_22",
+        "FluidFlowVacuumLines_eqn_2_25",
+        "FluidFlowVacuumLines_eqn_2_26",
+        "FluidFlowVacuumLines_eqn_2_28",
+        "FluidFlowVacuumLines_eqn_2_29",
+        "FluidFlowVacuumLines_eqn_2_3",
+        "FluidFlowVacuumLines_eqn_2_31",
+        "FluidFlowVacuumLines_eqn_2_32",
+        "FluidFlowVacuumLines_eqn_2_33",
+        "FluidFlowVacuumLines_eqn_2_34",
+        "FluidFlowVacuumLines_eqn_2_35",
+        "FluidFlowVacuumLines_eqn_2_36",
+        "FluidFlowVacuumLines_eqn_2_37",
+        "FluidFlowVacuumLines_eqn_2_4",
+        "FluidFlowVacuumLines_eqn_2_5",
+        "FluidFlowVacuumLines_eqn_2_6",
+        "FluidFlowVacuumLines_eqn_2_7",
+        "FluidFlowVacuumLines_eqn_2_8",
+        "LiquidRing_eqn_10_1",
+        "LiquidRing_eqn_10_11",
+        "LiquidRing_eqn_10_12",
+        "LiquidRing_eqn_10_13",
+        "LiquidRing_eqn_10_14",
+        "LiquidRing_eqn_10_15",
+        "LiquidRing_eqn_10_16",
+        "LiquidRing_eqn_10_17",
+        "LiquidRing_eqn_10_18",
+        "LiquidRing_eqn_10_2",
+        "LiquidRing_eqn_10_21",
+        "LiquidRing_eqn_10_3",
+        "LiquidRing_eqn_10_4",
+        "LiquidRing_eqn_10_5",
+        "LiquidRing_eqn_10_6",
+        "LiquidRing_eqn_10_8",
+        "LiquidRing_eqn_10_9",
+        "Precondensors_eqn_7_1",
+        "Precondensors_eqn_7_10",
+        "Precondensors_eqn_7_11",
+        "Precondensors_eqn_7_12",
+        "Precondensors_eqn_7_14a",
+        "Precondensors_eqn_7_14b",
+        "Precondensors_eqn_7_15",
+        "Precondensors_eqn_7_16",
+        "Precondensors_eqn_7_17",
+        "Precondensors_eqn_7_18",
+        "Precondensors_eqn_7_2",
+        "Precondensors_eqn_7_3",
+        "Precondensors_eqn_7_4a",
+        "Precondensors_eqn_7_4aa",
+        "Precondensors_eqn_7_4ab",
+        "Precondensors_eqn_7_4ac",
+        "Precondensors_eqn_7_5",
+        "Precondensors_eqn_7_6",
+        "Precondensors_eqn_7_7",
+        "Precondensors_eqn_7_8",
+        "Precondensors_eqn_7_9",
+        "PressMgmt_eqn_3_1",
+        "PressMgmt_eqn_3_11",
+        "PressMgmt_eqn_3_12",
+        "PressMgmt_eqn_3_13",
+        "PressMgmt_eqn_3_15",
+        "PressMgmt_eqn_3_16",
+        "PressMgmt_eqn_3_17",
+        "PressMgmt_eqn_3_2",
+        "PressMgmt_eqn_3_3",
+        "PressMgmt_eqn_3_4",
+        "PressMgmt_eqn_3_5",
+        "PressMgmt_eqn_3_6",
+        "PressMgmt_eqn_3_8",
+        "PressMgmt_eqn_3_9",
+        "ProcessApp1_eqn_5_1",
+        "ProcessApp1_eqn_5_10a",
+        "ProcessApp1_eqn_5_10b",
+        "ProcessApp1_eqn_5_10c",
+        "ProcessApp1_eqn_5_11",
+        "ProcessApp1_eqn_5_12",
+        "ProcessApp1_eqn_5_13",
+        "ProcessApp1_eqn_5_14",
+        "ProcessApp1_eqn_5_15",
+        "ProcessApp1_eqn_5_16",
+        "ProcessApp1_eqn_5_17",
+        "ProcessApp1_eqn_5_2a",
+        "ProcessApp1_eqn_5_2b",
+        "ProcessApp1_eqn_5_3",
+        "ProcessApp1_eqn_5_4",
+        "ProcessApp1_eqn_5_5",
+        "ProcessApp1_eqn_5_6",
+        "ProcessApp1_eqn_5_7",
+        "ProcessApp1_eqn_5_8",
+        "ProcessApp1_eqn_5_9",
+        "ProcessApp2_eqn_6_1",
+        "ProcessApp2_eqn_6_10",
+        "ProcessApp2_eqn_6_11a",
+        "ProcessApp2_eqn_6_2",
+        "ProcessApp2_eqn_6_4",
+        "ProcessApp2_eqn_6_7",
+        "ProcessApp2_eqn_6_8",
+        "ProcessApp2_eqn_6_9",
+        "RotaryPistonVane_eqn_11_1",
+        "RotaryPistonVane_eqn_11_2",
+        "RotaryPistonVane_eqn_11_3",
+        "RotaryPistonVane_eqn_11_4",
+        "RotaryPistonVane_eqn_11_5",
+        "RotaryPistonVane_eqn_11_6",
+        "SelectingPump_eqn_8_2",
+        "SelectingPump_eqn_8_4",
+        "SelectingPump_eqn_8_5",
+        "SelectingPump_eqn_8_9",
+        "SteamJetInjectors_eqn_9_1",
+        "SteamJetInjectors_eqn_9_2",
+        "SteamJetInjectors_eqn_9_3",
+        "SteamJetInjectors_eqn_9_4",
+        "SteamJetInjectors_eqn_9_5",
+        "VacuumTheory_eqn_1_10",
+        "VacuumTheory_eqn_1_11",
+        "VacuumTheory_eqn_1_12",
+        "VacuumTheory_eqn_1_13a",
+        "VacuumTheory_eqn_1_13b",
+        "VacuumTheory_eqn_1_3",
+        "VacuumTheory_eqn_1_7",
+        "VacuumTheory_eqn_1_9"
+    ],
+    "inconsistent": {
+        "LiquidRing_eqn_10_10": {
+            "broken": [
+                "rho"
+            ],
+            "trusted": [
+                "bhp",
+                "bhp_0",
+                "mu"
+            ],
+            "scores": {
+                "bhp": 4,
+                "bhp_0": 4,
+                "mu": 4,
+                "rho": 0
+            },
+            "mismatches": {
+                "rho": [
+                    {
+                        "inputs": {
+                            "bhp_0": 1.85364,
+                            "mu": 6.1584,
+                            "bhp": 1.005850994029123
+                        },
+                        "output": 2.35922,
+                        "mismatches": [
+                            {
+                                "target": "rho",
+                                "expected": 2.35922,
+                                "got": null
+                            }
+                        ],
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_failures": {
+                "rho": [
+                    {
+                        "oracle": "bhp",
+                        "inputs": {
+                            "bhp_0": 3.56851,
+                            "mu": 3.52956,
+                            "bhp": 2.1827305408252147
+                        },
+                        "expected": 8.25286,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "bhp",
+                        "inputs": {
+                            "bhp_0": 2.76575,
+                            "mu": 8.70718,
+                            "bhp": 1.6886821183918335
+                        },
+                        "expected": 6.86772,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "bhp",
+                        "inputs": {
+                            "bhp_0": 1.85364,
+                            "mu": 6.1584,
+                            "bhp": 1.005850994029123
+                        },
+                        "expected": 2.35922,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "bhp",
+                        "inputs": {
+                            "bhp_0": 7.23874,
+                            "mu": 4.51248,
+                            "bhp": 4.57731837092657
+                        },
+                        "expected": 9.64043,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "bhp",
+                        "inputs": {
+                            "bhp_0": 1.55781,
+                            "mu": 6.31228,
+                            "bhp": 0.902826807997831
+                        },
+                        "expected": 4.93379,
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_tuples": [
+                {
+                    "oracle": "bhp",
+                    "values": {
+                        "bhp_0": 3.56851,
+                        "mu": 3.52956,
+                        "rho": 8.25286,
+                        "bhp": 2.1827305408252147
+                    }
+                },
+                {
+                    "oracle": "bhp",
+                    "values": {
+                        "bhp_0": 2.76575,
+                        "mu": 8.70718,
+                        "rho": 6.86772,
+                        "bhp": 1.6886821183918335
+                    }
+                },
+                {
+                    "oracle": "bhp",
+                    "values": {
+                        "bhp_0": 1.85364,
+                        "mu": 6.1584,
+                        "rho": 2.35922,
+                        "bhp": 1.005850994029123
+                    }
+                },
+                {
+                    "oracle": "bhp",
+                    "values": {
+                        "bhp_0": 7.23874,
+                        "mu": 4.51248,
+                        "rho": 9.64043,
+                        "bhp": 4.57731837092657
+                    }
+                },
+                {
+                    "oracle": "bhp",
+                    "values": {
+                        "bhp_0": 1.55781,
+                        "mu": 6.31228,
+                        "rho": 4.93379,
+                        "bhp": 0.902826807997831
+                    }
+                },
+                {
+                    "oracle": "bhp_0",
+                    "values": {
+                        "bhp": 2.44634,
+                        "mu": 2.95455,
+                        "rho": 6.79883,
+                        "bhp_0": 4.130751689066996
+                    }
+                },
+                {
+                    "oracle": "bhp_0",
+                    "values": {
+                        "bhp": 1.8548,
+                        "mu": 8.99102,
+                        "rho": 9.91313,
+                        "bhp_0": 2.847965735432342
+                    }
+                },
+                {
+                    "oracle": "bhp_0",
+                    "values": {
+                        "bhp": 2.95584,
+                        "mu": 9.36123,
+                        "rho": 4.62895,
+                        "bhp_0": 5.093584884309776
+                    }
+                },
+                {
+                    "oracle": "bhp_0",
+                    "values": {
+                        "bhp": 3.68701,
+                        "mu": 7.568,
+                        "rho": 7.27576,
+                        "bhp_0": 6.009922605584133
+                    }
+                },
+                {
+                    "oracle": "bhp_0",
+                    "values": {
+                        "bhp": 8.16513,
+                        "mu": 9.94768,
+                        "rho": 8.22189,
+                        "bhp_0": 12.932108614442113
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "LiquidRing_eqn_10_19": {
+            "broken": [
+                "P"
+            ],
+            "trusted": [
+                "S_Th",
+                "S_p",
+                "T_e",
+                "T_i",
+                "p_c",
+                "p_s"
+            ],
+            "scores": {
+                "P": 7,
+                "S_Th": 7,
+                "S_p": 7,
+                "T_e": 7,
+                "T_i": 7,
+                "p_c": 7,
+                "p_s": 7
+            },
+            "mismatches": {},
+            "golden_failures": {},
+            "golden_tuples": [
+                {
+                    "oracle": "S_Th",
+                    "values": {
+                        "P": 9.34366,
+                        "S_p": 4.71609,
+                        "T_e": 5.08103,
+                        "T_i": 9.87063,
+                        "p_c": 5.40143,
+                        "p_s": 8.88631,
+                        "S_Th": 17.069006551439383
+                    }
+                },
+                {
+                    "oracle": "S_Th",
+                    "values": {
+                        "P": 7.42877,
+                        "S_p": 5.46489,
+                        "T_e": 2.36645,
+                        "T_i": 9.48525,
+                        "p_c": 2.83062,
+                        "p_s": 2.77049,
+                        "S_Th": 5.372971888942902
+                    }
+                },
+                {
+                    "oracle": "S_Th",
+                    "values": {
+                        "P": 7.93769,
+                        "S_p": 7.251,
+                        "T_e": 5.53538,
+                        "T_i": 3.21394,
+                        "p_c": 4.71678,
+                        "p_s": 6.83199,
+                        "S_Th": 13.8135503889023
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 4.17953,
+                        "S_Th": 3.74787,
+                        "T_e": 8.07899,
+                        "T_i": 4.53447,
+                        "p_c": 6.41223,
+                        "p_s": 7.73495,
+                        "S_p": 4.932193655112642
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 8.54444,
+                        "S_Th": 8.73803,
+                        "T_e": 6.71268,
+                        "T_i": 8.53095,
+                        "p_c": 6.25219,
+                        "p_s": 5.72719,
+                        "S_p": 9.912079706784889
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 2.26923,
+                        "S_Th": 3.93789,
+                        "T_e": 6.86396,
+                        "T_i": 5.5944,
+                        "p_c": 2.65716,
+                        "p_s": 8.47665,
+                        "S_p": 20.75146100292965
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 6.72926,
+                        "S_Th": 4.17025,
+                        "T_e": 6.34233,
+                        "T_i": 1.19929,
+                        "p_c": 2.64216,
+                        "p_s": 5.74878,
+                        "S_p": 1.7590834853649429
+                    }
+                },
+                {
+                    "oracle": "T_e",
+                    "values": {
+                        "P": 4.00498,
+                        "S_Th": 3.13964,
+                        "S_p": 3.69887,
+                        "T_i": 2.40998,
+                        "p_c": 3.78678,
+                        "p_s": 1.10849,
+                        "T_e": 4210.84865178499
+                    }
+                },
+                {
+                    "oracle": "T_e",
+                    "values": {
+                        "P": 7.77837,
+                        "S_Th": 4.99017,
+                        "S_p": 8.80423,
+                        "T_i": 5.75963,
+                        "p_c": 7.44515,
+                        "p_s": 1.72368,
+                        "T_e": 2825.2061796676617
+                    }
+                },
+                {
+                    "oracle": "T_e",
+                    "values": {
+                        "P": 7.10559,
+                        "S_Th": 9.01884,
+                        "S_p": 8.46242,
+                        "T_i": 3.27385,
+                        "p_c": 7.97734,
+                        "p_s": 9.93326,
+                        "T_e": 1210.9677394823884
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "LiquidRing_eqn_10_20": {
+            "broken": [
+                "P",
+                "T_e",
+                "T_i",
+                "p_0",
+                "p_c",
+                "p_s"
+            ],
+            "trusted": [
+                "S_0",
+                "S_p"
+            ],
+            "scores": {
+                "P": 8,
+                "S_0": 8,
+                "S_p": 8,
+                "T_e": 8,
+                "T_i": 8,
+                "p_0": 8,
+                "p_c": 8,
+                "p_s": 8
+            },
+            "mismatches": {},
+            "golden_failures": {},
+            "golden_tuples": [
+                {
+                    "oracle": "S_0",
+                    "values": {
+                        "P": 9.13389,
+                        "S_p": 3.1968,
+                        "T_e": 9.0518,
+                        "T_i": 1.12239,
+                        "p_0": 4.40778,
+                        "p_c": 2.52757,
+                        "p_s": 4.97995,
+                        "S_0": 2.8150179590364224
+                    }
+                },
+                {
+                    "oracle": "S_0",
+                    "values": {
+                        "P": 2.45603,
+                        "S_p": 7.0994,
+                        "T_e": 3.34984,
+                        "T_i": 1.67382,
+                        "p_0": 1.4229,
+                        "p_c": 7.92912,
+                        "p_s": 8.612,
+                        "S_0": 3.9263754427734483
+                    }
+                },
+                {
+                    "oracle": "S_0",
+                    "values": {
+                        "P": 4.57361,
+                        "S_p": 4.05985,
+                        "T_e": 2.88791,
+                        "T_i": 5.88379,
+                        "p_0": 8.19215,
+                        "p_c": 8.18036,
+                        "p_s": 3.13076,
+                        "S_0": 6.136101128450594
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 9.09824,
+                        "S_0": 9.19115,
+                        "T_e": 8.42032,
+                        "T_i": 8.69077,
+                        "p_0": 8.33825,
+                        "p_c": 1.5675,
+                        "p_s": 2.29113,
+                        "S_p": 38.351665131028035
+                    }
+                },
+                {
+                    "oracle": "S_p",
+                    "values": {
+                        "P": 7.32222,
+                        "S_0": 8.54676,
+                        "T_e": 7.04146,
+                        "T_i": 2.50539,
+                        "p_0": 8.85797,
+                        "p_c": 3.42084,
+                        "p_s": 9.31336,
+                        "S_p": 14.657778911676738
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "SelectingPump_eqn_8_1": {
+            "broken": [
+                "SCON"
+            ],
+            "trusted": [
+                "NC",
+                "NS",
+                "installation_cost"
+            ],
+            "scores": {
+                "NC": 4,
+                "NS": 4,
+                "SCON": 0,
+                "installation_cost": 4
+            },
+            "mismatches": {
+                "SCON": [
+                    {
+                        "inputs": {
+                            "NS": 7.67114,
+                            "installation_cost": 4.64646,
+                            "NC": -3.834422609810319
+                        },
+                        "output": 2.7229,
+                        "mismatches": [
+                            {
+                                "target": "SCON",
+                                "expected": 2.7229,
+                                "got": [
+                                    null
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "golden_failures": {
+                "SCON": [
+                    {
+                        "oracle": "NC",
+                        "inputs": {
+                            "NS": 9.76099,
+                            "installation_cost": 3.21246,
+                            "NC": -4.879943333265347
+                        },
+                        "expected": 7.6868,
+                        "got": [
+                            null
+                        ]
+                    },
+                    {
+                        "oracle": "NC",
+                        "inputs": {
+                            "NS": 7.43091,
+                            "installation_cost": 1.53991,
+                            "NC": -3.7150515219205116
+                        },
+                        "expected": 2.2988,
+                        "got": [
+                            null
+                        ]
+                    },
+                    {
+                        "oracle": "NC",
+                        "inputs": {
+                            "NS": 7.67114,
+                            "installation_cost": 4.64646,
+                            "NC": -3.834422609810319
+                        },
+                        "expected": 2.7229,
+                        "got": [
+                            null
+                        ]
+                    },
+                    {
+                        "oracle": "NC",
+                        "inputs": {
+                            "NS": 9.882,
+                            "installation_cost": 8.27216,
+                            "NC": -4.939603838818233
+                        },
+                        "expected": 8.07678,
+                        "got": [
+                            null
+                        ]
+                    },
+                    {
+                        "oracle": "NC",
+                        "inputs": {
+                            "NS": 3.8875,
+                            "installation_cost": 5.10463,
+                            "NC": -1.942199089797606
+                        },
+                        "expected": 1.50589,
+                        "got": [
+                            null
+                        ]
+                    }
+                ]
+            },
+            "golden_tuples": [
+                {
+                    "oracle": "NC",
+                    "values": {
+                        "NS": 9.76099,
+                        "SCON": 7.6868,
+                        "installation_cost": 3.21246,
+                        "NC": -4.879943333265347
+                    }
+                },
+                {
+                    "oracle": "NC",
+                    "values": {
+                        "NS": 7.43091,
+                        "SCON": 2.2988,
+                        "installation_cost": 1.53991,
+                        "NC": -3.7150515219205116
+                    }
+                },
+                {
+                    "oracle": "NC",
+                    "values": {
+                        "NS": 7.67114,
+                        "SCON": 2.7229,
+                        "installation_cost": 4.64646,
+                        "NC": -3.834422609810319
+                    }
+                },
+                {
+                    "oracle": "NC",
+                    "values": {
+                        "NS": 9.882,
+                        "SCON": 8.07678,
+                        "installation_cost": 8.27216,
+                        "NC": -4.939603838818233
+                    }
+                },
+                {
+                    "oracle": "NC",
+                    "values": {
+                        "NS": 3.8875,
+                        "SCON": 1.50589,
+                        "installation_cost": 5.10463,
+                        "NC": -1.942199089797606
+                    }
+                },
+                {
+                    "oracle": "NS",
+                    "values": {
+                        "NC": 4.51989,
+                        "SCON": 5.10426,
+                        "installation_cost": 4.37278,
+                        "NS": -9.038046750157376
+                    }
+                },
+                {
+                    "oracle": "NS",
+                    "values": {
+                        "NC": 8.75729,
+                        "SCON": 4.48599,
+                        "installation_cost": 3.27386,
+                        "NS": -17.513222344086195
+                    }
+                },
+                {
+                    "oracle": "NS",
+                    "values": {
+                        "NC": 3.53098,
+                        "SCON": 8.48677,
+                        "installation_cost": 7.89652,
+                        "NS": -7.059340273787218
+                    }
+                },
+                {
+                    "oracle": "NS",
+                    "values": {
+                        "NC": 5.37899,
+                        "SCON": 5.84775,
+                        "installation_cost": 9.49408,
+                        "NS": -10.754391715863932
+                    }
+                },
+                {
+                    "oracle": "NS",
+                    "values": {
+                        "NC": 3.17525,
+                        "SCON": 7.48548,
+                        "installation_cost": 7.42904,
+                        "NS": -6.3479246525181
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "SelectingPump_eqn_8_3": {
+            "broken": [
+                "hp"
+            ],
+            "trusted": [
+                "installed_costs"
+            ],
+            "scores": {
+                "hp": 0,
+                "installed_costs": 2
+            },
+            "mismatches": {
+                "hp": [
+                    {
+                        "inputs": {
+                            "installed_costs": 36968.128926443664
+                        },
+                        "output": 9.40656,
+                        "mismatches": [
+                            {
+                                "target": "hp",
+                                "expected": 9.40656,
+                                "got": null
+                            }
+                        ],
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_failures": {
+                "hp": [
+                    {
+                        "oracle": "installed_costs",
+                        "inputs": {
+                            "installed_costs": 33434.025367132395
+                        },
+                        "expected": 7.52412,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "installed_costs",
+                        "inputs": {
+                            "installed_costs": 24848.380633977984
+                        },
+                        "expected": 3.89074,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "installed_costs",
+                        "inputs": {
+                            "installed_costs": 36968.128926443664
+                        },
+                        "expected": 9.40656,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "installed_costs",
+                        "inputs": {
+                            "installed_costs": 33922.24798898646
+                        },
+                        "expected": 7.77046,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "installed_costs",
+                        "inputs": {
+                            "installed_costs": 14468.78801056668
+                        },
+                        "expected": 1.16979,
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_tuples": [
+                {
+                    "oracle": "installed_costs",
+                    "values": {
+                        "hp": 7.52412,
+                        "installed_costs": 33434.025367132395
+                    }
+                },
+                {
+                    "oracle": "installed_costs",
+                    "values": {
+                        "hp": 3.89074,
+                        "installed_costs": 24848.380633977984
+                    }
+                },
+                {
+                    "oracle": "installed_costs",
+                    "values": {
+                        "hp": 9.40656,
+                        "installed_costs": 36968.128926443664
+                    }
+                },
+                {
+                    "oracle": "installed_costs",
+                    "values": {
+                        "hp": 7.77046,
+                        "installed_costs": 33922.24798898646
+                    }
+                },
+                {
+                    "oracle": "installed_costs",
+                    "values": {
+                        "hp": 1.16979,
+                        "installed_costs": 14468.78801056668
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "SelectingPump_eqn_8_6": {
+            "broken": [
+                "k"
+            ],
+            "trusted": [
+                "M",
+                "P_1",
+                "P_2",
+                "R",
+                "T",
+                "adiabatic_hp",
+                "w"
+            ],
+            "scores": {
+                "M": 8,
+                "P_1": 8,
+                "P_2": 8,
+                "R": 8,
+                "T": 8,
+                "adiabatic_hp": 8,
+                "k": 8,
+                "w": 8
+            },
+            "mismatches": {},
+            "golden_failures": {},
+            "golden_tuples": [
+                {
+                    "oracle": "M",
+                    "values": {
+                        "P_1": 4.73265,
+                        "P_2": 9.01429,
+                        "R": 4.77315,
+                        "T": 3.38114,
+                        "adiabatic_hp": 4.33573,
+                        "k": 3.83432,
+                        "w": 6.4629,
+                        "M": 1.0027547632093396e-05
+                    }
+                },
+                {
+                    "oracle": "M",
+                    "values": {
+                        "P_1": 1.35507,
+                        "P_2": 3.97403,
+                        "R": 7.56646,
+                        "T": 3.65136,
+                        "adiabatic_hp": 6.21881,
+                        "k": 9.95451,
+                        "w": 2.77981,
+                        "M": 1.1317686897344074e-05
+                    }
+                },
+                {
+                    "oracle": "M",
+                    "values": {
+                        "P_1": 1.3547,
+                        "P_2": 1.60074,
+                        "R": 6.03028,
+                        "T": 4.29468,
+                        "adiabatic_hp": 5.79166,
+                        "k": 6.4801,
+                        "w": 5.30941,
+                        "M": 2.1491814117256355e-06
+                    }
+                },
+                {
+                    "oracle": "M",
+                    "values": {
+                        "P_1": 6.77413,
+                        "P_2": 5.37075,
+                        "R": 3.89863,
+                        "T": 2.54762,
+                        "adiabatic_hp": 8.02144,
+                        "k": 6.27841,
+                        "w": 7.1927,
+                        "M": -9.486066085324098e-07
+                    }
+                },
+                {
+                    "oracle": "M",
+                    "values": {
+                        "P_1": 3.00791,
+                        "P_2": 7.68828,
+                        "R": 4.76039,
+                        "T": 3.0014,
+                        "adiabatic_hp": 7.29771,
+                        "k": 4.22673,
+                        "w": 6.65788,
+                        "M": 9.02984543019531e-06
+                    }
+                },
+                {
+                    "oracle": "P_1",
+                    "values": {
+                        "M": 2.58983,
+                        "P_2": 8.30234,
+                        "R": 7.84269,
+                        "T": 5.26561,
+                        "adiabatic_hp": 5.66481,
+                        "k": 1.97553,
+                        "w": 1.47179,
+                        "P_1": 1.0929118500576854e-10
+                    }
+                },
+                {
+                    "oracle": "P_1",
+                    "values": {
+                        "M": 2.3014,
+                        "P_2": 7.60089,
+                        "R": 9.74405,
+                        "T": 3.03232,
+                        "adiabatic_hp": 6.91733,
+                        "k": 7.30996,
+                        "w": 3.18866,
+                        "P_1": 3.588283332986163e-06
+                    }
+                },
+                {
+                    "oracle": "P_1",
+                    "values": {
+                        "M": 8.94899,
+                        "P_2": 6.4234,
+                        "R": 6.44145,
+                        "T": 5.64708,
+                        "adiabatic_hp": 9.70028,
+                        "k": 5.98013,
+                        "w": 6.23918,
+                        "P_1": 6.971944508254475e-07
+                    }
+                },
+                {
+                    "oracle": "P_1",
+                    "values": {
+                        "M": 4.53837,
+                        "P_2": 5.8076,
+                        "R": 7.68117,
+                        "T": 3.44383,
+                        "adiabatic_hp": 4.11412,
+                        "k": 7.13319,
+                        "w": 9.55029,
+                        "P_1": 6.803490289709919e-06
+                    }
+                },
+                {
+                    "oracle": "P_1",
+                    "values": {
+                        "M": 7.30509,
+                        "P_2": 3.71118,
+                        "R": 7.24343,
+                        "T": 2.44075,
+                        "adiabatic_hp": 2.99259,
+                        "k": 3.14024,
+                        "w": 2.24834,
+                        "P_1": 9.038214541749897e-09
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "SelectingPump_eqn_8_7": {
+            "broken": [
+                "P_1",
+                "P_2"
+            ],
+            "trusted": [
+                "adiabatic_hp",
+                "w"
+            ],
+            "scores": {
+                "P_1": 0,
+                "P_2": 0,
+                "adiabatic_hp": 4,
+                "w": 4
+            },
+            "mismatches": {
+                "P_1": [
+                    {
+                        "inputs": {
+                            "P_2": 3.21598,
+                            "w": 8.76863,
+                            "adiabatic_hp": 0.0703660466724768
+                        },
+                        "output": 1.91112,
+                        "mismatches": [
+                            {
+                                "target": "P_1",
+                                "expected": 1.91112,
+                                "got": null
+                            }
+                        ],
+                        "error": "name 'f' is not defined"
+                    }
+                ],
+                "P_2": [
+                    {
+                        "inputs": {
+                            "P_1": 1.91112,
+                            "w": 8.76863,
+                            "adiabatic_hp": 0.0703660466724768
+                        },
+                        "output": 3.21598,
+                        "mismatches": [
+                            {
+                                "target": "P_2",
+                                "expected": 3.21598,
+                                "got": null
+                            }
+                        ],
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_failures": {
+                "P_1": [
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_2": 4.20826,
+                            "w": 1.92892,
+                            "adiabatic_hp": -0.007209555827536569
+                        },
+                        "expected": 5.52181,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_2": 5.46318,
+                            "w": 8.21234,
+                            "adiabatic_hp": -0.058170887852512426
+                        },
+                        "expected": 9.32005,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_2": 3.21598,
+                            "w": 8.76863,
+                            "adiabatic_hp": 0.0703660466724768
+                        },
+                        "expected": 1.91112,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_2": 7.58826,
+                            "w": 7.23344,
+                            "adiabatic_hp": -0.01957643861704139
+                        },
+                        "expected": 9.21815,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_2": 1.47922,
+                            "w": 1.17054,
+                            "adiabatic_hp": -0.012173489312255904
+                        },
+                        "expected": 3.343,
+                        "error": "name 'f' is not defined"
+                    }
+                ],
+                "P_2": [
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_1": 5.52181,
+                            "w": 1.92892,
+                            "adiabatic_hp": -0.007209555827536569
+                        },
+                        "expected": 4.20826,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_1": 9.32005,
+                            "w": 8.21234,
+                            "adiabatic_hp": -0.058170887852512426
+                        },
+                        "expected": 5.46318,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_1": 1.91112,
+                            "w": 8.76863,
+                            "adiabatic_hp": 0.0703660466724768
+                        },
+                        "expected": 3.21598,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_1": 9.21815,
+                            "w": 7.23344,
+                            "adiabatic_hp": -0.01957643861704139
+                        },
+                        "expected": 7.58826,
+                        "error": "name 'f' is not defined"
+                    },
+                    {
+                        "oracle": "adiabatic_hp",
+                        "inputs": {
+                            "P_1": 3.343,
+                            "w": 1.17054,
+                            "adiabatic_hp": -0.012173489312255904
+                        },
+                        "expected": 1.47922,
+                        "error": "name 'f' is not defined"
+                    }
+                ]
+            },
+            "golden_tuples": [
+                {
+                    "oracle": "adiabatic_hp",
+                    "values": {
+                        "P_1": 5.52181,
+                        "P_2": 4.20826,
+                        "w": 1.92892,
+                        "adiabatic_hp": -0.007209555827536569
+                    }
+                },
+                {
+                    "oracle": "adiabatic_hp",
+                    "values": {
+                        "P_1": 9.32005,
+                        "P_2": 5.46318,
+                        "w": 8.21234,
+                        "adiabatic_hp": -0.058170887852512426
+                    }
+                },
+                {
+                    "oracle": "adiabatic_hp",
+                    "values": {
+                        "P_1": 1.91112,
+                        "P_2": 3.21598,
+                        "w": 8.76863,
+                        "adiabatic_hp": 0.0703660466724768
+                    }
+                },
+                {
+                    "oracle": "adiabatic_hp",
+                    "values": {
+                        "P_1": 9.21815,
+                        "P_2": 7.58826,
+                        "w": 7.23344,
+                        "adiabatic_hp": -0.01957643861704139
+                    }
+                },
+                {
+                    "oracle": "adiabatic_hp",
+                    "values": {
+                        "P_1": 3.343,
+                        "P_2": 1.47922,
+                        "w": 1.17054,
+                        "adiabatic_hp": -0.012173489312255904
+                    }
+                },
+                {
+                    "oracle": "w",
+                    "values": {
+                        "P_1": 7.52067,
+                        "P_2": 7.31632,
+                        "adiabatic_hp": 8.38518,
+                        "w": -21369.76572135868
+                    }
+                },
+                {
+                    "oracle": "w",
+                    "values": {
+                        "P_1": 3.30039,
+                        "P_2": 3.90458,
+                        "adiabatic_hp": 9.78717,
+                        "w": 3974.170602725833
+                    }
+                },
+                {
+                    "oracle": "w",
+                    "values": {
+                        "P_1": 3.12047,
+                        "P_2": 6.53839,
+                        "adiabatic_hp": 5.35379,
+                        "w": 454.4822460898923
+                    }
+                },
+                {
+                    "oracle": "w",
+                    "values": {
+                        "P_1": 9.03395,
+                        "P_2": 1.98902,
+                        "adiabatic_hp": 3.09093,
+                        "w": -175.96040242420733
+                    }
+                },
+                {
+                    "oracle": "w",
+                    "values": {
+                        "P_1": 4.43835,
+                        "P_2": 8.09253,
+                        "adiabatic_hp": 3.43913,
+                        "w": 366.98430753998963
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        },
+        "SelectingPump_eqn_8_8": {
+            "broken": [
+                "P_1",
+                "P_2"
+            ],
+            "trusted": [
+                "adiabatic_power_watts",
+                "f"
+            ],
+            "scores": {
+                "P_1": 4,
+                "P_2": 4,
+                "adiabatic_power_watts": 4,
+                "f": 4
+            },
+            "mismatches": {},
+            "golden_failures": {},
+            "golden_tuples": [
+                {
+                    "oracle": "adiabatic_power_watts",
+                    "values": {
+                        "P_1": 9.80265,
+                        "P_2": 3.60156,
+                        "f": 6.39348,
+                        "adiabatic_power_watts": -0.132671942229186
+                    }
+                },
+                {
+                    "oracle": "adiabatic_power_watts",
+                    "values": {
+                        "P_1": 6.34201,
+                        "P_2": 3.39999,
+                        "f": 3.04114,
+                        "adiabatic_power_watts": -0.04138683099635776
+                    }
+                },
+                {
+                    "oracle": "adiabatic_power_watts",
+                    "values": {
+                        "P_1": 3.65867,
+                        "P_2": 1.67075,
+                        "f": 5.0124,
+                        "adiabatic_power_watts": -0.08388433793559485
+                    }
+                },
+                {
+                    "oracle": "adiabatic_power_watts",
+                    "values": {
+                        "P_1": 6.42373,
+                        "P_2": 6.02699,
+                        "f": 3.23726,
+                        "adiabatic_power_watts": -0.004874137119006123
+                    }
+                },
+                {
+                    "oracle": "adiabatic_power_watts",
+                    "values": {
+                        "P_1": 7.75699,
+                        "P_2": 8.87012,
+                        "f": 9.19664,
+                        "adiabatic_power_watts": 0.029962466828373346
+                    }
+                },
+                {
+                    "oracle": "f",
+                    "values": {
+                        "P_1": 8.97202,
+                        "P_2": 4.78185,
+                        "adiabatic_power_watts": 4.35213,
+                        "f": -317.07787625122756
+                    }
+                },
+                {
+                    "oracle": "f",
+                    "values": {
+                        "P_1": 4.20119,
+                        "P_2": 3.06635,
+                        "adiabatic_power_watts": 3.03789,
+                        "f": -423.3025872539534
+                    }
+                },
+                {
+                    "oracle": "f",
+                    "values": {
+                        "P_1": 4.81762,
+                        "P_2": 3.7798,
+                        "adiabatic_power_watts": 2.28211,
+                        "f": -408.53088634644274
+                    }
+                },
+                {
+                    "oracle": "f",
+                    "values": {
+                        "P_1": 5.24576,
+                        "P_2": 6.61329,
+                        "adiabatic_power_watts": 6.48838,
+                        "f": 1136.6631480707972
+                    }
+                },
+                {
+                    "oracle": "f",
+                    "values": {
+                        "P_1": 1.61694,
+                        "P_2": 2.3479,
+                        "adiabatic_power_watts": 3.87126,
+                        "f": 412.6723406755975
+                    }
+                }
+            ],
+            "swapped_pairs": []
+        }
+    },
+    "failed": [
+        {
+            "file": "AirLeak_eqn_4_10",
+            "error": "No module named 'AirLeak_eqn_4_10.eqn_4_10__t'"
+        },
+        {
+            "file": "VacuumTheory_eqn_1_8",
+            "error": "No module named 'VacuumTheory_eqn_1_8.eqn_1_8__m'"
+        }
+    ]
+}
