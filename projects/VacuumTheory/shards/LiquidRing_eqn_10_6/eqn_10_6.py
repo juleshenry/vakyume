@@ -12,7 +12,6 @@ from .eqn_10_6__S_cap_a import eqn_10_6__S_a
 from .eqn_10_6__V_cap import eqn_10_6__V
 from .eqn_10_6__t import eqn_10_6__t
 
-
 class LiquidRing:
     eqn_10_6__P_1 = eqn_10_6__P_1
     eqn_10_6__P_2 = eqn_10_6__P_2

@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_33__C_paralell(self, arithmetic_sum_C: float, **kwargs):
     # [.pyeqn] 1 / C_paralell = arithmetic_sum_C
     result = []
-    C_paralell = 1 / arithmetic_sum_C
+    C_paralell = 1/arithmetic_sum_C
     result.append(C_paralell)
     return result

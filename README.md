@@ -67,7 +67,7 @@ python3 -m pip install sympy scipy timeout-decorator numpy httpx ollama pymupdf
 python3 vakyume.py build projects/MyProject --pdf textbook.pdf
 ```
 
-### PDF to C++ in Four Commands
+### PDF to C++ in Five Commands
 
 ```bash
 # 1. Scrape equations from a PDF (launches interactive wizard)
@@ -81,7 +81,26 @@ python3 vakyume.py reconstruct projects/MyProject
 
 # 4. Transpile to C++ and compile
 python3 vakyume.py make-cpp projects/MyProject
+
+# 5. Generate an Equation Certification Report
+python3 vakyume.py make-docs projects/MyProject
 ```
+
+---
+
+## The `make-docs` Command
+
+Generates an **Equation Certification Report** in Markdown with LaTeX-rendered
+formulas. The report is written to `docs/EQUATION_CERTIFICATION.md` inside the
+project directory and includes every extracted equation, its variable
+definitions, and verification status.
+
+```bash
+python3 vakyume.py make-docs projects/VacuumTheory
+```
+
+The output is a peer-reviewable document suitable for rendering on GitHub or
+any Markdown viewer with LaTeX support.
 
 ---
 

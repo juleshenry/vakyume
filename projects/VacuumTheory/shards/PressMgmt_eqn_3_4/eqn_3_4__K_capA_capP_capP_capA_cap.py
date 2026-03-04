@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_3_4__KAPPA(self, P: float, V: float, **kwargs):
     # [.pyeqn] P * V = KAPPA
     result = []
-    KAPPA = P * V
+    KAPPA = P*V
     result.append(KAPPA)
     return result

@@ -5,12 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_5_8__alpha_12(
-    self, P_0_1: float, P_0_2: float, gamma_1: float, gamma_2: float, **kwargs
-):
+def eqn_5_8__alpha_12(self, P_0_1: float, P_0_2: float, gamma_1: float, gamma_2: float, **kwargs):
     # [.pyeqn] alpha_12 = gamma_1 * P_0_1 / (gamma_2 * P_0_2)
     result = []
-    alpha_12 = P_0_1 * gamma_1 / (P_0_2 * gamma_2)
+    alpha_12 = P_0_1*gamma_1/(P_0_2*gamma_2)
     result.append(alpha_12)
     return result

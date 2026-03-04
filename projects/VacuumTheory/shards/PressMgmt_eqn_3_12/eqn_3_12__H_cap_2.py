@@ -5,12 +5,11 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_3_12__H_2(self, KAPPA_1: float, P: float, **kwargs):
     # [.pyeqn] P = KAPPA_1 * H_2 ** 2
     result = []
-    H_2 = -sqrt(P / KAPPA_1)
+    H_2 = -sqrt(P/KAPPA_1)
     result.append(H_2)
-    H_2 = sqrt(P / KAPPA_1)
+    H_2 = sqrt(P/KAPPA_1)
     result.append(H_2)
     return result

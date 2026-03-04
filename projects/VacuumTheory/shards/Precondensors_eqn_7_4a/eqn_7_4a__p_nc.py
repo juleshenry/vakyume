@@ -5,7 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_7_4a__p_nc(self, P: float, p_c: float, **kwargs):
     # [.pyeqn] p_nc = P - p_c
     result = []

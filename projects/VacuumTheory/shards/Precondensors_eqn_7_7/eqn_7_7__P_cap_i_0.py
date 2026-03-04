@@ -5,20 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_7_7__P_i_0(
-    self,
-    M: float,
-    P: float,
-    W_air: float,
-    W_i: float,
-    epsilon_i: float,
-    p_c: float,
-    x_i: float,
-    **kwargs,
-):
+def eqn_7_7__P_i_0(self, M: float, P: float, W_air: float, W_i: float, epsilon_i: float, p_c: float, x_i: float, **kwargs):
     # [.pyeqn] W_i = W_air * (M * x_i * epsilon_i * P_i_0) / (29 * (P - p_c))
     result = []
-    P_i_0 = 29 * W_i * (P - p_c) / (M * W_air * epsilon_i * x_i)
+    P_i_0 = 29*W_i*(P - p_c)/(M*W_air*epsilon_i*x_i)
     result.append(P_i_0)
     return result

@@ -11,7 +11,6 @@ from .eqn_7_8__Q_cap_condensor_heat_duty import eqn_7_8__Q_condensor_heat_duty
 from .eqn_7_8__c_p import eqn_7_8__c_p
 from .eqn_7_8__del_T_cap import eqn_7_8__del_T
 
-
 class Precondensors:
     eqn_7_8__L_c = eqn_7_8__L_c
     eqn_7_8__Q_condensor_heat_duty = eqn_7_8__Q_condensor_heat_duty

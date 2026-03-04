@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_18a__R_ll(self, D_eq: float, **kwargs):
     # [.pyeqn] D_eq = 4 * R_ll
     result = []
-    R_ll = D_eq / 4
+    R_ll = D_eq/4
     result.append(R_ll)
     return result

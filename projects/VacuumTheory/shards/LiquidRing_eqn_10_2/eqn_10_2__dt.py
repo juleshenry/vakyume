@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_10_2__dt(self, PS: float, Q_gas: float, V: float, dP: float, **kwargs):
     # [.pyeqn] PS = - V * dP / dt + Q_gas
     result = []
-    dt = -V * dP / (PS - Q_gas)
+    dt = -V*dP/(PS - Q_gas)
     result.append(dt)
     return result

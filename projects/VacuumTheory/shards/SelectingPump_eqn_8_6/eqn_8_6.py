@@ -15,7 +15,6 @@ from .eqn_8_6__adiabatic_hp import eqn_8_6__adiabatic_hp
 from .eqn_8_6__k import eqn_8_6__k
 from .eqn_8_6__w import eqn_8_6__w
 
-
 class SelectingPump:
     eqn_8_6__M = eqn_8_6__M
     eqn_8_6__P_1 = eqn_8_6__P_1
@@ -27,17 +26,7 @@ class SelectingPump:
     eqn_8_6__w = eqn_8_6__w
 
     @kwasak
-    def eqn_8_6(
-        self,
-        M=None,
-        P_1=None,
-        P_2=None,
-        R=None,
-        T=None,
-        adiabatic_hp=None,
-        k=None,
-        w=None,
-    ):
+    def eqn_8_6(self, M=None, P_1=None, P_2=None, R=None, T=None, adiabatic_hp=None, k=None, w=None):
         """
         deg_R:=absolute temperature
         M:=molecular weight

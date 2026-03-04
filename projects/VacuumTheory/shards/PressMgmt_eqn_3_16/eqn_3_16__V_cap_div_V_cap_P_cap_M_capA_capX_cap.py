@@ -5,7 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_3_16__V_div_V_P_MAX(self, **kwargs):
     # [.pyeqn] V_div_V_P_MAX = 200000 / (3.141592653589793 / 4)
     result = []

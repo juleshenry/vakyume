@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_1_3__k(self, T: float, m: float, v: float, **kwargs):
     # [.pyeqn] .5 * m * v**2 = 1.5 * k * T
     result = []
-    k = 0.333333333333333 * m * v**2 / T
+    k = 0.333333333333333*m*v**2/T
     result.append(k)
     return result

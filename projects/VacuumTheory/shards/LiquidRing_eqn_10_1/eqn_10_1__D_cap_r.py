@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_10_1__D_r(self, sig_R: float, w: float, **kwargs):
     # [.pyeqn] sig_R = 0.00436 * D_r * w
     result = []
-    D_r = 229.357798165138 * sig_R / w
+    D_r = 229.357798165138*sig_R/w
     result.append(D_r)
     return result

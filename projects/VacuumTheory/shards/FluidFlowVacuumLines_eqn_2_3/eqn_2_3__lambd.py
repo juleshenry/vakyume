@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_3__lambd(self, D: float, kn: float, **kwargs):
     # [.pyeqn] kn = lambd / D
     result = []
-    lambd = D * kn
+    lambd = D*kn
     result.append(lambd)
     return result

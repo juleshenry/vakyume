@@ -5,40 +5,30 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_10_20__P(self, S_0, S_p, T_e, T_i, p_0, p_c, p_s, **kwargs):
+def eqn_10_20__P(self, S_0: float, S_p: float, T_e: float, T_i: float, p_0: float, p_c: float, p_s: float, **kwargs):
     # [.pyeqn] S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
     def _residual(P):
-        return (
-            S_p
-            * ((P - p_0) * (460 + T_i) * (P - p_c) / (P * (P - p_s) * (460 + T_e)))
-            ** 0.6
-        ) - (S_0)
-
+        return (S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6) - (S_0)
     from scipy.optimize import brentq as _brentq
     import math as _math
-
     def _rf(x):
         v = _residual(x)
         return v.real if isinstance(v, complex) else float(v)
-
-    _sings = sorted(set([0, p_0, p_c, p_s]))
+    _sings = sorted(set([p_0, p_c, p_s]))
     _intervals = []
     if _sings[0] > 1e-12:
         _e0 = min(0.01, _sings[0] * 0.001)
         _intervals.append((1e-12, _sings[0] - _e0))
     for _i in range(len(_sings) - 1):
-        _gap = _sings[_i + 1] - _sings[_i]
+        _gap = _sings[_i+1] - _sings[_i]
         _eg = min(0.01, _gap * 0.001)
-        if _gap > 2 * _eg:
-            _intervals.append((_sings[_i] + _eg, _sings[_i + 1] - _eg))
+        if _gap > 2 * _eg: _intervals.append((_sings[_i] + _eg, _sings[_i+1] - _eg))
     _top = _sings[-1] + min(0.01, max(abs(_sings[-1]) * 0.001, 1e-10))
     for _hi in [_top + 1, _top + 10, _top * 100, _top + 1000, 1e6]:
         _intervals.append((_top, _hi))
     _roots = []
     for _lo, _hi in _intervals:
-        if _lo >= _hi:
-            continue
+        if _lo >= _hi: continue
         _N = 50
         _step = (_hi - _lo) / _N
         for _j in range(_N):

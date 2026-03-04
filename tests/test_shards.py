@@ -104,37 +104,6 @@ def _build_family_class(family_name):
 _FAMILIES = list(_collect_families())
 
 
-# ── Known inconsistent families ─────────────────────────────────────────────
-# These families fail cross-validation due to issues in the equation notes
-# or SymPy producing complex-domain solutions.  Marked xfail so CI stays
-# green while signalling they need attention.
-#
-#   FluidFlowVacuumLines_eqn_2_17  — two distinct equations share the same
-#       equation number in the notes file (laminar flow delta_P in terms of
-#       v vs q); the parser lumps them into one family, but the q and v
-#       variants solve different equations.
-#   FluidFlowVacuumLines_eqn_2_34  — transitional flow conductance with
-#       multiple independent coefficients; SymPy solutions don't round-trip.
-#   LiquidRing_eqn_10_19  — complex roots for random positive inputs.
-#   LiquidRing_eqn_10_20  — complex roots for random positive inputs.
-#   Precondensors_eqn_7_14b  — log-mean temperature difference; SymPy
-#       produces complex solutions for some input ranges.
-#   SelectingPump_eqn_8_6  — fractional exponents produce complex roots.
-KNOWN_INCONSISTENT = {
-    "FluidFlowVacuumLines_eqn_2_17",
-    "FluidFlowVacuumLines_eqn_2_34",
-    "LiquidRing_eqn_10_10",
-    "LiquidRing_eqn_10_19",
-    "LiquidRing_eqn_10_20",
-    "Precondensors_eqn_7_14b",
-    "SelectingPump_eqn_8_1",
-    "SelectingPump_eqn_8_3",
-    "SelectingPump_eqn_8_6",
-    "SelectingPump_eqn_8_7",
-    "SelectingPump_eqn_8_8",
-}
-
-
 @pytest.mark.skipif(
     not os.path.isdir(SHARDS_DIR),
     reason="VacuumTheory project not found (run the pipeline first)",
@@ -142,9 +111,6 @@ KNOWN_INCONSISTENT = {
 @pytest.mark.parametrize("family", _FAMILIES, ids=_FAMILIES)
 def test_family_cross_validation(family):
     """Load all variants for a family and verify cross-consistency."""
-    if family in KNOWN_INCONSISTENT:
-        pytest.xfail(f"{family} is a known-inconsistent family")
-
     klass, base_eqn = _build_family_class(family)
 
     # Verify this family

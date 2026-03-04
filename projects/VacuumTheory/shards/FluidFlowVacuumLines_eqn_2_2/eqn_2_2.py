@@ -10,7 +10,6 @@ from .eqn_2_2__delta import eqn_2_2__delta
 from .eqn_2_2__lambd import eqn_2_2__lambd
 from .eqn_2_2__psi import eqn_2_2__psi
 
-
 class FluidFlowVacuumLines:
     eqn_2_2__delta = eqn_2_2__delta
     eqn_2_2__lambd = eqn_2_2__lambd

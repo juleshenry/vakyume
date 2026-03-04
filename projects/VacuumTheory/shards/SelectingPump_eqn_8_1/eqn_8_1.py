@@ -11,7 +11,6 @@ from .eqn_8_1__N_capS_cap import eqn_8_1__NS
 from .eqn_8_1__S_capC_capO_capN_cap import eqn_8_1__SCON
 from .eqn_8_1__installation_cost import eqn_8_1__installation_cost
 
-
 class SelectingPump:
     eqn_8_1__NC = eqn_8_1__NC
     eqn_8_1__NS = eqn_8_1__NS

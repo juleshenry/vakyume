@@ -6,6 +6,7 @@ from vakyume.cpp_gen import main as run_cpp_gen
 from vakyume.llm import ask_llm
 from vakyume.reconstruct import reconstruct_cli
 from vakyume.pdf_scraper import scrape_pdf
+from vakyume.gen_docs import generate_equation_report
 from vakyume.config import llm_config
 
 
@@ -136,6 +137,12 @@ def cmd_make_cpp(args):
         project_dir=args.project,
         input_file=args.input,
     )
+
+
+def cmd_make_docs(args):
+    """Generate an Equation Certification Report (Markdown with LaTeX)."""
+    report_path = generate_equation_report(args.project)
+    print(f"Documentation generated: {report_path}")
 
 
 def cmd_build(args):
@@ -299,6 +306,16 @@ def main():
         help="Python source file to convert (default: <project>/certified.py)",
     )
     cpp_parser.set_defaults(func=cmd_make_cpp)
+
+    # ── make-docs ────────────────────────────────────────────────────────
+    docs_parser = subparsers.add_parser(
+        "make-docs",
+        help="Generate an Equation Certification Report (Markdown with LaTeX)",
+    )
+    docs_parser.add_argument(
+        "project", help="Project directory (e.g., projects/VacuumTheory)"
+    )
+    docs_parser.set_defaults(func=cmd_make_docs)
 
     # ── build (all-in-one) ───────────────────────────────────────────────
     build_parser = subparsers.add_parser(

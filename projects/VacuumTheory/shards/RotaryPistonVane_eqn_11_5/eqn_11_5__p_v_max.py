@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_11_5__p_v_max(self, P_0_v: float, P_D: float, p_g: float, **kwargs):
     # [.pyeqn] p_v_max = P_0_v * p_g / (P_D - P_0_v)
     result = []
-    p_v_max = -P_0_v * p_g / (P_0_v - P_D)
+    p_v_max = -P_0_v*p_g/(P_0_v - P_D)
     result.append(p_v_max)
     return result

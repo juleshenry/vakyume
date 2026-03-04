@@ -13,7 +13,6 @@ from .eqn_5_2b__x_2 import eqn_5_2b__x_2
 from .eqn_5_2b__y_1 import eqn_5_2b__y_1
 from .eqn_5_2b__y_2 import eqn_5_2b__y_2
 
-
 class ProcessApp1:
     eqn_5_2b__K_1 = eqn_5_2b__K_1
     eqn_5_2b__K_2 = eqn_5_2b__K_2

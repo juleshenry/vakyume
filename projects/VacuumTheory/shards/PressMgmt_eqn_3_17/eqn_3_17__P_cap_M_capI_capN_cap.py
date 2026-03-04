@@ -5,7 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_3_17__P_MIN(self, **kwargs):
     # [.pyeqn] P_MIN = (3.141592653589793 / 4) / (200000)
     result = []

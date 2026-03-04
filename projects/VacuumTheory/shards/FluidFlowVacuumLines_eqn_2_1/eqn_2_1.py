@@ -12,7 +12,6 @@ from .eqn_2_1__mu import eqn_2_1__mu
 from .eqn_2_1__rho import eqn_2_1__rho
 from .eqn_2_1__v import eqn_2_1__v
 
-
 class FluidFlowVacuumLines:
     eqn_2_1__D = eqn_2_1__D
     eqn_2_1__Re = eqn_2_1__Re

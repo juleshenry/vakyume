@@ -5,7 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_1_12__sum_partial_pressures(self, Total_P: float, **kwargs):
     # [.pyeqn] Total_P = sum_partial_pressures
     result = []

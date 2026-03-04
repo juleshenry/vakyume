@@ -5,17 +5,7 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_2_26__P_p(
-    self,
-    D: float,
-    L: float,
-    P_downstream: float,
-    P_upstream: float,
-    mu: float,
-    q: float,
-    **kwargs,
-):
+def eqn_2_26__P_p(self, D: float, L: float, P_downstream: float, P_upstream: float, mu: float, q: float, **kwargs):
     # [.pyeqn] q * P_p = 3.141592653589793 * D ** 4 / (128 * mu * L) * P_p * (P_upstream - P_downstream)
     result = []
     P_p = 0.0

@@ -5,26 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_8_6__w(
-    self,
-    M: float,
-    P_1: float,
-    P_2: float,
-    R: float,
-    T: float,
-    adiabatic_hp: float,
-    k: float,
-    **kwargs,
-):
+def eqn_8_6__w(self, M: float, P_1: float, P_2: float, R: float, T: float, adiabatic_hp: float, k: float, **kwargs):
     # [.pyeqn] adiabatic_hp = (k / (k - 1) * (w * R * T) / (M * 550 * 3600) * ((P_2 / P_1) ** ((k - 1) / k) - 1))
     result = []
-    w = (
-        1980000
-        * M
-        * adiabatic_hp
-        * (k - 1)
-        / (R * T * k * ((P_2 / P_1) ** ((k - 1) / k) - 1))
-    )
+    w = 1980000*M*adiabatic_hp*(k - 1)/(R*T*k*((P_2/P_1)**((k - 1)/k) - 1))
     result.append(w)
     return result

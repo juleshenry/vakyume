@@ -11,7 +11,6 @@ from .eqn_9_4__S_capC_cap import eqn_9_4__SC
 from .eqn_9_4__r import eqn_9_4__r
 from .eqn_9_4__w_s import eqn_9_4__w_s
 
-
 class SteamJetInjectors:
     eqn_9_4__AEL = eqn_9_4__AEL
     eqn_9_4__SC = eqn_9_4__SC

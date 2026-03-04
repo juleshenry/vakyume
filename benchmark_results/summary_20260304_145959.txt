@@ -1,0 +1,7 @@
+Vakyume LLM-raw benchmark (no scaffolds, max_rounds=5)
+Started: Wed Mar  4 14:59:59 CST 2026
+---
+phi3
+  Pipeline:  Solved: 148 | Inconsistent: 0 | Failed: 16
+  Pytest:    147/148 passed (strict cross-validation)
+

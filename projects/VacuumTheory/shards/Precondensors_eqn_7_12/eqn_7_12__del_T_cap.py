@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_7_12__del_T(self, A: float, Q_condensor_heat_duty: float, U: float, **kwargs):
     # [.pyeqn] Q_condensor_heat_duty = U * A * del_T
     result = []
-    del_T = Q_condensor_heat_duty / (A * U)
+    del_T = Q_condensor_heat_duty/(A*U)
     result.append(del_T)
     return result

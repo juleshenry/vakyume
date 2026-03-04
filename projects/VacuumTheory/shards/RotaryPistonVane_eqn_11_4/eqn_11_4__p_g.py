@@ -5,7 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_11_4__p_g(self, p_s: float, p_v: float, **kwargs):
     # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
     result = []

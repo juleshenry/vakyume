@@ -10,7 +10,6 @@ from .eqn_4_7__W_cap import eqn_4_7__W
 from .eqn_4_7__W_cap_T_cap import eqn_4_7__W_T
 from .eqn_4_7__sum_individual_leak_rates import eqn_4_7__sum_individual_leak_rates
 
-
 class AirLeak:
     eqn_4_7__W = eqn_4_7__W
     eqn_4_7__W_T = eqn_4_7__W_T

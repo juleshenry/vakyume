@@ -10,7 +10,6 @@ from .eqn_5_10c__D_cap import eqn_5_10c__D
 from .eqn_5_10c__L_cap_0 import eqn_5_10c__L_0
 from .eqn_5_10c__R_cap import eqn_5_10c__R
 
-
 class ProcessApp1:
     eqn_5_10c__D = eqn_5_10c__D
     eqn_5_10c__L_0 = eqn_5_10c__L_0

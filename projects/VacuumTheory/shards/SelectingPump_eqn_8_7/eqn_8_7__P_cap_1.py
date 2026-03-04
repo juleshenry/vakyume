@@ -5,10 +5,6 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_8_7__P_1(self, P_2, adiabatic_hp, w, **kwargs):
+def eqn_8_7__P_1(self, P_2: float, adiabatic_hp: float, w: float, **kwargs):
     # [.pyeqn] adiabatic_hp = (w / 20) * ((P_2 / P_1) ** 0.286 - 1)
-    def _residual(P_1):
-        return ((w / 20) * ((P_2 / P_1) ** 0.286 - 1)) - (adiabatic_hp)
-
-    return [safe_brentq(_residual)]
+    raise UnsolvedException("Pending LLM/Manual Repair")

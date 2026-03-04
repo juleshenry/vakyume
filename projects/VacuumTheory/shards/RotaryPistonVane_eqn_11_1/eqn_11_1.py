@@ -13,7 +13,6 @@ from .eqn_11_1__V_cap import eqn_11_1__V
 from .eqn_11_1__dP_cap import eqn_11_1__dP
 from .eqn_11_1__dT_cap import eqn_11_1__dT
 
-
 class RotaryPistonVane:
     eqn_11_1__PS = eqn_11_1__PS
     eqn_11_1__Q_0 = eqn_11_1__Q_0
@@ -23,15 +22,7 @@ class RotaryPistonVane:
     eqn_11_1__dT = eqn_11_1__dT
 
     @kwasak
-    def eqn_11_1(
-        self,
-        PS=None,
-        Q_0=None,
-        Q_external_gas_throughput=None,
-        V=None,
-        dP=None,
-        dT=None,
-    ):
+    def eqn_11_1(self, PS=None, Q_0=None, Q_external_gas_throughput=None, V=None, dP=None, dT=None):
         """
         Q_0 := throughput of gas flow due to system outgassing
         """

@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_25__C(self, P_1: float, P_2: float, Q_throughput: float, **kwargs):
     # [.pyeqn] C = Q_throughput / (P_1 - P_2)
     result = []
-    C = Q_throughput / (P_1 - P_2)
+    C = Q_throughput/(P_1 - P_2)
     result.append(C)
     return result

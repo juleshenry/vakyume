@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_32__C_series(self, geometric_sum_C: float, **kwargs):
     # [.pyeqn] 1 / C_series = geometric_sum_C
     result = []
-    C_series = 1 / geometric_sum_C
+    C_series = 1/geometric_sum_C
     result.append(C_series)
     return result

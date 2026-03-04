@@ -5,12 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_10_4__Q_gas(
-    self, SP_1: float, SP_2: float, S_p: float, V: float, t: float, **kwargs
-):
+def eqn_10_4__Q_gas(self, SP_1: float, SP_2: float, S_p: float, V: float, t: float, **kwargs):
     # [.pyeqn] t = V / S_p * log((SP_1 - Q_gas) / (SP_2 - Q_gas))
     result = []
-    Q_gas = -(SP_1 - SP_2 * exp(S_p * t / V)) / (exp(S_p * t / V) - 1)
+    Q_gas = -(SP_1 - SP_2*exp(S_p*t/V))/(exp(S_p*t/V) - 1)
     result.append(Q_gas)
     return result

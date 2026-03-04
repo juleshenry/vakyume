@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_15__f(self, Re: float, **kwargs):
     # [.pyeqn] f = 0.316 / Re ** (0.25)
     result = []
-    f = 0.316 / Re ** (1 / 4)
+    f = 0.316/Re**(1/4)
     result.append(f)
     return result

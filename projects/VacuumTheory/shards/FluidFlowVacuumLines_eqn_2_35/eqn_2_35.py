@@ -10,7 +10,6 @@ from .eqn_2_35__C_cap_L_cap import eqn_2_35__C_L
 from .eqn_2_35__C_cap_T_cap import eqn_2_35__C_T
 from .eqn_2_35__F_cap_p import eqn_2_35__F_p
 
-
 class FluidFlowVacuumLines:
     eqn_2_35__C_L = eqn_2_35__C_L
     eqn_2_35__C_T = eqn_2_35__C_T

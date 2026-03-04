@@ -5,10 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
 def eqn_2_31__C(self, S_p: float, S_pump_speed: float, **kwargs):
     # [.pyeqn] S_pump_speed = (S_p * C) / (S_p + C)
     result = []
-    C = S_p * S_pump_speed / (S_p - S_pump_speed)
+    C = S_p*S_pump_speed/(S_p - S_pump_speed)
     result.append(C)
     return result

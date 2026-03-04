@@ -5,12 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_8_5__theoretical_adiabatic_horsepower(
-    self, Eff: float, actual_brake_horsepower: float, **kwargs
-):
+def eqn_8_5__theoretical_adiabatic_horsepower(self, Eff: float, actual_brake_horsepower: float, **kwargs):
     # [.pyeqn] Eff = theoretical_adiabatic_horsepower / actual_brake_horsepower
     result = []
-    theoretical_adiabatic_horsepower = Eff * actual_brake_horsepower
+    theoretical_adiabatic_horsepower = Eff*actual_brake_horsepower
     result.append(theoretical_adiabatic_horsepower)
     return result

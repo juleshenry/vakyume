@@ -5,20 +5,9 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
-
-def eqn_11_6__S_B(
-    self,
-    P_0_V: float,
-    P_D: float,
-    P_v_0: float,
-    S_D: float,
-    p_b: float,
-    p_g: float,
-    p_v_max: float,
-    **kwargs,
-):
+def eqn_11_6__S_B(self, P_0_V: float, P_D: float, P_v_0: float, S_D: float, p_b: float, p_g: float, p_v_max: float, **kwargs):
     # [.pyeqn] p_v_max = S_B / S_D * P_D * (P_0_V - p_b) / (P_D - P_v_0) + P_v_0 / (P_D - P_v_0) * p_g
     result = []
-    S_B = S_D * (P_D * p_v_max - P_v_0 * p_g - P_v_0 * p_v_max) / (P_D * (P_0_V - p_b))
+    S_B = S_D*(P_D*p_v_max - P_v_0*p_g - P_v_0*p_v_max)/(P_D*(P_0_V - p_b))
     result.append(S_B)
     return result
