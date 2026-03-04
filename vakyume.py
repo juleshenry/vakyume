@@ -180,12 +180,17 @@ def cmd_scrape(args):
     Default behaviour is to launch the interactive wizard which lets the
     user pick a model and chapters.  The wizard is skipped when the caller
     already knows what they want (``--chapters`` or ``--no-wizard``).
+
+    After scraping, a post-scrape validation report is printed so the user
+    can see which equations are well-formed and which need manual fixes
+    before shard generation.
     """
     from vakyume.pdf_scraper import (
         _extract_chapter_map,
         SKIP_CHAPTERS,
         run_wizard,
     )
+    from vakyume.note_validator import validate_notes_dir, print_validation_report
 
     if args.list_chapters:
         chapters = _extract_chapter_map(args.pdf)
@@ -214,6 +219,29 @@ def cmd_scrape(args):
             chapter_filter=args.chapters,
             model=args.model or "llama3:latest",
         )
+
+    # Post-scrape validation report
+    print("\n=== Post-Scrape Validation ===")
+    report = validate_notes_dir(output_dir)
+    print_validation_report(report)
+
+
+def cmd_validate(args):
+    """Validate scraped notes files without generating shards.
+
+    Prints a report of which equations are valid and which have issues,
+    so the user can fix them before running the pipeline.
+    """
+    from vakyume.note_validator import validate_notes_dir, print_validation_report
+
+    notes_dir = os.path.join(args.project, "notes")
+    if not os.path.isdir(notes_dir):
+        print(f"Notes directory not found: {notes_dir}")
+        return
+
+    print(f"Validating notes in {notes_dir}...")
+    report = validate_notes_dir(notes_dir)
+    print_validation_report(report)
 
 
 def main():
@@ -391,6 +419,16 @@ def main():
         help="Suppress progress output",
     )
     scrape_parser.set_defaults(func=cmd_scrape)
+
+    # ── validate (standalone notes validation) ───────────────────────────
+    validate_parser = subparsers.add_parser(
+        "validate",
+        help="Validate scraped notes files without generating shards",
+    )
+    validate_parser.add_argument(
+        "project", help="Project directory (e.g., projects/BuildingModels)"
+    )
+    validate_parser.set_defaults(func=cmd_validate)
 
     # ── Parse & dispatch ─────────────────────────────────────────────────
     args = parser.parse_args()

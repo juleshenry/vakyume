@@ -91,6 +91,11 @@ from .config import (
     OPERATORS,
     SHARD_IMPORT_HEADER,
 )
+from .note_validator import (
+    validate_notes_dir,
+    print_validation_report,
+    ValidationReport,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -259,6 +264,10 @@ class Solver:
 def shard_from_chapters(ctx, overwrite_existing=False):
     """Parse equation notes and generate individual solver shard files.
 
+    Runs post-scrape validation first and only generates shards for
+    equations that pass all checks.  A summary is printed so the user
+    knows which equations were skipped and why.
+
     Parameters
     ----------
     ctx : PipelineContext
@@ -273,8 +282,21 @@ def shard_from_chapters(ctx, overwrite_existing=False):
         print(f"Notes directory not found: {ctx.notes_dir}")
         return
 
+    # ── Post-scrape validation ───────────────────────────────────────────
+    report = validate_notes_dir(ctx.notes_dir)
+    print_validation_report(report)
+
+    # Build a per-file set of valid equation tags for fast lookup
+    valid_tags_by_file: dict[str, set[str]] = {}
+    for fr in report.files:
+        valid_tags_by_file[os.path.basename(fr.path)] = {
+            eq.eqn_tag for eq in fr.equations if eq.valid
+        }
+    # ─────────────────────────────────────────────────────────────────────
+
     chapter_files = sorted(os.listdir(ctx.notes_dir))
     created_count = 0
+    skipped_count = 0
 
     to_process = []
     for chapter_file in chapter_files:
@@ -294,6 +316,8 @@ def shard_from_chapters(ctx, overwrite_existing=False):
         if parts[0].isdigit():
             parts = parts[1:]
         class_name = "".join(p.capitalize() for p in parts)
+
+        file_valid_tags = valid_tags_by_file.get(chapter_file, set())
 
         with open(chapter_path, "r") as f:
             lines = f.readlines()
@@ -318,6 +342,11 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                 and not stripped.startswith("#")
                 and not stripped.startswith('"""')
             ):
+                # Skip equations that failed validation
+                if eqn_number not in file_valid_tags:
+                    skipped_count += 1
+                    continue
+
                 eq_tokens = solver.get_tokens(line)
                 nf = solver.make_normal_form(line)
                 if not nf:
@@ -405,3 +434,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                     sf.write(f"{TAB * 2}return\n")
 
     print(f"Scraped {created_count} new shards.")
+    if skipped_count:
+        print(
+            f"Skipped {skipped_count} invalid equation(s) (see validation report above)."
+        )
