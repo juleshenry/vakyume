@@ -30,10 +30,7 @@ std::vector<double> ProcessApp1_eqn_5_1__y_i(double K_i, double x_i) {
 }
 
 std::vector<double> ProcessApp1_eqn_5_10a__D(double L_0, double V_1) {
-    std::vector<double> result;
-    double D = ((-L_0) + V_1);
-    result.push_back(D);
-    return result;
+    throw std::runtime_error("ProcessApp1_eqn_5_10a__D: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> ProcessApp1_eqn_5_10a__L_0(double D, double V_1) {
@@ -46,10 +43,7 @@ std::vector<double> ProcessApp1_eqn_5_10a__L_0(double D, double V_1) {
 }
 
 std::vector<double> ProcessApp1_eqn_5_10a__V_1(double D, double L_0) {
-    std::vector<double> result;
-    double V_1 = (D + L_0);
-    result.push_back(V_1);
-    return result;
+    throw std::runtime_error("ProcessApp1_eqn_5_10a__V_1: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> ProcessApp1_eqn_5_10b__L_0(double R, double V_1) {
@@ -519,26 +513,15 @@ std::vector<double> ProcessApp1_eqn_5_8__gamma_2(double P_0_1, double P_0_2, dou
 }
 
 std::vector<double> ProcessApp1_eqn_5_9__D(double L_0, double V_1) {
-    std::vector<double> result;
-    double D = ((-L_0) + V_1);
-    result.push_back(D);
-    return result;
+    throw std::runtime_error("ProcessApp1_eqn_5_9__D: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> ProcessApp1_eqn_5_9__L_0(double D, double V_1) {
-    std::vector<double> result;
-    double L_0 = 0.0;
-    result.push_back(L_0);
-    L_0 = ((-D) + V_1);
-    result.push_back(L_0);
-    return result;
+    throw std::runtime_error("ProcessApp1_eqn_5_9__L_0: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> ProcessApp1_eqn_5_9__V_1(double D, double L_0) {
-    std::vector<double> result;
-    double V_1 = (D + L_0);
-    result.push_back(V_1);
-    return result;
+    throw std::runtime_error("ProcessApp1_eqn_5_9__V_1: requires numerical solver (not transpilable)");
 }
 
 #endif // VAKYUME_PROCESSAPP1_HPP

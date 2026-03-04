@@ -34,10 +34,44 @@ class ProcessApp1:
         return
     def eqn_5_10a__D(self, L_0: float, V_1: float, **kwargs):
         # L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
-        result = []
-        D = -L_0 + V_1
-        result.append(D)
-        return result
+        # D appears 2 times — use numerical solver
+        from scipy.optimize import brentq
+        import numpy as np
+
+        def _res(D_val):
+            try:
+                # Force complex evaluation to handle negative bases in fractional powers
+                target_var_complex = complex(D_val, 0)
+                val = (L_0 / target_var_complex) / (
+                    L_0 / target_var_complex + 1
+                ) - L_0 / V_1
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None:
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for D in expanded range")
+        D = brentq(_res, lo, hi)
+        return [D]
     def eqn_5_10a__L_0(self, D: float, V_1: float, **kwargs):
         # L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
         result = []
@@ -46,12 +80,39 @@ class ProcessApp1:
         L_0 = -D + V_1
         result.append(L_0)
         return result
-    def eqn_5_10a__V_1(self, D: float, L_0: float, **kwargs):
-        # L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
-        result = []
-        V_1 = D + L_0
-        result.append(V_1)
-        return result
+    def eqn_5_10a__V_1(self, D, L_0, **kwargs):
+        # Solve for V_1 by rearranging the equation L_0 / V_1 = (L_0 / D) / (L_0 / D + 1)
+
+        def _res(V_1_val):
+            try:
+                target_var_complex = complex(V_1_val, 0)
+                val = L_0 / V_1_val - (L_0 / D) / (L_0 / D + 1)
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None:
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0 and hi is None:
+                        hi = x
+
+        # Solve the equation L_0 / V_1 - (L_0 / D) / (L_0 / D + 1) = 0 using Brent's method
+        result = brentq(_res, lo, hi)
+        return [result]
     @kwasak
     def eqn_5_10b(self, L_0=None, R=None, V_1=None):
         return
@@ -551,22 +612,76 @@ class ProcessApp1:
     def eqn_5_9(self, D=None, L_0=None, V_1=None):
         return
     def eqn_5_9__D(self, L_0: float, V_1: float, **kwargs):
-        # L_0 / V_1 = L_0 / (L_0 + D)
-        result = []
-        D = -L_0 + V_1
-        result.append(D)
-        return result
+        # Solve for D in the equation L_0 / V_1 = L_0 / (L_0 + D) by rearranging the equation
+        def _res(D_val):
+            try:
+                target_var_complex = complex(D_val, 0)
+                val = L_0 / (L_0 + D_val) if hasattr(D_val, "__truediv__") else float("nan")
+                return np.real(val) if not isinstance(val, complex) else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None or hi is None:
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo_val is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0 and hi is None:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for D in expanded range")
+
+        return brentq(_res, lo, hi)
     def eqn_5_9__L_0(self, D: float, V_1: float, **kwargs):
         # L_0 / V_1 = L_0 / (L_0 + D)
-        result = []
-        L_0 = 0
-        result.append(L_0)
-        L_0 = -D + V_1
-        result.append(L_0)
-        return result
+        # L_0 appears 3 times — use numerical solver
+        from scipy.optimize import brentq
+        import numpy as np
+
+        def _res(L_0_val):
+            try:
+                # Force complex evaluation to handle negative bases in fractional powers
+                target_var_complex = complex(L_0_val, 0)
+                val = target_var_complex / (target_var_complex + D) - L_0 / V_1
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None:
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for L_0 in expanded range")
+        L_0 = brentq(_res, lo, hi)
+        return [L_0]
     def eqn_5_9__V_1(self, D: float, L_0: float, **kwargs):
         # L_0 / V_1 = L_0 / (L_0 + D)
-        result = []
-        V_1 = D + L_0
-        result.append(V_1)
-        return result
+        if L_0 == 0:
+            raise ValueError("Division by zero is not allowed")
+        V_1 = L_0 / (1 - D)

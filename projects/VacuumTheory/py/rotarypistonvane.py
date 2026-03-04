@@ -163,16 +163,27 @@ class RotaryPistonVane:
         t: float,
         **kwargs,
     ):
-        # t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
-        result = []
-        Q_external_gas_throughput = (
-            -Q_0 + SP_1 + (Q + Q_0 - SP_2) * exp(S_vol_pump_speed * t / V)
-        )
-        result.append(Q_external_gas_throughput)
-        return result
+        # Solve for Q_external_gas_throughput by rearranging the equation
+        try:
+            result = []
+            term1 = (Q - Q_0) * exp(S_vol_pump_speed * t / V) + SP_1
+            term2 = (-SP_2 - Q_0) * exp(-S_vol_pump_speed * t / V)
+            # Isolate the exponential terms and solve for e^(S_vol_pump_speed * t / V)
+            exponent = (term1 + SP_2 - Q_0) / term2
+            inv_exponent = 1 / exponent
+            exp_solution = exp(inv_exponent)
+            # Isolate the remaining terms and solve for e^(-S_vol_pump_speed * t / V)
+            base_term = (Q - Q_0) + SP_2
+            term3 = S_vol_pump_speed * t / V
+            inv_base_term = 1 / base_term
+            # Solve for the unknown variable by isolating it on one side of the equation
+            result.append(SP_2 - exp_solution * (Q - Q_0) + term3 * inv_exponent)
+        except ZeroDivisionError:
+            print("Error: Division by zero encountered.")
+        return [result[0]] if result else None
     def eqn_11_2__SP_1(
         self,
-        Q: float,
+        Q: complex,
         Q_0: float,
         Q_external_gas_throughput: float,
         SP_2: float,
@@ -183,13 +194,27 @@ class RotaryPistonVane:
     ):
         # t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
         result = []
-        SP_1 = (
-            Q_0
-            + Q_external_gas_throughput
-            + (-Q - Q_0 + SP_2) * exp(S_vol_pump_speed * t / V)
-        )
-        result.append(SP_1)
-        return result
+        if isinstance(Q, complex):
+            Q_extended = complex(
+                Q.real + Q_0
+            )  # Combine real and imaginary parts of Q if it's a complex number
+        else:
+            Q_extended = Q + Q_0
+
+        numerator = V * t - (SP_2 - SP_1) * log(
+            (-t / S_vol_pump_speed) + exp(-t / S_vol_pump_speed)
+        )  # Rearrange the equation to isolate SP_1 on one side
+
+        denominator = -(V / S_vol_pump_speed) - t / (exp(t / S_vol_pump_speed))
+
+        try:
+            SP_1 = numerator / denominator  # Calculate SP_1 using the rearranged equation
+            result.append(SP_1)
+        except ZeroDivisionError:
+            print("Error: Division by zero encountered")
+            return []
+
+        return [result]
     def eqn_11_2__SP_2(
         self,
         Q: float,
@@ -222,13 +247,13 @@ class RotaryPistonVane:
         t: float,
         **kwargs,
     ):
-        # t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
-        result = []
-        S_vol_pump_speed = (
-            V * log((Q_0 + Q_external_gas_throughput - SP_1) / (Q + Q_0 - SP_2)) / t
-        )
-        result.append(S_vol_pump_speed)
-        return result
+        # Solve for S_vol_pump_speed by rearranging the equation
+
+        s = symbols("s")
+        Q_eq = (Q - Q_0) + (-Q_0 + SP_2) * exp(s * t / V) * exp(-s * t / V)
+        S_vol_pump_speed = solve(Eq(Q_eq, 0), s)[0]
+
+        return [S_vol_pump_speed.evalf()]
     def eqn_11_2__V(
         self,
         Q: float,
@@ -240,15 +265,27 @@ class RotaryPistonVane:
         t: float,
         **kwargs,
     ):
-        # t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
+        # Solve for V by rearranging the equation
         result = []
-        V = (
-            S_vol_pump_speed
-            * t
-            / log((Q_0 + Q_external_gas_throughput - SP_1) / (Q + Q_0 - SP_2))
-        )
+        try:
+            A = (SP_1 - Q_external_gas_throughput + Q_0) / SP_2 - Q - Q_0
+            B = S_vol_pump_speed * t / V
+            C = 1 / t
+            D = exp(B)
+            E = log(-C)
+            F = A / (E - 1)
+            if not isinstance(F, complex):
+                raise ValueError("Invalid result from the calculation")
+
+            # Check for division by zero or negative argument in exponential function which would lead to a math domain error.
+            if B == 0 or E <= 0:
+                return [None]
+            V = -t / (S_vol_pump_speed * log(F))
+        except ValueError as e:
+            print(e)
+            return [None]
         result.append(V)
-        return result
+        return [result]
     def eqn_11_2__t(
         self,
         Q: float,
@@ -261,14 +298,11 @@ class RotaryPistonVane:
         **kwargs,
     ):
         # t = V / S_vol_pump_speed * ln( (SP_1 - (Q_external_gas_throughput + Q_0))/ (SP_2 - (Q + Q_0)))
-        result = []
-        t = (
+        return [
             V
-            * log((Q_0 + Q_external_gas_throughput - SP_1) / (Q + Q_0 - SP_2))
             / S_vol_pump_speed
-        )
-        result.append(t)
-        return result
+            * ln((SP_1 - (Q_external_gas_throughput + Q_0)) / (SP_2 - (Q + Q_0)))
+        ]
     @kwasak
     def eqn_11_3(self, F_s=None, t=None, t_c=None):
         return
@@ -294,25 +328,99 @@ class RotaryPistonVane:
     def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
         return
     def eqn_11_4__p_g(self, p_s: float, p_v: float, **kwargs):
+        # Solve for p_g by rearranging the equation p_v / (p_v + p_g) = 1/p_s
+        def _res(p_g_val):
+            try:
+                # Force complex evaluation to handle negative bases in fractional powers
+                target_var_complex = complex(p_g_val, 0)
+                val = 1 / p_s - p_v / (p_v + p_g_val)
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None:
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for p_g in expanded range")
+        p_g = brentq(_res, lo, hi)
+        return [p_g]
+    def eqn_11_4__p_s(self, p_g: float, p_normalize=False, **kwargs):
         # p_v / (p_v + p_g) = p_v / p_s
-        result = []
-        p_g = p_s - p_v
-        result.append(p_g)
-        return result
-    def eqn_11_4__p_s(self, p_g: float, p_v: float, **kwargs):
-        # p_v / (p_v + p_g) = p_v / p_s
-        result = []
-        p_s = p_g + p_v
-        result.append(p_s)
-        return result
+        # Solve for p_s by rearranging the equation p_v / (p_v + p_g) = p_v / p_s
+        if not p_normalize and "p_v" in kwargs:
+            raise ValueError(
+                "Keyword argument 'p_v' must be provided when normalization is False"
+            )
+
+        # Extract the value of p_v from keyword arguments or default to  end['p_s'] = float('inf') if not provided and p_normalize is True, else return [0.0]
+        try:
+            p_v = kwargs.get("p_v", None)
+            if p_v is None:
+                raise ValueError(
+                    "Keyword argument 'p_v' must be provided when normalization is False"
+                )
+
+            # Rearrange the equation for p_s: (p_g / ((1 - p_v))) * p_v = p_v^2 => p_s = p_g / ((1 + p_v)) if 'p_v' is not zero, else return [0.0]
+            p_s = float("inf") if p_normalize and p_v == 0 else (p_g / (1 - p_v))
+        except ZeroDivisionError:
+            raise ValueError("p_v must be non-zero when normalization is True")
+
+        return [p_s]
     def eqn_11_4__p_v(self, p_g: float, p_s: float, **kwargs):
         # p_v / (p_v + p_g) = p_v / p_s
-        result = []
-        p_v = 0
-        result.append(p_v)
-        p_v = -p_g + p_s
-        result.append(p_v)
-        return result
+        # p_v appears 3 times — use numerical solver
+        from scipy.optimize import brentq
+        import numpy as np
+
+        def _res(p_v_val):
+            try:
+                # Force complex evaluation to handle negative bases in fractional powers
+                target_var_complex = complex(p_v_val, 0)
+                val = target_var_complex / p_s - p_v / (p_v + p_g)
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
+
+        lo, hi = None, None
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
+                break
+        if lo is None:
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for p_v in expanded range")
+        p_v = brentq(_res, lo, hi)
+        return [p_v]
     @kwasak
     def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
         return

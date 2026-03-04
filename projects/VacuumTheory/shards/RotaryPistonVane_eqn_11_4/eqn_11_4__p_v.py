@@ -5,7 +5,6 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
-
 def eqn_11_4__p_v(self, p_g: float, p_s: float, **kwargs):
     # [.pyeqn] p_v / (p_v + p_g) = p_v / p_s
     result = []

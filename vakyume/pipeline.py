@@ -100,8 +100,8 @@ from .config import (
     SHARD_IMPORT_HEADER,
     UnsolvedException,
 )
-from .parser import case_safe_name, case_unsafe_name, Solver, shard_from_chapters
-from .repair import attempt_repair_shard
+from .parser import Solver, shard_from_chapters
+from .repair import attempt_repair_shard, _find_shard_file
 from .reconstruct import reconstruct_cli
 from .cpp_gen import main as generate_cpp
 from .utils import get_standalone_method_source, get_method_source_from_class
@@ -174,73 +174,96 @@ class PipelineContext:
 # ---------------------------------------------------------------------------
 #  Verification
 # ---------------------------------------------------------------------------
-def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
-    """Verify all shards in an equation family using cross-verification (golden tuple)."""
+def _load_family_class(ctx: PipelineContext, family_name: str):
+    """Import the family module and return (cls, eqn_number, pyeqn) or raise."""
     family_dir = os.path.join(ctx.shards_dir, family_name)
     if not os.path.exists(family_dir):
-        return {"error": f"Family directory {family_name} not found"}
+        raise FileNotFoundError(f"Family directory {family_name} not found")
 
     class_name = family_name.split("_")[0]
     eqn_num_match = re.search(r"_eqn_(.*)", family_name)
     if not eqn_num_match:
-        return {"error": f"Invalid family name {family_name}"}
+        raise ValueError(f"Invalid family name {family_name}")
     eqn_number = eqn_num_match.group(1)
 
     main_shard_path = os.path.join(family_dir, f"eqn_{eqn_number}.py")
     if not os.path.exists(main_shard_path):
-        return {"error": f"Main shard {main_shard_path} not found"}
+        raise FileNotFoundError(f"Main shard {main_shard_path} not found")
 
     if ctx.shards_dir not in sys.path:
         sys.path.append(ctx.shards_dir)
-
     parent_dir = os.path.dirname(family_dir)
     if parent_dir not in sys.path:
         sys.path.append(parent_dir)
 
     module_name = f"{family_name}.eqn_{eqn_number}"
 
+    # Force reimport to pick up repaired shards
+    for key in list(sys.modules.keys()):
+        if key.startswith(family_name):
+            del sys.modules[key]
+    importlib.invalidate_caches()
+
+    module = importlib.import_module(module_name)
+    cls = getattr(module, class_name, None)
+    if not cls:
+        raise AttributeError(f"Class {class_name} not found in {module_name}")
+
+    pyeqn = None
+    for name, attr in inspect.getmembers(cls):
+        if name.startswith(f"eqn_{eqn_number}__"):
+            try:
+                source = inspect.getsource(attr)
+                match = re.search(r"# \[\.pyeqn\] (.*)", source)
+                if match:
+                    pyeqn = match.group(1).strip()
+                    break
+            except Exception:
+                pass
+
+    return cls, eqn_number, pyeqn
+
+
+def verify_family(ctx: PipelineContext, family_name: str, verbose=False):
+    """Verify all shards in an equation family using golden-tuple cross-validation."""
     try:
-        module = importlib.import_module(module_name)
-        cls = getattr(module, class_name, None)
-        if not cls:
-            return {"error": f"Class {class_name} not found in {module_name}"}
+        cls, eqn_number, pyeqn = _load_family_class(ctx, family_name)
+    except Exception as e:
+        return {"error": str(e)}
 
-        pyeqn = None
-        for name, attr in inspect.getmembers(cls):
-            if name.startswith(f"eqn_{eqn_number}__"):
-                try:
-                    source = inspect.getsource(attr)
-                    match = re.search(r"# \[\.pyeqn\] (.*)", source)
-                    if match:
-                        pyeqn = match.group(1).strip()
-                        break
-                except:
-                    pass
+    subshards_dir = os.path.join(ctx.shards_dir, "harmony_checks")
+    if not os.path.exists(subshards_dir):
+        os.makedirs(subshards_dir)
 
-        subshards_dir = os.path.join(ctx.shards_dir, "harmony_checks")
-        if not os.path.exists(subshards_dir):
-            os.makedirs(subshards_dir)
-
+    try:
         v = Verify(cls, pyeqn=pyeqn, harmony_checks_dir=subshards_dir, verbose=verbose)
-        raw_results = v.verify()
+        raw_results = v.verify_golden()
 
-        # Clean up harmony_checks/ folder after completing a family verification
+        # Clean up harmony_checks/ folder
         if os.path.exists(subshards_dir):
             shutil.rmtree(subshards_dir)
             os.makedirs(subshards_dir)
 
         verification_results = {}
         mismatches = {}
+        golden_data = {}  # per-equation golden-tuple diagnostics
 
         for base_eq, data in raw_results.items():
             scores = data["scores"]
-            mismatches.update(data["mismatches"])
+            mismatches.update(data.get("mismatches", {}))
             verification_results[base_eq] = scores
+            golden_data[base_eq] = {
+                "broken": data.get("broken", []),
+                "trusted": data.get("trusted", []),
+                "golden_tuples": data.get("golden_tuples", []),
+                "failures": data.get("failures", {}),
+            }
 
         return {
             "results": verification_results,
             "mismatches": mismatches,
             "shard_errors": {},
+            "golden_data": golden_data,
         }
     except Exception as e:
         import traceback
@@ -291,16 +314,18 @@ def verify_all_shards(
                 if eqn_num_match:
                     eqn_number = eqn_num_match.group(1)
                     family_dir = os.path.join(ctx.shards_dir, family_name)
-                    variant_files = [
-                        f
-                        for f in os.listdir(family_dir)
-                        if f.endswith(".py") and "__" in f
-                    ]
+                    # Read variant names from the main shard's import lines
+                    # e.g. "from .eqn_7_14b__del_T_1_cap import eqn_7_14b__del_T_1"
+                    main_shard = os.path.join(family_dir, f"eqn_{eqn_number}.py")
                     variant_names = []
-                    for vf in variant_files:
-                        raw = vf.replace(".py", "").split("__")[-1]
-                        raw = case_unsafe_name(raw)
-                        variant_names.append(raw)
+                    if os.path.exists(main_shard):
+                        prefix = f"eqn_{eqn_number}__"
+                        with open(main_shard, "r") as _mf:
+                            for line in _mf:
+                                m = re.search(r"import (eqn_\S+)", line)
+                                if m and m.group(1).startswith(prefix):
+                                    var = m.group(1)[len(prefix) :]
+                                    variant_names.append(var)
                     num_v = len(variant_names)
                     scores = {v: num_v for v in variant_names}
                     all_results[family_name] = {
@@ -337,6 +362,7 @@ def analyze_results(ctx: PipelineContext, all_results):
 
         eqn_results_data = family_res.get("results")
         mismatches_data = family_res.get("mismatches", {})
+        golden_data = family_res.get("golden_data", {})
         all_solved = True
 
         for base_eq, variants_inner in (
@@ -347,45 +373,30 @@ def analyze_results(ctx: PipelineContext, all_results):
             best_score = max(variants_inner.values())
             num_v = len(variants_inner)
 
-            trusted = [
-                v
-                for v, score in variants_inner.items()
-                if score == best_score and score >= num_v
-            ]
-            broken = [v for v, score in variants_inner.items() if score < num_v]
+            # Use golden_data if available for more precise broken/trusted
+            eq_golden = golden_data.get(base_eq, {})
+            if eq_golden and "broken" in eq_golden:
+                broken = list(eq_golden["broken"])
+                trusted = list(eq_golden["trusted"])
+            else:
+                trusted = [
+                    v
+                    for v, score in variants_inner.items()
+                    if score == best_score and score >= num_v
+                ]
+                broken = [v for v, score in variants_inner.items() if score < num_v]
 
-            # Exclude brentq/newton numerical solver shards from "broken":
-            # these shards are inherently limited and may fail verification
-            # with random inputs (wrong root, complex branch, etc.)
+            # Detect placeholder shards that raise UnsolvedException
             eqn_suffix = (
                 family_name.split("_eqn_")[1] if "_eqn_" in family_name else None
             )
-            if eqn_suffix and broken:
-                family_dir = os.path.join(ctx.shards_dir, family_name)
-                numerical_shards = set()
-                for v in broken:
-                    safe_v = case_safe_name(v)
-                    shard_path = os.path.join(
-                        family_dir, f"eqn_{eqn_suffix}__{safe_v}.py"
-                    )
-                    if os.path.exists(shard_path):
-                        with open(shard_path, "r") as _sf:
-                            content = _sf.read()
-                        if "brentq" in content or "newton(" in content:
-                            numerical_shards.add(v)
-                broken = [v for v in broken if v not in numerical_shards]
-
-            # Detect placeholder shards that raise UnsolvedException
             if eqn_suffix:
                 family_dir = os.path.join(ctx.shards_dir, family_name)
                 for v in list(variants_inner.keys()):
                     if v in broken:
                         continue
-                    safe_v = case_safe_name(v)
-                    shard_path = os.path.join(
-                        family_dir, f"eqn_{eqn_suffix}__{safe_v}.py"
-                    )
-                    if os.path.exists(shard_path):
+                    shard_path = _find_shard_file(family_dir, eqn_suffix, v)
+                    if shard_path:
                         with open(shard_path, "r") as _sf:
                             content = _sf.read()
                         if 'raise UnsolvedException("Pending' in content:
@@ -396,6 +407,9 @@ def analyze_results(ctx: PipelineContext, all_results):
 
             if broken:
                 all_solved = False
+                # Include golden-tuple failures for targeted repair
+                golden_failures = eq_golden.get("failures", {})
+                golden_tuples = eq_golden.get("golden_tuples", [])
                 analysis["inconsistent"][family_name] = {
                     "broken": broken,
                     "trusted": trusted,
@@ -405,6 +419,8 @@ def analyze_results(ctx: PipelineContext, all_results):
                         for v in broken
                         if v in mismatches_data
                     },
+                    "golden_failures": golden_failures,
+                    "golden_tuples": golden_tuples,
                 }
                 break
 
@@ -445,12 +461,19 @@ def run_pipeline(
     repair_only=False,
     include_families=None,
 ):
-    """Run the full Vakyume pipeline: shard, verify, repair, certify, reconstruct, and generate C++."""
+    """Run the full Vakyume pipeline: shard, verify, repair, certify, reconstruct, and generate C++.
+
+    Uses round-robin golden-tuple verification:
+      1. Each shard acts as an "oracle" to generate known-correct value sets
+      2. Other shards are tested against these golden tuples
+      3. Broken shards get repaired with concrete expected-vs-got feedback
+      4. Re-verify after each repair to confirm the fix
+    """
     ctx = PipelineContext(project_dir)
 
     if include_families:
         print(f"Targeted repair mode: focus on {', '.join(include_families)}")
-        repair_only = True  # include_families implies we only care about those, effectively a targeted repair
+        repair_only = True
 
     if repair_only and overwrite:
         print(
@@ -522,42 +545,56 @@ def run_pipeline(
         inconsistent = analysis.get("inconsistent", {})
         failed = analysis.get("failed", [])
 
+        num_solved = len(analysis.get("solved", []))
+        num_incon = len(inconsistent)
+        num_failed = len(failed)
+        print(
+            f"  Results: {num_solved} solved, {num_incon} inconsistent, {num_failed} failed"
+        )
+
         if not inconsistent and not failed:
             print("!!! SUCCESS: All shards verified successfully!")
             break
 
-        # Mechanism to reset shards if they fail to converge
-        if round_idx >= 3:
-            print(
-                f"Convergence issues detected. Re-running SymPy scraper to reset broken shards..."
-            )
-            shard_from_chapters(ctx, overwrite_existing=True)
-            # Re-verify immediately after reset to see if deterministic fix worked
-            all_results = verify_all_shards(
-                ctx, verbose=verbose, skip_families=previously_solved
-            )
-            analysis = analyze_results(ctx, all_results)
-            inconsistent = analysis.get("inconsistent", {})
-            failed = analysis.get("failed", [])
-            if not inconsistent and not failed:
-                print("!!! SUCCESS: All shards verified successfully after reset!")
-                break
-
+        # Attempt repair on each inconsistent family
+        any_repaired = False
         for family_name, data in inconsistent.items():
             broken = data.get("broken", [])
             trusted = data.get("trusted", [])
             scores = data.get("scores", {})
             mismatches = data.get("mismatches", {})
+            golden_failures = data.get("golden_failures", {})
+            golden_tuples = data.get("golden_tuples", [])
 
             for b_var in broken:
-                attempt_repair_shard(
+                # Build golden-tuple test cases for the repair prompt
+                golden_test_cases = []
+                if golden_failures and b_var in golden_failures:
+                    for f in golden_failures[b_var][:3]:
+                        tc = {"inputs": f.get("inputs", {})}
+                        if "expected" in f:
+                            tc["expected"] = f["expected"]
+                        if "got" in f:
+                            tc["got"] = f["got"]
+                        if "error" in f:
+                            tc["error"] = f["error"]
+                        golden_test_cases.append(tc)
+
+                result = attempt_repair_shard(
                     ctx,
                     family_name,
                     b_var,
                     trusted,
                     scores,
                     mismatches,
+                    golden_test_cases=golden_test_cases,
                 )
+                if result.get("updated"):
+                    any_repaired = True
+
+        if not any_repaired:
+            print(f"  No repairs were made in round {round_idx} — stopping early.")
+            break
 
     # Reconstruction & C++ generation
     print("\nReconstructing library...")

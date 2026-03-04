@@ -65,17 +65,11 @@ std::vector<double> RotaryPistonVane_eqn_11_2__Q_0(double Q, double Q_external_g
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__Q_external_gas_throughput(double Q, double Q_0, double SP_1, double SP_2, double S_vol_pump_speed, double V, double t) {
-    std::vector<double> result;
-    double Q_external_gas_throughput = (((-Q_0) + SP_1) + (((Q + Q_0) - SP_2) * std::exp(((S_vol_pump_speed * t) / V))));
-    result.push_back(Q_external_gas_throughput);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_2__Q_external_gas_throughput: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__SP_1(double Q, double Q_0, double Q_external_gas_throughput, double SP_2, double S_vol_pump_speed, double V, double t) {
-    std::vector<double> result;
-    double SP_1 = ((Q_0 + Q_external_gas_throughput) + ((((-Q) - Q_0) + SP_2) * std::exp(((S_vol_pump_speed * t) / V))));
-    result.push_back(SP_1);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_2__SP_1: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__SP_2(double Q, double Q_0, double Q_external_gas_throughput, double SP_1, double S_vol_pump_speed, double V, double t) {
@@ -86,24 +80,15 @@ std::vector<double> RotaryPistonVane_eqn_11_2__SP_2(double Q, double Q_0, double
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__S_vol_pump_speed(double Q, double Q_0, double Q_external_gas_throughput, double SP_1, double SP_2, double V, double t) {
-    std::vector<double> result;
-    double S_vol_pump_speed = ((V * std::log((((Q_0 + Q_external_gas_throughput) - SP_1) / ((Q + Q_0) - SP_2)))) / t);
-    result.push_back(S_vol_pump_speed);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_2__S_vol_pump_speed: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__V(double Q, double Q_0, double Q_external_gas_throughput, double SP_1, double SP_2, double S_vol_pump_speed, double t) {
-    std::vector<double> result;
-    double V = ((S_vol_pump_speed * t) / std::log((((Q_0 + Q_external_gas_throughput) - SP_1) / ((Q + Q_0) - SP_2))));
-    result.push_back(V);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_2__V: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_2__t(double Q, double Q_0, double Q_external_gas_throughput, double SP_1, double SP_2, double S_vol_pump_speed, double V) {
-    std::vector<double> result;
-    double t = ((V * std::log((((Q_0 + Q_external_gas_throughput) - SP_1) / ((Q + Q_0) - SP_2)))) / S_vol_pump_speed);
-    result.push_back(t);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_2__t: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_3__F_s(double t, double t_c) {
@@ -128,26 +113,15 @@ std::vector<double> RotaryPistonVane_eqn_11_3__t_c(double F_s, double t) {
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_4__p_g(double p_s, double p_v) {
-    std::vector<double> result;
-    double p_g = (p_s - p_v);
-    result.push_back(p_g);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_g: requires numerical solver (not transpilable)");
 }
 
-std::vector<double> RotaryPistonVane_eqn_11_4__p_s(double p_g, double p_v) {
-    std::vector<double> result;
-    double p_s = (p_g + p_v);
-    result.push_back(p_s);
-    return result;
+std::vector<double> RotaryPistonVane_eqn_11_4__p_s(double p_g, double p_normalize) {
+    throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_s: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_4__p_v(double p_g, double p_s) {
-    std::vector<double> result;
-    double p_v = 0.0;
-    result.push_back(p_v);
-    p_v = ((-p_g) + p_s);
-    result.push_back(p_v);
-    return result;
+    throw std::runtime_error("RotaryPistonVane_eqn_11_4__p_v: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> RotaryPistonVane_eqn_11_5__P_0_v(double P_D, double p_g, double p_v_max) {

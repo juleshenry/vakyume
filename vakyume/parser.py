@@ -149,6 +149,31 @@ def case_unsafe_name(safe: str) -> str:
     return re.sub(r"([A-Z])_cap", r"\1", safe)
 
 
+def _find_existing_shard(family_dir: str, eqn_number: str, token: str) -> str | None:
+    """Check if a shard file already exists for *token*, regardless of naming convention.
+
+    Returns the full path if found, None otherwise.
+    """
+    method_name = f"eqn_{eqn_number}__{token}"
+    # Fast check: raw name first
+    raw_path = os.path.join(family_dir, f"{method_name}.py")
+    if os.path.exists(raw_path):
+        return raw_path
+    # Scan for any file that defines this function
+    try:
+        for fname in os.listdir(family_dir):
+            if not fname.endswith(".py") or "__" not in fname:
+                continue
+            fpath = os.path.join(family_dir, fname)
+            with open(fpath, "r") as fh:
+                for line in fh:
+                    if line.strip().startswith(f"def {method_name}("):
+                        return fpath
+    except OSError:
+        pass
+    return None
+
+
 class Solver:
     """SymPy-based equation solver with tokenizer and normal-form builder."""
 
@@ -289,11 +314,14 @@ def shard_from_chapters(ctx, overwrite_existing=False):
 
                 for token in tokes:
                     method_name = f"eqn_{eqn_number}__{token}"
-                    safe_token = case_safe_name(token)
-                    shard_name = f"eqn_{eqn_number}__{safe_token}.py"
+                    shard_name = f"eqn_{eqn_number}__{token}.py"
                     shard_path = os.path.join(family_dir, shard_name)
-                    if os.path.exists(shard_path) and not overwrite_existing:
+                    # Also check for existing shard under old naming conventions
+                    existing = _find_existing_shard(family_dir, eqn_number, token)
+                    if existing and not overwrite_existing:
                         continue
+                    if existing and overwrite_existing:
+                        shard_path = existing  # overwrite in-place
 
                     created_count += 1
                     shard_content = import_header
@@ -336,8 +364,7 @@ def shard_from_chapters(ctx, overwrite_existing=False):
                         sf.write("from vakyume.kwasak import kwasak\n")
                         for token in tokes:
                             method_name = f"eqn_{eqn_number}__{token}"
-                            safe_token = case_safe_name(token)
-                            file_name_no_ext = f"eqn_{eqn_number}__{safe_token}"
+                            file_name_no_ext = f"eqn_{eqn_number}__{token}"
                             sf.write(f"from .{file_name_no_ext} import {method_name}\n")
                         sf.write(f"\nclass {class_name}:\n")
                         for token in tokes:

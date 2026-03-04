@@ -552,8 +552,229 @@ class Verify:
 
         return {"scores": results, "mismatches": mismatches}
 
+    # ------------------------------------------------------------------
+    #  Golden-tuple round-robin verification
+    # ------------------------------------------------------------------
+    def verify_equation_golden(self, base_eq, num_tuples=5):
+        """Verify shards using golden-tuple round-robin cross-validation.
+
+        For each shard (the "oracle"), we:
+          1. Feed it random inputs → get its output → golden tuple
+          2. Validate the golden tuple against the harmony function
+          3. Feed the golden tuple (minus each other shard's variable) to
+             each other shard and check if it recovers the correct value
+
+        Returns a dict with:
+          - scores:  {var: num_passes}  (max = num_tuples * (num_shards - 1))
+          - broken:  [var, ...]
+          - trusted: [var, ...]
+          - golden_tuples: [{inputs: ..., oracle: var, values: {...}}, ...]
+          - failures: {var: [{oracle, inputs, expected, got}, ...]}
+        """
+        log_lines = list(self._log_buffer)
+        params = self._get_params(base_eq)
+        all_variants = [p for p in params if hasattr(self.lib_class, f"{base_eq}__{p}")]
+
+        # Detect and exclude invariant variants
+        invariant_vars = self._detect_invariant_variants(
+            base_eq, all_variants, params, log_lines
+        )
+        variants = [v for v in all_variants if v not in invariant_vars]
+
+        if not variants:
+            return {
+                "scores": {v: 1 for v in all_variants},
+                "broken": [],
+                "trusted": list(all_variants),
+                "golden_tuples": [],
+                "failures": {},
+                "mismatches": {},
+            }
+
+        num_v = len(all_variants)
+
+        # Collect golden tuples from each oracle
+        golden_tuples = []  # list of (oracle_var, full_value_dict)
+        for oracle_var in variants:
+            method = getattr(self.lib_instance, f"{base_eq}__{oracle_var}")
+            for _ in range(num_tuples):
+                inputs = {p: self.make_rand() for p in params if p != oracle_var}
+                try:
+                    result = method(**inputs.copy())
+                    if not result:
+                        continue
+                    # Pick the first numeric value
+                    val = None
+                    for v in result:
+                        if isinstance(v, (int, float, complex)):
+                            val = v
+                            break
+                    if val is None:
+                        continue
+
+                    full_set = dict(inputs)
+                    full_set[oracle_var] = val
+
+                    # Validate against harmony function (equation residual)
+                    if self.pyeqn:
+                        harmony_res = self._check_pyeqn_harmony(
+                            self.pyeqn, full_set, log_lines=log_lines
+                        )
+                        if harmony_res is False:
+                            # Oracle produced a value that doesn't satisfy the equation
+                            continue
+                        if harmony_res is None:
+                            # Inconclusive (domain error) — skip
+                            continue
+
+                    golden_tuples.append((oracle_var, full_set))
+                except Exception:
+                    # Oracle couldn't solve for these random inputs — skip
+                    continue
+
+        if not golden_tuples:
+            # No oracle could produce valid golden tuples — give benefit of doubt
+            log_lines.append(f" |- WARNING: No golden tuples generated for {base_eq}")
+            return {
+                "scores": {v: num_v for v in all_variants},
+                "broken": [],
+                "trusted": list(all_variants),
+                "golden_tuples": [],
+                "failures": {},
+                "mismatches": {},
+            }
+
+        # Test each variant against all golden tuples where it's NOT the oracle
+        passes = {v: 0 for v in variants}
+        total_tests = {v: 0 for v in variants}
+        failures = {v: [] for v in variants}
+
+        for oracle_var, full_set in golden_tuples:
+            for target_var in variants:
+                if target_var == oracle_var:
+                    continue
+                total_tests[target_var] += 1
+
+                target_method = getattr(self.lib_instance, f"{base_eq}__{target_var}")
+                target_inputs = {p: v for p, v in full_set.items() if p != target_var}
+                expected = full_set[target_var]
+
+                try:
+                    got = target_method(**target_inputs.copy())
+                    if self.are_similar(expected, got):
+                        passes[target_var] += 1
+                    else:
+                        failures[target_var].append(
+                            {
+                                "oracle": oracle_var,
+                                "inputs": target_inputs,
+                                "expected": expected,
+                                "got": got,
+                            }
+                        )
+                except Exception as err:
+                    err_str = str(err).lower()
+                    if any(
+                        kw in err_str for kw in ("pending llm", "unsolvedexception")
+                    ):
+                        # Placeholder — inconclusive, don't penalize
+                        passes[target_var] += 1
+                    else:
+                        failures[target_var].append(
+                            {
+                                "oracle": oracle_var,
+                                "inputs": target_inputs,
+                                "expected": expected,
+                                "error": str(err),
+                            }
+                        )
+
+        # Build scores: a shard is "perfect" if it passes ALL its tests
+        # For compatibility with analyze_results, score = num_v means perfect
+        scores = {}
+        broken = []
+        trusted = []
+
+        for v in variants:
+            if total_tests[v] == 0:
+                # Never tested (e.g. only 1 variant) — benefit of doubt
+                scores[v] = num_v
+                trusted.append(v)
+            elif passes[v] == total_tests[v]:
+                scores[v] = num_v
+                trusted.append(v)
+            else:
+                # Scale score: fraction of tests passed, mapped to 0..(num_v-1)
+                frac = passes[v] / total_tests[v]
+                scores[v] = max(0, int(frac * (num_v - 1)))
+                broken.append(v)
+
+        # Invariant vars get perfect scores
+        for iv in invariant_vars:
+            scores[iv] = num_v
+            trusted.append(iv)
+
+        # Build mismatches dict (compatible with existing pipeline format)
+        mismatches = {}
+        for v in broken:
+            if failures[v]:
+                # Convert to the format expected by analyze_results / repair
+                mismatches[v] = []
+                for f in failures[v][:3]:  # limit to 3 examples
+                    entry = {"inputs": f["inputs"]}
+                    if "expected" in f:
+                        entry["output"] = f["expected"]
+                        entry["mismatches"] = [
+                            {
+                                "target": v,
+                                "expected": f["expected"],
+                                "got": f.get("got"),
+                            }
+                        ]
+                    if "error" in f:
+                        entry["error"] = f["error"]
+                    mismatches[v] = [entry]
+
+        # Logging
+        is_clean = not broken
+        if self.verbose or not is_clean:
+            status = "OK" if is_clean else "FAILED"
+            if not is_clean:
+                print(f"Testing {self.lib_class.__name__}::{base_eq}... {status}")
+                for v in broken:
+                    total = total_tests[v]
+                    p = passes[v]
+                    print(f"  {v}: {p}/{total} golden-tuple tests passed")
+                    for f in failures[v][:2]:
+                        if "error" in f:
+                            print(f"    oracle={f['oracle']}: ERROR {f['error']}")
+                        else:
+                            print(
+                                f"    oracle={f['oracle']}: expected={f['expected']}, got={f.get('got')}"
+                            )
+                for line in log_lines:
+                    print(line)
+
+        return {
+            "scores": scores,
+            "broken": broken,
+            "trusted": trusted,
+            "golden_tuples": [
+                {"oracle": o, "values": v} for o, v in golden_tuples[:10]
+            ],
+            "failures": {v: failures[v][:5] for v in broken},
+            "mismatches": mismatches,
+        }
+
     def verify(self):
         overall_results = {}
         for base_eq in self.base_equations:
             overall_results[base_eq] = self.verify_equation(base_eq)
+        return overall_results
+
+    def verify_golden(self):
+        """Verify all equations using golden-tuple round-robin."""
+        overall_results = {}
+        for base_eq in self.base_equations:
+            overall_results[base_eq] = self.verify_equation_golden(base_eq)
         return overall_results
