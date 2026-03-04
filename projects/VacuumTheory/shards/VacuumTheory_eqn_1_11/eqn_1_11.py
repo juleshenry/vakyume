@@ -22,10 +22,4 @@ class VacuumTheory:
 
     @kwasak
     def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
-        """
-        W := lb/hr flow
-        M := molecular weight
-        P := Torr
-        T := R degrees temp
-        """
         return

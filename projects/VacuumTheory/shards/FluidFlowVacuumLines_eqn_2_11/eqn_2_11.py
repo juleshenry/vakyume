@@ -24,11 +24,4 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
-        """
-        f:= Moody friction
-        L:=length_pipe, ft
-        v:= velocity, ft/s
-        D:= inside diameter, ft
-        g_c:= dimensional constant, 32.2 lb * ft / lb * s
-        """
         return

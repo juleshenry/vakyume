@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_8_5__E_capff import eqn_8_5__Eff
+from .eqn_8_5__Eff_cap import eqn_8_5__Eff
 from .eqn_8_5__actual_brake_horsepower import eqn_8_5__actual_brake_horsepower
 from .eqn_8_5__theoretical_adiabatic_horsepower import (
     eqn_8_5__theoretical_adiabatic_horsepower,
@@ -27,7 +27,4 @@ class SelectingPump:
         actual_brake_horsepower=None,
         theoretical_adiabatic_horsepower=None,
     ):
-        """
-        Eff:= thermal efficiency
-        """
         return

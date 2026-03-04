@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_5_17__H_cap_2_1 import eqn_5_17__H_2_1
-from .eqn_5_17__H_cap_2_3 import eqn_5_17__H_2_3
-from .eqn_5_17__H_cap_2_mi import eqn_5_17__H_2_mi
+from .eqn_5_17__H_2_1_cap import eqn_5_17__H_2_1
+from .eqn_5_17__H_2_3_cap import eqn_5_17__H_2_3
+from .eqn_5_17__H_2_mi_cap import eqn_5_17__H_2_mi
 from .eqn_5_17__x_1 import eqn_5_17__x_1
 from .eqn_5_17__x_3 import eqn_5_17__x_3
 

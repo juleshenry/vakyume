@@ -281,40 +281,82 @@ std::vector<double> FluidFlowVacuumLines_eqn_2_16__f(double Re) {
     return result;
 }
 
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__L(double d, double delta_P, double mu, double q) {
+std::vector<double> FluidFlowVacuumLines_eqn_2_17a__L(double d, double delta_P, double mu, double v) {
     std::vector<double> result;
-    double L = ((delta_P * std::pow(d, 4.0)) / ((0.105 * mu) * q));
-    return {L};
+    double L = (((28.9855072463768 * std::pow(d, 2.0)) * delta_P) / (mu * v));
+    result.push_back(L);
+    return result;
 }
 
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__d(double L, double delta_P, double mu, double q) {
+std::vector<double> FluidFlowVacuumLines_eqn_2_17a__d(double L, double delta_P, double mu, double v) {
     std::vector<double> result;
-    double d = std::pow((delta_P / ((((0.105 * mu) * L) * q) / 1.0)), (1.0 / 4.0));
-    return {d};
+    double d = ((-0.185741756210067) * std::sqrt((((L * mu) * v) / delta_P)));
+    result.push_back(d);
+    d = (0.185741756210067 * std::sqrt((((L * mu) * v) / delta_P)));
+    result.push_back(d);
+    return result;
 }
 
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__delta_P(double L, double d, double mu, double q) {
+std::vector<double> FluidFlowVacuumLines_eqn_2_17a__delta_P(double L, double d, double mu, double v) {
     std::vector<double> result;
-    return {((((0.105 * mu) * L) * q) / std::pow(d, 4.0))};
+    double delta_P = ((((0.0345 * L) * mu) * v) / std::pow(d, 2.0));
+    result.push_back(delta_P);
+    return result;
 }
 
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__mu(double L, double d, double delta_P, double q) {
+std::vector<double> FluidFlowVacuumLines_eqn_2_17a__mu(double L, double d, double delta_P, double v) {
     std::vector<double> result;
-    double mu = ((delta_P * std::pow(d, 4.0)) / ((0.105 * L) * q));
-    return {mu};
+    double mu = (((28.9855072463768 * std::pow(d, 2.0)) * delta_P) / (L * v));
+    result.push_back(mu);
+    return result;
 }
 
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__q(double L, double d, double delta_P, double mu) {
+std::vector<double> FluidFlowVacuumLines_eqn_2_17a__v(double L, double d, double delta_P, double mu) {
+    std::vector<double> result;
+    double v = (((28.9855072463768 * std::pow(d, 2.0)) * delta_P) / (L * mu));
+    result.push_back(v);
+    return result;
+}
+
+std::vector<double> FluidFlowVacuumLines_eqn_2_17b__L(double d, double delta_P, double mu, double q) {
+    std::vector<double> result;
+    double L = (((9.52380952380952 * std::pow(d, 4.0)) * delta_P) / (mu * q));
+    result.push_back(L);
+    return result;
+}
+
+std::vector<std::complex<double>> FluidFlowVacuumLines_eqn_2_17b__d(double L, double delta_P, double mu, double q) {
+    std::vector<std::complex<double>> result;
+    std::complex<double> d = (((-0.569242509762222) * std::complex<double>(0.0, 1.0)) * std::pow((((L * mu) * q) / delta_P), (1.0 / 4.0)));
+    result.push_back(d);
+    d = ((0.569242509762222 * std::complex<double>(0.0, 1.0)) * std::pow((((L * mu) * q) / delta_P), (1.0 / 4.0)));
+    result.push_back(d);
+    d = ((-0.569242509762222) * std::pow((((L * mu) * q) / delta_P), (1.0 / 4.0)));
+    result.push_back(d);
+    d = (0.569242509762222 * std::pow((((L * mu) * q) / delta_P), (1.0 / 4.0)));
+    result.push_back(d);
+    return result;
+}
+
+std::vector<double> FluidFlowVacuumLines_eqn_2_17b__delta_P(double L, double d, double mu, double q) {
+    std::vector<double> result;
+    double delta_P = ((((0.105 * L) * mu) * q) / std::pow(d, 4.0));
+    result.push_back(delta_P);
+    return result;
+}
+
+std::vector<double> FluidFlowVacuumLines_eqn_2_17b__mu(double L, double d, double delta_P, double q) {
+    std::vector<double> result;
+    double mu = (((9.52380952380952 * std::pow(d, 4.0)) * delta_P) / (L * q));
+    result.push_back(mu);
+    return result;
+}
+
+std::vector<double> FluidFlowVacuumLines_eqn_2_17b__q(double L, double d, double delta_P, double mu) {
     std::vector<double> result;
     double q = (((9.52380952380952 * std::pow(d, 4.0)) * delta_P) / (L * mu));
     result.push_back(q);
     return result;
-}
-
-std::vector<double> FluidFlowVacuumLines_eqn_2_17__v(double L, double d, double delta_P, double mu) {
-    std::vector<double> result;
-    double v = ((delta_P * std::pow(d, 2.0)) / ((0.08246680675 * mu) * L));
-    return {v};
 }
 
 std::vector<double> FluidFlowVacuumLines_eqn_2_18a__D_eq(double R_ll) {

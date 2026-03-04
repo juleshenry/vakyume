@@ -8,7 +8,7 @@ from vakyume.config import UnsolvedException
 from vakyume.kwasak import kwasak
 from .eqn_2_37__A_cap import eqn_2_37__A
 from .eqn_2_37__C_cap import eqn_2_37__C
-from .eqn_2_37__F_cap_t import eqn_2_37__F_t
+from .eqn_2_37__F_t_cap import eqn_2_37__F_t
 from .eqn_2_37__M_cap import eqn_2_37__M
 from .eqn_2_37__T_cap import eqn_2_37__T
 
@@ -22,7 +22,4 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_37(self, A=None, C=None, F_t=None, M=None, T=None):
-        """
-        F_t:= 1, for an aperture
-        """
         return

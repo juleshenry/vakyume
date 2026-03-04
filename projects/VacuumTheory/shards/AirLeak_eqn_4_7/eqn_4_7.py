@@ -7,7 +7,7 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_4_7__W_cap import eqn_4_7__W
-from .eqn_4_7__W_cap_T_cap import eqn_4_7__W_T
+from .eqn_4_7__W_T_cap import eqn_4_7__W_T
 from .eqn_4_7__sum_individual_leak_rates import eqn_4_7__sum_individual_leak_rates
 
 

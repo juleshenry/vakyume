@@ -498,6 +498,62 @@ def _scaffold_bare_power(eq, target_var, lhs, rhs, header, pyeqn, total, **_kw):
     return "\n".join(lines)
 
 
+def _scaffold_outer_multiplicative_factor(
+    eq, target_var, lhs, rhs, header, pyeqn, total, **_kw
+):
+    """Branch 5b: target is a simple outer multiplicative coefficient of a power expr.
+
+    Matches forms like:
+        LHS = target * (complex_expr) ** exp
+        LHS = target * C * (complex_expr) ** exp
+
+    Solution: target = LHS / (other_factors * (complex_expr) ** exp)
+    """
+    if total != 1:
+        return None
+
+    # Target must NOT be inside the parenthesized base of the power
+    exp_match = re.search(r"\*\*\s*([\d.]+)", rhs)
+    if not exp_match:
+        return None
+    exp_val = exp_match.group(1)
+
+    # Find the (...)** fragment in the rhs
+    inner_expr = _extract_inner_expr(rhs, exp_val)
+    if not inner_expr:
+        return None
+
+    # Target must NOT appear inside the inner expression (it's outside the power)
+    pattern = re.compile(r"\b" + re.escape(target_var) + r"\b")
+    if pattern.search(inner_expr):
+        return None
+
+    # Target must appear in rhs but outside the power fragment
+    if not pattern.search(rhs):
+        return None
+
+    # Build the power fragment string for removal
+    pow_fragment = f"({inner_expr})**{exp_val}"
+    # Try variations of spacing
+    pow_fragment_spaced = f"({inner_expr}) ** {exp_val}"
+
+    # Get everything on the RHS except the target variable
+    remaining = _clean_remaining(rhs, target_var)
+    if not remaining:
+        return None
+
+    # The answer is simply LHS / remaining
+    answer = f"({lhs}) / ({remaining})"
+
+    lines = [header]
+    lines.append(f"    # [.pyeqn] {pyeqn}")
+    lines.append(f"    # Solve for {target_var}:")
+    lines.append(f"    # Step 1: {target_var} = {lhs} / ({remaining})")
+    lines.append(f"    {target_var} = {answer}")
+    lines.append(f"    return [{target_var}]")
+    return "\n".join(lines)
+
+
 def _scaffold_frac_exp_multi_diff(
     eq, target_var, lhs, rhs, header, pyeqn, total, **_kw
 ):
@@ -804,6 +860,7 @@ _SCAFFOLD_HANDLERS = [
     _scaffold_ratio_power_target_in_denominator,  # (A / target) ** n
     _scaffold_ratio_power_solve_numerator,  # (target / B) ** n re-match
     _scaffold_bare_power,  # target ** n
+    _scaffold_outer_multiplicative_factor,  # target * (expr)**n -> divide
     _scaffold_frac_exp_multi_diff,  # fractional exp, 2+ diffs
     _scaffold_frac_exp_single_occurrence,  # fractional exp, 1 occurrence
 ]

@@ -10,11 +10,6 @@ import numpy as np
 class ProcessApp1:
     @kwasak
     def eqn_5_1(self, K_i=None, x_i=None, y_i=None):
-        """
-        K_i := volatility
-        y_i := component concentration, vapor
-        x_i := component concentration, liquid
-        """
         return
     def eqn_5_1__K_i(self, x_i: float, y_i: float, **kwargs):
         # K_i = y_i / x_i
@@ -380,11 +375,6 @@ class ProcessApp1:
         return result
     @kwasak
     def eqn_5_3(self, P_0_i=None, p_i=None, x_i=None):
-        """
-        p_i := component partial pressure
-        x_i := liquid component mole fraction
-        P_0_i := pure component vapor pressure at equilibrium temperature
-        """
         return
     def eqn_5_3__P_0_i(self, p_i: float, x_i: float, **kwargs):
         # p_i = x_i * P_0_i

@@ -6,9 +6,9 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_3_1__A_capbs_P_capressure import eqn_3_1__Abs_Pressure
-from .eqn_3_1__B_caparometricP_capressure import eqn_3_1__BarometricPressure
-from .eqn_3_1__V_capacuum import eqn_3_1__Vacuum
+from .eqn_3_1__Abs_Pressure_cap import eqn_3_1__Abs_Pressure
+from .eqn_3_1__BarometricPressure_cap import eqn_3_1__BarometricPressure
+from .eqn_3_1__Vacuum_cap import eqn_3_1__Vacuum
 
 
 class PressMgmt:

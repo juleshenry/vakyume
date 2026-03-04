@@ -50,9 +50,7 @@ std::vector<double> SelectingPump_eqn_8_2__installed_costs(double hp) {
 }
 
 std::vector<double> SelectingPump_eqn_8_3__hp(double installed_costs) {
-    std::vector<double> result;
-    double hp = (10.0 * std::pow((installed_costs / 38000.0), (1.0 / 0.45)));
-    return {hp};
+    throw std::runtime_error("SelectingPump_eqn_8_3__hp: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> SelectingPump_eqn_8_3__installed_costs(double hp) {

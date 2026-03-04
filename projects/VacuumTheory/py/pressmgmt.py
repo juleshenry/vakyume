@@ -60,9 +60,6 @@ class PressMgmt:
         return result
     @kwasak
     def eqn_3_12(self, H_2=None, KAPPA_1=None, P=None):
-        """
-        KAPPA := A_C / V, THE `GAUGE CONSTANT`
-        """
         return
     def eqn_3_12__H_2(self, KAPPA_1: float, P: float, **kwargs):
         # P = KAPPA_1 * H_2 ** 2
@@ -113,9 +110,6 @@ class PressMgmt:
         return result
     @kwasak
     def eqn_3_15(self, V_PMIN=None):
-        """
-        V_PMIN := `PRACTICAL MIN, 1982`
-        """
         return
     def eqn_3_15__V_PMIN(self, **kwargs):
         # V_PMIN = 3.141592653589793 / 4

@@ -6,7 +6,7 @@ import numpy as np
 from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
-from .eqn_2_15__R_cape import eqn_2_15__Re
+from .eqn_2_15__Re_cap import eqn_2_15__Re
 from .eqn_2_15__f import eqn_2_15__f
 
 

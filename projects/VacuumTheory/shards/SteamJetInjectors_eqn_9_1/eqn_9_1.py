@@ -20,10 +20,4 @@ class SteamJetInjectors:
 
     @kwasak
     def eqn_9_1(self, A=None, rho_s=None, v=None, w_s=None):
-        """
-        w_s := motive steam flow rate, lb/hr
-        v:= velocity
-        A:= cross sectional area, ft^2
-        rhos_s := motive steam density, lb/ft^3
-        """
         return

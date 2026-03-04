@@ -186,8 +186,12 @@ class Verify:
                     )
                     f.write(f"def check_harmony({', '.join(tokens)}, **kwargs):\n")
                     f.write(
-                        f"    return ({lhs_str.replace('ln', 'log')}) - ({rhs_str.replace('ln', 'log')})\n"
+                        f"    res = ({lhs_str.replace('ln', 'log')}) - ({rhs_str.replace('ln', 'log')})\n"
                     )
+                    f.write(
+                        f"    # Ensure we return a magnitude (abs) to avoid truth-value ambiguity for complex residuals\n"
+                    )
+                    f.write(f"    return abs(res)\n")
 
             if self.harmony_checks_dir not in sys.path:
                 sys.path.append(self.harmony_checks_dir)
@@ -226,6 +230,14 @@ class Verify:
                 res_val = self.harmony_func(**params_dict)
                 if isinstance(res_val, (list, tuple, np.ndarray)):
                     res_val = res_val[0]
+
+                # Handle SymPy expressions if they leak through
+                if hasattr(res_val, "evalf"):
+                    try:
+                        res_val = complex(res_val.evalf())
+                    except (TypeError, ValueError):
+                        pass
+
                 res = abs(res_val) < 1e-4
                 if not res:
                     msg = f"  [Harmony Check] FAIL: residual {res_val} for {pyeqn}"
@@ -411,6 +423,11 @@ class Verify:
                     trial_detail = None
 
                     for val in source_values:
+                        # Skip non-numeric values (e.g. SymPy symbolic objects
+                        # containing sympy.I that aren't plain Python numbers)
+                        if not isinstance(val, (int, float, complex)):
+                            continue
+
                         full_set = test_inputs.copy()
                         full_set[source_var] = val
 

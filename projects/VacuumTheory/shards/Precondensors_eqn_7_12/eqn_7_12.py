@@ -7,7 +7,7 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_7_12__A_cap import eqn_7_12__A
-from .eqn_7_12__Q_cap_condensor_heat_duty import eqn_7_12__Q_condensor_heat_duty
+from .eqn_7_12__Q_condensor_heat_duty_cap import eqn_7_12__Q_condensor_heat_duty
 from .eqn_7_12__U_cap import eqn_7_12__U
 from .eqn_7_12__del_T_cap import eqn_7_12__del_T
 

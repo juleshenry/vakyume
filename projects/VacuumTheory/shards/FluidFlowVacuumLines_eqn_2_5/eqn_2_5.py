@@ -22,11 +22,4 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
-        """
-        q:=volumetric flow cm^3/s
-        D:= pipe diam.,cm
-        delta_P := upstream-downstream pressure, dyne/cm^3
-        L:=length, cm
-        mu:= coef. of visco., poise
-        """
         return

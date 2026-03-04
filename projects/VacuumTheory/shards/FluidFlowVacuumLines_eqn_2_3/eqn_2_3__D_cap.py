@@ -5,9 +5,10 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_2_3__D(self, kn: float, lambd: float, **kwargs):
     # [.pyeqn] kn = lambd / D
     result = []
-    D = lambd/kn
+    D = lambd / kn
     result.append(D)
     return result

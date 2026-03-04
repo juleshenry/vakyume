@@ -161,10 +161,7 @@ class Precondensors:
         **kwargs,
     ):
         # A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
-        result = []
-        A = Q_condensor_heat_duty / (U * (del_T_1 - del_T_2) * log(del_T_1 - del_T_2))
-        result.append(A)
-        return result
+        return [(Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)]
     def eqn_7_14b__Q_condensor_heat_duty(
         self, A: float, U: float, del_T_1: float, del_T_2: float, **kwargs
     ):

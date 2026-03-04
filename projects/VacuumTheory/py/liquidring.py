@@ -10,11 +10,6 @@ import numpy as np
 class LiquidRing:
     @kwasak
     def eqn_10_1(self, D_r=None, sig_R=None, w=None):
-        """
-        sig_R := rotor tip speed ft/s
-        D_r := rotor Diameter
-        w := rotational speed
-        """
         return
     def eqn_10_1__D_r(self, sig_R: float, w: float, **kwargs):
         # sig_R = 0.00436 * D_r * w
@@ -381,9 +376,6 @@ class LiquidRing:
     def eqn_10_18(
         self, P=None, S_Th=None, S_p=None, T_e=None, T_i=None, p_c=None, p_s=None
     ):
-        """
-        T_i := inlet  temperature of load
-        """
         return
     def eqn_10_18__P(
         self,
@@ -551,12 +543,13 @@ class LiquidRing:
         self, P: float, S_p: float, T_e: float, T_i: float, p_c: float, p_s: float, **kwargs
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        R = (P - p_s) / ((460 + T_i) ** (1 / 0.6))
-
-        # Step 2: S_Th * R = S_p
-        S_Th = S_p / R
-
-        return [S_Th]
+        result = []
+        S_Th = S_p / (
+            (P * T_i + 460.0 * P - T_i * p_s - 460.0 * p_s)
+            / (P * T_e + 460.0 * P - T_e * p_c - 460.0 * p_c)
+        ) ** (3 / 5)
+        result.append(S_Th)
+        return result
     def eqn_10_19__S_p(
         self,
         P: float,
@@ -568,7 +561,13 @@ class LiquidRing:
         **kwargs,
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        return [S_Th * ((P - p_s) * (460 + T_i) / ((P - p_c) * (460 + T_e))) ** 0.6]
+        result = []
+        S_p = S_Th * (
+            (P * T_i + 460.0 * P - T_i * p_s - 460.0 * p_s)
+            / (P * T_e + 460.0 * P - T_e * p_c - 460.0 * p_c)
+        ) ** (3 / 5)
+        result.append(S_p)
+        return result
     def eqn_10_19__T_e(
         self,
         P: float,
@@ -580,12 +579,73 @@ class LiquidRing:
         **kwargs,
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Solve for T_e:
-        R = (S_p / (S_Th)) ** (1.666667)
-        # (460 + T_e) = ((P - p_s)*(460 + T_i)) / (R * ((P - p_c)))
-        # T_e = ((P - p_s)*(460 + T_i)) / (R * ((P - p_c))) - 460
-        T_e = ((P - p_s) * (460 + T_i)) / (R * ((P - p_c))) - 460
-        return [T_e]
+        result = []
+        T_e = (
+            P * T_i
+            - 460.0 * P * (S_p / S_Th) ** (5 / 3)
+            + 460.0 * P
+            - T_i * p_s
+            + 460.0 * p_c * (S_p / S_Th) ** (5 / 3)
+            - 460.0 * p_s
+        ) / ((S_p / S_Th) ** (5 / 3) * (P - p_c))
+        result.append(T_e)
+        T_e = (
+            P * T_i
+            - 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P
+            - T_i * p_s
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_s
+        ) / (
+            (P - p_c)
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(T_e)
+        T_e = (
+            P * T_i
+            - 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P
+            - T_i * p_s
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * p_s
+        ) / (
+            (P - p_c)
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(T_e)
+        return result
     def eqn_10_19__T_i(
         self,
         P: float,
@@ -597,12 +657,83 @@ class LiquidRing:
         **kwargs,
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Solve for T_i:
-        R = (S_p / (S_Th)) ** (1.666667)
-        # (460 + T_i) = R * ( (P - p_c)*(460 + T_e) ) / ((P - p_s))
-        # T_i = R * ( (P - p_c)*(460 + T_e) ) / ((P - p_s)) - 460
-        T_i = R * ((P - p_c) * (460 + T_e)) / ((P - p_s)) - 460
-        return [T_i]
+        result = []
+        T_i = (
+            P * T_e * (S_p / S_Th) ** (5 / 3)
+            + 460.0 * P * (S_p / S_Th) ** (5 / 3)
+            - 460.0 * P
+            - T_e * p_c * (S_p / S_Th) ** (5 / 3)
+            - 460.0 * p_c * (S_p / S_Th) ** (5 / 3)
+            + 460.0 * p_s
+        ) / (P - p_s)
+        result.append(T_i)
+        T_i = (
+            P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P
+            - T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * p_s
+        ) / (P - p_s)
+        result.append(T_i)
+        T_i = (
+            P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P
+            - T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * p_s
+        ) / (P - p_s)
+        result.append(T_i)
+        return result
     def eqn_10_19__p_c(
         self,
         P: float,
@@ -614,13 +745,73 @@ class LiquidRing:
         **kwargs,
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Solve for p_c:
-        R = (S_p / (S_Th)) ** (1.666667)
-        # After clearing **0.6: R = (P - p_s)*(460 + T_i) / ( (P - p_c)*(460 + T_e) )
-        # (P - p_c) = ((P - p_s)*(460 + T_i)) / (R * ((460 + T_e)))
-        # p_c = P - ((P - p_s)*(460 + T_i)) / (R * ((460 + T_e)))
-        p_c = P - ((P - p_s) * (460 + T_i)) / (R * ((460 + T_e)))
-        return [p_c]
+        result = []
+        p_c = (
+            P * T_e * (S_p / S_Th) ** (5 / 3)
+            - P * T_i
+            + 460.0 * P * (S_p / S_Th) ** (5 / 3)
+            - 460.0 * P
+            + T_i * p_s
+            + 460.0 * p_s
+        ) / ((S_p / S_Th) ** (5 / 3) * (T_e + 460.0))
+        result.append(p_c)
+        p_c = (
+            P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - P * T_i
+            + 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P
+            + T_i * p_s
+            + 460.0 * p_s
+        ) / (
+            (T_e + 460.0)
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(p_c)
+        p_c = (
+            P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - P * T_i
+            + 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            - 460.0 * P
+            + T_i * p_s
+            + 460.0 * p_s
+        ) / (
+            (T_e + 460.0)
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        )
+        result.append(p_c)
+        return result
     def eqn_10_19__p_s(
         self,
         P: float,
@@ -632,13 +823,83 @@ class LiquidRing:
         **kwargs,
     ):
         # S_p = S_Th * ((P - p_s)*(460 + T_i)  / ( (P - p_c)*(460 + T_e) ))**0.6
-        # Solve for p_s:
-        R = (S_p / (S_Th)) ** (1.666667)
-        # After clearing **0.6: R = (P - p_s)*(460 + T_i) / ( (P - p_c)*(460 + T_e) )
-        # (P - p_s) = R * ( (P - p_c)*(460 + T_e) ) / ((460 + T_i))
-        # p_s = P - R * ( (P - p_c)*(460 + T_e) ) / ((460 + T_i))
-        p_s = P - R * ((P - p_c) * (460 + T_e)) / ((460 + T_i))
-        return [p_s]
+        result = []
+        p_s = (
+            -P * T_e * (S_p / S_Th) ** (5 / 3)
+            + P * T_i
+            - 460.0 * P * (S_p / S_Th) ** (5 / 3)
+            + 460.0 * P
+            + T_e * p_c * (S_p / S_Th) ** (5 / 3)
+            + 460.0 * p_c * (S_p / S_Th) ** (5 / 3)
+        ) / (T_i + 460.0)
+        result.append(p_s)
+        p_s = (
+            -P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + P * T_i
+            - 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P
+            + T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                - 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        ) / (T_i + 460.0)
+        result.append(p_s)
+        p_s = (
+            -P
+            * T_e
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + P * T_i
+            - 460.0
+            * P
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0 * P
+            + T_e
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+            + 460.0
+            * p_c
+            * (
+                -0.5 * (S_p / S_Th) ** 0.333333333333333
+                + 0.866025403784439 * I * (S_p / S_Th) ** 0.333333333333333
+            )
+            ** 5
+        ) / (T_i + 460.0)
+        result.append(p_s)
+        return result
     @kwasak
     def eqn_10_2(self, PS=None, Q_gas=None, V=None, dP=None, dt=None):
         return
@@ -699,34 +960,48 @@ class LiquidRing:
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
         # P appears 4 times — use numerical solver
         from scipy.optimize import brentq
+        import numpy as np
 
         def _res(P_val):
-            return (
-                S_p
-                * (
-                    (P_val - p_0)
-                    * (460 + T_i)
-                    * (P_val - p_c)
-                    / (P_val * (P_val - p_s) * (460 + T_e))
+            try:
+                # Force complex evaluation to handle negative bases in fractional powers
+                target_var_complex = complex(P_val, 0)
+                val = (
+                    S_p
+                    * (
+                        (target_var_complex - p_0)
+                        * (460 + T_i)
+                        * (target_var_complex - p_c)
+                        / (target_var_complex * (target_var_complex - p_s) * (460 + T_e))
+                    )
+                    ** 0.6
+                    - S_0
                 )
-                ** 0.6
-                - S_0
-            )
+                return val.real if hasattr(val, "real") else val
+            except Exception:
+                return float("nan")
 
         lo, hi = None, None
-        prev = _res(0.01)
-        for i in range(1, 100000):
-            x = i * 0.01
-            try:
-                cur = _res(x)
-            except Exception:
-                continue
-            if prev * cur < 0:
-                lo, hi = x - 0.01, x
+        # Expanded search: log-space from 1e-6 to 1e6 plus some linear steps
+        search_points = np.logspace(-6, 6, 500)
+        for i in range(len(search_points) - 1):
+            p1, p2 = search_points[i], search_points[i + 1]
+            r1, r2 = _res(p1), _res(p2)
+            if np.isfinite(r1) and np.isfinite(r2) and r1 * r2 <= 0:
+                lo, hi = p1, p2
                 break
-            prev = cur
         if lo is None:
-            raise UnsolvedException("No sign change found for P")
+            # Fallback to a wider linear search if logspace fails
+            for x in np.linspace(0.001, 10000, 1000):
+                r = _res(x)
+                if np.isfinite(r):
+                    if lo is None:
+                        lo_val, lo = r, x
+                    if r * lo_val <= 0:
+                        hi = x
+                        break
+        if lo is None or hi is None:
+            raise UnsolvedException("No sign change found for P in expanded range")
         P = brentq(_res, lo, hi)
         return [P]
     def eqn_10_20__S_0(
@@ -741,20 +1016,50 @@ class LiquidRing:
         **kwargs,
     ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        return [
-            S_p
-            * ((P - p_0) * (460 + T_i) * (P - p_c) / (P * (P - p_s) * (460 + T_e))) ** 0.6
-        ]
-    def eqn_10_20__S_p(self, P, S_0, T_e, T_i, p_0, p_c, p_s, **kwargs):
+        result = []
+        S_0 = S_p * (
+            (
+                P**2 * T_i
+                + 460.0 * P**2
+                - P * T_i * p_0
+                - P * T_i * p_c
+                - 460.0 * P * p_0
+                - 460.0 * P * p_c
+                + T_i * p_0 * p_c
+                + 460.0 * p_0 * p_c
+            )
+            / (P * (P * T_e + 460.0 * P - T_e * p_s - 460.0 * p_s))
+        ) ** (3 / 5)
+        result.append(S_0)
+        return result
+    def eqn_10_20__S_p(
+        self,
+        P: float,
+        S_0: float,
+        T_e: float,
+        T_i: float,
+        p_0: float,
+        p_c: float,
+        p_s: float,
+        **kwargs,
+    ):
         # S_0 = S_p * ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-        # Solve for S_p:
-        # S_p = S_0 / ((P - p_0)*(460 + T_i) * (P - p_c) / (P * (P - p_s)*(460 + T_e) ) )**0.6
-
-        denominator = (
-            (P - p_0) * (460 + T_i) * (P - p_c) / (P * (P - p_s) * (460 + T_e))
-        ) ** 0.6
-        S_p = S_0 / denominator
-        return [S_p]
+        result = []
+        S_p = S_0 / (
+            (
+                P**2 * T_i
+                + 460.0 * P**2
+                - P * T_i * p_0
+                - P * T_i * p_c
+                - 460.0 * P * p_0
+                - 460.0 * P * p_c
+                + T_i * p_0 * p_c
+                + 460.0 * p_0 * p_c
+            )
+            / (P * (P * T_e + 460.0 * P - T_e * p_s - 460.0 * p_s))
+        ) ** (3 / 5)
+        result.append(S_p)
+        return result
     def eqn_10_20__T_e(
         self,
         P: float,
@@ -850,10 +1155,6 @@ class LiquidRing:
         return [p_s]
     @kwasak
     def eqn_10_21(self, P=None, P_d=None, P_prime=None):
-        """
-        P_prime := pseudo suction pressure
-        P_d := actual pump discharge pressure
-        """
         return
     def eqn_10_21__P(self, P_d: float, P_prime: float, **kwargs):
         # P_prime = P / P_d * 760

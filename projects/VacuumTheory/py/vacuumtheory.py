@@ -61,12 +61,6 @@ class VacuumTheory:
         return result
     @kwasak
     def eqn_1_11(self, M=None, P=None, T=None, W=None, q=None):
-        """
-        W := lb/hr flow
-        M := molecular weight
-        P := Torr
-        T := R degrees temp
-        """
         return
     def eqn_1_11__M(self, P: float, T: float, W: float, q: float, **kwargs):
         # q = W * (359 / M) * (760 / P) * (T / 492) * (1/60)
@@ -157,11 +151,6 @@ class VacuumTheory:
         return result
     @kwasak
     def eqn_1_3(self, T=None, k=None, m=None, v=None):
-        """
-        k:= boltzmann constant
-        kboltz:= 1.38e-16
-        avogad:= 6.02e23
-        """
         return
     def eqn_1_3__T(self, k: float, m: float, v: float, **kwargs):
         # .5 * m * v**2 = 1.5 * k * T

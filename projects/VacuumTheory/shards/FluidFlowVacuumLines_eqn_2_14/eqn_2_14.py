@@ -24,8 +24,4 @@ class FluidFlowVacuumLines:
 
     @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
-        """
-        v_s := sonic_velocity
-        k:=ratio of specific heat at constant temp to the specific heat at constant volume
-        """
         return

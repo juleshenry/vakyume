@@ -10,12 +10,6 @@ import numpy as np
 class FluidFlowVacuumLines:
     @kwasak
     def eqn_2_1(self, D=None, Re=None, mu=None, rho=None, v=None):
-        """
-        rho := density, lb/ft^3
-        D := pipe inside diam, ft
-        v := vel. ft/s
-        mu := viscosity, lb/ft*s
-        """
         return
     def eqn_2_1__D(self, Re: float, mu: float, rho: float, v: float, **kwargs):
         # Re = rho * D * v / mu
@@ -49,9 +43,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_10(self, Suc_Pres=None, delta_P=None, oper_press=None):
-        """
-        delta_P := pressure loss
-        """
         return
     def eqn_2_10__Suc_Pres(self, delta_P: float, oper_press: float, **kwargs):
         # Suc_Pres = oper_press - delta_P
@@ -73,13 +64,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_11(self, D=None, L=None, f=None, g_c=None, h_r=None, v=None):
-        """
-        f:= Moody friction
-        L:=length_pipe, ft
-        v:= velocity, ft/s
-        D:= inside diameter, ft
-        g_c:= dimensional constant, 32.2 lb * ft / lb * s
-        """
         return
     def eqn_2_11__D(self, L: float, f: float, g_c: float, h_r: float, v: float, **kwargs):
         # h_r = f * L * v ** 2 / (D * 2 * g_c)
@@ -121,11 +105,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_12(self, L=None, d=None, delta_P=None, f=None, g=None, rho=None, v=None):
-        """
-        rho:= density, lb/ft^3
-        d:= pipe inside diameter, in
-        q:= vol. flow rate, ft^3/min
-        """
         return
     def eqn_2_12__L(
         self, d: float, delta_P: float, f: float, g: float, rho: float, v: float, **kwargs
@@ -187,11 +166,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_13(self, L=None, d=None, delta_P=None, f=None, q=None, rho=None):
-        """
-        rho:= density, lb/ft^3
-        d:= pipe inside diameter, in
-        q:= vol. flow rate, ft^3/min
-        """
         return
     def eqn_2_13__L(
         self, d: float, delta_P: float, f: float, q: float, rho: float, **kwargs
@@ -261,10 +235,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_14(self, M=None, R=None, T=None, g_c=None, k=None, v_s=None):
-        """
-        v_s := sonic_velocity
-        k:=ratio of specific heat at constant temp to the specific heat at constant volume
-        """
         return
     def eqn_2_14__M(self, R: float, T: float, g_c: float, k: float, v_s: float, **kwargs):
         # v_s = (k * g_c * R / M * T) ** 0.5
@@ -333,39 +303,79 @@ class FluidFlowVacuumLines:
         result.append(f)
         return result
     @kwasak
-    def eqn_2_17(self, L=None, d=None, delta_P=None, mu=None, v=None):
+    def eqn_2_17a(self, L=None, d=None, delta_P=None, mu=None, v=None):
         return
-    def eqn_2_17__L(self, d: float, delta_P: float, mu: float, q: float, **kwargs):
+    def eqn_2_17a__L(self, d: float, delta_P: float, mu: float, v: float, **kwargs):
+        # delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        L = 28.9855072463768 * d**2 * delta_P / (mu * v)
+        result.append(L)
+        return result
+    def eqn_2_17a__d(self, L: float, delta_P: float, mu: float, v: float, **kwargs):
+        # delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        d = -0.185741756210067 * sqrt(L * mu * v / delta_P)
+        result.append(d)
+        d = 0.185741756210067 * sqrt(L * mu * v / delta_P)
+        result.append(d)
+        return result
+    def eqn_2_17a__delta_P(self, L: float, d: float, mu: float, v: float, **kwargs):
+        # delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        delta_P = 0.0345 * L * mu * v / d**2
+        result.append(delta_P)
+        return result
+    def eqn_2_17a__mu(self, L: float, d: float, delta_P: float, v: float, **kwargs):
+        # delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        mu = 28.9855072463768 * d**2 * delta_P / (L * v)
+        result.append(mu)
+        return result
+    def eqn_2_17a__v(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+        # delta_P = 0.0345* mu * L * v / d**2
+        result = []
+        v = 28.9855072463768 * d**2 * delta_P / (L * mu)
+        result.append(v)
+        return result
+    @kwasak
+    def eqn_2_17b(self, L=None, d=None, delta_P=None, mu=None, q=None):
+        return
+    def eqn_2_17b__L(self, d: float, delta_P: float, mu: float, q: float, **kwargs):
         # delta_P = 0.105 * mu * L * q / d**4
-        L = (delta_P * d**4) / (0.105 * mu * q)
-        return [L]
-    def eqn_2_17__d(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
+        result = []
+        L = 9.52380952380952 * d**4 * delta_P / (mu * q)
+        result.append(L)
+        return result
+    def eqn_2_17b__d(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
         # delta_P = 0.105 * mu * L * q / d**4
-        # Solve for d:
-        # Step 1: d ** 4 = delta_P / (0.105 * mu * L * q / 1)
-        # Step 2: d = (delta_P / (0.105 * mu * L * q / 1)) ** (1.0 / 4)
-        d = (delta_P / (0.105 * mu * L * q / 1)) ** (1.0 / 4)
-        return [d]
-    def eqn_2_17__delta_P(self, L: float, d: float, mu: float, q: float, **kwargs):
+        result = []
+        d = -0.569242509762222 * I * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = 0.569242509762222 * I * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = -0.569242509762222 * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        d = 0.569242509762222 * (L * mu * q / delta_P) ** (1 / 4)
+        result.append(d)
+        return result
+    def eqn_2_17b__delta_P(self, L: float, d: float, mu: float, q: float, **kwargs):
         # delta_P = 0.105 * mu * L * q / d**4
-        return [0.105 * mu * L * q / d**4]
-    def eqn_2_17__mu(self, L: float, d: float, delta_P: float, q: float, **kwargs):
+        result = []
+        delta_P = 0.105 * L * mu * q / d**4
+        result.append(delta_P)
+        return result
+    def eqn_2_17b__mu(self, L: float, d: float, delta_P: float, q: float, **kwargs):
         # delta_P = 0.105 * mu * L * q / d**4
-        mu = delta_P * (d**4) / (0.105 * L * q)
-        return [mu]
-    def eqn_2_17__q(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
+        result = []
+        mu = 9.52380952380952 * d**4 * delta_P / (L * q)
+        result.append(mu)
+        return result
+    def eqn_2_17b__q(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
         # delta_P = 0.105 * mu * L * q / d**4
         result = []
         q = 9.52380952380952 * d**4 * delta_P / (L * mu)
         result.append(q)
         return result
-    def eqn_2_17__v(self, L: float, d: float, delta_P: float, mu: float, **kwargs):
-        # delta_P = 0.105 * mu * L * q / d**4 where q = (pi/4) * d**2 * v
-        # delta_P = 0.105 * mu * L * (pi/4 * d**2 * v) / d**4
-        # delta_P = (0.105 * pi / 4) * mu * L * v / d**2
-        # delta_P = 0.0824668 * mu * L * v / d**2
-        v = (delta_P * d**2) / (0.08246680675 * mu * L)
-        return [v]
     @kwasak
     def eqn_2_18a(self, D_eq=None, R_ll=None):
         return
@@ -476,11 +486,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_2(self, delta=None, lambd=None, psi=None):
-        """
-        lambd := average mean free path , in
-        delta := mol. diam , in
-        psi:= mol. density molecules/in^3
-        """
         return
     def eqn_2_2__delta(self, lambd: float, psi: float, **kwargs):
         # lambd = 3.141592653589793 * delta ** 2 * psi * 2 ** 0.5
@@ -504,9 +509,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_20(self, L=None, sum_equivalent_length=None, sum_pipe=None):
-        """
-        L:= laminar flow
-        """
         return
     def eqn_2_20__L(self, sum_equivalent_length: float, sum_pipe: float, **kwargs):
         # L = sum_pipe + sum_equivalent_length
@@ -528,10 +530,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_22(self, P_s=None, Q_throughput=None, S_p=None):
-        """
-        Q:= through_put, sucking pressure P
-        S_p:= dV / Dt
-        """
         return
     def eqn_2_22__P_s(self, Q_throughput: float, S_p: float, **kwargs):
         # Q_throughput = S_p * P_s
@@ -793,10 +791,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_3(self, D=None, kn=None, lambd=None):
-        """
-        D:= inside diameter, in
-        lambd:=avg. mean free path, in
-        """
         return
     def eqn_2_3__D(self, kn: float, lambd: float, **kwargs):
         # kn = lambd / D
@@ -2014,9 +2008,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_35(self, C_L=None, C_T=None, F_p=None):
-        """
-        F_P:= correction factor for Poiseuille's eqn from Figure
-        """
         return
     def eqn_2_35__C_L(self, C_T: float, F_p: float, **kwargs):
         # C_T = C_L * F_p
@@ -2038,10 +2029,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_36(self, C=None, C_0=None, F_t=None):
-        """
-        C_0:=conductance thin walled aperture
-        F_t:=transmission prob. for component
-        """
         return
     def eqn_2_36__C(self, C_0: float, F_t: float, **kwargs):
         # C = C_0 * F_t
@@ -2063,9 +2050,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_37(self, A=None, C=None, F_t=None, M=None, T=None):
-        """
-        F_t:= 1, for an aperture
-        """
         return
     def eqn_2_37__A(self, C: float, F_t: float, M: float, T: float, **kwargs):
         # C = 38.3 * (T * A * F_t / M) ** 0.5
@@ -2099,9 +2083,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_4(self, _beta=None, mu=None, vel_grad=None):
-        """
-        mu:=coefficient of viscosity
-        """
         return
     def eqn_2_4___beta(self, mu: float, vel_grad: float, **kwargs):
         # _beta = mu * vel_grad
@@ -2123,13 +2104,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_5(self, D=None, L=None, delta_P=None, mu=None, q=None):
-        """
-        q:=volumetric flow cm^3/s
-        D:= pipe diam.,cm
-        delta_P := upstream-downstream pressure, dyne/cm^3
-        L:=length, cm
-        mu:= coef. of visco., poise
-        """
         return
     def eqn_2_5__D(self, L: float, delta_P: float, mu: float, q: float, **kwargs):
         # q = 3.141592653589793 * (D ** 4) * delta_P / (128 * L * mu)
@@ -2169,11 +2143,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_6(self, lambd=None, mu=None, rho=None, v_a=None):
-        """
-        mu :=viscosity, poise
-        rho:= density, g/cm^3
-        lambd:= mean free path, cm
-        """
         return
     def eqn_2_6__lambd(self, mu: float, rho: float, v_a: float, **kwargs):
         # mu = 0.35 * rho * lambd * v_a
@@ -2201,11 +2170,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_7(self, T=None, k=None, m=None, v_a=None):
-        """
-        k:=boltz
-        T:= abs temp
-        m:= mass of a molecule
-        """
         return
     def eqn_2_7__T(self, k: float, m: float, v_a: float, **kwargs):
         # v_a = ((8 * k * T) / (3.141592653589793 * m)) ** 0.5
@@ -2233,11 +2197,6 @@ class FluidFlowVacuumLines:
         return result
     @kwasak
     def eqn_2_8(self, M=None, P_c=None, T_c=None, mu_c=None):
-        """
-        M:= mol. weight
-        T_c:= critical temp, K
-        P_c:= critical pressure, atm
-        """
         return
     def eqn_2_8__M(self, P_c: float, T_c: float, mu_c: float, **kwargs):
         # mu_c = (7.7 * (M ** 0.5) * P_c ** (2 / 3)) / T_c ** (1 / 6)

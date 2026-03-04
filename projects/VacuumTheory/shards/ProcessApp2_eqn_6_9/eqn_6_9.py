@@ -7,7 +7,7 @@ from vakyume.config import UnsolvedException
 
 from vakyume.kwasak import kwasak
 from .eqn_6_9__A_cap import eqn_6_9__A
-from .eqn_6_9__dV_cap_dt import eqn_6_9__dV_dt
+from .eqn_6_9__dV_dt_cap import eqn_6_9__dV_dt
 from .eqn_6_9__delta_P_cap import eqn_6_9__delta_P
 from .eqn_6_9__m import eqn_6_9__m
 from .eqn_6_9__mu import eqn_6_9__mu

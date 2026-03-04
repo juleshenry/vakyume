@@ -10,12 +10,6 @@ import numpy as np
 class SteamJetInjectors:
     @kwasak
     def eqn_9_1(self, A=None, rho_s=None, v=None, w_s=None):
-        """
-        w_s := motive steam flow rate, lb/hr
-        v:= velocity
-        A:= cross sectional area, ft^2
-        rhos_s := motive steam density, lb/ft^3
-        """
         return
     def eqn_9_1__A(self, rho_s: float, v: float, w_s: float, **kwargs):
         # w_s = v * A * rho_s
@@ -43,11 +37,6 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_2(self, P_m=None, d_n=None, rho_s=None, w_s=None):
-        """
-        d_n := nozzle throat diameter
-        P_m := motive steam pressure at point 1, psia
-        rhos_s := motive steam density at point 1, lb/ft^3
-        """
         return
     def eqn_9_2__P_m(self, d_n: float, rho_s: float, w_s: float, **kwargs):
         # w_s = 865.8 * d_n**2 * (P_m * rho_s) ** 0.5
@@ -77,12 +66,6 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_3(self, P_s=None, V=None, t_e=None, w_j=None):
-        """
-        t_e := time required to evacuate system, minutes
-        P_s := design suction pressure of the ejector, torr
-        V := free volume of process system, ft^3
-        w_j := ejector capacity, 70 deg_F basis, lb/hr
-        """
         return
     def eqn_9_3__P_s(self, V: float, t_e: float, w_j: float, **kwargs):
         # t_e = (2.3 - 0.003 * P_s) * V / w_j
@@ -110,11 +93,6 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_4(self, AEL=None, SC=None, r=None, w_s=None):
-        """
-        w_s:= motive steam requirement
-        r := pounds of steam required to compress 1 lb air from ejector suction pressure P_s to discharge pressure P_d
-        SC := size correction factor
-        """
         return
     def eqn_9_4__AEL(self, SC: float, r: float, w_s: float, **kwargs):
         # w_s = AEL * r * SC
@@ -142,12 +120,6 @@ class SteamJetInjectors:
         return result
     @kwasak
     def eqn_9_5(self, V=None, r_h=None, t_h=None, w_h=None):
-        """
-        w_h:= motive steam hogging
-        r_h:=pounds of 100-psig stream required per cubic foot
-        V:= process system free volume, ft^3
-        t_h := time permitted for evatuation, hr
-        """
         return
     def eqn_9_5__V(self, r_h: float, t_h: float, w_h: float, **kwargs):
         # w_h = r_h * V / t_h

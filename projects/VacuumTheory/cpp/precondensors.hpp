@@ -137,10 +137,7 @@ std::vector<double> Precondensors_eqn_7_14a__del_T_LM(double A, double Q_condens
 }
 
 std::vector<double> Precondensors_eqn_7_14b__A(double Q_condensor_heat_duty, double U, double del_T_1, double del_T_2) {
-    std::vector<double> result;
-    double A = (Q_condensor_heat_duty / ((U * (del_T_1 - del_T_2)) * std::log((del_T_1 - del_T_2))));
-    result.push_back(A);
-    return result;
+    throw std::runtime_error("Precondensors_eqn_7_14b__A: requires numerical solver (not transpilable)");
 }
 
 std::vector<double> Precondensors_eqn_7_14b__Q_condensor_heat_duty(double A, double U, double del_T_1, double del_T_2) {

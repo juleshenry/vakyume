@@ -18,9 +18,6 @@ class RotaryPistonVane:
         dP=None,
         dT=None,
     ):
-        """
-        Q_0 := throughput of gas flow due to system outgassing
-        """
         return
     def eqn_11_1__PS(
         self,
@@ -274,11 +271,6 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_3(self, F_s=None, t=None, t_c=None):
-        """
-        t:= actual evacuation time
-        t_c:= calculated evacuation time using Eq 10.4
-        F_s:= system factor, based on operating experience
-        """
         return
     def eqn_11_3__F_s(self, t: float, t_c: float, **kwargs):
         # t = t_c * F_s
@@ -300,13 +292,6 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_4(self, p_g=None, p_s=None, p_v=None):
-        """
-        p_v := partial pressure of vapor at pump suction, torr
-        p_g := pressure of permanent gas at pump suction, torr
-        p_s := pump suction pressure, sum of partial pressure of vapor and partial pressure of permanent gas, torr
-        P_0_V := saturation pressure of vapor at pump operating temperature, torr
-        P_D := pump discharge pressure, torr
-        """
         return
     def eqn_11_4__p_g(self, p_s: float, p_v: float, **kwargs):
         # p_v / (p_v + p_g) = p_v / p_s
@@ -330,9 +315,6 @@ class RotaryPistonVane:
         return result
     @kwasak
     def eqn_11_5(self, P_0_v=None, P_D=None, p_g=None, p_v_max=None):
-        """
-        p_v_max := maximum allowable partial pressure p_v_max of the process vapor at the pump suction
-        """
         return
     def eqn_11_5__P_0_v(self, P_D: float, p_g: float, p_v_max: float, **kwargs):
         # p_v_max = P_0_v * p_g / (P_D - P_0_v)
@@ -370,12 +352,6 @@ class RotaryPistonVane:
         p_g=None,
         p_v_max=None,
     ):
-        """
-        P_0_v := saturation vapor pressure of a condensable vapor
-        S_B := maximum permissible gas ballast flow rate, ft^3/min
-        S_D := free air displacement of the vacuum pump, ft^3/min
-        p_b := partial pressure of vapor in the ballast gas, e.g. partial pressure of water vapor in ATM, torr
-        """
         return
     def eqn_11_6__P_0_V(
         self,

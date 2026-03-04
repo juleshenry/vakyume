@@ -5,6 +5,7 @@ from scipy.optimize import newton
 import numpy as np
 from vakyume.config import UnsolvedException
 
+
 def eqn_10_9__delta_T(self, T_c: float, T_s: float, **kwargs):
     # [.pyeqn] T_c = T_s + delta_T
     result = []

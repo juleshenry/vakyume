@@ -1,0 +1,7 @@
+from cmath import *
+from math import e, pi
+import numpy as np
+
+
+def check_harmony(PS, Q_gas, V, dP, dt, **kwargs):
+    return (PS) - (-V * dP / dt + Q_gas)

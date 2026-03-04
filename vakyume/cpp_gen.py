@@ -316,6 +316,10 @@ def _transpile_method(class_name, method_name, source):
                 body_lines.append("    return result;")
             else:
                 val = tx.visit(stmt.value)
+                # If we're returning a single value but the function return type is std::vector,
+                # wrap it in an initializer list.
+                if not (val.startswith("{") and val.endswith("}")):
+                    val = f"{{ {val} }}"
                 body_lines.append(f"    return {val};")
             continue
 
