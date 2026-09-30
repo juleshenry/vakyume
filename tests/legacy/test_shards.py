@@ -22,7 +22,7 @@ from vakyume.verifier import Verify
 
 # ── Discover families at collection time ────────────────────────────────────
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SHARDS_DIR = os.path.join(REPO_ROOT, "projects", "VacuumTheory", "shards")
 
 

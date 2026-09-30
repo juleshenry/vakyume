@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      verify_projects:
+        description: "Also run whole-project verification (slow, CPU heavy)"
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --python ${{ matrix.python }}
+      - name: Lint (new core strictly, legacy for hard errors only)
+        run: |
+          uv run ruff check vakyume/equations.py vakyume/solve.py vakyume/verify.py vakyume/cli.py vakyume/__init__.py tests/*.py
+          uv run ruff check --select E9,F63,F7,F82 vakyume vakyume.py
+      - run: uv run pytest -q
+
+  verify-projects:
+    if: github.event_name == 'workflow_dispatch' && inputs.verify_projects
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run vakyume report projects/VacuumTheory --jobs 4 --no-write
+      - run: uv run vakyume report projects/BuildingModels --jobs 4 --no-write
