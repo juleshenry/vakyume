@@ -52,7 +52,7 @@ addopts = "-m 'not llm and not slow and not legacy'"
 line-length = 110
 target-version = "py311"
 # Legacy pipeline modules are linted only for hard errors (see CI).
-extend-exclude = ["projects"]
+extend-exclude = ["projects", "sublibs"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP", "B"]

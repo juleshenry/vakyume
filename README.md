@@ -17,7 +17,7 @@ heavy: set `JOBS=N` to limit worker processes, or `QUICK=1` for setup and fast
 tests only.
 
 > **Note on `kwasak`:** `vakyume/kwasak.py` follows the same rules as
-> [juleshenry/kwasak](https://github.com/juleshenry/kwasak) (fixed in
+> [`sublibs/kwasak`](sublibs/kwasak) (formerly juleshenry/KWASAK) (fixed in
 > `93b61e6`). Arguments are passed to `<eqn>__<var>` **by name**, `x=None`
 > counts as the missing variable, and unknown names raise `TypeError` unless
 > the stub declares `**kwargs`. Earlier upstream versions sorted arguments
