@@ -52,7 +52,37 @@ Working examples. Wed May 24 22:19:54 CDT 2023
 Fri Jul 28 20:37:55 CDT 2023
 Published.
 """
+import functools
 import inspect
+
+
+def _variables(func, skip_self):
+    """The stub's variables (named parameters except ``self`` for methods),
+    and whether it declares ``**kwargs`` to pass extra names through."""
+    params = list(inspect.signature(func).parameters.values())
+    if skip_self:
+        params = params[1:]
+    names = [
+        p.name
+        for p in params
+        if p.kind not in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD)
+    ]
+    extra_ok = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params)
+    return names, extra_ok
+
+
+def _dispatch(obj, func, variables, extra_ok, kwargs):
+    unknown = [k for k in kwargs if k not in variables]
+    if unknown and not extra_ok:
+        raise TypeError(f"{func.__name__}() got unknown variable(s): {', '.join(unknown)}")
+    # an explicit x=None counts as missing, same as leaving it out
+    given = {k: v for k, v in kwargs.items() if v is not None}
+    missing = [v for v in variables if v not in given]
+    if len(missing) != 1:
+        raise ValueError("Must have exactly one missing variable for which to solve.")
+    # by name, so the solver's parameter order does not matter; extra names
+    # (allowed by **kwargs on the stub) pass through to the solver
+    return getattr(obj, func.__name__ + "__" + missing[0])(**given)
 
 
 def kwasak(func):
@@ -62,29 +92,27 @@ def kwasak(func):
 
     and can calculate necessary formula to solve for a single variable
 
-    Assumption: method is not static. why? we abuse inspect to inspect the
-    [1:-1] kwargs in order to resolve the missing parameter
+    Assumption: method is not static. The stub's parameters (after `self`)
+    name the variables; exactly one must be missing (absent or None), and
+    `<method>__<missing>` is called with the others as keyword arguments.
+    Unknown names are an error unless the stub declares `**kwargs`, in which
+    case they are passed through to the solver.
     """
+    variables, extra_ok = _variables(func, skip_self=True)
 
+    @functools.wraps(func)
     def wrapper(self, **kwargs):
-        method_name = func.__name__
-        all_parameters = list(inspect.signature(func).parameters)[1:-1]
-        missing_arg = [kw for kw in all_parameters if kw not in kwargs]
-        if not len(missing_arg) == 1:
-            raise ValueError(
-                "Must have exactly one missing variable for which to solve."
-            )
-        correct_method = method_name + "__" + missing_arg[0]
-        correct_args = [x[1] for x in sorted(kwargs.items(), key=lambda kv: kv[0])]
-        return getattr(self, correct_method)(*correct_args)
+        return _dispatch(self, func, variables, extra_ok, kwargs)
 
     return wrapper
+
 
 def kwasak_static(func):
-    #fmt:off
-    def wrapper(self, **kw):
-        if len(m:=[w for w in list(inspect.signature(func).parameters)[:-1] if w not in kw])-1:raise ValueError("Must have exactly one missing variable for which to solve.")
-        return getattr(self, func.__name__ + "__" + m[0])(*[x[1] for x in sorted(kw.items(), key=lambda kv: kv[0])])
-    return wrapper
-    #fmt:on
+    """Same as `kwasak` for a stub without `self`."""
+    variables, extra_ok = _variables(func, skip_self=False)
 
+    @functools.wraps(func)
+    def wrapper(self, **kwargs):
+        return _dispatch(self, func, variables, extra_ok, kwargs)
+
+    return wrapper

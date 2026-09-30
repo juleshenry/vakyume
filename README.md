@@ -4,6 +4,8 @@ The `kwasak` decorator works in the following way:
 
 If a decorator is placed over an empty stub function, and a method is implemented, this decorator finds the correct internal method '$METHOD__X' and calls it with all but one argument not present in the original. 
 
+Arguments are matched to the solver **by name**, so its parameter order does not matter. Passing `x=None` is the same as leaving `x` out. Unknown names raise `TypeError` unless the stub declares `**kwargs`, in which case they pass through to the solver.
+
 Here is an illustrative example: 
 
 ```

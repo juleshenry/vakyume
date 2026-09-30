@@ -134,6 +134,41 @@ def einstein_static():
     ans = e.einstein(e=ans)  # returns e, 1000 * 8.98755179 e16, ~8.98755179 e19
     assert 1000.0 == (ans)
 
+def argument_order_and_validation():
+    class Gas:
+        @kwasak
+        def ideal(s, P=None, V=None, n=None, T=None):  # no **kwargs, not alphabetical
+            return
+
+        def ideal__P(s, V, n, T):
+            return n * 8.314 * T / V
+
+        def ideal__T(s, P, V, n):
+            return P * V / (n * 8.314)
+
+        def ideal__n(s, P, V, T):
+            return P * V / (8.314 * T)
+
+        def ideal__V(s, P, n, T):
+            return n * 8.314 * T / P
+
+    g = Gas()
+    # keyword args are matched by name, not by sorted position
+    assert abs(g.ideal(V=2.0, n=1.0, T=300.0) - 1247.1) < 1e-9
+    assert abs(g.ideal(P=1247.1, V=2.0, n=1.0) - 300.0) < 1e-9
+    # the last parameter is a variable when there is no **kwargs
+    assert abs(g.ideal(P=1247.1, n=1.0, T=300.0) - 2.0) < 1e-9
+    # explicit None means "solve for this"
+    assert abs(g.ideal(P=1247.1, V=2.0, n=None, T=300.0) - 1.0) < 1e-9
+    for bad in (dict(V=2.0, n=1.0, T=300.0, Q=1.0), dict(V=2.0, n=1.0)):
+        try:
+            g.ideal(**bad)
+        except (TypeError, ValueError):
+            pass
+        else:
+            raise AssertionError(f"accepted {bad}")
+
+
 if __name__ == "__main__":
     einstein()
     print("Einstein, ✅")
@@ -142,7 +177,9 @@ if __name__ == "__main__":
     vacuum_theory()
     print("Vacuum Theory, ✅")
     pythagoras_static()
-    print("Einstein (Static), ✅")
+    print("Pythagoras (Static), ✅")
     einstein_static()
     print("Einstein (Static), ✅")
+    argument_order_and_validation()
+    print("Argument order & validation, ✅")
     print("Done! ✅")
