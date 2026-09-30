@@ -2,6 +2,15 @@
 
 Vakyume is a pipeline for transforming legacy engineering knowledge—specifically vacuum system design—into verified, high-performance Python and C++ libraries. Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by Ryans and Roper, the project uses a "One-Odd-Out" (OOO) verification methodology to ensure mathematical consistency across all generated solvers.
 
+> **Note on `kwasak`:** the vendored copy (`vakyume/kwasak.py`) and upstream
+> [juleshenry/kwasak](https://github.com/juleshenry/kwasak) behave differently.
+> The vendored copy passes arguments to `<eqn>__<var>` **by name**. Upstream
+> sorts the keyword arguments alphabetically and passes them **by position**,
+> so a solver whose parameters aren't in alphabetical order receives swapped
+> values without any error. Upstream also treats an explicit `x=None` as a
+> supplied value and accepts unknown keyword names. Use the vendored copy
+> here, or `Equation.solve(**all_but_one)`, which doesn't use kwasak.
+
 ---
 
 ## v0.2 core: residual-verified solvers
