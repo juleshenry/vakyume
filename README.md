@@ -2,6 +2,20 @@
 
 Vakyume is a pipeline for transforming legacy engineering knowledge—specifically vacuum system design—into verified, high-performance Python and C++ libraries. Inspired by the 1986 edition of *Process Vacuum System Design and Operation* by Ryans and Roper, the project uses a "One-Odd-Out" (OOO) verification methodology to ensure mathematical consistency across all generated solvers.
 
+## Getting started
+
+```bash
+git clone https://github.com/juleshenry/vakyume && cd vakyume
+./start.sh
+```
+
+`start.sh` installs [uv](https://docs.astral.sh/uv/) if it's missing and sets
+up the environment (Python >= 3.11). It then runs the tests, verifies every
+equation in every project under `projects/`, and rewrites each project's
+`docs/STATUS.md` and `docs/EQUATION_CERTIFICATION.md`. Verification is CPU
+heavy: set `JOBS=N` to limit worker processes, or `QUICK=1` for setup and fast
+tests only.
+
 > **Note on `kwasak`:** `vakyume/kwasak.py` follows the same rules as
 > [juleshenry/kwasak](https://github.com/juleshenry/kwasak) (fixed in
 > `93b61e6`). Arguments are passed to `<eqn>__<var>` **by name**, `x=None`
