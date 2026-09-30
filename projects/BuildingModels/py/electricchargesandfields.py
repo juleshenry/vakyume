@@ -17,35 +17,30 @@ class ElectricChargesAndFields:
         r := distance between electron and proton
         """
         return
-
     def eqn_16_3__F_g(self, G: float, m_e: float, m_p: float, r: float, **kwargs):
         # F_g = G * m_e * m_p / r ** 2
         result = []
         F_g = G * m_e * m_p / r**2
         result.append(F_g)
         return result
-
     def eqn_16_3__G(self, F_g: float, m_e: float, m_p: float, r: float, **kwargs):
         # F_g = G * m_e * m_p / r ** 2
         result = []
         G = F_g * r**2 / (m_e * m_p)
         result.append(G)
         return result
-
     def eqn_16_3__m_e(self, F_g: float, G: float, m_p: float, r: float, **kwargs):
         # F_g = G * m_e * m_p / r ** 2
         result = []
         m_e = F_g * r**2 / (G * m_p)
         result.append(m_e)
         return result
-
     def eqn_16_3__m_p(self, F_g: float, G: float, m_e: float, r: float, **kwargs):
         # F_g = G * m_e * m_p / r ** 2
         result = []
         m_p = F_g * r**2 / (G * m_e)
         result.append(m_p)
         return result
-
     def eqn_16_3__r(self, F_g: float, G: float, m_e: float, m_p: float, **kwargs):
         # F_g = G * m_e * m_p / r ** 2
         result = []

@@ -11,6 +11,7 @@ from .eqn_2_6__mu import eqn_2_6__mu
 from .eqn_2_6__rho import eqn_2_6__rho
 from .eqn_2_6__v_a import eqn_2_6__v_a
 
+
 class FluidFlowVacuumLines:
     eqn_2_6__lambd = eqn_2_6__lambd
     eqn_2_6__mu = eqn_2_6__mu

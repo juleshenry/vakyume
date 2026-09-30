@@ -17,21 +17,18 @@ class RotationalEnergyAndMomentum:
         I := moment of inertia
         """
         return
-
     def eqn_12_11__I(self, L: float, v: float, **kwargs):
         # L = (1 / 2) * I * v ** 2
         result = []
         I = 2 * L / v**2
         result.append(I)
         return result
-
     def eqn_12_11__L(self, I: float, v: float, **kwargs):
         # L = (1 / 2) * I * v ** 2
         result = []
         L = I * v**2 / 2
         result.append(L)
         return result
-
     def eqn_12_11__v(self, I: float, L: float, **kwargs):
         # L = (1 / 2) * I * v ** 2
         result = []

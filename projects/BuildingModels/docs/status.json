@@ -1,0 +1,2915 @@
+[
+ {
+  "id": "3-1",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "x = x_0 + v_x * t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-2",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "v = v_0x + ax * t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "ax",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-3",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "x = x_0 + v_0x * t + 0.5 * ax * t**2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "ax",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-4",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "v = v_0 + a * t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-6",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "x = v_0 * t + x_0",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-14",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "a = a_A",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a_A",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "3-15",
+  "chapter": "DescribingMotionInOneDimension",
+  "text": "v = (v_B + v_A) * t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_B",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_A",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "4-1",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "v = (x_2 - x_1) / t + (y_2 - y_1) / t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x_2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x_1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "y_2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "y_1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "4-2",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "v = d r / dt",
+  "kind": "differential",
+  "status": "unsupported",
+  "note": "derivative notation (d?/d?)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "4-3",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "v = vx * x + vy * y",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "vx",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "vy",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "y",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "4-4",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "a = ax * x + ay * y",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "ax",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "ay",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "y",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "4-5",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "v = v_0 + a * t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "4-6",
+  "chapter": "DescribingMotionInMultipleDimensions",
+  "text": "r = r_0 + v_0 * t + 0.5 * a * t ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "5-1",
+  "chapter": "NewtonSLaws",
+  "text": "F = m * a",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "F",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "5-2",
+  "chapter": "NewtonSLaws",
+  "text": "F_action = F_reaction",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "F_action",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F_reaction",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "5-unknown",
+  "chapter": "NewtonSLaws",
+  "text": "F = *x",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "6-1",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "F = F_N",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "F",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F_N",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "6-2",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "x = - m * a_2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a_2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "6-3",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "F = * x",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "6-4",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "a = * x / m",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "6-5",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "V = sqrt(2 ** D ** 2 / m)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "V",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "D",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "9-1",
+  "chapter": "ApplyingNewtonSLaws",
+  "text": "m * g = m * (v ** 2) /",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "7-1",
+  "chapter": "WorkAndEnergy",
+  "text": "W = F * d",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "d",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "7-2",
+  "chapter": "WorkAndEnergy",
+  "text": "W_tot = F1 * x + F2 * x + F3 * x",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W_tot",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F3",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "7-3",
+  "chapter": "WorkAndEnergy",
+  "text": "W1 = mgH",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "mgH",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "7-6",
+  "chapter": "WorkAndEnergy",
+  "text": "W_f = F_ * d",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W_f",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "F_",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "d",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "7-7",
+  "chapter": "WorkAndEnergy",
+  "text": "W_net = W_F + W_g + W_f",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W_net",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "W_F",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "W_g",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "W_f",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "8-5",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "F_x = - * x",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "8-6",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "W_net = K_B - K_A",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W_net",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "K_B",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "K_A",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "8-8",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "E = U +",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "8-9",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "L = 0.5 * m * v_x ** 2 + m * g * x",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "L",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v_x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "g",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "8-9.2",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "L = K -",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "8-9.3",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "W = U(B) - U(A)",
+  "kind": "functional",
+  "status": "unsupported",
+  "note": "unknown function call: 'Symbol' object is not callable",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "8-9.4",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "W_net = W_NC + W_C",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "W_net",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "W_NC",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "W_C",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "8-9.5",
+  "chapter": "PotentialEnergyAndConservationOfEnergy",
+  "text": "W_NC = K +",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "9-2",
+  "chapter": "Gravity",
+  "text": "T ** 2 = G * M * R ** 3 / (4 * pi ** 2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "T",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "G",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "M",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R",
+    "method": "polynomial",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "9-3",
+  "chapter": "Gravity",
+  "text": "a = G * M * m / R ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "G",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "M",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "9-5",
+  "chapter": "Gravity",
+  "text": "m * GM / R ** 2 = v ** 2 /",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "9-4",
+  "chapter": "Gravity",
+  "text": "U = - G * M * m / r",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "U",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "G",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "M",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "10-1",
+  "chapter": "LinearMomentumAndTheCentreOfMass",
+  "text": "p = m * v",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "p",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "10-11",
+  "chapter": "LinearMomentumAndTheCentreOfMass",
+  "text": "F_ext = M * a_CM",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "F_ext",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "M",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a_CM",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "11-8",
+  "chapter": "RotationalDynamics",
+  "text": "I = (m * r**2) / i",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "I",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "i",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "11-10",
+  "chapter": "RotationalDynamics",
+  "text": "Ih = ICM + M * h**2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "Ih",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "ICM",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "M",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "h",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "12-7",
+  "chapter": "RotationalEnergyAndMomentum",
+  "text": "L = r ^ p",
+  "kind": "vector",
+  "status": "unsupported",
+  "note": "'^' (cross product) is not scalar algebra",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "12-10",
+  "chapter": "RotationalEnergyAndMomentum",
+  "text": "dL / dt = ext",
+  "kind": "differential",
+  "status": "unsupported",
+  "note": "derivative notation (d?/d?)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "12-11",
+  "chapter": "RotationalEnergyAndMomentum",
+  "text": "L = (1 / 2) * I * v ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "L",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "I",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "13-1",
+  "chapter": "SimpleHarmonicMotion",
+  "text": "E = 0.5 ** x ** 2 + 0.5 * m * v ** 2",
+  "kind": "algebraic",
+  "status": "fail",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 7,
+    "errors": [],
+    "status": "fail"
+   },
+   {
+    "target": "m",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "13-2",
+  "chapter": "SimpleHarmonicMotion",
+  "text": "m * d2x / dt2 = - * x",
+  "kind": "differential",
+  "status": "unsupported",
+  "note": "derivative notation (d?/d?)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "13-2.2",
+  "chapter": "SimpleHarmonicMotion",
+  "text": "1 * x1 + 2 * x2 = (1 + 2) * x0",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "x1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "14-10",
+  "chapter": "Waves",
+  "text": "n = 2L",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "14-11",
+  "chapter": "Waves",
+  "text": "fn = n * v / (2L)",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax. Perhaps you forgot a comma? (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "15-8",
+  "chapter": "FluidMechanics",
+  "text": "R = R1 + R2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "R",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "16-1",
+  "chapter": "ElectricChargesAndFields",
+  "text": "F12 = * Q1 * Q2 / r ** 2",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "16-2",
+  "chapter": "ElectricChargesAndFields",
+  "text": "F_e = * e ** 2 / r ** 2",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "16-3",
+  "chapter": "ElectricChargesAndFields",
+  "text": "F_g = G * m_e * m_p / r ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "F_g",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "G",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m_e",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m_p",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "16-6",
+  "chapter": "ElectricChargesAndFields",
+  "text": "U = p *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "17-2",
+  "chapter": "GaussSLaw",
+  "text": "E = E * (4 * R**2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "17-3",
+  "chapter": "GaussSLaw",
+  "text": "E = Q / (4 * R**2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "Q",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "18-1",
+  "chapter": "ElectricPotential",
+  "text": "U = * Q * q / r +",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "18-2",
+  "chapter": "ElectricPotential",
+  "text": "Wq3 = * q1 * q3 / r13",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "18-3",
+  "chapter": "ElectricPotential",
+  "text": "E = 0 + * q1 * q2 / r12 + * q1 * q3 / r13 + * q2 * q3 / r23",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "18-4",
+  "chapter": "ElectricPotential",
+  "text": "Ue = q *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "18-6",
+  "chapter": "ElectricPotential",
+  "text": "V = E *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "18-7",
+  "chapter": "ElectricPotential",
+  "text": "Q = C *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "19-1",
+  "chapter": "ElectricCurrent",
+  "text": "I = Q / t",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "I",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "Q",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "t",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "19-6",
+  "chapter": "ElectricCurrent",
+  "text": "Reff = 1 / (1 / R1 + 1 / R2 + ...)",
+  "kind": "aggregate",
+  "status": "unsupported",
+  "note": "open-ended sum ('...')",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "20-1",
+  "chapter": "ElectricCircuits",
+  "text": "V = R *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "20-2",
+  "chapter": "ElectricCircuits",
+  "text": "I = V /",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "20-3",
+  "chapter": "ElectricCircuits",
+  "text": "I1 = I2 + I3",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "I1",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "I2",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "I3",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "20-4",
+  "chapter": "ElectricCircuits",
+  "text": "Vvoltmeter = I * Reff",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "Vvoltmeter",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "I",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "Reff",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "20-5",
+  "chapter": "ElectricCircuits",
+  "text": "V = IR + Q / C",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "V",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "IR",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "Q",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "C",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "21-2",
+  "chapter": "TheMagneticForce",
+  "text": "m * v ** 2 / R = q * v * B /",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "21-3",
+  "chapter": "TheMagneticForce",
+  "text": "R = m * v / q *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "21-4",
+  "chapter": "TheMagneticForce",
+  "text": "q / m = 2 * B * T / (m * v)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "q",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m",
+    "method": "numeric",
+    "complete": false,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "B",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "T",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "21-5",
+  "chapter": "TheMagneticForce",
+  "text": "F = I * l *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "21-7",
+  "chapter": "TheMagneticForce",
+  "text": "q * v = q * v *",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "parse error: invalid syntax (<string>, line 1)",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "23-1",
+  "chapter": "ElectromagneticInduction",
+  "text": "V = -d % B / dt",
+  "kind": "algebraic",
+  "status": "fail",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "V",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 12,
+    "errors": [],
+    "status": "fail"
+   },
+   {
+    "target": "d",
+    "method": "numeric",
+    "complete": false,
+    "samples": 12,
+    "unsound": 4,
+    "missed": 3,
+    "errors": [],
+    "status": "fail"
+   },
+   {
+    "target": "B",
+    "method": "numeric",
+    "complete": false,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 2,
+    "errors": [],
+    "status": "partial"
+   },
+   {
+    "target": "dt",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 12,
+    "errors": [],
+    "status": "fail"
+   }
+  ]
+ },
+ {
+  "id": "23-1.2",
+  "chapter": "ElectromagneticInduction",
+  "text": "E = B0 * a * r**2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "B0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "23-1.3",
+  "chapter": "ElectromagneticInduction",
+  "text": "E = B0 * a * R**2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "B0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "a",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "R",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-2",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "FE = 2 * l / (2 * r)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "FE",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "l",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "r",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-2.2",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "x = 0 * (x + v * t) / (t * v / c ** 2)",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "variables cancel out: ['c', 't', 'v']",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "24-2.3",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "x = 0 * (x + v * t) + vx / c ** 2",
+  "kind": "invalid",
+  "status": "invalid",
+  "note": "variables cancel out: ['t', 'v']",
+  "samples": 0,
+  "targets": []
+ },
+ {
+  "id": "24-2.4",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "u_x = u_0 * x / (1 - v * u_x / c ** 2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "u_x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "u_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "c",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-2.5",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "u_x = u_0 * x / (1 - v * u_x / c ** 2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "u_x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "u_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "x",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "c",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-6",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "ux = u + v / (1 + (v * u) / c ** 2)",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "ux",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "u",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "v",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "c",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-9",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "K = (1 - u ** 2 / c ** 2) * m_0 * c ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "K",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "u",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "c",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ },
+ {
+  "id": "24-11",
+  "chapter": "TheTheoryOfSpecialRelativity",
+  "text": "E ** 2 = p ** 2 * c ** 2 + m_0 ** 2",
+  "kind": "algebraic",
+  "status": "pass",
+  "note": "",
+  "samples": 12,
+  "targets": [
+   {
+    "target": "E",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "p",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "c",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   },
+   {
+    "target": "m_0",
+    "method": "closed",
+    "complete": true,
+    "samples": 12,
+    "unsound": 0,
+    "missed": 0,
+    "errors": [],
+    "status": "pass"
+   }
+  ]
+ }
+]

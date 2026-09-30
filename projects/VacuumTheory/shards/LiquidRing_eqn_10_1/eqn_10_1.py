@@ -10,6 +10,7 @@ from .eqn_10_1__D_cap_r import eqn_10_1__D_r
 from .eqn_10_1__sig_R_cap import eqn_10_1__sig_R
 from .eqn_10_1__w import eqn_10_1__w
 
+
 class LiquidRing:
     eqn_10_1__D_r = eqn_10_1__D_r
     eqn_10_1__sig_R = eqn_10_1__sig_R

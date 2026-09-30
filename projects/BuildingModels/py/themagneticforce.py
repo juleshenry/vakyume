@@ -17,21 +17,18 @@ class TheMagneticForce:
         T := period
         """
         return
-
     def eqn_21_4__B(self, T: float, m: float, q: float, v: float, **kwargs):
         # q / m = 2 * B * T / (m * v)
         result = []
         B = q * v / (2 * T)
         result.append(B)
         return result
-
     def eqn_21_4__T(self, B: float, m: float, q: float, v: float, **kwargs):
         # q / m = 2 * B * T / (m * v)
         result = []
         T = q * v / (2 * B)
         result.append(T)
         return result
-
     def eqn_21_4__m(self, B: float, T: float, q: float, v: float, **kwargs):
         # q / m = 2 * B * T / (m * v)
         def _residual(m):
@@ -77,14 +74,12 @@ class TheMagneticForce:
             _pos = [r for r in _roots if r > 0]
             return list(set(round(r, 10) for r in (_pos if _pos else _roots)))
         return [safe_brentq(_residual)]
-
     def eqn_21_4__q(self, B: float, T: float, m: float, v: float, **kwargs):
         # q / m = 2 * B * T / (m * v)
         result = []
         q = 2 * B * T / v
         result.append(q)
         return result
-
     def eqn_21_4__v(self, B: float, T: float, m: float, q: float, **kwargs):
         # q / m = 2 * B * T / (m * v)
         result = []

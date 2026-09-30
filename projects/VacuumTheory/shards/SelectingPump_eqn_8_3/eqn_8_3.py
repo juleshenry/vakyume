@@ -9,6 +9,7 @@ from vakyume.kwasak import kwasak
 from .eqn_8_3__hp import eqn_8_3__hp
 from .eqn_8_3__installed_costs import eqn_8_3__installed_costs
 
+
 class SelectingPump:
     eqn_8_3__hp = eqn_8_3__hp
     eqn_8_3__installed_costs = eqn_8_3__installed_costs

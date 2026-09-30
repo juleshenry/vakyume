@@ -15,21 +15,18 @@ class ApplyingNewtonSLaws:
         F_N := normal force
         """
         return
-
     def eqn_6_1__F(self, F_N: float, **kwargs):
         # F = F_N
         result = []
         F = F_N
         result.append(F)
         return result
-
     def eqn_6_1__F_N(self, F: float, **kwargs):
         # F = F_N
         result = []
         F_N = F
         result.append(F_N)
         return result
-
     @kwasak
     def eqn_6_2(self, a_2=None, m=None, x=None):
         """
@@ -42,21 +39,18 @@ class ApplyingNewtonSLaws:
         g := gravitational acceleration
         """
         return
-
     def eqn_6_2__a_2(self, m: float, x: float, **kwargs):
         # x = - m * a_2
         result = []
         a_2 = -x / m
         result.append(a_2)
         return result
-
     def eqn_6_2__m(self, a_2: float, x: float, **kwargs):
         # x = - m * a_2
         result = []
         m = -x / a_2
         result.append(m)
         return result
-
     def eqn_6_2__x(self, a_2: float, m: float, **kwargs):
         # x = - m * a_2
         result = []

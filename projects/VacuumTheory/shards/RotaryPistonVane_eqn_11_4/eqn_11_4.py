@@ -10,6 +10,7 @@ from .eqn_11_4__p_g import eqn_11_4__p_g
 from .eqn_11_4__p_s import eqn_11_4__p_s
 from .eqn_11_4__p_v import eqn_11_4__p_v
 
+
 class RotaryPistonVane:
     eqn_11_4__p_g = eqn_11_4__p_g
     eqn_11_4__p_s = eqn_11_4__p_s

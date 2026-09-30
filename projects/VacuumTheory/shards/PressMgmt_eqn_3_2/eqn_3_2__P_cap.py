@@ -5,9 +5,10 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
+
 def eqn_3_2__P(self, G: float, G_C: float, H: float, rho: float, **kwargs):
     # [.pyeqn] P = G / (G_C * rho * H)
     result = []
-    P = G/(G_C*H*rho)
+    P = G / (G_C * H * rho)
     result.append(P)
     return result

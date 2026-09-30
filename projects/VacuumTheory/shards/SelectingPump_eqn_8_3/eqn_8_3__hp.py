@@ -5,6 +5,10 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
+
 def eqn_8_3__hp(self, installed_costs: float, **kwargs):
     # [.pyeqn] installed_costs = 38000 * (hp / 10) ** 0.45
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    def _residual(hp):
+        return (38000 * (hp / 10) ** 0.45) - (installed_costs)
+
+    return [safe_brentq(_residual)]

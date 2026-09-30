@@ -11,6 +11,7 @@ from .eqn_10_15__S_cap_T_caph import eqn_10_15__S_Th
 from .eqn_10_15__S_cap_p import eqn_10_15__S_p
 from .eqn_10_15__p_s import eqn_10_15__p_s
 
+
 class LiquidRing:
     eqn_10_15__P = eqn_10_15__P
     eqn_10_15__S_Th = eqn_10_15__S_Th

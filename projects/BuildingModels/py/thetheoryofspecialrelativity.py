@@ -16,7 +16,6 @@ class TheTheoryOfSpecialRelativity:
         c := speed of light
         """
         return
-
     def eqn_24_11__E(self, c: float, m_0: float, p: float, **kwargs):
         # E ** 2 = p ** 2 * c ** 2 + m_0 ** 2
         result = []
@@ -25,7 +24,6 @@ class TheTheoryOfSpecialRelativity:
         E = sqrt(c**2 * p**2 + m_0**2)
         result.append(E)
         return result
-
     def eqn_24_11__c(self, E: float, m_0: float, p: float, **kwargs):
         # E ** 2 = p ** 2 * c ** 2 + m_0 ** 2
         result = []
@@ -34,7 +32,6 @@ class TheTheoryOfSpecialRelativity:
         c = sqrt((E - m_0) * (E + m_0)) / p
         result.append(c)
         return result
-
     def eqn_24_11__m_0(self, E: float, c: float, p: float, **kwargs):
         # E ** 2 = p ** 2 * c ** 2 + m_0 ** 2
         result = []
@@ -43,7 +40,6 @@ class TheTheoryOfSpecialRelativity:
         m_0 = sqrt((E - c * p) * (E + c * p))
         result.append(m_0)
         return result
-
     def eqn_24_11__p(self, E: float, c: float, m_0: float, **kwargs):
         # E ** 2 = p ** 2 * c ** 2 + m_0 ** 2
         result = []
@@ -52,7 +48,6 @@ class TheTheoryOfSpecialRelativity:
         p = sqrt((E - m_0) * (E + m_0)) / c
         result.append(p)
         return result
-
     @kwasak
     def eqn_24_2(self, c=None, u_0=None, u_x=None, v=None, x=None):
         """
@@ -84,14 +79,12 @@ class TheTheoryOfSpecialRelativity:
         c := speed of light
         """
         return
-
     def eqn_24_2__FE(self, l: float, r: float, **kwargs):
         # FE = 2 * l / (2 * r)
         result = []
         FE = l / r
         result.append(FE)
         return result
-
     def eqn_24_2__c(self, t: float, v: float, x: float, **kwargs):
         # x = 0 * (x + v * t) / (t * v / c ** 2)
         def _residual(c):
@@ -137,33 +130,28 @@ class TheTheoryOfSpecialRelativity:
             _pos = [r for r in _roots if r > 0]
             return list(set(round(r, 10) for r in (_pos if _pos else _roots)))
         return [safe_brentq(_residual)]
-
     def eqn_24_2__l(self, FE: float, r: float, **kwargs):
         # FE = 2 * l / (2 * r)
         result = []
         l = FE * r
         result.append(l)
         return result
-
     def eqn_24_2__r(self, FE: float, l: float, **kwargs):
         # FE = 2 * l / (2 * r)
         result = []
         r = l / FE
         result.append(r)
         return result
-
     def eqn_24_2__t(self, c: float, v: float, x: float, **kwargs):
         # x = 0 * (x + v * t) / (t * v / c ** 2)
         # Placeholder for numerical solver
         raise UnsolvedException("Pending LLM/Manual Repair")
-
     def eqn_24_2__u_0(self, c: float, u_x: float, v: float, x: float, **kwargs):
         # u_x = u_0 * x / (1 - v * u_x / c ** 2)
         result = []
         u_0 = u_x * (c**2 - u_x * v) / (c**2 * x)
         result.append(u_0)
         return result
-
     def eqn_24_2__u_x(self, c: float, u_0: float, v: float, x: float, **kwargs):
         # u_x = u_0 * x / (1 - v * u_x / c ** 2)
         result = []
@@ -172,28 +160,24 @@ class TheTheoryOfSpecialRelativity:
         u_x = c * (c + sqrt(c**2 - 4 * u_0 * v * x)) / (2 * v)
         result.append(u_x)
         return result
-
     def eqn_24_2__v(self, c: float, t: float, x: float, **kwargs):
         # x = 0 * (x + v * t) / (t * v / c ** 2)
         def _residual(v):
             return (0 * (x + v * t) / (t * v / c**2)) - (x)
 
         return [safe_brentq(_residual)]
-
     def eqn_24_2__vx(self, c: float, t: float, v: float, x: float, **kwargs):
         # x = 0 * (x + v * t) + vx / c ** 2
         result = []
         vx = c**2 * x
         result.append(vx)
         return result
-
     def eqn_24_2__x(self, c: float, t: float, v: float, **kwargs):
         # x = 0 * (x + v * t) / (t * v / c ** 2)
         result = []
         x = 0
         result.append(x)
         return result
-
     @kwasak
     def eqn_24_6(self, c=None, u=None, ux=None, v=None):
         """
@@ -203,7 +187,6 @@ class TheTheoryOfSpecialRelativity:
         c := speed of light
         """
         return
-
     def eqn_24_6__c(self, u: float, ux: float, v: float, **kwargs):
         # ux = u + v / (1 + (v * u) / c ** 2)
         result = []
@@ -212,7 +195,6 @@ class TheTheoryOfSpecialRelativity:
         c = -sqrt(-u * v * (u - ux) / (u - ux + v))
         result.append(c)
         return result
-
     def eqn_24_6__u(self, c: float, ux: float, v: float, **kwargs):
         # ux = u + v / (1 + (v * u) / c ** 2)
         result = []
@@ -229,21 +211,18 @@ class TheTheoryOfSpecialRelativity:
         ) / (2 * v)
         result.append(u)
         return result
-
     def eqn_24_6__ux(self, c: float, u: float, v: float, **kwargs):
         # ux = u + v / (1 + (v * u) / c ** 2)
         result = []
         ux = (c**2 * u + c**2 * v + u**2 * v) / (c**2 + u * v)
         result.append(ux)
         return result
-
     def eqn_24_6__v(self, c: float, u: float, ux: float, **kwargs):
         # ux = u + v / (1 + (v * u) / c ** 2)
         result = []
         v = c**2 * (-u + ux) / (c**2 + u**2 - u * ux)
         result.append(v)
         return result
-
     @kwasak
     def eqn_24_9(self, K=None, c=None, m_0=None, u=None):
         """
@@ -251,14 +230,12 @@ class TheTheoryOfSpecialRelativity:
         c := speed of light
         """
         return
-
     def eqn_24_9__K(self, c: float, m_0: float, u: float, **kwargs):
         # K = (1 - u ** 2 / c ** 2) * m_0 * c ** 2
         result = []
         K = m_0 * (c**2 - u**2)
         result.append(K)
         return result
-
     def eqn_24_9__c(self, K: float, m_0: float, u: float, **kwargs):
         # K = (1 - u ** 2 / c ** 2) * m_0 * c ** 2
         result = []
@@ -267,14 +244,12 @@ class TheTheoryOfSpecialRelativity:
         c = sqrt((K + m_0 * u**2) / m_0)
         result.append(c)
         return result
-
     def eqn_24_9__m_0(self, K: float, c: float, u: float, **kwargs):
         # K = (1 - u ** 2 / c ** 2) * m_0 * c ** 2
         result = []
         m_0 = K / (c**2 - u**2)
         result.append(m_0)
         return result
-
     def eqn_24_9__u(self, K: float, c: float, m_0: float, **kwargs):
         # K = (1 - u ** 2 / c ** 2) * m_0 * c ** 2
         result = []

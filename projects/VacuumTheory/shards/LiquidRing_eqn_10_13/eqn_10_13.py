@@ -9,6 +9,7 @@ from vakyume.kwasak import kwasak
 from .eqn_10_13__T_cap_c import eqn_10_13__T_c
 from .eqn_10_13__T_cap_s import eqn_10_13__T_s
 
+
 class LiquidRing:
     eqn_10_13__T_c = eqn_10_13__T_c
     eqn_10_13__T_s = eqn_10_13__T_s

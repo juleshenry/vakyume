@@ -12,9 +12,7 @@ from .gaussslaw import GaussSLaw
 from .gravity import Gravity
 from .linearmomentumandthecentreofmass import LinearMomentumAndTheCentreOfMass
 from .newtonslaws import NewtonSLaws
-from .potentialenergyandconservationofenergy import (
-    PotentialEnergyAndConservationOfEnergy,
-)
+from .potentialenergyandconservationofenergy import PotentialEnergyAndConservationOfEnergy
 from .rotationaldynamics import RotationalDynamics
 from .rotationalenergyandmomentum import RotationalEnergyAndMomentum
 from .simpleharmonicmotion import SimpleHarmonicMotion
@@ -25,27 +23,4 @@ from .workandenergy import WorkAndEnergy
 from .harmony_checks import harmony_checks
 from .subshards import subshards
 
-__all__ = [
-    "ApplyingNewtonSLaws",
-    "DescribingMotionInMultipleDimensions",
-    "DescribingMotionInOneDimension",
-    "ElectricChargesAndFields",
-    "ElectricCircuits",
-    "ElectricCurrent",
-    "ElectromagneticInduction",
-    "FluidMechanics",
-    "GaussSLaw",
-    "Gravity",
-    "LinearMomentumAndTheCentreOfMass",
-    "NewtonSLaws",
-    "PotentialEnergyAndConservationOfEnergy",
-    "RotationalDynamics",
-    "RotationalEnergyAndMomentum",
-    "SimpleHarmonicMotion",
-    "TheMagneticForce",
-    "TheTheoryOfSpecialRelativity",
-    "Waves",
-    "WorkAndEnergy",
-    "harmony_checks",
-    "subshards",
-]
+__all__ = ["ApplyingNewtonSLaws", "DescribingMotionInMultipleDimensions", "DescribingMotionInOneDimension", "ElectricChargesAndFields", "ElectricCircuits", "ElectricCurrent", "ElectromagneticInduction", "FluidMechanics", "GaussSLaw", "Gravity", "LinearMomentumAndTheCentreOfMass", "NewtonSLaws", "PotentialEnergyAndConservationOfEnergy", "RotationalDynamics", "RotationalEnergyAndMomentum", "SimpleHarmonicMotion", "TheMagneticForce", "TheTheoryOfSpecialRelativity", "Waves", "WorkAndEnergy", "harmony_checks", "subshards"]

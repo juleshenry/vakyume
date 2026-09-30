@@ -16,15 +16,12 @@ class Waves:
         v := speed of the waves on the string
         """
         return
-
     def eqn_14_11__fn(self, n: float, v: float, **kwargs):
         # fn = n * v / (2L)
         return [n * v / (2 * sqrt(2))]
-
     def eqn_14_11__n(self, fn: float, v: float, **kwargs):
         # fn = n * v / (2L)
         return sqrt(2 * v / fn)
-
     def eqn_14_11__v(self, fn: float, n: float, **kwargs):
         # fn = n * v / (2L)
         return sqrt(2 * fn * n)

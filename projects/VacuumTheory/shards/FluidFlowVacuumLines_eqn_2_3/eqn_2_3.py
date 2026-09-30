@@ -10,6 +10,7 @@ from .eqn_2_3__D_cap import eqn_2_3__D
 from .eqn_2_3__kn import eqn_2_3__kn
 from .eqn_2_3__lambd import eqn_2_3__lambd
 
+
 class FluidFlowVacuumLines:
     eqn_2_3__D = eqn_2_3__D
     eqn_2_3__kn = eqn_2_3__kn

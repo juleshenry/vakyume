@@ -11,6 +11,7 @@ from .eqn_9_2__d_n import eqn_9_2__d_n
 from .eqn_9_2__rho_s import eqn_9_2__rho_s
 from .eqn_9_2__w_s import eqn_9_2__w_s
 
+
 class SteamJetInjectors:
     eqn_9_2__P_m = eqn_9_2__P_m
     eqn_9_2__d_n = eqn_9_2__d_n

@@ -14,31 +14,31 @@ class AirLeak:
     def eqn_4_10__T(self, V: float, del_P: float, leakage: float, t: float, **kwargs):
         # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
-        T = 3.127*V*del_P/(leakage*t)
+        T = 3.127 * V * del_P / (leakage * t)
         result.append(T)
         return result
     def eqn_4_10__V(self, T: float, del_P: float, leakage: float, t: float, **kwargs):
         # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
-        V = 0.319795330988168*T*leakage*t/del_P
+        V = 0.319795330988168 * T * leakage * t / del_P
         result.append(V)
         return result
     def eqn_4_10__del_P(self, T: float, V: float, leakage: float, t: float, **kwargs):
         # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
-        del_P = 0.319795330988168*T*leakage*t/V
+        del_P = 0.319795330988168 * T * leakage * t / V
         result.append(del_P)
         return result
     def eqn_4_10__leakage(self, T: float, V: float, del_P: float, t: float, **kwargs):
         # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
-        leakage = 3.127*V*del_P/(T*t)
+        leakage = 3.127 * V * del_P / (T * t)
         result.append(leakage)
         return result
     def eqn_4_10__t(self, T: float, V: float, del_P: float, leakage: float, **kwargs):
         # leakage = 0.0059 * V * del_P / t * 530 / T  # lb/hr
         result = []
-        t = 3.127*V*del_P/(T*leakage)
+        t = 3.127 * V * del_P / (T * leakage)
         result.append(t)
         return result
     @kwasak

@@ -5,9 +5,10 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
+
 def eqn_11_3__t(self, F_s: float, t_c: float, **kwargs):
     # [.pyeqn] t = t_c * F_s
     result = []
-    t = F_s*t_c
+    t = F_s * t_c
     result.append(t)
     return result

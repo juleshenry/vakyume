@@ -12,6 +12,7 @@ from .eqn_1_11__T_cap import eqn_1_11__T
 from .eqn_1_11__W_cap import eqn_1_11__W
 from .eqn_1_11__q import eqn_1_11__q
 
+
 class VacuumTheory:
     eqn_1_11__M = eqn_1_11__M
     eqn_1_11__P = eqn_1_11__P

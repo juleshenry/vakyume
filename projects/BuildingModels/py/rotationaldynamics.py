@@ -17,28 +17,24 @@ class RotationalDynamics:
         h := distance from the centre of mass to the parallel axis
         """
         return
-
     def eqn_11_10__ICM(self, Ih: float, M: float, h: float, **kwargs):
         # Ih = ICM + M * h ** 2
         result = []
         ICM = Ih - M * h**2
         result.append(ICM)
         return result
-
     def eqn_11_10__Ih(self, ICM: float, M: float, h: float, **kwargs):
         # Ih = ICM + M * h ** 2
         result = []
         Ih = ICM + M * h**2
         result.append(Ih)
         return result
-
     def eqn_11_10__M(self, ICM: float, Ih: float, h: float, **kwargs):
         # Ih = ICM + M * h ** 2
         result = []
         M = (-ICM + Ih) / h**2
         result.append(M)
         return result
-
     def eqn_11_10__h(self, ICM: float, Ih: float, M: float, **kwargs):
         # Ih = ICM + M * h ** 2
         result = []
@@ -47,7 +43,6 @@ class RotationalDynamics:
         h = -sqrt(-(ICM - Ih) / M)
         result.append(h)
         return result
-
     @kwasak
     def eqn_11_8(self, I=None, i=None, m=None, r=None):
         """
@@ -57,28 +52,24 @@ class RotationalDynamics:
         r := distance
         """
         return
-
     def eqn_11_8__I(self, i: float, m: float, r: float, **kwargs):
         # I = (m * r ** 2) / i
         result = []
         I = m * r**2 / i
         result.append(I)
         return result
-
     def eqn_11_8__i(self, I: float, m: float, r: float, **kwargs):
         # I = (m * r ** 2) / i
         result = []
         i = m * r**2 / I
         result.append(i)
         return result
-
     def eqn_11_8__m(self, I: float, i: float, r: float, **kwargs):
         # I = (m * r ** 2) / i
         result = []
         m = I * i / r**2
         result.append(m)
         return result
-
     def eqn_11_8__r(self, I: float, i: float, m: float, **kwargs):
         # I = (m * r ** 2) / i
         result = []

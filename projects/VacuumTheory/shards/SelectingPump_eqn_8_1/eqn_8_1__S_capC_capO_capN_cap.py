@@ -5,6 +5,10 @@ from scipy.optimize import newton, brentq
 import numpy as np
 from vakyume.config import UnsolvedException, safe_brentq
 
+
 def eqn_8_1__SCON(self, NC: float, NS: float, installation_cost: float, **kwargs):
     # [.pyeqn] installation_cost = 16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35
-    raise UnsolvedException("Pending LLM/Manual Repair")
+    def _residual(SCON):
+        return (16000 * (NS + 2 * NC) * (SCON / 1000) ** 0.35) - (installation_cost)
+
+    return [safe_brentq(_residual)]

@@ -15,6 +15,7 @@ from .eqn_6_1__w_1 import eqn_6_1__w_1
 from .eqn_6_1__w_2 import eqn_6_1__w_2
 from .eqn_6_1__w_v import eqn_6_1__w_v
 
+
 class ProcessApp2:
     eqn_6_1__T_1 = eqn_6_1__T_1
     eqn_6_1__T_2 = eqn_6_1__T_2
@@ -26,5 +27,15 @@ class ProcessApp2:
     eqn_6_1__w_v = eqn_6_1__w_v
 
     @kwasak
-    def eqn_6_1(self, T_1=None, T_2=None, T_R=None, c_p=None, del_h_v=None, w_1=None, w_2=None, w_v=None):
+    def eqn_6_1(
+        self,
+        T_1=None,
+        T_2=None,
+        T_R=None,
+        c_p=None,
+        del_h_v=None,
+        w_1=None,
+        w_2=None,
+        w_v=None,
+    ):
         return

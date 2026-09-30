@@ -16,35 +16,30 @@ class ElectricCurrent:
         t := time
         """
         return
-
     def eqn_19_1__I(self, Q: float, t: float, **kwargs):
         # I = Q / t
         result = []
         I = Q / t
         result.append(I)
         return result
-
     def eqn_19_1__Q(self, I: float, t: float, **kwargs):
         # I = Q / t
         result = []
         Q = I * t
         result.append(Q)
         return result
-
     def eqn_19_1__t(self, I: float, Q: float, **kwargs):
         # I = Q / t
         result = []
         t = Q / I
         result.append(t)
         return result
-
     @kwasak
     def eqn_19_6(self, R1=None, R2=None, Reff=None):
         """
         Reff := effective resistance
         """
         return
-
     def eqn_19_6__R1(self, R2: float, Reff: float, **kwargs):
         # Reff = 1 / (1 / R1 + 1 / R2 + ...)
         def _residual(R1):
@@ -90,7 +85,6 @@ class ElectricCurrent:
             _pos = [r for r in _roots if r > 0]
             return list(set(round(r, 10) for r in (_pos if _pos else _roots)))
         return [safe_brentq(_residual)]
-
     def eqn_19_6__R2(self, R1: float, Reff: float, **kwargs):
         # Reff = 1 / (1 / R1 + 1 / R2 + ...)
         def _residual(R2):
@@ -136,7 +130,6 @@ class ElectricCurrent:
             _pos = [r for r in _roots if r > 0]
             return list(set(round(r, 10) for r in (_pos if _pos else _roots)))
         return [safe_brentq(_residual)]
-
     def eqn_19_6__Reff(self, R1: float, R2: float, **kwargs):
         # Reff = 1 / (1 / R1 + 1 / R2 + ...)
         def _residual(Reff):

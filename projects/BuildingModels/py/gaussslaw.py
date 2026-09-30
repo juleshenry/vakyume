@@ -15,14 +15,12 @@ class GaussSLaw:
         R := radius
         """
         return
-
     def eqn_17_2__E(self, R: float, **kwargs):
         # E = E * (4 * R ** 2)
         result = []
         E = 0
         result.append(E)
         return result
-
     def eqn_17_2__R(self, E: float, **kwargs):
         # E = E * (4 * R ** 2)
         result = []
@@ -31,7 +29,6 @@ class GaussSLaw:
         R = 1 / 2
         result.append(R)
         return result
-
     @kwasak
     def eqn_17_3(self, E=None, Q=None, R=None):
         """
@@ -39,21 +36,18 @@ class GaussSLaw:
         R := radius
         """
         return
-
     def eqn_17_3__E(self, Q: float, R: float, **kwargs):
         # E = Q / (4 * R ** 2)
         result = []
         E = Q / (4 * R**2)
         result.append(E)
         return result
-
     def eqn_17_3__Q(self, E: float, R: float, **kwargs):
         # E = Q / (4 * R ** 2)
         result = []
         Q = 4 * E * R**2
         result.append(Q)
         return result
-
     def eqn_17_3__R(self, E: float, Q: float, **kwargs):
         # E = Q / (4 * R ** 2)
         result = []
