@@ -32,7 +32,7 @@ Q_condensor_heat_duty = U * A * del_T
 # 7-14a Temperature Difference Simple
 A = Q_condensor_heat_duty / (U * del_T_LM) 
 # 7-14b Temperature Difference Full
-A = (Q_condensor_heat_duty / (U * (del_T_1 - del_T_2))) / ln(del_T_1 - del_T_2)
+A = Q_condensor_heat_duty * ln(del_T_1 / del_T_2) / (U * (del_T_1 - del_T_2))
 # 7-15 Heat Transfer Difference
 1 / U = sum_R
 # 7-16 Heat Transfer with Tube Wall Resistance
