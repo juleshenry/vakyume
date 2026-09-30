@@ -20,11 +20,13 @@ def extract_notes_from_pdf(pdf_path, output_dir, chapters=None):
     try:
         import fitz  # noqa: F401 — PyMuPDF availability check
 
+        scrape_kwargs = {"model": llm_config["model"]} if llm_config.get("model") else {}
         summary = scrape_pdf(
             pdf_path=pdf_path,
             output_dir=output_dir,
             verbose=True,
             chapter_filter=chapters,
+            **scrape_kwargs,
         )
         total = sum(v["equations"] for v in summary.values())
         print(f"Extracted {total} equations into {output_dir}")
