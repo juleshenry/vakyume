@@ -4,7 +4,61 @@ Vakyume is a pipeline for transforming legacy engineering knowledge—specifical
 
 ---
 
-## The Core Pipeline
+## v0.2 core: residual-verified solvers
+
+The core no longer generates one solver file per variable. Each equation is
+stored once, and solving for any variable follows a deterministic policy:
+
+1. **Peel and solve exactly.** Invert the outer operations around the target
+   (`+`, `*`, fractional powers, `exp`, `log`). Float exponents such as `**0.286`
+   are rationalized first. If the target is then isolated, that's a closed form.
+   If what remains is a polynomial in the target, every real root comes from
+   `numpy.roots`. Both are *complete*: every real root is found.
+2. **`sympy.solve`** runs in a killable worker with a timeout, and its results
+   are cached. It is used only when step 1 can't finish.
+3. **Numeric scan** over a symmetric log grid, for transcendental cases.
+   Results from steps 2 and 3 are flagged `complete=False`.
+
+Every candidate is substituted back into the original equation and kept only
+if the scaled residual is below 1e-9. The solver applies only the domain the
+math implies (real values, principal branches). Physical context comes from
+the caller:
+
+```python
+from vakyume import Library
+
+lib = Library.load("projects/VacuumTheory")
+lib["2-1"].solve(rho=1.2, D=0.1, v=3.0, mu=1.8e-5)         # kwasak-style: solves for Re
+lib["2-5"].solve(q=10, delta_P=5, L=2, mu=0.01)             # AmbiguousSolution: D = +/-...
+lib["2-5"].solve(q=10, delta_P=5, L=2, mu=0.01, where=lambda D: D > 0)
+lib["2-5"].solve(q=10, delta_P=5, L=2, mu=0.01, select="all")  # Solution(roots, complete, method)
+```
+
+```bash
+uv sync                                   # Python >= 3.11
+uv run vakyume list projects/VacuumTheory          # equations and parsed kinds
+uv run vakyume solve projects/VacuumTheory 2-1 rho=1.2 D=0.1 v=3 mu=1.8e-5
+uv run vakyume report projects/VacuumTheory --jobs 4   # CPU heavy: verifies everything
+uv run pytest                              # fast tests; `-m slow` for whole projects
+```
+
+`vakyume report` checks each variable of every equation. It samples
+consistent points, hides one value, solves for it, and requires two things:
+every root satisfies the equation (re-checked with SymPy at 30 digits), and
+the hidden value is recovered. It writes `docs/STATUS.md` and
+`docs/status.json`, which `make-docs` now uses instead of a hard-coded
+"certified". Relations that aren't scalar algebra are reported rather than
+turned into broken solvers. That covers inequalities, open-ended sums,
+derivatives, `U(B)` calls, cross products, and operands lost in extraction
+such as `F = *x`.
+
+The LLM is no longer needed to fill gaps in solving. The original
+scrape → shard → verify → LLM-repair pipeline below still works with
+`uv sync --extra legacy`.
+
+---
+
+## The Core Pipeline (legacy)
 
 Vakyume automates the path from a textbook PDF to a compiled binary through an eight-stage orchestration.
 

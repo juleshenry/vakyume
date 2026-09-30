@@ -1,109 +1,52 @@
-"""
-                                                               :+ .x..                                                                        
-                                                          .:...x$   $+:x  $.                                                                  
-                                                      ..:. XX.  &    X.   xx$....                                                             
-                                                      .:X . .             & . X.                                                              
-                                                   .:;X+++xX&$X+:.   .    . .x  x..                                                           
-                                                 .:$++++++++++x+......:;x$$X+..+..                         .                                  
-                                               .:$x+x++++++++++x$...............&..                      .:&xxx&X.                            
-                                              .:$++++++++++++++++$...:&$........$;:.                    .$xxX&XxxxxX+                         
-                                              :$++++++++++++++++++X..&&$$X+....;&.;..                  :Xxx&$$$$$$$xxxxXX.                    
-                                      ...    .:x++++++++++++++++++&:$&&XXX$..:&&$X$$.                 .+xxxx$$$$$$$$$X&$xx+xx.                
-                                     .:$X$X..:X++++$+++x$+++++++++$::&&$XX$..x&$XXX.+.                 ;x$xxxxxx$$$$$$$$$$$&$x+$X.            
-                                         .   :$++xX$$X++X+++++++++$:..:.::....X&X$x.$.                 :xxX$xxxxxxxx$&X$$$$$$$$$$xx;          
-                                             .+++++Xx+xxx+++++++++X.......::........X.                 :XxxxX$xxxxxxxxxxX&$X$$$&+xX           
-                                              .$+++++++++++++++++&........::.;X:....&.  .+Xx$XX.       .&xxxxxx&xxxxxxxxxxxxx$Xxx$            
-                                               :$+++++++++++++++&:.......&&$x:$.....:        :..        Xxxxxxxxxx&x.      .                  
-                                                .X++++++++++++x$........$&&&$x....:X.                   XxxxxxxX                              
-                                                . .Xxx+++++x$$.........x..:.$.....$.                   .xxxxx.                                
-                                            .X+. . .  ..;+$+:...........:x+;....::.                  ..Xxxxx+                                 
-                                               ..;+    .   . .    . ...;;;+Xx+$&.                     $xxxx$.                                 
-                                              ..X..:+$&$XxX   .. .             .x:.              ..$;;+xxxX.                                  
-                  .XX:..                   .&;:..........$.....&;:    .&.    ;$.. ..             .;....xxx+                                   
-               .$......$.              .XxxxX..............:x++++$;    :.+x.   .Xx+.            .;.:++:XX:::                                  
-               .x.......:$...:.    ..$.....:..&........:....;++++$.:$;.&....:$X:$;..           .&:.XXxxx$..+                                  
-                .;:$X+X:..:$.::. :$:......$;.:X.....&XXX;...$x+++;........+&$:...;:X..     .x...::Xxxxx$;..:                                  
-                .x+X.::.;+:X.+. .+:.........:$......:$X&..xx++++X:........x&X....$.:.X.      :$..;xxxxX..:x.                                  
-                    .:X...Xx    &.........:.&.:......:..$x++++++$................;:...:+. .X:$...Xxxxxx$.                                     
-                  .X::..$..x   .;:.........::+:.....;$x++++++++X..................$.....;.....x+$xxxx; X.                                     
-                  .X..:+X.$$  &:..x...........:X&$+++++++++++++$..................$.....$......$xxxx$X.;.                                     
-                   :;:.:.+&$. .$Xx++x$xxx+++++++++++++++++++++$....+..::+XX+:.....x..::::.....+xxxxX...;.                                     
-                        .. ..XX.  .+x++++++++++++++++++++++++$:....x............&::;:........;xxxxx;.                                         
-                                .:$+++++++++++++++++++++++++X:.....$............$::++.&:....:$xxxx$.                                          
-                             . .x++++++++++++++++++++++++++X.......;.....:X+....&.:;::....::&xxxx$..                                          
-                         .. ..;&++++++++++++++++++++++++++X:......x:....$.X   .;$x::.....&;;$xxxX..                                           
-                      ...:$&&&&&&$+++++++++++++++++++++++X:.......+.....X:$ . x     X$:...:.  .X..                                            
-                     .:&&&&&&&&&&&&&&$x+++++++++++++++++$........X........x;.:&;     .x$+;..  &..                                             
-                     :&&&&&&&&&&&&&&&&&&&&&$x++++++++++$........:x............:+.;$ ;  ..+...&..                                              
-                    .x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$X$:.........XX+:..........$:.X::x+. &  .&..                                               
-                   ..$&&&&&&&&&&&&&&&&&&&&&&&&&&&&$     .X&$+..:....:.......::...&:. .:&   x:x.                                               
-                    .:&&&&&&&&&&&&&&&&&&&&&&&&&+....               .:xXX$X+++:;;;....:$   .: .X..                                             
-                     :$&&&&&&&&&&&&&&&&&&&&&&; .                            . .. ;..:++...x.   $..                                            
-                     .;&&&&&&&&&&&&&&&&&&&&&&:.....X&X                            .Xx. ..+;;+.$.$..                                           
-                     .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.       .                      .+  .X...:+...+..                                          
-                      .:&&&&&&&&&&&&&&&&&&&&&&&&&&&      . X&..      x.        $.  $  .X.. .:+. .$..                                          
-                       :x&&&&&&&&&&&&&&&&&&&&&&&&&. .   .&&&&..      .&;.       $$$   ;... .::x  +..                                          
-                       .:&&&&&&&&&&&&&&&&&&&&&&&&&.  .X&&&&&&$.     ..&&&. .   .:X$. .+..  .::X .:..                                          
-                        .:&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&.   ..+&&&&&: ...&x ..x..   .:.$X$x...                                         
-                         .;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$... &&&&&+:...:$   +...   .:;.. $..                                          
-                         .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&$:...:..  .;..   ..:X.  x..                                          
-                          .:x&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&::..::$.  X...   .:x...::..                                          
-                           ...+$&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&+:...::..  +... ...+....x...                                          
-                              .     ....;xX&&&&&&&&&&&&&&&&&&&&&&&&&&&&X:. ..:;+..+:.....:&. . X...                                           
-                                       ....::x+++++$;+;+$&&&&&&&&&&&&&$:.....:;.  .&.:::$ .   x...                                            
-                                         .:+++++++++xx:..........:;+Xx...  ..::x..  ..  .  .$...                                              
-                                      ..+xx+++++++++++++Xx....               .:.$..     :x$....                                               
-                                   .::x+++++++++++++++++++++X..               ...+&xXXXx...                                                   
-                                  .::x+++++++++++++++++++++++$...                                                                             
-                                   ..;;$&&&&&$$XXX$XXX$$$$$XX$x..                                                                             
-                                     ..:X&&&&&&&$xX&&&&&&x:.                                                                                  
-                                            ........   ...                      
-                                         
-                                                ▐                   
-                                        ▗ ▗  ▄▖ ▐ ▗ ▗ ▗ ▗ ▗ ▗▄▄  ▄▖ 
-                                        ▝▖▞ ▝ ▐ ▐▗▘ ▝▖▞ ▐ ▐ ▐▐▐ ▐▘▐ 
-                                         ▙▌ ▗▀▜ ▐▜   ▙▌ ▐ ▐ ▐▐▐ ▐▀▀ 
-                                         ▐  ▝▄▜ ▐ ▚  ▜  ▝▄▜ ▐▐▐ ▝▙▞ 
-                                                     ▞              
-                                                   ▝▘              
-                                        
-                                            by Julian Henry
+"""Vakyume: verified solvers for every variable of textbook equations.
+
+    >>> from vakyume import Library
+    >>> lib = Library.load("projects/VacuumTheory")
+    >>> lib["2-1"].solve(rho=1.2, D=0.1, v=3.0, mu=1.8e-5)   # -> Re
+    >>> lib.FluidFlowVacuumLines.eqn_2_1(Re=2.0e4, rho=1.2, D=0.1, v=3.0)  # -> mu
+
+The original scrape/shard/verify/repair pipeline is still importable
+(``from vakyume import run_pipeline``) with the ``legacy`` extra installed.
 """
 
-from .pipeline import run_pipeline
-from .parser import Solver
-from .verifier import Verify
-from .cpp_gen import main as run_cpp_gen
-from .config import (
-    UnsolvedException,
-    TAB,
-    MAX_COMP_TIME_SECONDS,
-    COOLDOWN_SECONDS,
-    OPERATORS,
-    FUNKTORZ,  # backward-compat alias (deprecated)
-    llm_config,
-)
-from .reconstruct import reconstruct_from_shards, reconstruct_cli
+from importlib import import_module
+
+from .equations import Chapter, Equation, Library, Variable, load_toml, parse_notes
+from .solve import AmbiguousSolution, NoSolution, Solution
 
 __all__ = [
-    # Core pipeline
-    "run_pipeline",
-    # Parsing & solving
-    "Solver",
-    # Verification
-    "Verify",
-    # C++ code generation
-    "run_cpp_gen",
-    # Reconstruction
-    "reconstruct_from_shards",
-    "reconstruct_cli",
-    # Exceptions
-    "UnsolvedException",
-    # Configuration & constants
-    "TAB",
-    "MAX_COMP_TIME_SECONDS",
-    "COOLDOWN_SECONDS",
-    "OPERATORS",
-    "FUNKTORZ",  # backward-compat alias (deprecated)
-    "llm_config",
+    "AmbiguousSolution",
+    "Chapter",
+    "Equation",
+    "Library",
+    "NoSolution",
+    "Solution",
+    "Variable",
+    "load_toml",
+    "parse_notes",
 ]
+
+# Legacy names, imported on first use so the new core does not pull in
+# timeout-decorator, ollama, etc.
+_LEGACY = {
+    "run_pipeline": ".pipeline",
+    "Solver": ".parser",
+    "Verify": ".verifier",
+    "reconstruct_from_shards": ".reconstruct",
+    "reconstruct_cli": ".reconstruct",
+    "UnsolvedException": ".config",
+    "TAB": ".config",
+    "MAX_COMP_TIME_SECONDS": ".config",
+    "COOLDOWN_SECONDS": ".config",
+    "OPERATORS": ".config",
+    "FUNKTORZ": ".config",
+    "llm_config": ".config",
+}
+
+
+def __getattr__(name: str):
+    if name == "run_cpp_gen":
+        return import_module(".cpp_gen", __name__).main
+    if name in _LEGACY:
+        return getattr(import_module(_LEGACY[name], __name__), name)
+    raise AttributeError(f"module 'vakyume' has no attribute {name!r}")
